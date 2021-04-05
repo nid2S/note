@@ -27,6 +27,7 @@
 - np.sin(x) > 사인 함수를 이용해 배열 x와 대응하는 배열 생성
 - np.random.permutation(i) > i 까지 랜덤으로 섞인 배열 반환.
 - np.percentile(배열, [분위]) > 배열에서 분위에 해당하는 샘플을 추출해 반환. [0,25,50,75,100]식으로 지정하면 된다.
+- np.unique(배열) > 배열에 있는 값의 종류를 배열로 반환.
   
 - np.argmax(배열) > 배열중 최대치의 인덱스 반환
 - np.mean(x == y) > x와 y 배열의 동일도를 출력.
@@ -206,6 +207,12 @@
 - ]) > 모델(분류기반,최대 세개) 제작.
 - Sequential() > .add > .add 로도 모델 제작이 가능함.
 
+- session : 일종의 실행창. 텐서의 내용과 연산 결과를 볼 수 있음. 세션 선언, 실행, 종료 문으로 구분됨.
+- tf.Session/InteractiveSession() : 세션 선언 / 자동으로 기본 세션을 지정해주는 세션 선언.
+- sess.run(tf.global_variables_initializer()) : 변수 초기화.
+- sess.run(텐서) : 실행. 흔히 eval 사용.  |  텐서.eval() : 텐서 객체 데이터 확인.
+- sess.close() : 세션 종료. with 로 오픈시 필요 없음.
+
 - model.compile(
 -  optimizer='adam',  > 데이터와 손실함수를 바탕으로 모델 업데이트 방향 결정.
 -  loss='sparse_categorical_crossentropy',  > 훈련중 모델 오차 측정. 
@@ -225,8 +232,6 @@
 - tf.keras.layers.MaxPooling2D((줄일 행렬의 크기 x, y)) > 이미지를 MaxPooling 해 크기를 줄임.
 - tf.keras.layer.Dropout(rate) > Overfitting 을 방지하기 위해 DropOut. rate 는 1 = 100% 다.
 
-
-  
 - tf.keras.utils.to_categorical(정수 리스트) > 정수 리스트에 따라서 원핫 인코딩. [1,3]을 넣으면 [[0,1,0,0],[0,0,0,1]]을 반환하는 식.
 - tf.lite.TFLiteConverter.from_keras_model(model).converter() | open('파일명.tflite', 'wb') > tf 모델 tflite 바이너리로 변환. 이렇게 변환한 것은 안드로이드 스튜디오의 에셋에 복사 > app 모듈의 build.gradle 에 패키지 추가 > Main_Activity 에서 이미지 바이너리 변환 > Classifier 에서 모델 사용 > Main_Activity 에서 출력 순으로 사용된다.
 
@@ -321,14 +326,22 @@
 - sklearn.preprocessing.StandardScaler() : 모든 특성을 정규 분포로 바꿔준다.
 - sklearn.preprocessing.QuantileTransformer(n_quantile = n) : n개의 분위를 사용해 데이터를 균등하게 분포시키는 스케일러 로드. output_distribution='normal'로 균등 분포가 아니라 정규분포로 출력을 바꿀 수 있음. 
 - sklearn.preprocessing.PowerTransformer() : 데이터의 특성별로 정규분표에 가깝게 변환해주는 스케일러 로드. method='yeo_johnson'(양수 음수 값 둘 다 지원, 기본값) 과 method='box-cox'(양수만 지원.)를 지정해 줄 수 있다. 
+- sklearn.preprocessing.KBinsDiscretizer(n_bins=n, strategy='uniform') : n개로 구간 분할 모델 로드. .bin_edges_ 에 각 특성별 경곗값이 저장되어 있다. transform 메서드는 각 데이터 포인트를 해당 구간으로 인코딩하는 역할을 한다. 기본적으로 구간에 원 핫 인코딩을 적용한다. transform 결과.toarray()로 원핫 인코딩된 결과를 볼 수 있다.  
+- sklearn.preprocessing.PolynomialFeatures(degree=i, include_bias=bool) : x**i 까지 고차항(다항식)을 추가해 특성을 풍부하게 나타내는(구간 분할과 비슷한 효과) 모델 로드. bool 이 T 면 절편에 해당하는 1인 특성을 추가한다. 다항식 특성을 선형 모델과 같이 사용하면 전형적인 다항 회귀 모델(결과가 곡선)이 된다. 고차원 다항식은 데이터가 부족한 영역에서는 너무 민감하게 동작한다는 문제점이 있다.    
 ###### decomposition
-- sklearn.decomposition.PCA() : 주성분 분석(PCA) 프로세서 로드. 기본값은 데이터를 회전,이동만 시키고 모든 주성분을 유지하지만 n_component 매개변수에 값을 넣어 유지시킬 주성분의 개수를 정할 수 있다. fit 시 모델.components_ 속성에 주성분이 저장된다. whiten=T 로 주성분의 스케일이 같아지게 할 수있다. 
+- sklearn.decomposition.PCA() : 주성분 분석(PCA) 프로세서 로드. 기본값은 데이터를 회전,이동만 시키고 모든 주성분을 유지하지만 n_component 매개변수에 값을 넣어 유지시킬 주성분의 개수를 정할 수 있다. fit 시 모델.components_ 속성에 주성분이 저장된다. whiten=T 로 주성분의 스케일이 같아지게 할 수 있다. .inverse_transform을 사용해 원본 공간으로 되돌릴 수 있다. 
 - sklearn.decomposition.NMF(random_state = 0) : NMF 프로세서 로드. n_component 매개변수에 값을 넣어 유지시킬 주성분의 개수를 정할 수 있다. 
+- sklearn.manifold.TSNE(random_state=n) : 매니폴드학습 알고리즘의 t-SNE 알고리즘 모델 로드. 데이터들을 알아서 나눔. 훈련시킨 모델만 변경 가능해 transform 메서드 없이 fit_transform() 메서드만 지원한다. 
+###### cluster(agglomerative)  
+- .fit_predict(data) 로 각 데이터 포인트가 속한 클러스터들을 리스트 형태로 받아 볼 수 있다.
+- sklearn.cluster.KMeans(n_cluster=n) : n개의 클러스터 중심점을 생성하는 k-평균 알고리즘 모델 로드. .labels_ 에 각 데이터 포인트가 포함된 클러스터들을 리스트 형태로 볼 수 있고, .predict 로 새로운 데이터의 데이터포인트가 어느 클러스터에 속할 지 예측할 수 있다.
+- sklearn.cluster.AgglomerativeClustering(n_cluster=n, linkage="ward/average/complete") : 병합 군집 모델 로드. 모든 클러스터 내의 분산을 가장 적게 증가시키는(기본, 대부분 알맞음)/평균 거리가 가장 짦은/최대 거리가 가장 짦은 두 클러스터를 합친다.   
+- sklearn.cluster.DBSCAN(min_sample=i, eps=j) : DBSCAN 군집 모델 로드. j 거리에 i 개 이상 데이터가 있다면 그 데이터 포인트를 핵심 샘플로 지정한다. 어느 군집에도 속하지 않는 포인트를 noise 로 지정해, -1의 레이블을 가지며 이를 이용해 이산치 검출을 할 수 있다.   
+###### one-hot-encoding
+- sklearn.processing.OneHotEncoder(spares=bool) : 원 핫 인코딩 모델 로드. sparse 가 False 면 희소행렬이 아니라 ndarray 로 반환된다. .fit_transform(data)로 사용, .get_feature_names() 로 원본 데이터의 변수 이름을 얻을 수 있다.
+- sklearn.compose.ColumnTransformer([("scaling",스케일러,['스케일 조정할 연속형 열 이름들']), ("onehot",원핫인코더,['원핫인코딩할 범주형 열 이름들'])]) : 각 열마다 다른 전처리(스케일 조정, 원핫인코딩)을 하게 해주는 ct 로드. 
+- sklearn.compose.make_column_transformer([(['스케일 조정할 연속형 열 이름들'], 스케일러), (['원핫인코딩할 범주형 열 이름들'], 원핫인코더)]) : 클래스 이름을 기반으로 각 단계에 이름을 붙여주는  ct 로드.
 
-#### unsupervised learning
-
-#### RL
-- sklearn.cluster.KMeans(n_cluster = k) > k개의 클러스터(군집)를 가진 K평균 모델을 생성. .fit(X)으로 훈련, .predict(X)사용할 수 있다. .cluster_centers_ 에 각 클러스터의 중심점이 기록되어 있다.
 
 
 #### metrics
@@ -336,3 +349,6 @@
 - sklearn.metrics.***_score(테스트 결과, 실제) > 훈련 결과의 정확도를 다양한 방식으로 반환.
 - sklearn.metrics.accuracy_score(테스트 결과, 실제) > 둘의 일치도를 그대로 정확도로 반환.
 - sklearn.metrics.f1_score(테스트 결과, 실제) > F1 Measure 를 이용하여 정확도를 반환.
+
+### RL
+
