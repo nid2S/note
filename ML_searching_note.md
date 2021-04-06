@@ -20,16 +20,14 @@
 - np 객체.dtype > 데이터 타입 문자열로 반환
 - np 객체.shape > 배열의 마지막 좌표(행,열) 출력([5,10,15]의 경우 (3,)식으로)
   
-- np.where(조건) > 조건문(리스트<1 식으로 내부에 리스트 포함)에 사용. 조건에 밎는 인덱스들을 ndarray 형태로 반환. 슬라이싱에 사용 가능. (조건문, 맞으면, 아니면) 식으로 구성해 처리를 할 수도 있음. 
 - np.eye(i) > 대각선이 1이고 나머지는 0인 i*i의 2차원 배열 생성
 - np.arange(start, end, step) > 리스트의 슬라이스와 같이 범위대로 배열을 제작.
 - np.linespace(start, end, step) > 시작부터 끝까지 간격(개수)만큼 나눠진 배열 생성
 - np.sin(x) > 사인 함수를 이용해 배열 x와 대응하는 배열 생성
 - np.random.permutation(i) > i 까지 랜덤으로 섞인 배열 반환.
 - np.percentile(배열, [분위]) > 배열에서 분위에 해당하는 샘플을 추출해 반환. [0,25,50,75,100]식으로 지정하면 된다.
-- np.unique(배열) > 배열에 있는 값의 종류를 배열로 반환.
   
-- np.argmax(배열) > 배열중 최대치의 인덱스 반환
+- np.argmax(배열) > 배열중 최대치의 순서 반환
 - np.mean(x == y) > x와 y 배열의 동일도를 출력.
 - np.expand_dims(np 배열,index) > np 배열의 index 위치에 데이터를 추가해 차원을 늘림. 한개의 이미지만 사용할때도 2차원으로 만들어 주어야 함.
 
@@ -99,8 +97,9 @@
 - plt.imshow(RGB 이미지) > plot 에 이미지를 준비함.
 - plt.show() > imshow 로 준비된 것을 출력.
 
-- plt.bar/barh(compute_pos(yticks, height, i, models), data[model], height=height*0.95, label=model, color=colors[i]) > 세로/가로막대를 그림. 
-- plt.hist() > 히스토그램을 그림.
+- plt.barh() >  
+- plt.hist() >  히스토그램을 그림.
+- plt.semilogy() >  
   
 - plt.grid(bool) > 격자 표시 여부
 - plt.colorBar() > 픽셀값이 나타난 컬러바 설정
@@ -193,9 +192,9 @@
 
 #tensorflow
 ***
-- tf.keras.layers.Input(shape=[열 개수(독립변수 개수)]) > 독립변수의 개수만큼 입력레이어 구성.
-- tf.keras.layers.Dense(히든레이어 노드수,activation="swish/relu")(X) > 히든레이어 제작.
-- tf.keras.layers.Dense(열 개수(종속변수 개수))(X) > 입력으로 부터 종속변수의 개수만큼의 출력을 내놓는 레이어 구성. 퍼셉트론에서 가중치와 편향을 변경시킴.
+- X=tf.keras.layers.Input(shape=[열 개수(독립변수 개수)]) > 독립변수의 개수만큼 입력레이어 구성.
+- Y=tf.keras.layers.Dense(열 개수(종속변수 개수))(X) > 입력으로 부터 종속변수의 개수만큼의 출력을 내놓는 레이어 구성. 퍼셉트론에서 가중치와 편향을 변경시킴.
+- H=tf.keras.layers.Dense(히든레이어 노드수,activation="swish(다른걸로 할 수도 있음)")(X) > 히든레이어 제작. 히든레이어의 노드수가 점점 떨어질 필요는 없음.
 
 - tf.keras.layers.Dense(units, input_dim, activation) > 으로 input 없이 바로 사용할 수도 있다.
 
@@ -206,12 +205,6 @@
 - 	keras.layers.Dense(10, activation = 'softmax') > 10개의 클래스 각각 그 클래스에 속할 확률을 출력.
 - ]) > 모델(분류기반,최대 세개) 제작.
 - Sequential() > .add > .add 로도 모델 제작이 가능함.
-
-- session : 일종의 실행창. 텐서의 내용과 연산 결과를 볼 수 있음. 세션 선언, 실행, 종료 문으로 구분됨.
-- tf.Session/InteractiveSession() : 세션 선언 / 자동으로 기본 세션을 지정해주는 세션 선언.
-- sess.run(tf.global_variables_initializer()) : 변수 초기화.
-- sess.run(텐서) : 실행. 흔히 eval 사용.  |  텐서.eval() : 텐서 객체 데이터 확인.
-- sess.close() : 세션 종료. with 로 오픈시 필요 없음.
 
 - model.compile(
 -  optimizer='adam',  > 데이터와 손실함수를 바탕으로 모델 업데이트 방향 결정.
@@ -232,7 +225,14 @@
 - tf.keras.layers.MaxPooling2D((줄일 행렬의 크기 x, y)) > 이미지를 MaxPooling 해 크기를 줄임.
 - tf.keras.layer.Dropout(rate) > Overfitting 을 방지하기 위해 DropOut. rate 는 1 = 100% 다.
 
-- tf.keras.utils.to_categorical(정수 리스트) > 정수 리스트에 따라서 원핫 인코딩. [1,3]을 넣으면 [[0,1,0,0],[0,0,0,1]]을 반환하는 식.
+- tf.random.set_seed(i) > 각종 파라미터의 영향을 보기 위해 랜덤값을 고정
+- tf.placeholder(dtype, shape, name) > 입력값을 저장하는 버킷. place 홀더의 이름은 굳이 지정할 필요 없다.
+- tf.Variable() >  
+- tf.random_normal() >  
+- tf.zeros() >  
+- tf.matmul() >  
+  
+- tf.keras.utils.to_categorical(정수 리스트) >  정수 리스트에 따라서 원핫 인코딩. [1,3]을 넣으면 [[0,1,0,0],[0,0,0,1]]을 반환하는 식.
 - tf.lite.TFLiteConverter.from_keras_model(model).converter() | open('파일명.tflite', 'wb') > tf 모델 tflite 바이너리로 변환. 이렇게 변환한 것은 안드로이드 스튜디오의 에셋에 복사 > app 모듈의 build.gradle 에 패키지 추가 > Main_Activity 에서 이미지 바이너리 변환 > Classifier 에서 모델 사용 > Main_Activity 에서 출력 순으로 사용된다.
 
 
@@ -287,7 +287,7 @@
 ###### k
 - sklearn.neighbors.KNeighborsRegression(n_neighbors=k) > k개의 이웃을 찾는 knn 회귀모델 로드.
 ###### Linear  
-- sklearn.linear_model.LinearRegression() > OLS(최소제곱법) 선형회귀 모델 로드. 가중치는 .coef_ 에 ndarray 로, 편향은 .intercept_에 저장되어 있다.
+- sklearn.linear_model.LinearRegression() >  OLS(최소제곱법) 선형회귀 모델 로드. 가중치는 .coef_ 에 ndarray 로, 편향은 .intercept_에 저장되어 있다.
 ###### Ridge, Lasso
 - sklearn.linear_model.Ridge(alpha=i) > 리지 선형회귀 모델 로드. 알파 값은 기본 1이며, 높이면 더 단순히(가중치를 0에 가깝게) 만들어 훈련세트의 성능은 나빠져도 일반화는 더 잘되게 만들 수 있다.
 - sklearn.linear_model.Lasso(alpha=i, max_iter) > 라소 선형회귀 모델 로드. 리지와 비슷하나 어떤 값은 진짜 0이 될수 있다. np.coef_ != 0 의 합계를 구하면 사용한 특성수를 알 수 있고, 과소 적합을 피하려면 알파를 줄이고 max_iter 를 늘려야한다.
@@ -326,43 +326,17 @@
 - sklearn.preprocessing.StandardScaler() : 모든 특성을 정규 분포로 바꿔준다.
 - sklearn.preprocessing.QuantileTransformer(n_quantile = n) : n개의 분위를 사용해 데이터를 균등하게 분포시키는 스케일러 로드. output_distribution='normal'로 균등 분포가 아니라 정규분포로 출력을 바꿀 수 있음. 
 - sklearn.preprocessing.PowerTransformer() : 데이터의 특성별로 정규분표에 가깝게 변환해주는 스케일러 로드. method='yeo_johnson'(양수 음수 값 둘 다 지원, 기본값) 과 method='box-cox'(양수만 지원.)를 지정해 줄 수 있다. 
-- sklearn.preprocessing.KBinsDiscretizer(n_bins=n, strategy='uniform') : n개로 구간 분할 모델 로드. .bin_edges_ 에 각 특성별 경곗값이 저장되어 있다. transform 메서드는 각 데이터 포인트를 해당 구간으로 인코딩하는 역할을 한다. 기본적으로 구간에 원 핫 인코딩을 적용한다. transform 결과.toarray()로 원핫 인코딩된 결과를 볼 수 있다.  
-- sklearn.preprocessing.PolynomialFeatures(degree=i, include_bias=bool) : x**i 까지 고차항(다항식)을 추가해 특성을 풍부하게 나타내는(구간 분할과 비슷한 효과) 모델 로드. bool 이 T 면 절편에 해당하는 1인 특성을 추가한다. 다항식 특성을 선형 모델과 같이 사용하면 전형적인 다항 회귀 모델(결과가 곡선)이 된다. 고차원 다항식은 데이터가 부족한 영역에서는 너무 민감하게 동작한다는 문제점이 있다.    
 ###### decomposition
-- sklearn.decomposition.PCA() : 주성분 분석(PCA) 프로세서 로드. 기본값은 데이터를 회전,이동만 시키고 모든 주성분을 유지하지만 n_component 매개변수에 값을 넣어 유지시킬 주성분의 개수를 정할 수 있다. fit 시 모델.components_ 속성에 주성분이 저장된다. whiten=T 로 주성분의 스케일이 같아지게 할 수 있다. .inverse_transform 을 사용해 원본 공간으로 되돌릴 수 있다. 
-- sklearn.decomposition.NMF(random_state = 0) : NMF 프로세서 로드. n_component 매개변수에 값을 넣어 유지시킬 주성분의 개수를 정할 수 있다. 
-- sklearn.manifold.TSNE(random_state=n) : 매니폴드학습 알고리즘의 t-SNE 알고리즘 모델 로드. 데이터들을 알아서 나눔. 훈련시킨 모델만 변경 가능해 transform 메서드 없이 fit_transform() 메서드만 지원한다. 
-###### cluster(agglomerative)  
-- .fit_predict(data) 로 각 데이터 포인트가 속한 클러스터들을 리스트 형태로 받아 볼 수 있다.
-- sklearn.cluster.KMeans(n_cluster=n) : n개의 클러스터 중심점을 생성하는 k-평균 알고리즘 모델 로드. .labels_ 에 각 데이터 포인트가 포함된 클러스터들을 리스트 형태로 볼 수 있고, .predict 로 새로운 데이터의 데이터포인트가 어느 클러스터에 속할 지 예측할 수 있다.
-- sklearn.cluster.AgglomerativeClustering(n_cluster=n, linkage="ward/average/complete") : 병합 군집 모델 로드. 모든 클러스터 내의 분산을 가장 적게 증가시키는(기본, 대부분 알맞음)/평균 거리가 가장 짦은/최대 거리가 가장 짦은 두 클러스터를 합친다.   
-- sklearn.cluster.DBSCAN(min_sample=i, eps=j) : DBSCAN 군집 모델 로드. j 거리에 i 개 이상 데이터가 있다면 그 데이터 포인트를 핵심 샘플로 지정한다. 어느 군집에도 속하지 않는 포인트를 noise 로 지정해, -1의 레이블을 가지며 이를 이용해 이산치 검출을 할 수 있다.   
-###### one-hot-encoding
-- sklearn.processing.OneHotEncoder(spares=bool) : 원 핫 인코딩 모델 로드. sparse 가 False 면 희소행렬이 아니라 ndarray 로 반환된다. .fit_transform(data)로 사용, .get_feature_names() 로 원본 데이터의 변수 이름을 얻을 수 있다.
-- sklearn.compose.ColumnTransformer([("scaling",스케일러,['스케일 조정할 연속형 열 이름들']), ("onehot",원핫인코더,['원핫인코딩할 범주형 열 이름들'])]) : 각 열마다 다른 전처리(스케일 조정, 원핫인코딩)을 하게 해주는 ct 로드. 
-- sklearn.compose.make_column_transformer([(['스케일 조정할 연속형 열 이름들'], 스케일러), (['원핫인코딩할 범주형 열 이름들'], 원핫인코더)]) : 클래스 이름을 기반으로 각 단계에 이름을 붙여주는  ct 로드.
-###### feature-selection
-- sklearn.feature_selection.SelectKBest/SelectPercentile(score_func=f, percentile=i) : 일변량 통계 모델 로드. 고정된 K 개의 특성을/지정된 비율만큼 특성을 선택한다. f 는 분류면 feature_selection.f_classif, 회귀면 feature_selection.f_regression 를 사용하고, i 는 백분율로 입력한다.
-- sklearn.feature_selection.SelectFromModel(모델, threshold='median/mean') : 모델을 이용한 모델기반 자동선택 모델 로드. 중요도가 임계치(threshold)보다 큰 모든 특성을 선택한다. 중간/평균 이며 '1.3*median' 식으로 비율을 지정할 수도 있다. 
-- sklearn.feature_selection.RFE(모델, n_feature_to_select = n) : 모델을 이용해 n개 까지 재귀적 특성 제거를 하는 반복적 특성 선택 모델 로드. 
+- sklearn.decomposition.PCA() : 주성분 분석(PCA) 프로세서 로드. 기본값은 데이터를 회전,이동만 시키고 모든 주성분을 유지하지만 n_component 매개변수에 값을 넣어 유지시킬 주성분의 개수를 정할 수 있다. fit 시 모델.components_ 속성에 주성분이 저장된다.
+
+#### unsupervised learning
+
+#### RL
+- sklearn.cluster.KMeans(n_cluster = k) > k개의 클러스터(군집)를 가진 K평균 모델을 생성. .fit(X)으로 훈련, .predict(X)사용할 수 있다. .cluster_centers_ 에 각 클러스터의 중심점이 기록되어 있다.
 
 
 #### metrics
-- sklearn.metrics.classification_report(테스트 결과, 실제) : 정확도를 다양한 방식이 모여있는 표로 반환.
-- sklearn.metrics.***_score(테스트 결과, 실제) : 훈련 결과의 정확도를 다양한 방식으로 반환.
-- sklearn.metrics.accuracy_score(테스트 결과, 실제) : 둘의 일치도를 그대로 정확도로 반환.
-- sklearn.metrics.f1_score(테스트 결과, 실제) : F1 Measure 를 이용하여 정확도를 반환.
-  
-- sklearn.model_selection.cross_val_score(모델, data, labels, cv=i) : 모델을 이용해 i번 폴드하는 교차 검증 사용. 총 i개 모델의 정확도를 배열로 반환한다. 보통 반환값.mean()을 이용한 평균값으로 간단하게 정확도를 나타낸다. cv 에 KFold 객체 등을 넣어 사용할 수 도 있다. 그리드 서치와 함께 n_jobs 매개변수로 사용할 cpu 수를 지정할 수 있다. 데이터셋과 모델이 너무 클때는 여러 코어를 쓰면 메모리 사용량이 너무 커져 메모리 사용 현환을 모니터링해야 한다.
-- sklearn.model_selection.cross_validate(모델, data, labels, cv=i, return_train_score=bool) : 위와 같지만 훈련과 테스트에 걸린 시간까지 담아 딕셔너리로 반환한다. bool 이 T 면 테스트 스코어도 같이 포함해 반환된다. 모델을 그리드 서치로 사용하면 중첩 교차 검증의 구현이 가능하다.
-- sklearn.model_selection.LeaveOneOut() :  LOOCV 로드. 위의 cv 매개변수로 넣어 사용할 수 있다. 큰 데이터 셋에선 시간이 오래 걸리지만, 작은 데이터 셋에선 종종 더 좋은 효과를 낸다.
-- sklearn.model_selection.ShuffleSplit(train_size=i/f, test_siz=i/f, n_split=n) :  i개의 데이터 포인트로/f의 데이터 포인트 비율로 n번 반복분할 하는 임의 분할 교차 검증 로드. cv 매개변수에 넣어 사용할 수 있다.
-- sklearn.model_selection.RepeatedStratifiedKFold/RepeatedKFold(random_state = i) : 반복 교차 검증 로드. 분류/회귀 이며 model_selection.StratifiedKFold/KFold 를 기본으로 사용하기 때문에 import 를 해주어야 한다. cv 에 매개변수. 
-- sklearn.model_selection.GridSearchCv(모델, 파라미터 딕셔너리({'변수명':[넣을 수 리스트]}, 딕셔너리의 리스트로 넣으면 조건부로 그리드 탐색), cv=i, return_train_score=bool) : 교차검증을 사용한 그리드 서치 매개변수 조정 방법 로드. .fit(data, label)로 설정된 매개변수 조합에 대해 교차검증을 수행하고, 가장 성능이 좋은 배개변수로 데이터에 대한 새 모델을 자동으로 만듦. 모델엔 .score(test_data, test_label)과 .predict(data)로 접근 가능하다. {.best_params_ : 선택한 매개변수, .best_score_ :  이 설정으로 얻은 정확도 ,  .best_estimator_ :  이 설정으로 얻은 정확도, .cv_result_ : 각 결과}  
- 
-- sklearn.metrics.confusion_matrix(label, pred_logreg(예측결과)) : 오차 행렬 표시. [(음성데이터)[음성으로 예측한 수, 양성으로 예측한 수] (양성데이터)[음성으로 예측한 수, 양성으로 예측한 수]] 식으로 반환된다.
-
-
-
-### RL
-
+- sklearn.metrics.classification_report(테스트 결과, 실제) > 정확도를 다양한 방식이 모여있는 표로 반환.
+- sklearn.metrics.***_score(테스트 결과, 실제) > 훈련 결과의 정확도를 다양한 방식으로 반환.
+- sklearn.metrics.accuracy_score(테스트 결과, 실제) > 둘의 일치도를 그대로 정확도로 반환.
+- sklearn.metrics.f1_score(테스트 결과, 실제) > F1 Measure 를 이용하여 정확도를 반환.
