@@ -329,7 +329,7 @@
 - sklearn.preprocessing.KBinsDiscretizer(n_bins=n, strategy='uniform') : n개로 구간 분할 모델 로드. .bin_edges_ 에 각 특성별 경곗값이 저장되어 있다. transform 메서드는 각 데이터 포인트를 해당 구간으로 인코딩하는 역할을 한다. 기본적으로 구간에 원 핫 인코딩을 적용한다. transform 결과.toarray()로 원핫 인코딩된 결과를 볼 수 있다.  
 - sklearn.preprocessing.PolynomialFeatures(degree=i, include_bias=bool) : x**i 까지 고차항(다항식)을 추가해 특성을 풍부하게 나타내는(구간 분할과 비슷한 효과) 모델 로드. bool 이 T 면 절편에 해당하는 1인 특성을 추가한다. 다항식 특성을 선형 모델과 같이 사용하면 전형적인 다항 회귀 모델(결과가 곡선)이 된다. 고차원 다항식은 데이터가 부족한 영역에서는 너무 민감하게 동작한다는 문제점이 있다.    
 ###### decomposition
-- sklearn.decomposition.PCA() : 주성분 분석(PCA) 프로세서 로드. 기본값은 데이터를 회전,이동만 시키고 모든 주성분을 유지하지만 n_component 매개변수에 값을 넣어 유지시킬 주성분의 개수를 정할 수 있다. fit 시 모델.components_ 속성에 주성분이 저장된다. whiten=T 로 주성분의 스케일이 같아지게 할 수 있다. .inverse_transform을 사용해 원본 공간으로 되돌릴 수 있다. 
+- sklearn.decomposition.PCA() : 주성분 분석(PCA) 프로세서 로드. 기본값은 데이터를 회전,이동만 시키고 모든 주성분을 유지하지만 n_component 매개변수에 값을 넣어 유지시킬 주성분의 개수를 정할 수 있다. fit 시 모델.components_ 속성에 주성분이 저장된다. whiten=T 로 주성분의 스케일이 같아지게 할 수 있다. .inverse_transform 을 사용해 원본 공간으로 되돌릴 수 있다. 
 - sklearn.decomposition.NMF(random_state = 0) : NMF 프로세서 로드. n_component 매개변수에 값을 넣어 유지시킬 주성분의 개수를 정할 수 있다. 
 - sklearn.manifold.TSNE(random_state=n) : 매니폴드학습 알고리즘의 t-SNE 알고리즘 모델 로드. 데이터들을 알아서 나눔. 훈련시킨 모델만 변경 가능해 transform 메서드 없이 fit_transform() 메서드만 지원한다. 
 ###### cluster(agglomerative)  
@@ -341,14 +341,28 @@
 - sklearn.processing.OneHotEncoder(spares=bool) : 원 핫 인코딩 모델 로드. sparse 가 False 면 희소행렬이 아니라 ndarray 로 반환된다. .fit_transform(data)로 사용, .get_feature_names() 로 원본 데이터의 변수 이름을 얻을 수 있다.
 - sklearn.compose.ColumnTransformer([("scaling",스케일러,['스케일 조정할 연속형 열 이름들']), ("onehot",원핫인코더,['원핫인코딩할 범주형 열 이름들'])]) : 각 열마다 다른 전처리(스케일 조정, 원핫인코딩)을 하게 해주는 ct 로드. 
 - sklearn.compose.make_column_transformer([(['스케일 조정할 연속형 열 이름들'], 스케일러), (['원핫인코딩할 범주형 열 이름들'], 원핫인코더)]) : 클래스 이름을 기반으로 각 단계에 이름을 붙여주는  ct 로드.
-
+###### feature-selection
+- sklearn.feature_selection.SelectKBest/SelectPercentile(score_func=f, percentile=i) : 일변량 통계 모델 로드. 고정된 K 개의 특성을/지정된 비율만큼 특성을 선택한다. f 는 분류면 feature_selection.f_classif, 회귀면 feature_selection.f_regression 를 사용하고, i 는 백분율로 입력한다.
+- sklearn.feature_selection.SelectFromModel(모델, threshold='median/mean') : 모델을 이용한 모델기반 자동선택 모델 로드. 중요도가 임계치(threshold)보다 큰 모든 특성을 선택한다. 중간/평균 이며 '1.3*median' 식으로 비율을 지정할 수도 있다. 
+- sklearn.feature_selection.RFE(모델, n_feature_to_select = n) : 모델을 이용해 n개 까지 재귀적 특성 제거를 하는 반복적 특성 선택 모델 로드. 
 
 
 #### metrics
-- sklearn.metrics.classification_report(테스트 결과, 실제) > 정확도를 다양한 방식이 모여있는 표로 반환.
-- sklearn.metrics.***_score(테스트 결과, 실제) > 훈련 결과의 정확도를 다양한 방식으로 반환.
-- sklearn.metrics.accuracy_score(테스트 결과, 실제) > 둘의 일치도를 그대로 정확도로 반환.
-- sklearn.metrics.f1_score(테스트 결과, 실제) > F1 Measure 를 이용하여 정확도를 반환.
+- sklearn.metrics.classification_report(테스트 결과, 실제) : 정확도를 다양한 방식이 모여있는 표로 반환.
+- sklearn.metrics.***_score(테스트 결과, 실제) : 훈련 결과의 정확도를 다양한 방식으로 반환.
+- sklearn.metrics.accuracy_score(테스트 결과, 실제) : 둘의 일치도를 그대로 정확도로 반환.
+- sklearn.metrics.f1_score(테스트 결과, 실제) : F1 Measure 를 이용하여 정확도를 반환.
+  
+- sklearn.model_selection.cross_val_score(모델, data, labels, cv=i) : 모델을 이용해 i번 폴드하는 교차 검증 사용. 총 i개 모델의 정확도를 배열로 반환한다. 보통 반환값.mean()을 이용한 평균값으로 간단하게 정확도를 나타낸다. cv 에 KFold 객체 등을 넣어 사용할 수 도 있다. 그리드 서치와 함께 n_jobs 매개변수로 사용할 cpu 수를 지정할 수 있다. 데이터셋과 모델이 너무 클때는 여러 코어를 쓰면 메모리 사용량이 너무 커져 메모리 사용 현환을 모니터링해야 한다.
+- sklearn.model_selection.cross_validate(모델, data, labels, cv=i, return_train_score=bool) : 위와 같지만 훈련과 테스트에 걸린 시간까지 담아 딕셔너리로 반환한다. bool 이 T 면 테스트 스코어도 같이 포함해 반환된다. 모델을 그리드 서치로 사용하면 중첩 교차 검증의 구현이 가능하다.
+- sklearn.model_selection.LeaveOneOut() :  LOOCV 로드. 위의 cv 매개변수로 넣어 사용할 수 있다. 큰 데이터 셋에선 시간이 오래 걸리지만, 작은 데이터 셋에선 종종 더 좋은 효과를 낸다.
+- sklearn.model_selection.ShuffleSplit(train_size=i/f, test_siz=i/f, n_split=n) :  i개의 데이터 포인트로/f의 데이터 포인트 비율로 n번 반복분할 하는 임의 분할 교차 검증 로드. cv 매개변수에 넣어 사용할 수 있다.
+- sklearn.model_selection.RepeatedStratifiedKFold/RepeatedKFold(random_state = i) : 반복 교차 검증 로드. 분류/회귀 이며 model_selection.StratifiedKFold/KFold 를 기본으로 사용하기 때문에 import 를 해주어야 한다. cv 에 매개변수. 
+- sklearn.model_selection.GridSearchCv(모델, 파라미터 딕셔너리({'변수명':[넣을 수 리스트]}, 딕셔너리의 리스트로 넣으면 조건부로 그리드 탐색), cv=i, return_train_score=bool) : 교차검증을 사용한 그리드 서치 매개변수 조정 방법 로드. .fit(data, label)로 설정된 매개변수 조합에 대해 교차검증을 수행하고, 가장 성능이 좋은 배개변수로 데이터에 대한 새 모델을 자동으로 만듦. 모델엔 .score(test_data, test_label)과 .predict(data)로 접근 가능하다. {.best_params_ : 선택한 매개변수, .best_score_ :  이 설정으로 얻은 정확도 ,  .best_estimator_ :  이 설정으로 얻은 정확도, .cv_result_ : 각 결과}  
+ 
+- sklearn.metrics.confusion_matrix(label, pred_logreg(예측결과)) : 오차 행렬 표시. [(음성데이터)[음성으로 예측한 수, 양성으로 예측한 수] (양성데이터)[음성으로 예측한 수, 양성으로 예측한 수]] 식으로 반환된다.
+
+
 
 ### RL
 
