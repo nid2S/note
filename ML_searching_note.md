@@ -334,6 +334,7 @@
 - sklearn.decomposition.PCA() : 주성분 분석(PCA) 프로세서 로드. 기본값은 데이터를 회전,이동만 시키고 모든 주성분을 유지하지만 n_component 매개변수에 값을 넣어 유지시킬 주성분의 개수를 정할 수 있다. fit 시 모델.components_ 속성에 주성분이 저장된다. whiten=T 로 주성분의 스케일이 같아지게 할 수 있다. .inverse_transform 을 사용해 원본 공간으로 되돌릴 수 있다. 
 - sklearn.decomposition.NMF(random_state = 0) : NMF 프로세서 로드. n_component 매개변수에 값을 넣어 유지시킬 주성분의 개수를 정할 수 있다. 
 - sklearn.manifold.TSNE(random_state=n) : 매니폴드학습 알고리즘의 t-SNE 알고리즘 모델 로드. 데이터들을 알아서 나눔. 훈련시킨 모델만 변경 가능해 transform 메서드 없이 fit_transform() 메서드만 지원한다. 
+- sklearn.decomposition.LatentDirichletAllocation(n_components=n, learning_method="batch/online", max_iter=i, random_state=0) : n개의 토픽을 생성하는 LDA 로드. 기본 학습 방법인 online 대신 조금 느리지만 성능이 더 나은 batch 방법을 사용할 수 있고, i를 높이면 모델 성능이 좋아진다(기본값은 10). 각 단어의 중요도를 저장한 .components_ 의 크기는 (n, n_words)이다.  
 ###### cluster(agglomerative)  
 - .fit_predict(data) 로 각 데이터 포인트가 속한 클러스터들을 리스트 형태로 받아 볼 수 있다.
 - sklearn.cluster.KMeans(n_cluster=n) : n개의 클러스터 중심점을 생성하는 k-평균 알고리즘 모델 로드. .labels_ 에 각 데이터 포인트가 포함된 클러스터들을 리스트 형태로 볼 수 있고, .predict 로 새로운 데이터의 데이터포인트가 어느 클러스터에 속할 지 예측할 수 있다.
@@ -378,16 +379,23 @@
 - Bow 표현을 만드려면 .transform(list), Scipy 희소 행렬로 저장되어 있으며, .get_feature_names()로 각 특성에 해당하는 단어들을 볼 수 있음. min_df 매개변수로 토큰이 나타날 최소 문서 개수를 지정할 수 있고, max_df 매개변수로 자주 나타나는 단어를 제거할 수 있다. stop_words 매개변수에 "english" 를 넣으면 내장된 불용어를 사용한다.
 - sklearn.feature_extraction.text.TfidVectorizer(min_df=i) : 텍스트 데이터를 입력받아 BOW 특성 추출과 tf-idf 를 실행하고 L2정규화(스케일 조정)까지 적용하는 모델로드. 훈련데이터의 통걔적 속성을 사용하므로 파이프 라인을 이용한 그리드 서치를 해 주어야 한다. .idf_ 에서 훈련세트의 idf 값을 볼 수 있다. idf 값이 낮으면 자주 나타나 덜 중요하다 생각되는 것이다.
 
-- > ###### spacy
-- >+ 영어와 독일어를 지원하는 NLP 파이썬 패키지. 표제어 추출 방식이 구현되어 있음. 
-- >+ python -m spacy download en 으로 언어의 모델을 먼저 다운받아야 함.
-- >+ spacy.load('en') : spacy 의 영어 모델 로드. 
-- >+ 모델(document) : 문서 토큰화. 찾은 표제어들 반환.
--   
-- > ###### nltk
-- >+ 포터 어간 추출기가 구현되어 있는 파이썬 패키지.
-- >+ nlty.stem.PorterStemmer() : PorterStemmer 객체 생성.
-- >+ 객체.stem(토큰.norm_.lower()) > 토큰(어간) 찾기.
+> ###### spacy
+>+ 영어와 독일어를 지원하는 NLP 파이썬 패키지. 표제어 추출 방식이 구현되어 있음. 
+>+ python -m spacy download en 으로 언어의 모델을 먼저 다운받아야 함.
+>+ spacy.load('en') : spacy 의 영어 모델 로드. 
+>+ 모델(document) : 문서 토큰화. 찾은 표제어들 반환.
+   
+> ###### nltk
+>+ 포터 어간 추출기가 구현되어 있는 파이썬 패키지.
+>+ nlty.stem.PorterStemmer() : PorterStemmer 객체 생성.
+>+ 객체.stem(토큰.norm_.lower()) > 토큰(어간) 찾기.
+ 
+> ###### KoNLpy
+>+ 한글 분석을 가능하게 하는 파이썬 패키지.
+>+ konlpy.tag.Okt() >  Okt 클래스 객체 생성. .morphs(text)로 형태소 분석이 가능하다.
+
+
+
 
 
 ### RL
