@@ -39,20 +39,19 @@
 - 반복문자를 포함하는 단어를 역참조 방식을 사용해 제거.
 ###### 단어 동의어 대체
 - 더 훌륭한 성능과 적은 오류를 위해 같은 의미의 단어를 하나로 변환.
-
-
-
-# re
-- 정규 표현식 사용 클래스(?)
-- re.compile() : 
-- re.subn() : 
-
-
-# replacers
-- replacers.RegexpReplacer() : 텍스트 대체 클래스 로드. .replace(text)로 사용, 축약을 해제하고 단어 토큰화까지 진행해 리스트로 반환.
-- replacers.RepeatReplacer() : 반복 문자 삭제 클래스 로드. 위와 동일하게 사용할 수 있으며, 반복된 단어를 일반 단어로 바꿔 반환한다. nltk 의 wordnet.synsets(word)에 이미 있다면 처리하지 않도록 하면 일반 단어는 반복을 삭제하지 않는다.
-- replacers.WordReplacer({'바꿀단어':'바뀔단어'}) : 단어를 동의어로 변환하는 클래스 로드. 마찬가지로 사용, 목록에 있는 단어는 바꿔서, 아니면 그대로 반환한다.
-
+###### 유사척도
+- 지프의 법칙 : 토큰이 언어로 배포되는 방법을 설명. 토큰 빈도가 정렬된 목록의 순위와 정비례하게 함. 
+- 편집 거리 : 두 문자열을 동일하게 하려면 삽입,대체,삭제해야 하는 문자의 수를 계산. 
+- 자카드 계수(타니모토 계수) : 두 세트의 곱집합 / 합집합. 동일하면 1, 완전 다르면 0이다.
+- 스미스 워터맨 거리 : 편집거리와 유사. 관련된 단백질서열 및 광학정렬을 검출하기 위해 개발됨.
+- 이진 거리 : 문자열 유사도 메트릭. 두 라벨이 동일하면 0, 다르면 1을 반환.
+- 매시 거리 : 부분 일치에 기초. 1 - (곱집합 길이/합집합 길이)*(두 세트의 길이차에 따른 점수(1, 0.67, 0.33, 0))
+###### 단어 빈도 (ngrams)
+- 연어 : 함께하는 경향이 있는 둘 이상의 토큰의 집합.
+###### 조건부 지수 분류
+- MLE : 다항기호 논리학 회귀(multinomial logistic regression)혹은 조건부 지수 분류기 라고도 함. 텍스트에서 주어진 확률 분포를 포함하는 frequency 를 생성하는데 사용됨.
+- 확률 분포 : 파생 확룰 분포()와 분석 확률 분포()로 구성. 도수분포()에서 얻음. (?)
+- 최대 우도 추정 : 도수분포를 얻기 위한 추정. 빈도에 기초해 모든 발생 확률을 계산.
 
 # NLTK
 - nltk.download() : NLTK 세트 다운로드. 특정 세트의 이름을 넣으면 그것만 다운로드한다.
@@ -76,6 +75,39 @@
 ### corpus
 - nltk.corpus.stopwords() : 불용어 처리 클래스 로드. .words('언어')로 불용어 목록을 받아올 수 있으며(set 로 묶어주는게 좋고, not in 으로 거를 수 있음) .fileids()로 불용어 목록이 있는 언어를 확인할 수 있다.
 - nltk.corpus.wordnet() : 단어들의 목록 로드. .synsets(word)로 안에 있는지 확인 가능. (?)
+- nltk.corpus.alpino() : 알피노 코퍼스 로드. .word()로 내부의 단어들을 꺼낼 수 있다. 다른 것들도 사용가능.
+
+### metrics
+- nltk.metrics.accuracy(sentence1, sentence2) : 두 토큰화된 단어 리스트의 정확도(같은 정도)반환.
+- nltk.metrics.precision(sentence1, sentence2) : 두 토큰화된 단어 리스트의 정밀도(TP/(TP+FP))반환.
+- nltk.metrics.recall(sentence1, sentence2) : 두 토큰화된 단어 리스트의 재현율(TP/(TP+FN))반환.
+- nltk.metrics.f_measure(sentence1, sentence2) : 두 토큰화된 단어 리스트의 f1점수(정밀도와 재현율의 조화 평균(역수의 평균의 역수,곱/합))반환.
+
+- nltk.metrics.edit_distance(word1, word2) : 두 단어간 편집거리 반환.
+- nltk.metrics.jaccard_distance(set1, set2) : 두 세트간 자카드 계수 반환.
+- nltk.metrics.binary_distance(set1, set2) : 두 세트간 이진거리 계수 반환.
+- nltk.metrics.masi_distance(set1, set2) : 두 세트간 매시거리 계수 반환.
+
+### ngrams
+- nltk.util.ngrams(단어 리스트, n) : n개의 토큰이 연결되어 있는 n그램 생성. 
+- nltk.collocations.BigramCollocationFinder : 바이그램 탐색기. .from_words(tokens)로 토큰을 저장할 수 있다.
+- 토큰저장탐색기.nbest(nltk.metrics.BigramAssocMeasures.likelihood_ratio, n) : n개의 바이그램을 찾아 리스트를 받아볼 수 있다.
+- 토큰저장탐색기.score_ngrams(nltk.collocations.BigramAssocMeasures().raw_freq) : 바이그램을 찾는 또다른 방법.
+
+
+
+
+
+# re
+- 정규 표현식 사용 클래스(?)
+- re.compile() : 
+- re.subn() : 
+
+
+# replacers
+- replacers.RegexpReplacer() : 텍스트 대체 클래스 로드. .replace(text)로 사용, 축약을 해제하고 단어 토큰화까지 진행해 리스트로 반환.
+- replacers.RepeatReplacer() : 반복 문자 삭제 클래스 로드. 위와 동일하게 사용할 수 있으며, 반복된 단어를 일반 단어로 바꿔 반환한다. nltk 의 wordnet.synsets(word)에 이미 있다면 처리하지 않도록 하면 일반 단어는 반복을 삭제하지 않는다.
+- replacers.WordReplacer({'바꿀단어':'바뀔단어'}) : 단어를 동의어로 변환하는 클래스 로드. 마찬가지로 사용, 목록에 있는 단어는 바꿔서, 아니면 그대로 반환한다.
 
 
 # Gensim
