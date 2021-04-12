@@ -33,7 +33,7 @@
 - 문장의 전체적 의미에 크게 기여하지 않는 불용어를 검색 공간 줄이기 등의 이유로 제거하는 과정.
 ###### 텍스트 대체  
 - 축약이나 줄임말 등을 본래대로 풀어 처리를 효과적이게 하는 과정.
-- 정규 표현식 이용 텍스트 대체:  import re >  [(r'won\'t', 'will not')]식으로 제작 > re.compile(앞에꺼) > re.subn(컴파일, 뒤에꺼, text)[0] 의 과정을 거쳐 할 수 있음
+- 정규 표현식 이용 텍스트 대체:  import re >  [(r'won\'t', 'will not'), (바꿀단어, 바꿜 단어)]식으로 제작 > re.compile(바꿀 단어) > re.subn(컴파일, 바뀔 단어, text)[0] 의 과정을 거쳐 할 수 있음.
 ###### 반복 문자 처리
 - 무의미하고 오류를 일으키는 반복문자를 일반 문자로 변환.
 - 반복문자를 포함하는 단어를 역참조 방식을 사용해 제거.
@@ -56,6 +56,11 @@
 - 스무딩 : 이전에 발생하지 않은 단어 처리에 사용. MLE 의 알려지지 않은 단어의 확률이 0이라는 문제점을 해결하기 위해 사용한다.
 - 에드온 스무딩 : 1이 각 단어의 수에 추가, 알려지지 않은 단어의 개수에 다른 값을 더할 수 있어 알려지지 않은 단어의 처리를 가능케 한다.
 - 굿 튜닝 : 통계적 기법의 성능을 향상시키는 효율적 스무딩 방법. 보이지 않는 객체의 확률 예측에 도움.
+
+
+
+
+
 
 # NLTK
 - nltk.download() : NLTK 세트 다운로드. 특정 세트의 이름을 넣으면 그것만 다운로드한다.
@@ -98,13 +103,6 @@
 - 토큰저장탐색기.nbest(nltk.metrics.BigramAssocMeasures.likelihood_ratio, n) : n개의 바이그램을 찾아 리스트를 받아볼 수 있다.
 - 토큰저장탐색기.score_ngrams(nltk.collocations.BigramAssocMeasures().raw_freq) : 바이그램을 찾는 또다른 방법.
 - nltk.probability.LidstoneProbDist(fd, gamma=f, bins = n) = 최대 우도 추정 사용. fd(빈도분포)를 기반으로 f(0~1)를 사용해 n개의 샘플을 생성. 샘플들의 총 합은 1. 
-
-### (?)
-- nltk.util.unique_list(words) : 
-- nltk.tag.HiddenMarkovModelTrainer(tags, uniqueList) : 은닉 마르코프 모델. 
-
-
-
 
 # re
 - 정규 표현식 사용을 지원.
