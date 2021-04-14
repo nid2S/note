@@ -89,33 +89,18 @@
 
 # matplotlib.pyplot
 ***
-- plt.figure(figsize=(x,y)) > 그래프를 보여주는 창을 생성한다. x,y는 생략가능.
-- plt.title("창 제목") > 표시되는 창의 제목을 설정.
+- plt.plot(정수형 리스트) : 리스트대로 그래프 생성. 그래프가 하나면 그것의 값이 y값 이라고 가정하고 자동으로 x를 만들어 그래프 생성.
+- plt.plot(정수형 리스트, 'ro') : ro - 빨간색 원형 마커. 이런식으로 색과 그래프 마커를 지정해 줄 수 있음.
+- plt.plot(x,y,type,x,y,type) : 이런 식으로 여러개의 그래프를 그릴 수 도 있다. 
+- plt.axis([x min, x max, y min, y max]) : 축의 범위 지정.
 
-- plt.plot(x, y, marker) > x와 y 배열을 x축, y 축으로 하는 그래프 생성. (마커 =) 'x' 식으로 마커를 지정해줄 수도 있다. 여러번 쓰면 한 화면에 여러개의 그래프(같은 종류라도)를 나타낼 수 있다.
-- plt.subplot(행,열,번호) > 그 행, 그 열에 그 번호를 가지는 새로운 plot 을 생성한다.
-- plt.tight_layout() > 이미지 겹침을 방지한다. 위의 subplot 아래에 써주면 좋음.
-
-- plt.imshow(RGB 이미지) > plot 에 이미지를 준비함.
-- plt.show() > imshow 로 준비된 것을 출력.
-
-- plt.bar/barh(compute_pos(yticks, height, i, models), data[model], height=height*0.95, label=model, color=colors[i]) > 세로/가로막대를 그림. 
-- plt.hist() > 히스토그램을 그림.
- 
-  
-- plt.grid(bool) > 격자 표시 여부
-- plt.colorBar() > 픽셀값이 나타난 컬러바 설정
-- plt.legend() > 범례 설정
-- plt.x/ylabel(str) > x/y축 제목을 설정
-- plt.x/yticks([틱]) > plot 의 x/y축을 설정. []만 넣으면 축을 없앨 수 있다.
-- plt.x/ylim(start, end) > plot 의 x/y축을 간격을 설정.
 
 
 # plotnine
 ***
 - (plotnine.ggplot(petitions)  : 데이터로 그래프 제작
--  + plotnine.aes('category')  : 데이터 축 설정. x='' , y='' 식으로 레이블을 지정하지 않고 하나만 지정하면 x로 들어감.
--  + plotnine.geom_bar(fill='green')) : 데이터 종류 설정. geom_point() 식으로 하면 산점도 타입이다.
+-  plotnine.aes('category')  : 데이터 축 설정. x='' , y='' 식으로 레이블을 지정하지 않고 하나만 지정하면 x로 들어감.
+-  plotnine.geom_bar(fill='green')) : 데이터 종류 설정. geom_point() 식으로 하면 산점도 타입이다.
 - plotnine.ggplot(data=데이터, mapping= plotnine.aes(x=, y=, color=) + plotnine.geom_point(alpha=f)) : 식으로도 가능하다.   
 
 
@@ -404,7 +389,16 @@
 
 
 # os
-- os.path.basename(경로) : 경로에서 파일 이름만 추출해 반환.
-- os.path.join(하위 폴더, 상위 폴더/) : 경로 합치기. os.getcwd()로 얻을 수 있는 현재 dir 과 같이 사용하면 유용..
+- os.getcwd() : 현재 작업 폴더 반환.
+- os.chdir(경로) : 디렉토리 변경.
+- os.path.abspath(상대 경로) : 절대 경로 반환. 
+- os.path.dirname(경로) : 디렉토리명만 반환.
+- os.path.basename(경로) : 파일 이름만 반환.
 - os.listdir(경로) : 경로 안의 파일 이름을 전부 반환.
+- os.path.join(상위, 하위) : 경로를 병합해 새 경로 생성. ('C:\Tmp', 'a', 'b')식으로 넣는다.
+- os.path.isdir(경로) : 폴더의 존재 여부를 반환.
+- os.path.isfile(경로) : 파일의 존재 여부를 반환.
+- os.path.exists(경로) : 파일 혹은 디렉토리의 존재 여부를 반환.
+- os.path.getsize(경로) : 파일의 크기 반환.
+
 
