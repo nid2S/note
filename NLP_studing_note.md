@@ -6,19 +6,12 @@
 >     - 형태소 분석기(konlpy, mecab)
 >     .... 등
 
-> variation of RNN
->      - RNN
->     -GRU
->     -LSTM
-
+> variation of RNN - RNN, GRU, LSTM
 > variation of transformer
-> encoder
->     - Bert
-> decoder 
->     -gpt
+> encoder - Bert
+> decoder - gpt
 > Bert + gpt -> Bart(generator)
-
-> 그리고 2번째는 mnist-> 영화 감성 분류 (IMDB) -> 캐글 재난 분류(이건 바뀔수도)
+> mnist-> 영화 감성 분류 (IMDB) -> 캐글 재난 분류
 
 # 자연어 처리
 - 자연어와 컴퓨터간 상호작용에 대함. 인공지능과 컴퓨터 언어학의 주요 분야중 하나.
@@ -98,13 +91,15 @@
 - 첫 MHA 레이어는 masked Multi head attention 이며, 현재 디코더의 입력을 쿼리로, 인코더 출력 정보를 키와 벨류로 사용한다.
 - 벡터를 실제 단어로 출력하기 위해 끝에 리니어와 softmax 가 존재한다. 레이블 스무딩을 이용해 마지막까지 성능 향상을 한다.
 ##### GPT
-- Generative pre Training of a language model 의 약어.
+- Generative Pre Training of a language model 의 약어.
 - language model : 현재 알고있는 단어를 기반으로 다음 단어를 예측하는데 많이 사용되는 모델. 레이블링이 불필요하다는 장점이 있음. GPT-1의 핵심. 비지도, GPT-1은 다 분야의 엄청난 양의 데이터로 pre trained 됨.  
 - generative model : 머신러닝 모델의 학습 방법 중 하나. 데이터가 많을수록 학습이 잘 됨.
 - BPE(바이트 페어 인코딩) : 자주 함께 사용되는 char 를 하나의 묶음으로 사용(최소한의 단어). 워드 임베딩과 캐릭터 임베딩의 장점을 모두 가지고 있음. (word)단어간의 유사도와 (char)처음보는 문자의 예측 모두가 가능함. 
 - GPT-1 : 문장간 관계 유추, 질의 응답, 문장유사도, 분류등에 뛰어난 성능을 보임. 언어 모델로 학습, 파인 튜닝(linear 와 softmax, 추가적인 레이어 없이 적은 양의 레이블 만으로도 가능) 두 단계를 거침. 트랜스포머의 디코더기반 모델. 
 - GPT-2 : 1과 달리 파인튜닝을 없애고, 사이즈가 커짐. 입력된 값과 수행해야할 task(다음단어, 번역, 응답 등)를 함께 입력받아 다음 단어를 출력. 
 - GPT-3 : 파인튜닝 제거(가능하긴 하나 필요 X)를 핵심으로 하고 있음. 제로샷이나 원샷이 아닌 퓨샷러닝(몇장의 이미지만 사용)만을 이용. 여러 분야에서 뛰어난 성능을 보이나 단방향으로 학습해 문맥 파악에 약하다는 단점을 가짐.     
+
+
 
 
 
