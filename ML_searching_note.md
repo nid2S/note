@@ -9,6 +9,7 @@
 - numpy 에 저장되는 RGB 데이터 구조는 당시 유행했던 BGR 방식을 채용했음.
 - lasagna 라는 theano 기반 라이브러리도 있다.
 
+
 # numpy
 ***
 - numpy => 수치연산에 최적화. 배열,행렬,배열에서 작동하는 다양한 수학함수를 지원, 배열의 모양은 각 차원을 따라 크기를 제공하는 정수형 튜플.
@@ -89,11 +90,32 @@
 
 # matplotlib.pyplot
 ***
-- plt.plot(정수형 리스트) : 리스트대로 선 또는 마커그래프 생성. 그래프가 하나면 그것의 값이 y값 이라고 가정하고 자동으로 x를 만들어 그래프 생성.
+- plt.plot(정수형 리스트) : 리스트대로 선 또는 마커그래프 생성. 리스트를 한개 넣으면 y값 으로 인식하고 x를 자동생성하고, 두개면 순서대로 x,y 라고 인식한다. 
 - plt.plot(정수형 리스트, 'ro') : ro - 빨간색 원형 마커. 이런식으로 색과 그래프 마커를 지정해 줄 수 있음.
-- plt.plot(x,y,type,x,y,type) : 이런 식으로 여러개의 그래프를 그릴 수 도 있다. 
+- plt.plot(x,y,type,x,y,type) : 이런 식으로 매개변수를 넣거나 plot 을 여러번 사용하면 여러개의 그래프를 그릴 수 있다. 
+- plot - color : r(red),g(green),b(blue),c(cyan),m(magenta),y(yellow),k(black),w(white) , color='css_color_name/#rgb'으로 다양한 색상 지정 가능.
+- plot - LineStyle : -(solid),--(dashed),-.(dashed-dot),:(dotted).
+- plot - Markers : o(circle),s(square),*(star),p(pentagon),+(plus),x(X),D(diamond),|/_(h/v line),^/v/</>(triangle),1/2/3/4(tri)
+
+- plt.title(title) : 그래프 제목 설정. loc-타이틀 위치('right','left'), pad-타이틀&그래프간격, 폰트 크기와 두께 설정 가능.
+- plt.xlabel(text) : x축에 레이블(축제목) 설정.
+- plt.ylabel(text) : y축에 레이블(축제목) 설정.
 - plt.axis([x min, x max, y min, y max]) : 축의 범위 지정.
 
+- plt.fill_between(x, y, alpha) : 그래프에서 그 범위를 채움. (x,y1,y2)식으로 두 그래프 사이의 영역을 채울 수 도 있음. color 매개 변수로 색 지정 가능.
+- plt.fill(x,y,alpha) : x,y 점들로 정의되는 다각형의 영역을 자유롭게 채울 수 있음.
+
+- plt.grid(bool) : 그래프에 격자 표시 여부 결정. axis='y/x' 로 가로/세로 방향의 그래프만 그릴 수 있음. color,alpha,linestyle 등의 매개변수 사용가능.
+- plt.xticks(number 리스트) : x축에 눈금 표시. label 매개변수에 리스트를 넣어 각 눈금의 이름을 지정해 줄 수 있음.
+- plt.yticks(number 리스트) : y축에 눈금 표시. 
+- plt.tick_params() : 눈금 스타일 설정. axis-적용축('x','y','both'), direction-눈금위치('in','out','inout'), pad-눈금&레이블 거리, length/width/color-눈금 길이/너비/색, labelsize/labelcolor-레이블 크기/색, t,b,l,r - bool&눈금표시 위치.
+
+- plt.axhline() : 
+- plt.axvline() : 
+- plt.hlines() : 
+- plt.vlines() : 
+
+- plt.show() : 생성한 plot(그래프)를 보여줌.
 
 
 # plotnine
