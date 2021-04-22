@@ -16,20 +16,23 @@
   
 - np.array(리스트) > 리스트에 해당하는 배열 생성
 - np.array([[1,1,1],[2,2,2]]) > 2행 3열짜리 2차원 np배열 생성. shape()로는 (2,3)이 출력되며, x[1,2] 식으로 두번째 열의 세번째 요소를 뽑아낼 수 있다. 
-  
-- np.float32(이미지) > cv2로 읽어온 이미지의 데이터 타입을 변환. 이런식으로 부동소수점 데이터 유형으로 변환시 작업 중 오버플로우를 방지가능.
-- np 객체.dtype > 데이터 타입 문자열로 반환
-- np 객체.shape > 배열의 마지막 좌표(행,열) 출력([5,10,15]의 경우 (3,)식으로)
-  
-- np.where(조건) > 조건문(리스트<1 식으로 내부에 리스트 포함)에 사용. 조건에 밎는 인덱스들을 ndarray 형태로 반환. 슬라이싱에 사용 가능. (조건문, 맞으면, 아니면) 식으로 구성해 처리를 할 수도 있음.
+
+- np.array() : 리스트, 튜플, 배열로 부터 ndarray 생성
+- np.asarray() : 기존의 array 로  부터 ndarray 생성
+
 - np.eye(i) > 대각선이 1이고 나머지는 0인 i*i의 2차원 배열 생성
 - np.arange(start, end, step) > 리스트의 슬라이스와 같이 범위대로 배열을 제작.
 - np.linespace(start, end, step) > 시작부터 끝까지 간격(개수)만큼 나눠진 배열 생성
 - np.sin(x) > 사인 함수를 이용해 배열 x와 대응하는 배열 생성
+- np.where(조건) > 조건문(리스트<1 식으로 내부에 리스트 포함)에 사용. 조건에 밎는 인덱스들을 ndarray 형태로 반환. 슬라이싱에 사용 가능. (조건문, 맞으면, 아니면) 식으로 구성해 처리를 할 수도 있음.
 - np.random.permutation(i) > i 까지 랜덤으로 섞인 배열 반환.
 - np.percentile(배열, [분위]) > 배열에서 분위에 해당하는 샘플을 추출해 반환. [0,25,50,75,100]식으로 지정하면 된다.
 - np.unique(배열) > 배열에 있는 값의 종류를 배열로 반환.  
 
+- np.float32(이미지) > cv2로 읽어온 이미지의 데이터 타입을 변환. 이런식으로 부동소수점 데이터 유형으로 변환시 작업 중 오버플로우를 방지가능.
+- np 객체.dtype > 데이터 타입 문자열로 반환
+- np 객체.shape > 배열의 마지막 좌표(행,열) 출력([5,10,15]의 경우 (3,)식으로)
+  
 - np.argmax(배열) > 배열중 최대치의 인덱스 반환
 - np.mean(x == y) > x와 y 배열의 동일도를 출력.
 - np.expand_dims(np 배열,index) > np 배열의 index 위치에 데이터를 추가해 차원을 늘림. 한개의 이미지만 사용할때도 2차원으로 만들어 주어야 함.
@@ -37,11 +40,13 @@
 - ndarray.flags > 어레이의 메모리 레이아웃에 대한 정보.
 - ndarray.shape > 배열 차원의 튜플.
 - ndarray.ndim > 배열의 차원 수.
-- ndarray.data > 배열 데이터의 시작을 가리키는 파이썬 버퍼 객체.
 - ndarray.size > 배열의 요소 수.
 - ndarray.itemsize > 한 배열 요소의 길이 (바이트).
+- ndarray.dtype > 배열의 데이터 타입.
+- ndarray.data > 배열 데이터의 시작을 가리키는 파이썬 버퍼 객체.
 - ndarray.nbytes > 배열의 요소가 사용한 총 바이트.
-- ndarray.reshape((shape)) > 메모리가 다른 개체의 경우 기본 개체.
+- ndarray.T > 2차원 배열의 경우 행과 열의 크기 변환.  
+- ndarray.reshape((shape)) > 같은 크기의 다른 형태로 차원 변형.
 
 - np.save(이름,배열) : 1개의 배열을 NumPy format 의 바이너리 파일로 저장.
 - np.savez(경로,배열(x=x, y=y 식으로 이름 부여 가능)) : 여러개의 배열을 1개의 압축되지 않은 *.npz 포맷 파일로 저장. 이때 불러오면 numpy.lib.npyio.NpzFile 이며, 개별 배열은 인덱싱해서( ['x'] ) 사용할 수 있다.
@@ -54,7 +59,12 @@
 
 #pandas
 ***
-- pandas 에는 넘파이가 내장되어있어 넘파이에서 가능한건 대부분 가능하다.
+- 판다스는 시리즈, 데이터프레임, 패널 총 세개의 데이터 구조를 사용함.
+  
+- pd.Series(1차원 리스트 , index(인덱스가 될 리스트)) : 시리즈(1차원 배열의 각 값에 대응하는 인덱스를 부여할 수 있는 구조) 생성. 인덱스는 정수뿐 아닌 문자열등도 가능함.
+- pd.DataFrame(2차원 리스트, index(행이름), columns(열이름)) : 데이터프레임(행과 열이 존재)생성. .index(인덱스+타입, Index 객체), .columns(칼럼+타임, Index 객체), .values(값만 리스트로) 사용가능.
+- index 나 columns 를 안쓰면 0부터 자동할당되고, 리스트,시리즈,딕셔너리(키가 열이름),ndarray 등으로도 생성할 수 있음.
+
 - pd.read_csv("/경로/파일명.csv") > 파일읽기. 자신과 같은 디렉토리에 있으면 그냥 써도, 그냥 웹상의 주소를 써도 됨. 문자열의 형태로 읽힌다.
 - pd.get_dummies(범주형 데이터) > one hot encoding. 범주형 종속변수가 그 종류만큼 (이름)_(데이터이름)의 형태로 나뉜다.
 
@@ -62,11 +72,8 @@
 - 데이터.tail() > 끝쪽 데이터 5개. 안에 숫자를 넣으면 그 숫자큼 나옴.
 - 데이터.info() > 데이터셋의 정보 볼 수 있음
 - 데이터.groupby([열]) > group by
-
-- 데이터.shape  > 모양. (행 개수,열 개수)로 출력된다.
 - 데이터.columns  > 칼럼이름. 리스트로 반환된 후 dtype 도 출력한다.
-- 데이터.dtypes > 칼럼마다 데이터의 타입을 뭘로 인식하는지 알려줌
-  
+
 - 데이터["열 이름"] > 그 열과 이름, 데이터 타입 출력.
 - 데이터[["열이름"]] > 열 제목과 그 열 출력. 
 - 데이터["열 이름1","2","3"] > 열(칼럼) 다중 선택.
@@ -106,14 +113,22 @@
 - plt.fill(x,y,alpha) : x,y 점들로 정의되는 다각형의 영역을 자유롭게 채울 수 있음.
 
 - plt.grid(bool) : 그래프에 격자 표시 여부 결정. axis='y/x' 로 가로/세로 방향의 그래프만 그릴 수 있음. color,alpha,linestyle 등의 매개변수 사용가능.
+- plt.legend() : 그래프에 레이블(범례) 표시, plot 에서 label="" 로 준 레이블이 그 그래프의 레이블이 된다.
 - plt.xticks(number 리스트) : x축에 눈금 표시. label 매개변수에 리스트를 넣어 각 눈금의 이름을 지정해 줄 수 있음.
 - plt.yticks(number 리스트) : y축에 눈금 표시. 
 - plt.tick_params() : 눈금 스타일 설정. axis-적용축('x','y','both'), direction-눈금위치('in','out','inout'), pad-눈금&레이블 거리, length/width/color-눈금 길이/너비/색, labelsize/labelcolor-레이블 크기/색, t,b,l,r - bool&눈금표시 위치.
 
-- plt.axhline() : 
-- plt.axvline() : 
-- plt.hlines() : 
-- plt.vlines() : 
+- plt.axhline(y, x_min(0~1), x_max(0~1)) : y에 min 부터 max 까지 수평선을 그음. color, linestyle, linewidth 등 매개변수 사용가능.
+- plt.axvline(x, y_min, y_max) : x에 min 부터 max 까지 수직선을 그음. 왼쪽 아래부터 오른쪽 끝까지 0~1로 표현.
+- plt.hlines(y, x_min, x_max) : y에 min 부터 max 까지 수평선을 그음. min,max 가 0~1로 표현되지 않음.
+- plt.vlines(x, y_min, y_max) : x에 min 부터 max 까지 수직선을 그음.
+
+- plt.bar(x, y) : 막대그래프를 그림. width(너비),align(눈금위치. 히스토그램처럼 눈금을 막대 끝으로 이동가능,'edge'),color,edgecolor,linewidth(테두리두께),tick_label,log(bool, y를 로그스케일로) 등의 매개변수 사용 가능.
+- plt.barh(x, y) : 수평 막대그래프를 그림. height 를 제외하면 매개변수 동일. width/height 를 음수로 지정하면 막대 위쪽에 눈금 표시.
+- plt.scatter(x, y) : 산점도(상관관계표현)를 그림. s(마커 면적),c(마커 색),alpha(투명도) 등의 매개변수 사용가능. 
+- plt.hist(리스트) : 히스토그램(도수분포표 그래프)을 그림. 리스트에 나온 계급과 그 빈도를 분석해 자동으로 히스토그램으로 만들어줌. bins(쪼갤영역수),density(bool,막대사이를 이어 하나로), histtype(막대 내부를 채울지,'step') 등 매개변수 사용가능.
+- plt.errorbar(x, y, yerr) : 에러바(데이터편차표현)를 그림. yerr 는 각 y의 편차로 위아래 대칭인 오차로 표시, [(error), (error)]식으로 넣으면 아래방향/위방향 편차를 나타내게 됨. uplims/lolims(bool, 상한/하한 기호표시) 매개변수 사용가능.
+- plt.pie(ratio(각 영역 비율 리스트), label(각 영역 이름 리스트)) : 파이차트(범주별 구성비율 원형표시)를 그림. autopct(영역안에 표시될 숫자 형식 지정), startangle(시작각도), counterclock(bool,반시계 여부), explode(0~1실수 리스트, 차트중심에서 이탈도), shadow(bool,그림자), colors(리스트,색이름/코드), wedgeprops({'width': 0.7, 'edgecolor': 'w', 'linewidth': 5}, 반지름 비율, 테두리색, 테두리너비) 매개변수 사용가능.
 
 - plt.show() : 생성한 plot(그래프)를 보여줌.
 
