@@ -2,7 +2,7 @@
 - 인공지능 > 지능적인 인간의 행동을 모방하는 기계의 능력.
 - 심볼릭 AI(symbolic AI) > 프로그래머들이 명시적인 규칙을 충분히 많이 만들면 일반지능(인간수준 인공지능)을 만들 수 있다는 접근 방법. 전문가 시스템과도 연관되어 있음.
 - 머신러닝(Machine Learning) > 인공지능의 한 분야, 알고리즘을 이용해 데이터를 분석하고, 그를 통해 학습하며, 그 내용을 기반으로 판단이나 예측을 함. 지도학습과 비지도 학습이 포함되어 있음.
-- 딥러닝(Deep Learning) > 인공 신경망에서 발전. 데이터 군집화나 추상화를 시도함(여러 비선형 변환기법의 조합을 통함). 머신러닝과 달리 데이터 학습량이 늘어도 정확도 향상에 한계가 오는 지점이 없음.
+- 딥러닝(Deep Learning) > 인공 신경망에서 발전. 몇 층의 인공 신경망을 이용. 데이터 군집화나 추상화를 시도함(여러 비선형 변환기법의 조합을 통함). 머신러닝과 달리 데이터 학습량이 늘어도 정확도 향상에 한계가 오는 지점이 없음.
 
 - 머신러닝은 최적화와 일반화를 잘 조절해야 함. 100%에 가까운 모델을 만들고, 그 후 일반화를 진행. 데이터 사이즈가 같을때 정확도를 높이려면 층을 추가하고, 크기를 키우고, epoch 를 높이면 됨. 
 
@@ -122,7 +122,7 @@
 - 그래디언트 부스팅 결정 트리 : 랜덤 포레스트보다 성능이 좋고 예측리 빠르며 메모리를 덜 사용하지만 힉습이 느리고 매개변수 튜닝이 많이 필요함.
 - 서포트 벡터 머신 : 비슷한 의미의 특성으로 이뤄진 중간규모 데이터 셋에 잘 맞음. 데이터 스케일 조정이 필요하고 매개변수 튜닝이 맣이 필요함.
 - 신경망 : 대용량 데이터 세트에서 복잡한 모델을 만들 수 있음. 매개변수 선택과 대이터 스케일에 민감. 큰 모델은 학습이 오래 걸림.
-
+- tf 에서 딥러닝 모델 생성 : 데이터 생성 > 전처리 > 모델 레이어 제작 > compile > fit > predict 의 순서로 이뤄진다. 
 
 >####분류
 >- 나올 수 있는 응답이 개별적(국가나 언어등 둘 사이에 무언가가 없음). 레이블이 이산형 범주. 
@@ -167,12 +167,37 @@
 >- BernoulliNB - 이진데이터에 적용. 각 클래스의 특성 중 0이 아닌것을 셈. 커질수록 모델이 단순해지는 alpha 가 있음.
 >- MultinomialNB - 카운트(count) 데이터에 적용. 클래스별 특성의 평균을 계산. alpha.
 >
->- 
 
 
 > ####회귀
 >- 나올 수 있는 응답이 연속적. 레이블이 연속형인 숫자.
+>- 그 중에서도 데이터 추세가 선형인 선형 회귀는 경사 하강법을 이용한다.
+> ```python 선형 회귀 구현
+> learning_late = 0.01  # 학습룰 0.01로 설정
+> epoch = 300  # 학습 횟수는 300번으로 설정
+> W = tf.Variable(1.0)
+> b = tf.Variable(1.0) # 가중치, 편향 선언
 > 
+> def hypo(x):  # 가설(가중치와 편향)을 적용해 값을 반환하는 함수
+>   return W*x + b
+> 
+> def mse(y_pred, t):  # 평균 오차 제곱 손실함수
+>   return tf.reduce_mean(tf.square(y_pred - y) 차이값을 제곱한 뒤 평균을 구함
+> 
+> optimizer = tf.optimizer.SGD(learning_late)  # 옵티마이저는 경사 하강법, 학습률은 0.01로
+> 
+> X = [1,2,3,4,5]
+> y = [12,23,34,45,56]  # 학습 데이터 설정
+> 
+> for i in range(epoch+1):
+>   y_pred = hypo(X)  # 식 수행
+>   cost = mse(y_pred, y)  # 결과의 비용(본래와의 평균 제곱 오차)
+>   gradients = tf.GradientTape().gradients(zip(gradients, [W, b])  # 비용에 대한 파라미터 미분값 계산
+>   optimizer.apply_gradients(zip(gradients, [W, b]))  # 파라미터 업데이트
+>   # epoch 에 따른 출력문을 넣어줘도 괜찮음.
+> 
+> hypo(테스트 데이터) 로 훈련된 모델 사용가능.
+> ```
 > ######회귀 모델 종류
 >- 리지 선형 회귀 모델 : 선형 회귀 모델에 가중치의 합이 최소가 되도록 L2 규제를 추가한다.
 >- 라소 선형 회귀 모델 : 리지와 비슷하나  L1 규제를 걸어 어떤 값이 0이 될 수 있게 한다.
@@ -214,26 +239,27 @@
 ##딥러닝 활성화 함수(activation function)
 ***
 - Relu(Rectified Linear Unit) >> (X > 0)? X : 0
-- Sigmoid >> 입력을 전부 0~1의 미분가능한 수로 변환.  |  s(z) = 1/1+e^-z
 - tanh(Hyperbolic Tangent) >> 입력을 -1~1의 미분 가능한 수로 변환. 시그모이드의 대체제. 시그모이드와 함께 Vanishing gradient problem 을 가지고 있음. | (2/1+e^-2x) - 1
+- Sigmoid >> 입력을 전부 0~1의 미분가능한 수로 변환.  |  s(z) = 1/1+e^-z
 - softmax >> 입력을 전부 0~1사이로 정규화. 출력의 총합이 1.  |  np.exp(x  - np.max(x)) / np.exp(x  - np.max(x)).sum()
 
 ##활성화 도구(Optimizer)
 ***
-- GD(Gradient descent) > 가장 기본 알고리즘. 경사를 따라 내려가면서 W 업데이트. 
-- SGD(Stochastic gradient decent) > full-batch 가 아닌 mini-batch 로 학습.
+- GD(Gradient descent) > 경사 하강법. 가장 기본 알고리즘. 경사를 따라 내려가면서 W 업데이트. 
+- SGD(Stochastic gradient decent) > 확률적 경사 하강법. full-batch 가 아닌 mini-batch 로 학습.
 - Momentum > SGD + Momentum(이전 batch 학습결과 반영, 보통 이전:현재 = 9:1 정도)
 - AdaGrad > SGD + notation. 큰 변동 가중치 = 학습률 감소, 저변동 가중치 = 학습률 증가. 무한히 학습시 학습이 아예 안될 수 있음.
 - RMSProp > AdaGrad 보완. 가중치보다 기울기가 크게 반영되도록 하고, hyper parameter p를 추가해 h가 무한히 커지지 않게 함.
 - Adam > RMSProp + Momentum. 각각 v와 h가 0으로 초기화 되면 학습 초반 W가 0으로 biased 되었는데, 이를 해결.
-- lbfgs >  Limited BFGS. 준-뉴턴 방식 (quasi-Newton methods)의 알고리즘 중 가장 흔히 쓰이는 방법. 많은 변수를 가진 최적화 문제에 적합.  제한된 메모리 내 에서 f(x)(스칼라 함수, 비선형이며 미분가능함수.)를 제한 조건이 없는 실수 벡터 x에 대해서 최소화 시키는 것
+- lbfgs >  Limited BFGS. 준 뉴턴 방식 (quasi-Newton methods)의 알고리즘 중 가장 흔히 쓰이는 방법. 많은 변수를 가진 최적화 문제에 적합.  제한된 메모리 내 에서 f(x)(스칼라 함수, 비선형 미분가능)를 제한 조건이 없는 실수 벡터 x에 대해서 최소화 시키는 것
 
 ##손실함수(loss)
 ***
 - 텐서 계산 > y값 산출 > 손실함수에 이용 > 손실 산출    의 구조로 이어진다.
 - MSE(평균제곱오차) > 개별 예의 모든 제곱 손실을 합한 뒤 예의 수로 나눔. 선형 회귀 모델.
+- binary_crossentropy > 이진 분류의 손실 함수. 
 - categorical_crossentropy > 다중 분류 모델의 손실 함수. one-hot-encoding 된 결과로 입력을 해 주어야 하며, 3개의 클래스 별로 확률값이 나오게 된다. 
-- sparse_categorical_crossentropy > 분류 모델의 손실 함수. one-hot-encoding 을 할 필요 없이 정수형태(클래스 번호)로 결과값을 입력해주면 된다,
+- sparse_categorical_crossentropy > 분류 모델의 손실 함수. one-hot-encoding 을 할 필요 없이 정수형태(클래스 번호)로 결과값을 입력해주면 된다. 이런게 아닌 일반 모델에서 평범한 정수 인코딩(1,2,3 식)은 레이블 간 유사도를 전달하기에 회귀로 출 수 있는 분류 문제가 아닌 한 문제가 발생한다.
 
 
 ###### ANN 성능 튜닝
@@ -260,7 +286,7 @@
 >- ACGAN(Auxiliary Classifier) : SGAN 에 Generator 가 학습을 진행할수록 좋은 이미지를 만들어내고 어느 순간부터 데이터가 augmentation 기능을 할 수 있다는 특징이 있다. 먼저 R/F 를 구분한 뒤 어떤 클래스인지 구분한다는 특징이 있다. 
 >- cGAN : 기존 noise Z 만 가지고 무작위로 이미지를 생성했던 GAN 과 달리 특정 레이블 y 가 추가되며 특정 이미지만 고정적으로 생산가능하다. 실제 현실의 이미지는 너무 많은 변수가 있다는 문제점이 있었고, 이로 인해 이 개념을 이용해 복잡한 이미지나 영상까지 변경 가능하게 한 pix2pix 가 탄생했다.
 >- pix2pix : 데이터 형태와 무관하게 범용적으로 사용 가능, 다른 종류의 손실함수(L1, L2, 유클라디안 > GAN 기반 Loss 학습) 사용 이라는 특징을 가지고 있다.
-> ###### code (clone)
+> ###### GAN code (clone)
 > ```python
 > import tensorflow as tf
 > import numpy as np

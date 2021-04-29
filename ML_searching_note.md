@@ -29,6 +29,7 @@
 - np.zeros(shape) > 모든 값이 0인 배열 생성.
 - np.ones(shape) > 모든 값이 1인 배열 생성.
 - np.full(shape, num) > 모든 값이 num 인 배열 생성.
+- np.diag(1차원 배열) >  대각행렬 생성. k 매개변수에 음수를 넣으면 그 절댓값 만큼 아래 행에서 시작.
 - np.random.random(shape) > 임의의 값(0~1)으로 채워진 배열 생성.
 - np.eye(i) > 대각선이 1이고 나머지는 0인 i*i의 2차원 배열 생성
 - np.sin(x) > 사인 함수를 이용해 배열 x와 대응하는 배열 생성
@@ -37,13 +38,16 @@
 - np.unique(배열) > 배열에 있는 값의 종류를 배열로 반환.  
 - np.percentile(배열, [분위]) > 배열에서 분위에 해당하는 샘플을 추출해 반환. [0,25,50,75,100]식으로 지정하면 된다.
   
-- np.dot(배열1, 배열2) > 행렬곱 생성.. 배열1의 열 개수와 배열 2의 행 개수가 동일해야 함. 1의 행과 2의 열 개수를 가짐. 행렬곱의(i,j)는 (1의 i행합 * 2의 j열합)의 요소값을 가짐.
+- np.dot(배열1, 배열2) > 내적곱(점곱) 생성. 배열1의 열 개수와 배열 2의 행 개수가 동일해야 함. 1의 행과 2의 열 개수를 가짐. 행렬곱의(i,j)는 (1의 i행합 * 2의 j열합)의 요소값을 가짐. 2차원에서는 아래와 같으나 고차원에서는 다른 역할을 수행한다.
+- np.matmul(배열1, 배열2) >  행렬곱 생성. 2차원 이상의 배열은 2차원 배열을 여러개 가지고 있다 보기에((1,2,3,4) > (3,4)를(1,2)개) 행렬 1의 마지막 차원 요소 개수와 행렬2의 뒤에서 두번째 차원 요소 개수가 같아야 한다.
 - np.float32(배열) > ndarray 의 데이터 타입을 변환. 다른타입도 가능, 부동소수점 데이터 유형으로 변환시 작업 중 오버플로우를 방지의 기능이 있음.
 - np.argmax(배열) > 배열중 최대치의 인덱스 반환
 - np.mean(배열) > 배열의 평균을 출력. (x == y)식으로 하면 두 배열의 동일도를 받아볼 수 있음.
 - np.expand_dims(np 배열,index) > np 배열의 index 위치에 데이터를 추가해 차원을 늘림.
-  
+
 - ndarray.reshape((shape)) > 같은 크기의 다른 형태로 차원 변형.
+
+- np.linalg.svd(ndarray) > SVD 사용. SVD 대로 직교행렬 U, 대각 행렬의 특이값 리스트 S, 또 다른 직교행렬 VT 를 반환함.  
 
 - ndarray.flags > 어레이의 메모리 레이아웃에 대한 정보.
 - ndarray.shape > 배열 차원의 튜플.
@@ -53,7 +57,8 @@
 - ndarray.dtype > 배열의 데이터 타입.
 - ndarray.data > 배열 데이터의 시작을 가리키는 파이썬 버퍼 객체.
 - ndarray.nbytes > 배열의 요소가 사용한 총 바이트.
-- ndarray.T > 2차원 배열의 경우 행과 열의 크기 교체.  
+- ndarray.T > 배열의 행과 열의 크기 교체.  
+- ndarray.round(i) > 배열의 소수의 소수점 이하 i까지 출력.
 
 - np.save(이름,배열) : 1개의 배열을 NumPy format 의 바이너리 파일로 저장.
 - np.savez(경로,배열(x=x, y=y 식으로 이름 부여 가능)) : 여러개의 배열을 1개의 압축되지 않은 *.npz 포맷 파일로 저장. 이때 불러오면 numpy.lib.npyio.NpzFile 이며, 개별 배열은 인덱싱해서( ['x'] ) 사용할 수 있다.
@@ -237,7 +242,8 @@
 
 - model = tf.keras.models.Model(X,Y)  > 모델 제작 
 - model = keras.Sequential([
--   keras.layers.Flatten(input_shape=(x,y)),  > x*y 픽셀의 2차원 이미지 배열을 (x*y)의 1차원 배열로 반환. 앞에 input shape 는 input layer 를 대채할 수 있게해준다.
+-   keras.layers.Flatten(input_shape=(x,y)),  > x*y 픽셀의 2차원 이미지 배열을 (x*y)의 1차원 배열로 반환. 
+                                                input shape 매개변수는 input layer 를 대채할 수 있게 해주며, 배치 크기를 제외하고 차원을 지정하기에 차원이 하나 추가 될 수 있고, 배치까지 지정하려면 batch_input_shape 를 사용한다.  
 - 	keras.layers.Dense(128, activation = 'relu'),  > 밀집연결(densely-connected)층/완전연결층. 128개의 노드(또는 뉴런)을 가짐.
 - 	keras.layers.Dense(10, activation = 'softmax') > 10개의 클래스 각각 그 클래스에 속할 확률을 출력.
 - ]) > 모델(분류기반,최대 세개) 제작.
@@ -300,6 +306,12 @@
 - torch.utils.data.DataLoader(트레인 세트, batch_size=i, shuffle=T/F, num_worker=i) > 데이터를 배치 사이즈대로 나눠 로드. 마지막은 프로세스를 몇개 사용하냐 라는 의미로, 오류가 난다면 0으로 하면 된다.
 - torch.FloatTensor(X_data-ndarray 타입) > float 타입 요소를 가진 텐서로 변환. 다른 타입도 존재.
 - 텐서.premute(shape number - 0,3,1,2 식으로) > 텐서의 순서를 변환 (20, 32, 32,3)을 채널수가 사이즈보다 먼저 나오는 텐서에 맞게 (0,3,32,32)로 바꿀 수 있다.
+
+
+
+
+
+
 
 
 # torchvision
@@ -434,8 +446,6 @@
 
 
 ### RL
-
-
 
 
 # os
