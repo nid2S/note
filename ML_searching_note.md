@@ -234,20 +234,19 @@
 
 #tensorflow
 ***
-- tf.keras.layers.Input(shape=[열 개수(독립변수 개수)]) > 독립변수의 개수만큼 입력레이어 구성.
+
+##### layers
+- tf.keras.layers.Input(shape=(입력 차원)) > 입력차원 만큼 입력레이어 구성.
 - tf.keras.layers.Dense(히든레이어 노드수,activation="swish/relu")(X) > 히든레이어 제작.
 - tf.keras.layers.Dense(열 개수(종속변수 개수))(X) > 입력으로 부터 종속변수의 개수만큼의 출력을 내놓는 레이어 구성. 퍼셉트론에서 가중치와 편향을 변경시킴.
 
-- tf.keras.layers.Dense(units, input_dim, activation) > 으로 input 없이 바로 사용할 수도 있다.
+- tf.keras.layers.Dense(units, input_dim, activation) > 으로 입력의 차원을 지정해주면 input 없이 바로 사용할 수도 있다.
 
-- model = tf.keras.models.Model(X,Y)  > 모델 제작 
-- model = keras.Sequential([
--   keras.layers.Flatten(input_shape=(x,y)),  > x*y 픽셀의 2차원 이미지 배열을 (x*y)의 1차원 배열로 반환. 
-                                                input shape 매개변수는 input layer 를 대채할 수 있게 해주며, 배치 크기를 제외하고 차원을 지정하기에 차원이 하나 추가 될 수 있고, 배치까지 지정하려면 batch_input_shape 를 사용한다.  
-- 	keras.layers.Dense(128, activation = 'relu'),  > 밀집연결(densely-connected)층/완전연결층. 128개의 노드(또는 뉴런)을 가짐.
-- 	keras.layers.Dense(10, activation = 'softmax') > 10개의 클래스 각각 그 클래스에 속할 확률을 출력.
-- ]) > 모델(분류기반,최대 세개) 제작.
-- Sequential() > .add > .add 로도 모델 제작이 가능함.
+- tf.keras.layers.LSTM() > RNN 의 일종인 LSTM 사용. 
+- tf.keras.layers.Conv2D(컨볼루션 크기(행,렬), 필터 이미지 개수(한 행렬의 크기 x,y), padding(='same' 입출력 사이즈 동일), activation, inputShape) > 이미지에 convolution filter 를 사용해 행렬을 만듦.
+- tf.keras.layers.MaxPooling2D((줄일 행렬의 크기 x, y)) > 이미지를 MaxPooling 해 크기를 줄임.
+- tf.keras.layer.Dropout(rate) > Overfitting 을 방지하기 위해 DropOut. rate 는 1 = 100% 다.
+
 
 - session : 일종의 실행창. 텐서의 내용과 연산 결과를 볼 수 있음. 세션 선언, 실행, 종료 문으로 구분됨.
 - tf.Session/InteractiveSession() : 세션 선언 / 자동으로 기본 세션을 지정해주는 세션 선언.
@@ -255,6 +254,22 @@
 - sess.run(텐서) : 실행. 흔히 eval 사용.  |  텐서.eval() : 텐서 객체 데이터 확인.
 - sess.close() : 세션 종료. with 로 오픈시 필요 없음.
 
+##### model make
+- 케라스는 Sequential API, Functional API, Subclassing API 의 구현 방식을 지원.
+
+- model = keras.Sequential([  > Sequential API(딘순히 층을 쌓아 구성할 수 있고, 여러 층을 공유하거나 다양한 종류의 입출력을 사용할 수 있지만 그만큼 복잡한 모델 제작에 한계가 있음)를 이용해 모델 설계.   
+-   keras.layers.Flatten(input_shape=(x,y)),  > x*y 픽셀의 2차원 이미지 배열을 (x*y)의 1차원 배열로 반환. input shape 매개변수는 input layer 를 대채할 수 있게 해주며, 배치 크기를 제외하고 차원을 지정하기에 차원이 하나 추가 될 수 있고, 배치까지 지정하려면 batch_input_shape 를 사용한다.  
+- 	keras.layers.Dense(128, activation = 'relu'),  > 밀집연결(densely-connected)층/완전연결층. 128개의 노드(또는 뉴런)을 가짐.
+- 	keras.layers.Dense(10, activation = 'softmax') > 10개의 클래스 각각 그 클래스에 속할 확률을 출력.
+- ]) > 모델(분류기반, 이 경우 최대 세개까지 레이어 추가 가능) 제작.
+- Sequential() > model.add 로도 층 추가가 가능하고, 전결합층(dense)뿐 아니라 임베딩, LSTM, GRU, Flatten, Convolution2D, Batch Normalization 등 다양한 층 추가 가능.
+
+- functional API : 함수형 API 는 Sequential API 와 달리 각 층을 일종의 함수로 정의.
+- input(shape) 에서 시작해 Dense(node, activation)(inputs) > Dense()(h1) > Dense()(h2) 후 tf.keras.models.Model(input,output) 식으로 구성.  
+
+- Subclassing API : Subclassing API 는 모델을 클래스 형태로 제작해 사용. 
+
+###### model train, use
 - model.compile(
 -  optimizer='adam',  > 데이터와 손실함수를 바탕으로 모델 업데이트 방향 결정.
 -  loss='sparse_categorical_crossentropy',  > 훈련중 모델 오차 측정. 
@@ -270,13 +285,9 @@
 - model.get_weights() > 각 독립변수에 대한 가중치 출력.
 - model.summary() 로 모델의 정보(이름/none,출력하는 개수/파라미터(가중치의 개수))를 확인 할 수 있다.
 
-- tf.keras.layers.Conv2D(컨볼루션 크기(행,렬), 필터 이미지 개수(한 행렬의 크기 x,y), padding(='same' 입출력 사이즈 동일), activation, inputShape) > 이미지에 convolution filter 를 사용해 행렬을 만듦.
-- tf.keras.layers.MaxPooling2D((줄일 행렬의 크기 x, y)) > 이미지를 MaxPooling 해 크기를 줄임.
-- tf.keras.layer.Dropout(rate) > Overfitting 을 방지하기 위해 DropOut. rate 는 1 = 100% 다.
 
 - tf.keras.utils.to_categorical(정수 리스트) > 정수 리스트에 따라서 원핫 인코딩. [1,3]을 넣으면 [[0,1,0,0],[0,0,0,1]]을 반환하는 식.
 - tf.lite.TFLiteConverter.from_keras_model(model).converter() | open('파일명.tflite', 'wb') > tf 모델 tflite 바이너리로 변환. 이렇게 변환한 것은 안드로이드 스튜디오의 에셋에 복사 > app 모듈의 build.gradle 에 패키지 추가 > Main_Activity 에서 이미지 바이너리 변환 > Classifier 에서 모델 사용 > Main_Activity 에서 출력 순으로 사용된다.
-
 
 # Pytorch ( torch )
 ***
