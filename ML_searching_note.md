@@ -237,28 +237,29 @@
 
 ##### layers
 - tf.keras.layers.Input(shape=(입력 차원)) > 입력차원 만큼 입력레이어 구성.
-- tf.keras.layers.Dense(히든레이어 노드수,activation="swish/relu")(X) > 히든레이어 제작.
-- tf.keras.layers.Dense(열 개수(종속변수 개수))(X) > 입력으로 부터 종속변수의 개수만큼의 출력을 내놓는 레이어 구성. 퍼셉트론에서 가중치와 편향을 변경시킴.
+- tf.keras.layers.Dense(히든레이어 노드수,activation="swish/relu")(X) > 전밀집층(모든 노드가 이전 혹은 다음 노드와 연결) 제작. input_dim 매개변수로 입력의 차원을 지정해주면 input 없이 바로 사용할 수도 있음. 뒤에 (input_layer)를 붙여 function API 를 이용한 모델 제작이 가능함.
 
-- tf.keras.layers.Dense(units, input_dim, activation) > 으로 입력의 차원을 지정해주면 input 없이 바로 사용할 수도 있다.
-
-- tf.keras.layers.LSTM() > RNN 의 일종인 LSTM 사용. 
 - tf.keras.layers.Conv2D(컨볼루션 크기(행,렬), 필터 이미지 개수(한 행렬의 크기 x,y), padding(='same' 입출력 사이즈 동일), activation, inputShape) > 이미지에 convolution filter 를 사용해 행렬을 만듦.
 - tf.keras.layers.MaxPooling2D((줄일 행렬의 크기 x, y)) > 이미지를 MaxPooling 해 크기를 줄임.
-- tf.keras.layer.Dropout(rate) > Overfitting 을 방지하기 위해 DropOut. rate 는 1 = 100% 다.
+- tf.keras.layers.Embedding(총 단어 개수, 결과 벡터의 크기, 입력 시퀀스 길이) : 단어를 밀집벡터로 만듦(임베딩 층(Dense 같은)제작). (샘플개수, 입력길이)형태의 정수 인코딩이 된 2차원 정수 배열을 입력받아 워드 임베딩 후 3차원 배열을 반환. 
+- tf.keras.layers.Dropout(rate) > Overfitting 을 방지하기 위해 DropOut. rate 는 1 = 100% 다.
+
+- tf.keras.layers.SimpleRNN(hidden_size) : RNN 사용. hidden_size 는 은닉상태의 크기. input_shape 매개변수에 (timesteps(입력 시퀀스 길이), input_dim(입력 크기)) 로 넣어 입력을 정의해 줄 수 도 있음. return_sequences(전체 은닉상태 출력)와 return_state(마지막 은닉상태 한번 더 출력)매개변수 사용 가능.
+- tf.keras.layers.LSTM(hidden_size, input_shape=(time_steps, input_dim)) > RNN 의 일종인 LSTM 사용. RNN 층은 (batch_size(배치 크기, 한번에 학습할 데이터 양), timesteps(시점, 문장의 길이), input_dim(단어 벡터 차원)) 크기의 3D 텐서를 입력으로 받음. return state 를 true 로 하면 마지막 셀 상태까지 반환, 양방향이면 정방향,역방향 둘 다 은닉상태와 셀상태 반환(fh,fc,bh,bc 순). 
+- tf.keras.layers.GRU(hidden_size, input_shape=(time_steps, input_dim)) > LSTM 을 개량한 GRU 사용. LSTM 에 비해 구조가 간단하고, 데이터 양이 적을떄 LSTM 보다 낫다고 알려져 있음.
 
 
 - session : 일종의 실행창. 텐서의 내용과 연산 결과를 볼 수 있음. 세션 선언, 실행, 종료 문으로 구분됨.
-- tf.Session/InteractiveSession() : 세션 선언 / 자동으로 기본 세션을 지정해주는 세션 선언.
+- tf.Session()/InteractiveSession() : 세션 선언 / 자동으로 기본 세션을 지정해주는 세션 선언.
 - sess.run(tf.global_variables_initializer()) : 변수 초기화.
 - sess.run(텐서) : 실행. 흔히 eval 사용.  |  텐서.eval() : 텐서 객체 데이터 확인.
-- sess.close() : 세션 종료. with 로 오픈시 필요 없음.
+- sess.close() : 세션 종료.
 
 ##### model make
 - 케라스는 Sequential API, Functional API, Subclassing API 의 구현 방식을 지원.
 
 - model = keras.Sequential([  > Sequential API(딘순히 층을 쌓아 구성할 수 있고, 여러 층을 공유하거나 다양한 종류의 입출력을 사용할 수 있지만 그만큼 복잡한 모델 제작에 한계가 있음)를 이용해 모델 설계.   
--   keras.layers.Flatten(input_shape=(x,y)),  > x*y 픽셀의 2차원 이미지 배열을 (x*y)의 1차원 배열로 반환. input shape 매개변수는 input layer 를 대채할 수 있게 해주며, 배치 크기를 제외하고 차원을 지정하기에 차원이 하나 추가 될 수 있고, 배치까지 지정하려면 batch_input_shape 를 사용한다.  
+-   keras.layers.Flatten(input_shape=(x,y)),  > x\*y 픽셀의 2차원 이미지 배열을 (x*y)의 1차원 배열로 반환. input shape 매개변수는 input layer 를 대채할 수 있게 해주며, 배치 크기를 제외하고 차원을 지정하기에 차원이 하나 추가 될 수 있고, 배치까지 지정하려면 batch_input_shape 를 사용한다.  
 - 	keras.layers.Dense(128, activation = 'relu'),  > 밀집연결(densely-connected)층/완전연결층. 128개의 노드(또는 뉴런)을 가짐.
 - 	keras.layers.Dense(10, activation = 'softmax') > 10개의 클래스 각각 그 클래스에 속할 확률을 출력.
 - ]) > 모델(분류기반, 이 경우 최대 세개까지 레이어 추가 가능) 제작.
@@ -268,6 +269,8 @@
 - input(shape) 에서 시작해 Dense(node, activation)(inputs) > Dense()(h1) > Dense()(h2) 후 tf.keras.models.Model(input,output) 식으로 구성.  
 
 - Subclassing API : Subclassing API 는 모델을 클래스 형태로 제작해 사용. 
+               
+- model.summary() : 모델의 정보(layer(type), outputShape, param(파라미터(매개변수, 노드)수))를 확인할 수 있음
 
 ###### model train, use
 - model.compile(
@@ -288,6 +291,7 @@
 
 - tf.keras.utils.to_categorical(정수 리스트) > 정수 리스트에 따라서 원핫 인코딩. [1,3]을 넣으면 [[0,1,0,0],[0,0,0,1]]을 반환하는 식.
 - tf.lite.TFLiteConverter.from_keras_model(model).converter() | open('파일명.tflite', 'wb') > tf 모델 tflite 바이너리로 변환. 이렇게 변환한 것은 안드로이드 스튜디오의 에셋에 복사 > app 모듈의 build.gradle 에 패키지 추가 > Main_Activity 에서 이미지 바이너리 변환 > Classifier 에서 모델 사용 > Main_Activity 에서 출력 순으로 사용된다.
+
 
 # Pytorch ( torch )
 ***
