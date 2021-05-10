@@ -20,7 +20,8 @@
 - EDA(Exploratory Data Analysis) : 탐색적 데이터 분석. 데이터 내 값의 분포, 변수간 관계, 결측값 존재 유뮤 등을 확인하는 데이터 파악 과정.
 
 ### 전처리
-
+- 순서 : 데이터 생성(로드) > 데이터 확인(길이, null, empty) > 정제(null, 노이즈, 반복, 외국어, 불용어 제거) > 토큰화(문장 >> 단어) > 벡터화(W2V, 임베딩, 원핫 인코딩) > 모델 학습(제작)
+ 
 ##### 토큰화 
 - 텍스트를 토큰이라는 작은 부분으로 분할하는 과정. 문장 토큰화와 단어(단어, 단어구, 형태소) 토큰화로 나뉜다.
 
@@ -40,7 +41,7 @@
 ##### 정규화
 - 정규화 : 표현 방법이 다른 같은 의미의 단어들을 같은 단어로 만드는 작업. 
 - 문장부호(구두점)제거, 전체 대/소문자화, 숫자 단어화, 약어 전개 등의 자연어 텍스트 처리 수행을 위한 과정.
-- 문장부호 제거는 반복문이나 기타 클래스/메서드로, 대/소문자화는 String.upper()/lower()로 가능하다.
+- 문장부호 제거는 반복문이나 기타 클래스/메서드, strip(string.punctuation(구두점모음))으로, 대/소문자화는 String.upper()/lower()로 가능하다.
 - 단, 단어 내에 문장 부호가 있거나 단어가 대소문자 구분을 필요로 하기도 하기에 무턱대고 수행해서는 안된다.
 
 ###### 텍스트 대체  
@@ -75,7 +76,8 @@
 - 행렬 용어 : 전치행렬 - 원래 행렬에서 행과 열을 바꿈 | 직교행렬 - 원래 행렬\*전치행렬,n\*n 행렬에서 원 행렬*전치행렬 = 단위행렬을 만족해야 함. | 단위행렬 - 대각행렬(정사각 아니여도 됨, 아니여도 (i,i) 가 1), 대각선은 1, 나머지는 0인 정사각 행렬. | 역행렬 - A\*어떤 행렬 이 단위 행렬일 때 어떤 행렬. 
 - SVD(특이값 분해) : m\*n 차원의 행렬 A 를 UΣV^T 로 분해하는 행렬분해 방법. U(m\*m 직교행렬), V(n\*n 직교행렬), Σ(m*n 직사각 대각 행렬) 로 분해한다.
 - Truncated SVD(절단된 SVD) : 대각 행렬 Σ의 원소값 중 상위 t 개만 남음. t 는 클수록 많은 정보를 가져 갈 수 있지만 작을수록 노이즈 제거 가능. 원 행렬 복구 불가.
-- LSA(latent Semantic Analysis, 잠재 의미 분석) : 단어의 의미를 고려. DTM 을 축소해 축소 차원에서 근접 단어를 토픽으로 묶음. 기존 TF-IDF에 절단된 SVD 사용. 단어를 행, 문장을 열로 나타낸 뒤, SVD 를 사용해 세개의 매트릭스(토픽을 위한 단어, 토픽 강도, 문장)로 나타냄. 뒤의 두 매트릭스를 곱해 단어간 유사도를 파악. 쉽고 빠른 구현과 단어의 잠재 의미를 이끌어 내지만 새 정보의 업데이트가 어렵단 문제점을 가짐. 
+- LSA(latent Semantic Analysis, 잠재 의미 분석) : 단어의 의미를 고려. DTM이나 TF-IDF와 같은 각 문서에서 각 단어의 빈도수를 카운트한 행렬을 입력으로 받아 차원을 축소해 의미를 추출함. 쉽고 빠른 구현과 단어의 잠재 의미를 이끌어 낼 수 있단 장점이 있음.
+- LSA 자세히 : 단어를 행, 문장을 열로 나타낸 뒤, SVD 를 사용해 세개의 매트릭스(토픽을 위한 단어, 토픽 강도, 문장)로 나타냄. 뒤의 두 매트릭스를 곱해 단어간 유사도를 파악. 새 정보의 업데이트가 어렵고, 단어 의미 유추 작업에서 성능이 떨어진단 문제점을 가짐. 
 - LDA(Latent Dirichlet Allocation, 잠재 디레클레 할당) : 토픽 모델링 대표 알고리즘. DTM 이나 TF-IDF 행렬을 입력으로 해 역공학(문사 작성 과정 역추적)을 해 토픽 추출. 단어가 특정 토픽에 존재할 확률과 특정 토픽이 존재할 확률을 결합확룰로 추정해 토픽을 추출한다.    
 
 ###### S2S
@@ -108,20 +110,37 @@
 - 방법 : 정수 인코딩시 문장별로 단어를 모아 두어 문장의 길이를 확인할 수 있는데, 이때 가장 긴 문장의 길이에 맞게 다른 문장에 0을 삽입한다.
 
 ##### word embedding (정수 인코딩 + 단어간 유사도 정보)
-- Word Embeddings : 텍스트 내 단어를 밀집 벡터로 만드는 과정. 단어간의 유사도 정보를 같이 담을 수 있음. 유사도에 따라 단어가 유사한 값을 띄게 됨. 단어집합의 크기*임베딩 벡터 크기 의 크기를 갖게 됨.
-- 밀집벡터 : 희소벡터(대부분의 값이 0인 벡터)와 달리 대부분의 값이 실수이고 상대적으로 저차원인 벡터.
+- Word Embeddings : 텍스트 내 단어를 밀집 벡터로 만드는 과정. 단어의 유사도(의미)정보도 벡터화 가능. 유사도에 따라 단어가 유사한 값을 띄게 됨.
+- 밀집벡터 : 희소벡터(대부분의 값이 0인 벡터)와 달리 대부분의 값이 실수이고 상대적으로 저차원인 벡터. 사용자가 설정한 값으로 벡터의 차원을 맞춤.
+- 분산표현 : 분포 가설(비슷한 위치에서 등장하는 단어는 비슷한 의미를 가짐)에 기초해 만들어진 표현 방법. 단어의 의미를 여러 차원에 분산하여 표현. 단어간 유사도 계산 가능.
+
+###### Word2Vec
+- word to vector : 워드 임베딩을 하는 대표적 방법. 은닉층에 활성화 함수가 존재하지 않으며, 룩업테이블(투사층)이 그 역할을 대신함. 유사한 단어를 나타낼 수 도 있어 단어 임베딩 뿐 아니라 추천 시스템에도 사용되고 있음.
+- W2V 자세히 : 투사층(임베딩 벡터의 차원(M)), 입력층과 투사층 사이(단어집합크기(V)*M), 투사층과 출력층 사이(M\*V) 의 크기를 가짐. 윈도우 크기 내에서만 주변 단어를 고려해 전체적 통계 정보를 반영하지 못한다는 문제점을 가짐. 
+- VS NNLM : NNLM의 느린 속도와 정확도를 개선해 탄생. 다음단어가 아닌 중심 단어를 예측, 이전단어만 참고하는게 아닌 전후 단어 모두 참고, 활성화 함수와 은닉층 제거, 계층적 softmax와 네거티브 샘플링 등을 이용해 은닉층 제거 이외에도 속도를 개선.   
+
+- 네거티브 샘플링(Negative Sampling) : W2V이 학습과정에서 전체 단어가 아닌 일부 단어에만 집중할 수 있도록 하는 방법. 무작위로 주변단어가 아닌 단어를 선택하고, 그것들을 기준으로 단어 집합을 만들어 긍정과 부정의 이진 분류 문제로 만듦.
   
+- CBOW(Continuous Bag of Words) : word2vec의 두가지 방법중 하나. 주변 단어를 이용해 중간의 단어를 예측. 윈도우(앞뒤로 몇개의 단어를 볼 지)를 계속 움직여 주변과 중심 단어 선택을 바꿔가며 데이터 셋을 만드는(슬라이딩 윈도우)것이 가능. 
+- CBOW 자세히 : 두개의 가중치 행렬(입력-투사, 투사-출력)을 학습해 나감. 입력된 원 핫 벡터(윈도우 안의 단어들)들을 가중치 행렬과 곱(i번째 행을 가져옴)해 그 결과 벡터들의 평균을 구함. 그 평균 벡터는 두번째 가중치 행렬과 곱해지고, 여기에 softmax와 손실함수로 cross-entropy를 사용해 각 단어가 중간 단어일 확률을 가진 스코어 벡터를 생성.
+- Skip-gram : word2vec의 또다른 방법. 중심 단어에서 주변 단어(윈도우 안의 단어들)를 예측. CBOW와 유사한 과정을 통해 구함. CBOW보다 성능이 좋다고 알려져 있음.
+- SGNG(Skip-Gram with Negative Sampling) : 네거티브 샘플링을 사용하는 Skip-Gram. 중심단어와 주변단어 둘 다 입력이 되고, 두 단어가 실제 윈도우 내에 존재하는 이웃일 확률을 계산. 
+ 
+###### GloVe
+- GloVe : 또 다른 워드 임베딩 방법. 카운트 기반과 예측 기반 모두 사용하는 방법론. 카운트 기반의 LSA(잠재 의미 분석)과 W2V의 단점을 지적, 보완한다는 목적으로 나와 W2V와 비슷한 성능을 보여줌. 
+- GloVe 아이디어 : 임베딩된 중심 단어와 주변 단어 벡터의 내적곱이 전체 데이터에서의 동시 등장 확률이 되도록 만드는 것.   
+- 윈도우 기반 동시 등장 행렬(Window based Co-occurrence Matrix) : 행과 열을 전체 단어의 집합으로 구성한 뒤, i단어의 윈도우 안에서 j단어가 등장한 횟수를 (i,j)에 나타낸 행렬.
+- 동시 등장 확률(Co-occurrence Probability) : 동시 등장 행렬에서 특정 단어(i)의 전체 등장 횟수와 특정 단어(i)가 등장했을때 특정 단어(j)가 등장한 횟수를 카운트해 계산한 조건부 확률. 
+
+###### FastText
+- FastText : 페이스북 개발 워드 임베딩 방법. 메커니즘은 W2V와 비슷하지만, 하나의 단어 안에도 여러 단어들이 존재한다고 생각(내부단어 고려)함. W2V, LSA와 달리 OOV와 RaerWord에 대한 대응이 가능함.
+- 내부단어 고려 : 각 단어를 글자단위 n-gram의 구성으로 취급. n을 몇으로 하냐에 따라 단어들이 얼마나 분리될지 결정. 
+- 토큰 분리 : 시작과 끝을 의미하는 <, > 에 기존 단어에 <>를 추가한 토큰까지 총 (글자수 - n + 4)개의 토큰이 나옴. 이때 n의 범위를 지정할 수 있는데, 이 경우 범위 안의 정수가 모두, 차례대로 n으로 사용됨.
+
+- OOV(Out Of Vocabulary)대응 : 데이터 셋 내 모든 단어의 n-gram에 대해 워드 임베딩이 되어, 데이터셋만 충분하면 모르는 단어(OOV)에 대해서도 다른 단어와 유사도 계산이 가능. 
+- RareWord(빈도수가 적은 단어)대응 : 단어가 희귀단어라도 그 단어의 n-gram이 다른 단어와 겹친다면 비교적 높은 임베딩 벡터값(유사도)을 얻음. 노이즈가 많은 코퍼스에서도 같은 이유로 강점을 가짐. 
 
 
-- ConceptNet : 지식 그래프 사용, 단어간의 관계를 정의해 유사도 측정.
-- Word2Vec : 임베딩의 일종. 비슷한 위치의 단어들에서 유사도를 얻음(유사하게 설정함). skip gram 을 이용해 단어와 이웃으로 나누고 인코딩. 처음보는 단어도 잘 학습하게 도와준다.
-- 이미 여러 유사단어들이 선행학습된 Word2Vec 을 텐서플로우허브에서 다운로드 받아 간편하게 사용할 수 있다. word2vec 과 globe 등은 이미 학습된 단어로 워드 임베딩을 실행하나 각 단어가 한개의 벡터로만 표현된다는 문제를 가짐.  
-  
-- LM : 모델 학습에 따로 레이블링 할 필요 없다는 장점. 순방향과 역방향이 있으며 둘을 모두 합친걸 biLM 이라고 한다. 
-- ELMo : 문맥에 따라 단어 임베딩. 문장을 입력으로 받아 문장에 따라 다른 임베딩으로 출력가능. 
-- ELMo 학습 : 순방향 LM은 현재 단어로 다음 단어를 예측하도록 학습시키고, 역방향 LM은 문장에서 뒤의 단어로 앞의 단어를 학습하도록 함. 모든 레이어의 출력값을 이용해 임베딩.  
-- ELMo 순방향 LM : 먼저 단어를 char 임베딩으로 전환하고, 그것이 첫 lstm 셀로 이동된 뒤 학습을 진행한다. 첫 출력은 문자임베딩과 residual connection(상위 레이어가 하위의 특징을 잃지 않고, 역전파를 통한 그레디언트 베니싱을 극복하도록 함)을 가지고 있다.  
-- ELMo 역방향 LM : 방향만 다르게 순방향과 같은 역할을 함. 끝 단어부터 첫 단어까지 예측.
 
 ### 모델, 평가
 
@@ -130,6 +149,12 @@
 - 언어 모델링 : 주어진 단어들로 아직 모르는 단어를 예측하는 것.  
 - 언어모델의 기능 : 기계번역에서 문맥을 파악하거나, 오타를 교정하거나, 음성인식을 더 잘 되게 도와주는 등 보다 적절한 문장을 판단함.  
 - 조건부 확률의 연쇄 법칙 : 조건부 확률(사건 B가 일어난 경우 사건 A가 일어날 확률)이 가지는 특징. P(x1,x2...xn)=P(x1)P(x2|x1)...P(xn|x1...xn−1). 이를 문장에 적용해 다음 단어에 대한 예측 확률을 모두 곱하여 문장의 확률을 구할 수 있음. 
+
+- LM : 모델 학습에 따로 레이블링 할 필요 없다는 장점. 순방향과 역방향이 있으며 둘을 모두 합친걸 biLM 이라고 한다. 
+- ELMo : 문맥에 따라 단어 임베딩. 문장을 입력으로 받아 문장에 따라 다른 임베딩으로 출력가능. 
+- ELMo 학습 : 순방향 LM은 현재 단어로 다음 단어를 예측하도록 학습시키고, 역방향 LM은 문장에서 뒤의 단어로 앞의 단어를 학습하도록 함. 모든 레이어의 출력값을 이용해 임베딩.  
+- ELMo 순방향 LM : 먼저 단어를 char 임베딩으로 전환하고, 그것이 첫 lstm 셀로 이동된 뒤 학습을 진행한다. 첫 출력은 문자임베딩과 residual connection(상위 레이어가 하위의 특징을 잃지 않고, 역전파를 통한 그레디언트 베니싱을 극복하도록 함)을 가지고 있다.  
+- ELMo 역방향 LM : 방향만 다르게 순방향과 같은 역할을 함. 끝 단어부터 첫 단어까지 예측.
   
 - SLM(Statistical Language Model) : 통계적 언어모델. 카운트에 기반해 확률을 구함(count(현 문장+예측할 단어)/count(현 문장)). 데이터 부족시 희소문제(데이터 부족으로 정확한 모델링이 불가능한 문제)가 발생하며 이를 완화하기 위해 n-gram,스무딩,백오프등 일반화 기법이 있으나 결국 NN 언어 모델로 넘어가게 됨.  
 - N-그램 : n개의 토큰이 연속적으로 모인것. 한개면 유니그램, 두개면 바이그램등으로 지칭. 문맥의 파악이 가능. 문장 벡터화의 방법 중 하나인 bag of words 의 단점을 해소 할 수 있음.
@@ -224,7 +249,6 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - GRU(Gated Recurrent Unit) : 게이트 순환 유닛. LSTM과 성능은 유사하며 복잡했던 구조를 간단화 시킴. 업데이트 게이트와 리셋 단 두개의 게이트 만을 사용함. 
 - 성능 : 데이터 양이 적을때는 GRU 가, 많을때는 LSTM이 낫다고 알려져 있음. 
 
-
 ##### GPT
 - Generative Pre Training of a language model 의 약어.
 - language model : 현재 알고있는 단어를 기반으로 다음 단어를 예측하는데 많이 사용되는 모델. 레이블링이 불필요하다는 장점이 있음. GPT-1의 핵심. 비지도, GPT-1은 다 분야의 엄청난 양의 데이터로 pre trained 됨.  
@@ -246,14 +270,12 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 
 
 
-
-
+#
 ******
 
 
 
-
-# NLTK
+# NLTK | NLP(영어, 그 외 다른 언어 일부)
 - nltk.download() : NLTK 세트 다운로드. 특정 세트의 이름을 넣으면 그것만 다운로드한다.
 
 ### tokenize
@@ -303,7 +325,74 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - 토큰저장탐색기.score_ngrams(nltk.collocations.BigramAssocMeasures().raw_freq) : 바이그램을 찾는 또다른 방법.
 - nltk.probability.LidstoneProbDist(fd, gamma=f, bins = n) = 최대 우도 추정 사용. fd(빈도분포)를 기반으로 f(0~1)를 사용해 n개의 샘플을 생성. 샘플들의 총 합은 1. 
 
-# re
+# tensorflow | 토큰,벡터화,임베딩,RNN등
+##### tokenize
+- tf.keras.preprocessing.text.Tokenizer() : 정수 인코딩을 위한 토크나이저 로드. .fit_on_texts(단어집합) 으로 단어 빈도수가 높은 순으로 낮은 정수 인덱스를 부여할 수 있다. .word_index 로 단어와 인덱스를 확인할 수 있고, .word_counts 로 단어의 개수를 확인 할 수 있다. 
+- Tokenizer() : .texts_to_matrix(문장배열,mode='count')로 DTM(인덱스 0부터 시작)을 생성할 수 있다. 모드가 'binary' 면 단어의 존재여부만 보여주는 행렬을, tfidf 는 tfidf 행렬을, freq 는 (단어 등장 횟수/문서 단어 총합)의 행렬을 보여준다. 
+- tf.keras.preprocessing.text.text_to_word_sequence(sentence) : 모든 알파벳을 소문자로 변환, 구두점 제거, 죽약형은 분리하지 않는 단어 토큰화 함수.  정제와 단어 토큰화를 동시에 적용.
+##### vectorize
+- tf.keras.utils.to_categorical(벡터) : 원 핫 인코딩을 해줌. (요소 개수, 요소 종류)의 형태를 가짐.
+- tokenizer.texts_to_sequences(단어집합) : 각 단어를 이미 정해진 인덱스로 변환. 만약 토크나이저 로드시 인수로 i+1을 넣었다면 i 까지의 인덱스를 가진 단어만을 사용하고 나머지는 버린다.
+- tf.keras.preprocessing.sequence.pad_sequences(인코딩된 단어 집합) : 가장 긴 문장의 길이에 맞게 문장의 앞에 0을 삽이비해 ndarray 로 반환. padding='post' 로 문장 뒤에 0을 삽입할 수 있고, maxlen 매개변수로 길이를 지정할 수 있다.
+##### embedding
+- tf.keras.layers.Embedding(총 단어 개수, 결과 벡터의 크기, 입력 시퀀스 길이) : 단어를 밀집벡터로 만듦(임베딩 층(Dense 같은)제작). (샘플개수, 입력길이)형태의 정수 인코딩이 된 2차원 정수 배열을 입력받아 워드 임베딩 후 3차원 배열을 반환. 
+##### RNN
+- tf.keras.layers.SimpleRNN(hidden_size) : RNN 사용. hidden_size 는 은닉상태의 크기로, 다음 시점의 메모리 셀과 출력층으로 보내는 값의 크기이기도 함. input_shape 매개변수에 (timesteps(입력 시퀀스 길이), input_dim(입력 크기)) 로 넣어 입력을 정의해 줄 수 도 있음. (batch_size, timesteps, input_dim) 크기의 3D 텐서를 입력으로 받음.
+
+# sklearn | BOW, TFID, LDA 등
+- sklearn.feature_extraction.text.CountVectorizer() : BOW 표현을 하게 해주는 변환기 로드. .fit(문자열이 담긴 리스트)로 사용, .vocabulary_ 속성에서 반환된 {단어:등장횟수} 형태의 딕셔너리를 볼 수 있음.  tf-idf 와 함께 ngram_range=(연속 토큰 최소길이, 최대길이) 로 연속된 토큰을 고려할 수 있다. 보통은 하나만 하지만 많을 때 바이그램정도로 추가하면 도움이 된다.  
+- Bow 표현을 만드려면 .transform(list), Scipy 희소 행렬(원소 대부분 0) 저장되어 있으며, .get_feature_names()로 각 특성에 해당하는 단어들을 볼 수 있음. min_df 매개변수로 토큰이 나타날 최소 문서 개수를 지정할 수 있고, max_df 매개변수로 자주 나타나는 단어를 제거할 수 있다. stop_words 매개변수에 "english" 를 넣으면 내장된 불용어를 사용한다.
+  
+- sklearn.feature_extraction.text.TfidVectorizer(min_df=i) : 텍스트 데이터를 입력받아 BOW 특성 추출과 tf-idf 를 실행하고 L2정규화(스케일 조정)까지 적용하는 모델로드. 훈련데이터의 통걔적 속성을 사용하므로 파이프 라인을 이용한 그리드 서치를 해 주어야 한다. .idf_ 에서 훈련세트의 idf 값을 볼 수 있다. idf 값이 낮으면 자주 나타나 덜 중요하다 생각되는 것이다.
+- sklearn.decomposition.LatentDirichletAllocation(n_components=n, learn_method="online", random_state=k, max_iter=i) : LDA 수행. .fit_transform(X), .components_ 등을 사용할 수 있다.
+
+
+# gensim | word2vec, FastText
+- gensim.models.Word2Vec(sentences, size, window, min_count, workers, sg) : 워드 투 벡터 사용. size(임베딩 벡터 차원), window(윈도우 크기), min_count(최소빈도수), workers(프로세스 수), sg(0-CBOW, 1-Skip_gram)등의 매개변수 사용가능.
+- gensim.models.FastText(corpus, size, window, min_count, workers, sg) : FastText 사용. 한국어에서 이걸 사용하려면 음절단위가 아닌 자모(ㄱ,ㅏ,ㄴ,ㅓ)단위로 사용함. 
+
+- 모델(W2V).wv.most_similar(word) : 유사한 단어들과 유사도(확률)출력.
+- 모델(W2V).similarity(w1, w2) : 두 단어간 유사도 계산.
+  
+- gensim.models.KeyedVectors.load_word2vec_format(name) : 저장된 모델 로드.
+- 모델(W2V).wv.save_word2vec_format(name) : 모델 저장.
+
+- [link](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit) : 구글 제공 3백만개의 사전훈련된 W2V 단어 벡터 로드. load_word2vec_format으로 .bin 의 다운 파일 사용 가능.  
+- [link2](https://drive.google.com/file/d/0B0ZXk88koS2KbDhXdWg1Q2RydlU/view) : 박규병 님 제공 한국어 W2V 단어 벡터 로드. 
+
+# glove | GloVe
+- glove : pip install glove_python 으로 다운로드 가능. 워드 임베딩의 방법 중 하나인 glove를 사용할 수 있음.
+- glove.Corpus() : 글로브 동시 등장 행렬 생성기 로드. .fit(corpus, window)로 사용가능. 
+- glove.Glove(no_components, learning_rate) : GloVe를 수행 클래스 로드. .fit(등시등장행렬.matrix, epochs, no_threads, verbose)로 사용가능.
+- glove 메서드 : .add_dictionary(동시등장행렬.dictionary) > 사전 추가. .most_similar(word) > 비슷한 단어들과 유사도 반환. 
+
+# replacers | 텍스트 대체, 반복 삭제
+- replacers.RegexpReplacer() : 텍스트 대체 클래스 로드. .replace(text)로 사용, 축약을 해제하고 단어 토큰화까지 진행해 리스트로 반환.
+- replacers.RepeatReplacer() : 반복 문자 삭제 클래스 로드. 위와 동일하게 사용할 수 있으며, 반복된 단어를 일반 단어로 바꿔 반환한다. nltk 의 wordnet.synsets(word)에 이미 있다면 처리하지 않도록 하면 일반 단어는 반복을 삭제하지 않는다.
+- replacers.WordReplacer({'바꿀단어':'바뀔단어'}) : 단어를 동의어로 변환하는 클래스 로드. 마찬가지로 사용, 목록에 있는 단어는 바꿔서, 아니면 그대로 반환한다.
+
+
+# KoNLpy | 한글 분석(토큰화, 태깅)
+- konlpy : 한글 분석을 가능하게 함. 자바로 이뤄져 있어 JDK 1.7 이상과 JPype 가 설치되어 있어야 함. 각 분석기는 성능과 결과가 다르게 나와 용도에 따라 적절한 것을 선택해야 함.
+- 종류 : Okt(Open Korea Text, Twitter), 꼬꼬마(Kkma), 메캅(Mecab, 속도 중시), 코모란(Komoran), 한나눔(Hannanum) 등의 형태소 분석기 사용 가능.
+- 함수 : .morphs(text)로 형태소 분석(토큰화)을, .pos(text)로 형태소 토큰화 후 품사 태깅을, .nouns(text)로 명사만 받아볼 수 있다.
+  
+- konlpy.tag.Okt() :  Okt 클래스 객체 생성. 
+- konlpy.tag.Kkma() : 꼬꼬마 토크나이저 로드. Okt 보다 조금 더 세분화(한 > 하,ㄴ)해 분리하지만 매우 느리다.
+
+# soynlp | 반복 제어, 품사태깅, 단어 토큰화
+- SOYNLP : 품사 태깅, 단어 토큰화 등을 지원. 비지도 학습으로 토큰화. 학습에 필요한 문서를 다운로드할 필요가 있음.
+- soynlp.DoublespaceLineCorpus("txt 파일.txt") : 데이터를 다수의 문서로 분리함.
+- soynlp.normalizer.emoticon_normalize(sent, num_repeats=i) : ㅋㅋ,ㅎㅎ 등의 이모티콘을 i개 까지만 반복되도록 변환.
+- soynlp.normalizer.repeat_normalize(sent, num_repeats=i) : 의미없이 반복되는 글자를 i개 까지만 반복되도록 변환.
+
+# 한국어 전처리 | 띄어쓰기, 맞춤법, 문장 토큰화
+- PyKoSpacing : 한국어 띄어쓰기 패키지. 띄어쓰기가 없는 문장을 띄어쓰기를 한 문장으로 변환해줌. pykospacing.spacing(문장)으로 사용할 수 있음. 
+- Py-Hanspell : 네이버 맞춤법 검사기를 바탕으로 제작된 맞춤법(띄어쓰기 포함)보정 패키지. hanspell.spell_checker.check(문장).checked 로 개선된 문장을 볼 수 있음.
+- kss.split_sentences(text) :  kss 모듈의 한국어 문장 토큰화 함수. 
+
+
+# re | 정규표현식
 - 정규 표현식 사용을 지원.
 - 정규표현식
 > - [] : []안의 문자들과 매치. [abc]면 a,b,c중 하나와 매치를 뜻함. [a-c],[a-zA-Z]식으로 범위를 지정할 수 도 있고, 패턴 앞에 ^ 를 붙혀 패턴 부정을 나타낼 수 도 있다.
@@ -322,53 +411,7 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - 컴파일.finditer(sent) : 정규 표현식에 맞는 단어만 각각을 매치 객체의 형태로 하여 반복 가능한 개채의 형태로 돌려준다. 
 - 컴파일의 메서드는 전부 re.메서드(표현식, 문자열) 형태로 사용할 수 있다.
 
-# replacers
-- replacers.RegexpReplacer() : 텍스트 대체 클래스 로드. .replace(text)로 사용, 축약을 해제하고 단어 토큰화까지 진행해 리스트로 반환.
-- replacers.RepeatReplacer() : 반복 문자 삭제 클래스 로드. 위와 동일하게 사용할 수 있으며, 반복된 단어를 일반 단어로 바꿔 반환한다. nltk 의 wordnet.synsets(word)에 이미 있다면 처리하지 않도록 하면 일반 단어는 반복을 삭제하지 않는다.
-- replacers.WordReplacer({'바꿀단어':'바뀔단어'}) : 단어를 동의어로 변환하는 클래스 로드. 마찬가지로 사용, 목록에 있는 단어는 바꿔서, 아니면 그대로 반환한다.
-
-# urllib
+# urllib | url 이용
 - url 이용 라이브러리.
 - urllib.request.urlretrieve(주소, filename) : 주소의 파일을 파일 이름으로 다운로드.
-
-
-# tensorflow
-##### tokenize
-- tf.keras.preprocessing.text.Tokenizer() : 정수 인코딩을 위한 토크나이저 로드. .fit_on_texts(단어집합) 으로 단어 빈도수가 높은 순으로 낮은 정수 인덱스를 부여할 수 있다. .word_index 로 단어와 인덱스를 확인할 수 있고, .word_counts 로 단어의 개수를 확인 할 수 있다. 
-- Tokenizer() : .texts_to_matrix(문장배열,mode='count')로 DTM(인덱스 0부터 시작)을 생성할 수 있다. 모드가 'binary' 면 단어의 존재여부만 보여주는 행렬을, tfidf 는 tfidf 행렬을, freq 는 (단어 등장 횟수/문서 단어 총합)의 행렬을 보여준다. 
-- tf.keras.preprocessing.text.text_to_word_sequence(sentence) : 모든 알파벳을 소문자로 변환, 구두점 제거, 죽약형은 분리하지 않는 단어 토큰화 함수.  정제와 단어 토큰화를 동시에 적용.
-##### vectorize
-- tf.keras.utils.to_categorical(벡터) : 원 핫 인코딩을 해줌. (요소 개수, 요소 종류)의 형태를 가짐.
-- tokenizer.texts_to_sequences(단어집합) : 각 단어를 이미 정해진 인덱스로 변환. 만약 토크나이저 로드시 인수로 i+1을 넣었다면 i 까지의 인덱스를 가진 단어만을 사용하고 나머지는 버린다.
-- tf.keras.preprocessing.sequence.pad_sequences(인코딩된 단어 집합) : 가장 긴 문장의 길이에 맞게 문장의 앞에 0을 삽이비해 ndarray 로 반환. padding='post' 로 문장 뒤에 0을 삽입할 수 있고, maxlen 매개변수로 길이를 지정할 수 있다.
-##### embedding
-- tf.keras.layers.Embedding(총 단어 개수, 결과 벡터의 크기, 입력 시퀀스 길이) : 단어를 밀집벡터로 만듦(임베딩 층(Dense 같은)제작). (샘플개수, 입력길이)형태의 정수 인코딩이 된 2차원 정수 배열을 입력받아 워드 임베딩 후 3차원 배열을 반환. 
-##### RNN
-- tf.keras.layers.SimpleRNN(hidden_size) : RNN 사용. hidden_size 는 은닉상태의 크기로, 다음 시점의 메모리 셀과 출력층으로 보내는 값의 크기이기도 함. input_shape 매개변수에 (timesteps(입력 시퀀스 길이), input_dim(입력 크기)) 로 넣어 입력을 정의해 줄 수 도 있음. (batch_size, timesteps, input_dim) 크기의 3D 텐서를 입력으로 받음.
-
-
-# sklearn
-- sklearn.feature_extraction.text.CountVectorizer() : BOW 표현을 하게 해주는 변환기 로드. .fit(문자열이 담긴 리스트)로 사용, .vocabulary_ 속성에서 반환된 {단어:등장횟수} 형태의 딕셔너리를 볼 수 있음.  tf-idf 와 함께 ngram_range=(연속 토큰 최소길이, 최대길이) 로 연속된 토큰을 고려할 수 있다. 보통은 하나만 하지만 많을 때 바이그램정도로 추가하면 도움이 된다.  
-- Bow 표현을 만드려면 .transform(list), Scipy 희소 행렬(원소 대부분 0) 저장되어 있으며, .get_feature_names()로 각 특성에 해당하는 단어들을 볼 수 있음. min_df 매개변수로 토큰이 나타날 최소 문서 개수를 지정할 수 있고, max_df 매개변수로 자주 나타나는 단어를 제거할 수 있다. stop_words 매개변수에 "english" 를 넣으면 내장된 불용어를 사용한다.
-  
-- sklearn.feature_extraction.text.TfidVectorizer(min_df=i) : 텍스트 데이터를 입력받아 BOW 특성 추출과 tf-idf 를 실행하고 L2정규화(스케일 조정)까지 적용하는 모델로드. 훈련데이터의 통걔적 속성을 사용하므로 파이프 라인을 이용한 그리드 서치를 해 주어야 한다. .idf_ 에서 훈련세트의 idf 값을 볼 수 있다. idf 값이 낮으면 자주 나타나 덜 중요하다 생각되는 것이다.
-
-- sklearn.decomposition.LatentDirichletAllocation(n_components=n, learn_method="online", random_state=k, max_iter=i) : LDA 수행. .fit_transform(X), .components_ 등을 사용할 수 있다.
-
-# KoNLpy
-- 한글 분석을 가능하게 함. 자바로 이뤄져 있어 JDK 1.7 이상과 JPype 가 설치되어 있어야 함. 각 분석기는 성능과 결과가 다르게 나와 용도에 따라 적절한 것을 선택해야 함.
-- Okt(Open Korea Text, Twitter), 꼬꼬마(Kkma), 메캅(Mecab, 속도 중시), 코모란(Komoran), 한나눔(Hannanum) 등의 형태소 분석기 사용 가능.
-- kss.split_sentences(text) :  kss 모듈의 한국어 문장 토큰화 함수. 
-- konlpy.tag.Okt() >  Okt 클래스 객체 생성. .morphs(text)로 형태소 분석(토큰화)을, .pos(text)로 형태소 토큰화 후 품사 태깅을, .nouns(text)로 명사만 받아볼 수 있다.
-- konlpy.tag.Kkma() > 꼬꼬마 토크나이저 로드. Okt 보다 조금 더 세분화(한 > 하,ㄴ)해 분리하지만 매우 느리다.
-
-# 한국어 전처리 패키지
-- PyKoSpacing : 한국어 띄어쓰기 패키지. 띄어쓰기가 없는 문장을 띄어쓰기를 한 문장으로 변환해줌. pykospacing.spacing(문장)으로 사용할 수 있음. 
-- Py-Hanspell : 네이버 맞춤법 검사기를 바탕으로 제작된 맞춤법(띄어쓰기 포함)보정 패키지. hanspell.spell_checker.check(문장).checked 로 개선된 문장을 볼 수 있음.
-
-- SOYNLP : 품사 태깅, 단어 토큰화 등을 지원하는 단어 토크나이저. 비지도 학습으로 토큰화. 학습에 필요한 문서를 다운로드할 필요가 있다.
-- soynlp.DoublespaceLineCorpus("txt 파일.txt") : 데이터를 다수의 문서로 분리함.
-- soynlp.word.WordExtractor() : 형태소를 학습할 단어 토크나이저 로드. .train(corpus)로 훈련을, .extract()로 단어 점수표를 확인할 수 있고, 이를 이용해 soynlp.tokenizer 의 LTokenizer, MaxScoreTokenizer 등을 사용한다.   
-- soynlp.normalizer.emoticon_normalize(sent, num_repeats=i) : ㅋㅋ,ㅎㅎ 등의 이모티콘을 i개 까지만 반복되도록 변환.
-- soynlp.normalizer.repeat_normalize(sent, num_repeats=i) : 의미없이 반복되는 글자를 i개 까지만 반복되도록 변환.
 
