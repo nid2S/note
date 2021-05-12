@@ -69,7 +69,7 @@
 - np.loadtext() : 텍스트 파일을 배열로 불러옴. ndarray로 불려옴. 
 
 
-#pandas
+# pandas
 ***
 - 판다스는 시리즈, 데이터프레임, 패널 총 세개의 데이터 구조를 사용함.
   
@@ -79,30 +79,31 @@
 - pd.read_csv("/경로/파일명.csv") > 파일읽기. 자신과 같은 디렉토리에 있으면 그냥 써도, 그냥 웹상의 주소를 써도 됨. 문자열의 형태로 읽힌다.
 - pd.get_dummies(범주형 데이터) > one hot encoding. 범주형 종속변수가 그 종류만큼 (이름)_(데이터이름)의 형태로 나뉜다.
 
-- df.head() > 위쪽 데이터 5개. 
-- df.tail() > 끝쪽 데이터 5개. 안에 숫자를 넣으면 그 숫자큼 나옴.
-- df.info() > 데이터셋의 정보 볼 수 있음
-- df.groupby([열]) > group by. 그 열 전부 반환.
 - df.columns  > 칼럼이름 Index 객체로 반환.
 - df.values  > 값들 배열형태로 반환.
 - df.index > 인덱스+타입 Index 객체로 반환. 
 - df.columns > 칼럼+타입 Index 객체로 반환.
 - df.values > 값만 리스트로 반환.
+
+- df.head() > 위쪽 데이터 5개. 
+- df.tail() > 끝쪽 데이터 5개. 안에 숫자를 넣으면 그 숫자큼 나옴.
+- df.info() > 데이터프레임의 정보 볼 수 있음
+- df.isna().sum() > na의 위치(혹은 개수, 결측치)를 확인 할 수 있음.
+- df.mean() > 데이터들의 평균값을 얻을 수 있움.
+- df.plot() > 데이터를 가지고 그래프를 그림. kind="bar" 등으로 종류를 지정해 줄 수 도 있음.
+- df.groupby([열]) > group by. 그룹에 맞춰 가져옴. 그 열의 데이터가 같은걸 모아 출력.
+- df.drop_duplicate(subset=[열이름], inplace=True) > 열에서 중복 내용 제거.
   
-- 데이터["열 이름"] > 그 열의 인덱스, 값 들, 이름, 데이터 타입 출력.
-- 데이터[["열이름"]] > 열 제목과 그 열 출력. 
-- 데이터["열 이름1","2","3"] > 열(칼럼) 다중 선택.
-- 데이터[:, "k1":"k3"] > k1 부터 k3까지 열(칼럼) 선택
-- 데이터.loc[["가져올 칼럼 명 들"]] > 특정 인덱스의 데이터만 가져옴. (데이터[칼럼명] == 1) 식으로 조건식을 넣을 수도 있다.
-- 데이터[dataFrame.Age > 30] > 이런식으로 데이터를 선택해서 표시할 수 있다.
-  
+- 데이터["칼럼명"] > 그 열의 인덱스, 값 들, 이름, 데이터 타입 출력. 차원이 여러개일 경우는 [5, 1:3]처럼 차원별로 인덱스를 지정해 주어야 함.
+- 데이터["칼럼1","2","3"] > 열(칼럼) 다중 선택. [칼럼1:칼럼3]식으로 선택할 수 도 있음.
+- 데이터[dataFrame.Age > 30] > 이런식으로 데이터를 선택해서 표시할 수도 있음
+
 - 데이터["칼럼명"].astype("int/float") > 데이터 수치형으로 변경
 - 데이터["칼럼명"].astype("category") > 데이터 범주형으로 변경. 원핫인코딩이 가능해짐.
-- 데이터["칼럼명"].value_counts() > 그 칼럼에 등장하는 값의 종류를 그 값이 나온 수와 함께 나타냄. 
- 
-- 데이터.isna()(.sum()) 으로 na의 위치(혹은 개수, 결측치)를 확인 할 수 있다. NaN(숫자아닌 자료)를 모델에 그대로 넣으면 오류가 남.
-- 데이터.mean() > 으로 데이터들의 평균값을 얻을 수 있다.
-- 데이터["칼럼"].fillna(평균값) > na에 평균값을 넣어 오류를 없앨 수 있다.
+- 데이터["칼럼명"].replace(요소1, 요소2) > 그 칼럼의 값 중 요소 1과 일치하는 값을 요소 2로 바꿈. [x1,x2],[y1,y2] 식으로 넣어 여러개의 값을 변환할 수 도 있음.
+- 데이터["칼럼명"].fillna(평균값) > 특정 열의 na에 평균값을 넣어 오류를 없앨 수 있음.
+- 데이터["칼럼명"].value_counts() > 그 칼럼에 등장하는 값의 종류를 그 값이 나온 수와 함께 나타냄.
+- 데이터["칼럼명"].nunique() > 열에서 중복된 샘플을 제외한 샘플의 개수 출력. 중복된 값이 있다면 단 하나의 값만 남게 됨.
   
 - 차트 = 데이터.plot(kind='bar', title='날씨', figsize=(12, 4), legend=True, fontsize=12) > 차트 종류,제목,크기,범례 유무,폰트 크기 설정
 - 차트.set_xlabel('도시', fontsize=12)          # x축 정보 표시
@@ -231,8 +232,13 @@
 - cv2.videoWriter('경로/이름',cv2.VideoWriter_fourcc('M','P','4','V'-MP4/'M','J','P','G'-avi),FPS(33이하),(프레임너비,높이)) > videoWriter 객체 생성.
 - videoWriter 객체.write(read 로 얻은 이미지) > 저장
 
+- 이미지 모델 학습시에는 np.ndarray(shape=(image_amount, image_size[1], image_size[0]), dtype=np.float32) 식으로 준비된 이미지 파일과
+  np.ndarray(shape=(image_amount,), dtype=np.int32)식으로 준비된 레이블에 
+  이미지 오픈 > fit > asarray > normalized(astype(np.float32)>/255.0 ) > all_images[i]에 넣은 이미지를 사용해야 한다. 
+  mnist, PIL > (number, y, x) 로 train. | openCv > (number, y, x ,3) 으로 train
 
-#tensorflow
+
+# tensorflow
 ***
 
 ##### layers
@@ -247,7 +253,9 @@
 - tf.keras.layers.SimpleRNN(hidden_size) : RNN 사용. hidden_size 는 은닉상태의 크기. input_shape 매개변수에 (timesteps(입력 시퀀스 길이), input_dim(입력 크기)) 로 넣어 입력을 정의해 줄 수 도 있음. return_sequences(전체 은닉상태 출력)와 return_state(마지막 은닉상태 한번 더 출력)매개변수 사용 가능.
 - tf.keras.layers.LSTM(hidden_size, input_shape=(time_steps, input_dim)) > RNN 의 일종인 LSTM 사용. RNN 층은 (batch_size(배치 크기, 한번에 학습할 데이터 양), timesteps(시점, 문장의 길이), input_dim(단어 벡터 차원)) 크기의 3D 텐서를 입력으로 받음. return state 를 true 로 하면 마지막 셀 상태까지 반환, 양방향이면 정방향,역방향 둘 다 은닉상태와 셀상태 반환(fh,fc,bh,bc 순). 
 - tf.keras.layers.GRU(hidden_size, input_shape=(time_steps, input_dim)) > LSTM 을 개량한 GRU 사용. LSTM 에 비해 구조가 간단하고, 데이터 양이 적을떄 LSTM 보다 낫다고 알려져 있음.
+- tf.keras.layers.GlobalAveragePooling1D() > 입력으로 들어오는 모든 벡터들의 평균을 구함. 흔히 임베딩 층 뒤에 사용됨.
 
+- tensorflow.keras.preprocessing.sequence.pad_sequences(data, maxlen) : 데이터(리스트)의 요소 개수를 maxlen으로 고정. 적으면 0을 채우고 많으면 버림.
 
 - session : 일종의 실행창. 텐서의 내용과 연산 결과를 볼 수 있음. 세션 선언, 실행, 종료 문으로 구분됨.
 - tf.Session()/InteractiveSession() : 세션 선언 / 자동으로 기본 세션을 지정해주는 세션 선언.
@@ -272,15 +280,20 @@
                
 - model.summary() : 모델의 정보(layer(type), outputShape, param(파라미터(매개변수, 노드)수))를 확인할 수 있음
 
+- tensorflow.keras.callbacks.EarlyStopping(monito"val_loss", mode="min", verbose, patience) : 과정합 방지를 위한 조기 종료 설정. patience회 검증 데이터의 손실이 증가하면 학습을 조기종료함. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능.
+- tensorflow.keras.callbacks.ModelCheckpoint(모델명.h5, monitor="val_acc", mode="max", verbose=1, save_best_only=True) : 검증 데이터의 정확도가 이전보다 좋아지면 모델 저장. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능.
+
 ###### model train, use
 - model.compile(
 -  optimizer='adam',  > 데이터와 손실함수를 바탕으로 모델 업데이트 방향 결정.
 -  loss='sparse_categorical_crossentropy',  > 훈련중 모델 오차 측정. 
 -  metrics=['accuracy']  > 훈련단계와 테스트 단계를 모니터링하기 위한 방법.
 - ) > 모델 컴파일.
-
-- model.fit(train_images , train_labels , epochs=1000(반복 횟수)) > 학습된 모델 제작. verbose=0 으로 떨어지는 모습을 보지 않을 수 있고, validation_data=(test_image,test_label) 로 테스트용 데이터로 계산한 손실과 정확도를 함꺠 출력시킬 수 있다.
-- 모델 학습시에는 np.ndarray(shape=(image_amount, image_size[1], image_size[0]), dtype=np.float32) 식으로 준비된 이미지 파일과 np.ndarray(shape=(image_amount,), dtype=np.int32)식으로 준비된 레이블에 이미지 오픈 > fit > asarray > normalized(astype(np.float32)>/255.0 ) > all_images[i]에 넣은 이미지를 사용해야 한다. mnist, PIL > (number, y, x) 로 train. | openCv > (number, y, x ,3) 으로 train
+  
+- model.fit(train_data , train_labels , epochs=1000(반복 횟수)) : 학습된 모델 제작. 
+  verbose=0 으로 떨어지는 모습을 보지 않을 수 있고, validation_data=(test_data,test_label) 로 테스트용 데이터로 계산한 손실과 정확도를 함꺠 출력시킬 수 있으며,
+  callback 매개변수에 callbacks의 함수를 넣어 사용할 수 있음. 여러개면 [one, two]식으로 입력.
+  
 - model.save('파일명.h5') > 모델 저장
 - model.evaluate(test_images, test_labels) > 모델 성능 비교. loss, accuracy 순으로 반환. verbose = 0 > silent
 
