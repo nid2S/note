@@ -113,108 +113,117 @@
 ### 지도학습
 입출력 데이터기반 예측
 
+####분류
+- 나올 수 있는 응답이 개별적(국가나 언어등 둘 사이에 무언가가 없음). 레이블이 이산형 범주. 출력층의 노드수는 레이블 개수와 동일해야 함.
+
+- 이진 분류 - 범주 두개(y/n). 대부분의 선형 분류가 속함(로지스틱 제외).
+- 다중분류 - 범주 새개 이상. 이진분류를 다중분류로 확장하기 위해서는 일 대 다 라는 방법을 사용함.
+- 일 대 다 - 각 클래스를 다른 모든것과 비교하도록 훈련시킴.
+ 
+- F1-Measure - 데이터가 불균형할 때, 정확도 만으로는 성능 측정이 어려워 통계적으로 보정해주는 방법. 다수보다 소수집단의 정답 여부를 더 크게 반영.
+- K-fold Test - 전체 데이터를 다양한 방법으로 쪼개 훈련,테스트,검증의 과정을 여러번(K번) 반복하며 테스트가 편향되어 있지 않고 설명력을 가지게 하려 시행. 
+
+- AutoEncoder - 입력데이터와 출력 데이터를 같게 하고 중간에 레이어를 넣어 원복하게 만드는 구조. 입력 데이터에 대한 일종의 패턴을 찾아냄. 이진 분류시, 정상만 훈련시킨 뒤 Logistic Regression 모델에 이것에 넣었을 때의 값을 넣어 분류할 수 있도록 구성하는데 사용된다. 훈련 데이터가 적을 때 사용된다.
+```python  # auto encoder clone
+import tensorflow as tf
+import tensorflow.keras.layers as layers
+import tensorflow.keras.models as models
+
+n_inputs = x_train.shape[1]
+n_outputs = 2
+n_latent = 50
+
+inputs = tf.keras.layers.Input(shape=(n_inputs, ))
+x = tf.keras.layers.Dense(100, activation='tanh')(inputs)
+latent = tf.keras.layers.Dense(n_latent, activation='tanh')(x)
+
+# Encoder
+encoder = tf.keras.models.Model(inputs, latent, name='encoder')
+encoder.summary()
+
+latent_inputs = tf.keras.layers.Input(shape=(n_latent, ))
+x = tf.keras.layers.Dense(100, activation='tanh')(latent_inputs)
+outputs = tf.keras.layers.Dense(n_inputs, activation='sigmoid')(x)
+
+# Decoder
+decoder = tf.keras.models.Model(latent_inputs, outputs, name='decoder')
+decoder.summary()
+```
+
+####회귀
+- 나올 수 있는 응답이 연속적. 레이블이 연속형인 숫자.
+```python 선형 회귀 구현
+learning_late = 0.01  # 학습룰 0.01로 설정
+epoch = 300  # 학습 횟수는 300번으로 설정
+W = tf.Variable(1.0)
+b = tf.Variable(1.0) # 가중치, 편향 선언
+
+def hypo(x):  # 가설(가중치와 편향)을 적용해 값을 반환하는 함수
+  return W*x + b
+
+def mse(y_pred, t):  # 평균 오차 제곱 손실함수
+  return tf.reduce_mean(tf.square(y_pred - y) 차이값을 제곱한 뒤 평균을 구함
+
+optimizer = tf.optimizer.SGD(learning_late)  # 옵티마이저는 경사 하강법, 학습률은 0.01로
+
+X = [1,2,3,4,5]
+y = [12,23,34,45,56]  # 학습 데이터 설정
+
+for i in range(epoch+1):
+  y_pred = hypo(X)  # 식 수행
+  cost = mse(y_pred, y)  # 결과의 비용(본래와의 평균 제곱 오차)
+  gradients = tf.GradientTape().gradients(zip(gradients, [W, b])  # 비용에 대한 파라미터 미분값 계산
+  optimizer.apply_gradients(zip(gradients, [W, b]))  # 파라미터 업데이트
+  # epoch 에 따른 출력문을 넣어줘도 괜찮음.
+
+hypo(테스트 데이터) 로 훈련된 모델 사용가능.
+ ```
+
+
 #### 모델
+##### KNN (nearest neighbor)
 - 최근접 이웃 : 작은 데이터셋일 경우 기본 모델로 좋고, 설명도 편함.
+  
+##### linear
 - 선형 모델 : 대용량, 고차원 데이터셋에 사용 가능.
-- 나이브 베이즈 : 분류 전용. 선형 모델에 비해 훨씬 빠름. 대용량, 고차원 데이터셋에 사용가능.
+- 리지 선형 회귀 모델 : 선형 회귀 모델에 가중치의 합이 최소가 되도록 L2 규제를 추가한다.
+- 라소 선형 회귀 모델 : 리지와 비슷하나  L1 규제를 걸어 어떤 값이 0이 될 수 있게 한다.
+
+###### naive bayes
+- 나이브 베이즈 : 분류 전용. 선형 모델에 비해 훨씬 빠름. 대용량, 고차원 데이터셋에 사용가능. 베이즈의 정리를 이용.
+- 베이즈의 정리 : 조건부 확률을 계산하는 방법 중 하나. P(A)가 A가 일어날 확률, P(B|A)가 A가 일어난 후 B가 일어날 확률 이라고 했을 때 P(A|B)=(P(B|A)P(A))/P(B) 의 공식을 따른다 
+- 베이즈의 정리 이용 : P(레이블 | 입력 텍스트)(입력 텍스트가 그 레이블일 확률) = P(w1(본문의 단어) | 레이블) × P(w2 | 레이블) × P(w3 | 레이블) × P(레이블). 오직 단어의 빈도수만을 고려.
+
+- Naive Bayes(NB) - 선형 분류기보다 훈련 속도가 빠르지만 일반화 성능이 조금 뒤짐.
+- GaussianNB - 연속적인 어떤 데이터에도 적용가능. 각 특성의 표준편차와 평균을 저장. 고차원의 데이터셋에 사용.
+- BernoulliNB - 이진데이터에 적용. 각 클래스의 특성 중 0이 아닌것을 셈. 커질수록 모델이 단순해지는 alpha 가 있음.
+- MultinomialNB - 카운트(count) 데이터에 적용. 클래스별 특성의 평균을 계산. alpha.
+
+##### dicision tree
 - 결정 트리 : 매우 빠르며 데이터 스케일 조정이 필요 없음. 시각화와 설명하기 좋음.
 - 랜덤 포레스트 : 결정트리 하나보다 좋은 성능을 냄. 안정적이고 강력하며 데이터 스케일 조정이 필요 없지만 고차원 희소 데이터와는 안 맞음.
 - 그래디언트 부스팅 결정 트리 : 랜덤 포레스트보다 성능이 좋고 예측리 빠르며 메모리를 덜 사용하지만 힉습이 느리고 매개변수 튜닝이 많이 필요함.
+- 결정트리 :  예/아니오를 반복하며 학습. 각 분열된 영역(리프)가 하나의 타깃값을 가질때 까지 반복. 이때의 리프노드를 순수노드라고 함.  
+- 과대적합을 막기 위해 가지치기(사전 - 최대 깊이, 개수 제한, 최소 포인트 개수 제한 | 사후 - 데이터가 적은 노드 삭제)를 해줘야 함.
+ 
+##### ensenble
+- 앙상블 : 여러 모델을 연결해 더 강력한 모델을 만드는 기법. 랜덤 포레스트와 그래디언트 부스팅등이 있다.
+- 랜덤 포레스트 : 조금씩 다른 여러 결정 트리의 묶음. 다른 방향으로 과대적합된 트리들을 평균냄. 여러개의 데이터중에서 무작위로 만들어낸 데이터의 부트스트랩 샘플을 생성한다. 모든 츠리에 대한 예측을 만든 후, 그 예측을 평균하거나(회귀) 예측한 확률을 평균내어(분류) 예측값을 나타낸다. 트리가 많을수록 랜덤값에 영향을 덜 받는다. 많은 트리는 메모리와 긴 훈련시간을 부른다. 차원이 높고 희소한 데이터에는 잘 작동하지 않는다.
+- 그래디언트 부스팅 회귀트리 : 약한 학습기 사용. 이전 트리의 오차를 보완하는 방법으로 순차적으로 만듦. 무작위성이 없고, 적은 메모리와 예측도 빠름. 랜덤포레스트 보다 매개변수의 영향을 더 많이 받는다. 커질수록 보정을 많이해 복잡한 모델을 만드는 러닝 레이트 매개변수를 가지고 있다. 랜덤 포레스트보다 조금 더 불안정하다. 
+- 배깅 : Bootstrap aggregating 의 줄임.  랜덤 샘플링으로 훈련세트를 각기 달리 훈련시킨 뒤 확률값을 평균하거나 빈도가 가장 높은 예측결과 예측값이 된다.
+- 엑스트라 트리 : 후보 특성을 무작위 분할 후 최적의 분할을 민듦. 랜덤 포래스트와 다른 방식으로 모델에 무작위성을 주입. 
+- 에이다 부스트 : 약한 학습기 사용. adaptive Boosting. 이전 모델이 잘못 분류한 샘플의 가중치를 높임. 각 모델은 성능에 따라 가중치가 부여. 깊이 1의 트리 사용.
+   
+##### SVM
 - 서포트 벡터 머신 : 비슷한 의미의 특성으로 이뤄진 중간규모 데이터 셋에 잘 맞음. 데이터 스케일 조정이 필요하고 매개변수 튜닝이 맣이 필요함.
+- 커널 기법 : 선형 모델(분류기)을 새로운 특성을 많이 만들지 않고도 학습시키기 위한 수학적 기교.
+- 커널 서포트 벡터 머신 : 커널 기법을 이용한 SVM. 데이터의 특성이 몇 개 안 되도 복잡한 결정 결계를 만들 수 있으나 샘플이 많으면 잘 맞지 않는다.
+ 
+##### NN
 - 신경망 : 대용량 데이터 세트에서 복잡한 모델을 만들 수 있음. 매개변수 선택과 대이터 스케일에 민감. 큰 모델은 학습이 오래 걸림.
-- tf 에서 딥러닝 모델 생성 : 데이터 생성 > 전처리 > 모델 레이어 제작 > compile > fit > predict 의 순서로 이뤄진다. 
+- tf 에서 딥러닝 모델 생성 : 데이터 생성 > 전처리 > 모델 레이어 제작 > compile > fit > predict 의 순서로 이뤄진다.
 
-####분류
->- 나올 수 있는 응답이 개별적(국가나 언어등 둘 사이에 무언가가 없음). 레이블이 이산형 범주. 출력층의 노드수는 레이블 개수와 동일해야 함.
->
->- 이진 분류 - 범주 두개(y/n). 대부분의 선형 분류가 속함(로지스틱 제외).
->- 다중분류 - 범주 새개 이상. 이진분류를 다중분류로 확장하기 위해서는 일 대 다 라는 방법을 사용함.
->- 일 대 다 - 각 클래스를 다른 모든것과 비교하도록 훈련시킴.
-> 
->- F1-Measure - 데이터가 불균형할 때, 정확도 만으로는 성능 측정이 어려워 통계적으로 보정해주는 방법. 다수보다 소수집단의 정답 여부를 더 크게 반영.
->- K-fold Test - 전체 데이터를 다양한 방법으로 쪼개 훈련,테스트,검증의 과정을 여러번(K번) 반복하며 테스트가 편향되어 있지 않고 설명력을 가지게 하려 시행. 
->
->- AutoEncoder - 입력데이터와 출력 데이터를 같게 하고 중간에 레이어를 넣어 원복하게 만드는 구조. 입력 데이터에 대한 일종의 패턴을 찾아냄. 이진 분류시, 정상만 훈련시킨 뒤 Logistic Regression 모델에 이것에 넣었을 때의 값을 넣어 분류할 수 있도록 구성하는데 사용된다. 훈련 데이터가 적을 때 사용된다.
-> ```python  # auto encoder clone
-> import tensorflow as tf
-> import tensorflow.keras.layers as layers
-> import tensorflow.keras.models as models
-> 
-> n_inputs = x_train.shape[1]
-> n_outputs = 2
-> n_latent = 50
-> 
-> inputs = tf.keras.layers.Input(shape=(n_inputs, ))
-> x = tf.keras.layers.Dense(100, activation='tanh')(inputs)
-> latent = tf.keras.layers.Dense(n_latent, activation='tanh')(x)
-> 
-> # Encoder
-> encoder = tf.keras.models.Model(inputs, latent, name='encoder')
-> encoder.summary()
-> 
-> latent_inputs = tf.keras.layers.Input(shape=(n_latent, ))
-> x = tf.keras.layers.Dense(100, activation='tanh')(latent_inputs)
-> outputs = tf.keras.layers.Dense(n_inputs, activation='sigmoid')(x)
-> 
-> # Decoder
-> decoder = tf.keras.models.Model(latent_inputs, outputs, name='decoder')
-> decoder.summary()
-> ```
-
-> ###### 분류 모델 종류
->- Naive Bayes(NB) - 선형 분류기보다 훈련 속도가 빠르지만 일반화 성능이 조금 뒤짐.
->- GaussianNB - 연속적인 어떤 데이터에도 적용가능. 각 특성의 표준편차와 평균을 저장. 고차원의 데이터셋에 사용.
->- BernoulliNB - 이진데이터에 적용. 각 클래스의 특성 중 0이 아닌것을 셈. 커질수록 모델이 단순해지는 alpha 가 있음.
->- MultinomialNB - 카운트(count) 데이터에 적용. 클래스별 특성의 평균을 계산. alpha.
-
-####회귀
->- 나올 수 있는 응답이 연속적. 레이블이 연속형인 숫자.
->- 그 중에서도 데이터 추세가 선형인 선형 회귀는 경사 하강법을 이용한다.
-> ```python 선형 회귀 구현
-> learning_late = 0.01  # 학습룰 0.01로 설정
-> epoch = 300  # 학습 횟수는 300번으로 설정
-> W = tf.Variable(1.0)
-> b = tf.Variable(1.0) # 가중치, 편향 선언
-> 
-> def hypo(x):  # 가설(가중치와 편향)을 적용해 값을 반환하는 함수
->   return W*x + b
-> 
-> def mse(y_pred, t):  # 평균 오차 제곱 손실함수
->   return tf.reduce_mean(tf.square(y_pred - y) 차이값을 제곱한 뒤 평균을 구함
-> 
-> optimizer = tf.optimizer.SGD(learning_late)  # 옵티마이저는 경사 하강법, 학습률은 0.01로
-> 
-> X = [1,2,3,4,5]
-> y = [12,23,34,45,56]  # 학습 데이터 설정
-> 
-> for i in range(epoch+1):
->   y_pred = hypo(X)  # 식 수행
->   cost = mse(y_pred, y)  # 결과의 비용(본래와의 평균 제곱 오차)
->   gradients = tf.GradientTape().gradients(zip(gradients, [W, b])  # 비용에 대한 파라미터 미분값 계산
->   optimizer.apply_gradients(zip(gradients, [W, b]))  # 파라미터 업데이트
->   # epoch 에 따른 출력문을 넣어줘도 괜찮음.
-> 
-> hypo(테스트 데이터) 로 훈련된 모델 사용가능.
-> ```
-> ######회귀 모델 종류
->- 리지 선형 회귀 모델 : 선형 회귀 모델에 가중치의 합이 최소가 되도록 L2 규제를 추가한다.
->- 라소 선형 회귀 모델 : 리지와 비슷하나  L1 규제를 걸어 어떤 값이 0이 될 수 있게 한다.
-
-#### 양쪽 전부 사용가능
->- 결정트리 :  예/아니오를 반복하며 학습. 각 분열된 영역(리프)가 하나의 타깃값을 가질때 까지 반복. 이때의 리프노드를 순수노드라고 함.  
->- 과대적합을 막기 위해 가지치기(사전 - 최대 깊이, 개수 제한, 최소 포인트 개수 제한 | 사후 - 데이터가 적은 노드 삭제)를 해줘야 함.
-> 
->- 앙상블 : 여러 모델을 연결해 더 강력한 모델을 만드는 기법. 랜덤 포레스트와 그래디언트 부스팅등이 있다.
->>- 랜덤 포레스트 : 조금씩 다른 여러 결정 트리의 묶음. 다른 방향으로 과대적합된 트리들을 평균냄. 여러개의 데이터중에서 무작위로 만들어낸 데이터의 부트스트랩 샘플을 생성한다. 모든 츠리에 대한 예측을 만든 후, 그 예측을 평균하거나(회귀) 예측한 확률을 평균내어(분류) 예측값을 나타낸다. 트리가 많을수록 랜덤값에 영향을 덜 받는다. 많은 트리는 메모리와 긴 훈련시간을 부른다. 차원이 높고 희소한 데이터에는 잘 작동하지 않는다.
->>- 그래디언트 부스팅 회귀트리 : 약한 학습기 사용. 이전 트리의 오차를 보완하는 방법으로 순차적으로 만듦. 무작위성이 없고, 적은 메모리와 예측도 빠름. 랜덤포레스트 보다 매개변수의 영향을 더 많이 받는다. 커질수록 보정을 많이해 복잡한 모델을 만드는 러닝 레이트 매개변수를 가지고 있다. 랜덤 포레스트보다 조금 더 불안정하다. 
->>- 배깅 : Bootstrap aggregating 의 줄임.  랜덤 샘플링으로 훈련세트를 각기 달리 훈련시킨 뒤 확률값을 평균하거나 빈도가 가장 높은 예측결과 예측값이 된다.
->>- 엑스트라 트리 : 후보 특성을 무작위 분할 후 최적의 분할을 민듦. 랜덤 포래스트와 다른 방식으로 모델에 무작위성을 주입. 
->>- 에이다 부스트 : 약한 학습기 사용. adaptive Boosting. 이전 모델이 잘못 분류한 샘플의 가중치를 높임. 각 모델은 성능에 따라 가중치가 부여. 깊이 1의 트리 사용.
-> 
->- 커널 기법 : 선형 모델(분류기)을 새로운 특성ㅇ르 많이 만들지 않고도 학습시키기 위한 수학적 기교.
->- 커널 서포트 벡터 머신 : 커널 기법을 이용한 SVM. 데이터의 특성이 몇 개 안 되도 복잡한 결정 결계를 만들 수 있으나 샘플이 많으면 잘 맞지 않는다.
-
-#### 머신러닝 모델 구현 (keras)
+##### 머신러닝 모델 구현 (keras)
 ###### function API
 - function : 각 층이 함수형태로 되어 있음. 시퀀셜로는 구현하기 어려운 복잡한 모델 구현 가능. layer()(이전레이어) 로 제작됨.
 - 선형 회귀 : output = Dense(1, activation='linear')(inputs) > Model(input, output) 으로 제작 후, compile(optimizer=SGD(), loss='mse', metrics=['mse'])로 컴파일
@@ -310,6 +319,12 @@
 - GAN(Generative Adversarial Network,생성적 적대 신경망) : 비지도 학습, 제로섬 게임 틀 안에서 서로 경쟁하는 두개의 신경 네트워크 시스템에 의해 구현. fake 신경암을 추가해 서로 경쟁하여 더 좋은 성능을 내개 함. 
 - AE(AutoEncoder) : 음성 합성등에 특화된 딥러닝 네트워크.
 
+### CNN
+- CNN(Convolution Neural Network) : 합성곱 신경망. 이미지 처리에 탁월한 성능을 보임. 크게 합성곱층(합성곱연산 수행)과 풀링층 으로 구성. 이미지의 공간적인 구조 정보를 보존하며 학습. 다층 퍼셉트론보다 훨씬 적은 가중치를 사용(커넣크기)하고, 편향은 커널 적용 뒤에 더해짐.
+- 합성곱 연산(CONV) : 이미지의 특징 추출. 커널(필터)라는 일정한 크기의 행렬로 이미지 전체를 훑으며(사용자 지정(stride)칸씩 이동, 좌>우,상>하) 겹친 이미지와 커널의 원소 값을 곱해 모두 더하여 출력으로 함. 다차원 텐서에 합성곱 연산을 적용하려면 커널이 입력과 같은 채널(차원)수를 가져야 한다
+- 패딩 : 합성곱 연산 이후에도 본래 크기와 같은 이미지(행렬)를 얻기 위해 연산전 가장자리에 행과 열을 늘림. 보통 0을 삽입해(제로패딩)패딩.
+
+
 ### GAN
 >- DCGAN(Deep Convolution) : Convolution 필터만 사용하고 Max Pooling 은 사용하지 않음. 안정성 분제를 조금이나마 해결할 수 있다.
 >- LSGAN(Least Squares) : 결정 상자에서 멀리 떨어진 데이터는 페널티를 줌.
@@ -317,7 +332,7 @@
 >- ACGAN(Auxiliary Classifier) : SGAN 에 Generator 가 학습을 진행할수록 좋은 이미지를 만들어내고 어느 순간부터 데이터가 augmentation 기능을 할 수 있다는 특징이 있다. 먼저 R/F 를 구분한 뒤 어떤 클래스인지 구분한다는 특징이 있다. 
 >- cGAN : 기존 noise Z 만 가지고 무작위로 이미지를 생성했던 GAN 과 달리 특정 레이블 y 가 추가되며 특정 이미지만 고정적으로 생산가능하다. 실제 현실의 이미지는 너무 많은 변수가 있다는 문제점이 있었고, 이로 인해 이 개념을 이용해 복잡한 이미지나 영상까지 변경 가능하게 한 pix2pix 가 탄생했다.
 >- pix2pix : 데이터 형태와 무관하게 범용적으로 사용 가능, 다른 종류의 손실함수(L1, L2, 유클라디안 > GAN 기반 Loss 학습) 사용 이라는 특징을 가지고 있다.
-> ###### GAN code (clone)
+###### GAN code (clone)
 > ```python
 > import tensorflow as tf
 > import numpy as np

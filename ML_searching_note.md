@@ -14,51 +14,51 @@
 
 # numpy
 ***
-- numpy => 수치연산에 최적화. 배열,행렬,배열에서 작동하는 다양한 수학함수를 지원, 배열의 모양은 각 차원을 따라 크기를 제공하는 정수형 튜플. 다차원 배열 슬라이싱을 하려면 각 차원별로 슬라이스 범위를 지정해 줘야 함.
+- numpy : 수치연산에 최적화. 배열,행렬,배열에서 작동하는 다양한 수학함수를 지원, 배열의 모양은 각 차원을 따라 크기를 제공하는 정수형 튜플. 다차원 배열 슬라이싱을 하려면 각 차원별로 슬라이스 범위를 지정해 줘야 함.
   
-- np.array(리스트) > 리스트에 해당하는 배열 생성
-- np.array([[1,1,1],[2,2,2]]) > 2행 3열짜리 2차원 np배열 생성. shape()로는 (2,3)이 출력되며, x[1,2] 식으로 두번째 열의 세번째 요소를 뽑아낼 수 있다. 
+- np.array(리스트) : 리스트에 해당하는 배열 생성
+- np.array([[1,1,1],[2,2,2]]) : 2행 3열짜리 2차원 np배열 생성. shape()로는 (2,3)이 출력되며, x[1,2] 식으로 두번째 열의 세번째 요소를 뽑아낼 수 있다. 
 
 - np.array() : 리스트, 튜플, 배열로 부터 ndarray 생성
 - np.asarray() : 기존의 array 로  부터 ndarray 생성
-- np.arange(start, end, step) > 리스트의 슬라이스와 같이 범위대로 배열을 제작.
-- np.linespace(start, end, num) > 시작부터 끝까지 같은 간격으로 num(요소개수/간격)의 배열 생성
-- np.logspace(start, end, num) > 시작부터 끝까지 log 스케일 간격으로 num 개 요소의 배열 생성
-- np.where(조건) > 조건문(리스트<1 식으로 내부에 리스트 포함)에 사용. 조건에 밎는 인덱스들을 ndarray 형태로 반환. 슬라이싱에 사용 가능. (조건문, 맞으면, 아니면) 식으로 구성해 처리를 할 수도 있음.
+- np.arange(start, end, step) : 리스트의 슬라이스와 같이 범위대로 배열을 제작.
+- np.linespace(start, end, num) : 시작부터 끝까지 같은 간격으로 num(요소개수/간격)의 배열 생성
+- np.logspace(start, end, num) : 시작부터 끝까지 log 스케일 간격으로 num 개 요소의 배열 생성
+- np.where(조건) : 조건문(리스트<1 식으로 내부에 리스트 포함)에 사용. 조건에 밎는 인덱스들을 ndarray 형태로 반환. 슬라이싱에 사용 가능. (조건문, 맞으면, 아니면) 식으로 구성해 처리를 할 수도 있음.
 
-- np.zeros(shape) > 모든 값이 0인 배열 생성.
-- np.ones(shape) > 모든 값이 1인 배열 생성.
-- np.full(shape, num) > 모든 값이 num 인 배열 생성.
-- np.diag(1차원 배열) >  대각행렬 생성. k 매개변수에 음수를 넣으면 그 절댓값 만큼 아래 행에서 시작.
-- np.random.random(shape) > 임의의 값(0~1)으로 채워진 배열 생성.
-- np.eye(i) > 대각선이 1이고 나머지는 0인 i*i의 2차원 배열 생성
-- np.sin(x) > 사인 함수를 이용해 배열 x와 대응하는 배열 생성
-- np.random.permutation(i) > i 까지 랜덤으로 섞인 배열 반환.
-- np.random.seed(i) > random 유사난수화. 랜덤에서 난수 생성시 사용되는 시드를 고정시켜 유사난수로 만든다.
-- np.unique(배열) > 배열에 있는 값의 종류를 배열로 반환.  
-- np.percentile(배열, [분위]) > 배열에서 분위에 해당하는 샘플을 추출해 반환. [0,25,50,75,100]식으로 지정하면 된다.
+- np.zeros(shape) : 모든 값이 0인 배열 생성.
+- np.ones(shape) : 모든 값이 1인 배열 생성.
+- np.full(shape, num) : 모든 값이 num 인 배열 생성.
+- np.diag(1차원 배열) :  대각행렬 생성. k 매개변수에 음수를 넣으면 그 절댓값 만큼 아래 행에서 시작.
+- np.random.random(shape) : 임의의 값(0~1)으로 채워진 배열 생성.
+- np.eye(i) : 대각선이 1이고 나머지는 0인 i*i의 2차원 배열 생성
+- np.sin(x) : 사인 함수를 이용해 배열 x와 대응하는 배열 생성
+- np.random.permutation(i) : i 까지 랜덤으로 섞인 배열 반환.
+- np.random.seed(i) : random 유사난수화. 랜덤에서 난수 생성시 사용되는 시드를 고정시켜 유사난수로 만든다.
+- np.unique(배열) : 배열에 있는 값의 종류를 배열로 반환.  
+- np.percentile(배열, [분위]) : 배열에서 분위에 해당하는 샘플을 추출해 반환. [0,25,50,75,100]식으로 지정하면 된다.
   
-- np.dot(배열1, 배열2) > 내적곱(점곱) 생성. 배열1의 열 개수와 배열 2의 행 개수가 동일해야 함. 1의 행과 2의 열 개수를 가짐. 행렬곱의(i,j)는 (1의 i행합 * 2의 j열합)의 요소값을 가짐. 2차원에서는 아래와 같으나 고차원에서는 다른 역할을 수행한다.
-- np.matmul(배열1, 배열2) >  행렬곱 생성. 2차원 이상의 배열은 2차원 배열을 여러개 가지고 있다 보기에((1,2,3,4) > (3,4)를(1,2)개) 행렬 1의 마지막 차원 요소 개수와 행렬2의 뒤에서 두번째 차원 요소 개수가 같아야 한다.
-- np.float32(배열) > ndarray 의 데이터 타입을 변환. 다른타입도 가능, 부동소수점 데이터 유형으로 변환시 작업 중 오버플로우를 방지의 기능이 있음.
-- np.argmax(배열) > 배열중 최대치의 인덱스 반환
-- np.mean(배열) > 배열의 평균을 출력. (x == y)식으로 하면 두 배열의 동일도를 받아볼 수 있음.
-- np.expand_dims(np 배열,index) > np 배열의 index 위치에 데이터를 추가해 차원을 늘림.
+- np.dot(배열1, 배열2) : 내적곱(점곱) 생성. 배열1의 열 개수와 배열 2의 행 개수가 동일해야 함. 1의 행과 2의 열 개수를 가짐. 행렬곱의(i,j)는 (1의 i행합 * 2의 j열합)의 요소값을 가짐. 2차원에서는 아래와 같으나 고차원에서는 다른 역할을 수행한다.
+- np.matmul(배열1, 배열2)   행렬곱 생성. 2차원 이상의 배열은 2차원 배열을 여러개 가지고 있다 보기에((1,2,3,4) > (3,4)를(1,2)개) 행렬 1의 마지막 차원 요소 개수와 행렬2의 뒤에서 두번째 차원 요소 개수가 같아야 한다.
+- np.float32(배열) : ndarray 의 데이터 타입을 변환. 다른타입도 가능, 부동소수점 데이터 유형으로 변환시 작업 중 오버플로우를 방지의 기능이 있음.
+- np.argmax(배열) : 배열중 최대치의 인덱스 반환
+- np.mean(배열) : 배열의 평균을 출력. (x == y)식으로 하면 두 배열의 동일도를 받아볼 수 있음.
+- np.expand_dims(np 배열,index) : np 배열의 index 위치에 데이터를 추가해 차원을 늘림.
 
-- ndarray.reshape((shape)) > 같은 크기의 다른 형태로 차원 변형.
+- ndarray.reshape((shape)) : 같은 크기의 다른 형태로 차원 변형.
 
-- np.linalg.svd(ndarray) > SVD 사용. SVD 대로 직교행렬 U, 대각 행렬의 특이값 리스트 S, 또 다른 직교행렬 VT 를 반환함.  
+- np.linalg.svd(ndarray) : SVD 사용. SVD 대로 직교행렬 U, 대각 행렬의 특이값 리스트 S, 또 다른 직교행렬 VT 를 반환함.  
 
-- ndarray.flags > 어레이의 메모리 레이아웃에 대한 정보.
-- ndarray.shape > 배열 차원의 튜플.
-- ndarray.ndim > 배열의 차원 수.
-- ndarray.size > 배열의 요소 수.
-- ndarray.itemsize > 한 배열 요소의 길이 (바이트).
-- ndarray.dtype > 배열의 데이터 타입.
-- ndarray.data > 배열 데이터의 시작을 가리키는 파이썬 버퍼 객체.
-- ndarray.nbytes > 배열의 요소가 사용한 총 바이트.
-- ndarray.T > 배열의 행과 열의 크기 교체.  
-- ndarray.round(i) > 배열의 소수의 소수점 이하 i까지 출력.
+- ndarray.flags : 어레이의 메모리 레이아웃에 대한 정보.
+- ndarray.shape : 배열 차원의 튜플.
+- ndarray.ndim : 배열의 차원 수.
+- ndarray.size : 배열의 요소 수.
+- ndarray.itemsize : 한 배열 요소의 길이 (바이트).
+- ndarray.dtype : 배열의 데이터 타입.
+- ndarray.data : 배열 데이터의 시작을 가리키는 파이썬 버퍼 객체.
+- ndarray.nbytes : 배열의 요소가 사용한 총 바이트.
+- ndarray.T : 배열의 행과 열의 크기 교체.  
+- ndarray.round(i) : 배열의 소수의 소수점 이하 i까지 출력.
 
 - np.save(이름,배열) : 1개의 배열을 NumPy format 의 바이너리 파일로 저장.
 - np.savez(경로,배열(x=x, y=y 식으로 이름 부여 가능)) : 여러개의 배열을 1개의 압축되지 않은 *.npz 포맷 파일로 저장. 이때 불러오면 numpy.lib.npyio.NpzFile 이며, 개별 배열은 인덱싱해서( ['x'] ) 사용할 수 있다.
@@ -76,36 +76,38 @@
 - pd.Series(1차원 리스트 , index(인덱스가 될 리스트)) : 시리즈(1차원 배열의 각 값에 대응하는 인덱스를 부여할 수 있는 구조) 생성. 인덱스는 정수뿐 아닌 문자열등도 가능함.
 - pd.DataFrame(2차원 리스트, index(행이름), columns(열이름)) : 데이터프레임(행과 열이 존재)생성. index 나 columns 등을 안쓰면 0부터 자동할당되고, 리스트,시리즈,딕셔너리(키가 열이름),ndarray 등으로도 생성할 수 있음.
 
-- pd.read_csv("/경로/파일명.csv") > 파일읽기. 자신과 같은 디렉토리에 있으면 그냥 써도, 그냥 웹상의 주소를 써도 됨. 문자열의 형태로 읽힌다.
-- pd.get_dummies(범주형 데이터) > one hot encoding. 범주형 종속변수가 그 종류만큼 (이름)_(데이터이름)의 형태로 나뉜다.
+- pd.read_csv("/경로/파일명.csv") : 파일읽기. 자신과 같은 디렉토리에 있으면 그냥 써도, 그냥 웹상의 주소를 써도 됨. 문자열의 형태로 읽힌다.
+- pd.get_dummies(범주형 데이터) : one hot encoding. 범주형 종속변수가 그 종류만큼 (이름)_(데이터이름)의 형태로 나뉜다.
 
-- df.columns  > 칼럼이름 Index 객체로 반환.
-- df.values  > 값들 배열형태로 반환.
-- df.index > 인덱스+타입 Index 객체로 반환. 
-- df.columns > 칼럼+타입 Index 객체로 반환.
-- df.values > 값만 리스트로 반환.
+- df.columns  : 칼럼이름 Index 객체로 반환.
+- df.values  : 값들 배열형태로 반환.
+- df.index : 인덱스+타입 Index 객체로 반환. 
+- df.columns : 칼럼+타입 Index 객체로 반환.
+- df.values : 값만 리스트로 반환.
 
-- df.head() > 위쪽 데이터 5개. 
-- df.tail() > 끝쪽 데이터 5개. 안에 숫자를 넣으면 그 숫자큼 나옴.
-- df.info() > 데이터프레임의 정보 볼 수 있음
-- df.isna().sum() > na의 위치(혹은 개수, 결측치)를 확인 할 수 있음.
-- df.mean() > 데이터들의 평균값을 얻을 수 있움.
-- df.plot() > 데이터를 가지고 그래프를 그림. kind="bar" 등으로 종류를 지정해 줄 수 도 있음.
-- df.groupby([열]) > group by. 그룹에 맞춰 가져옴. 그 열의 데이터가 같은걸 모아 출력.
-- df.drop_duplicate(subset=[열이름], inplace=True) > 열에서 중복 내용 제거.
+- df.head() : 위쪽 데이터 5개. 
+- df.tail() : 끝쪽 데이터 5개. 안에 숫자를 넣으면 그 숫자큼 나옴.
+- df.info() : 데이터프레임의 정보 볼 수 있음
+- df.isna().sum() : na의 위치(혹은 개수, 결측치)를 확인 할 수 있음.
+- df.mean() : 데이터들의 평균값을 얻을 수 있움.
+- df.plot() : 데이터를 가지고 그래프를 그림. kind="bar" 등으로 종류를 지정해 줄 수 도 있음.
+- df.groupby([열]) : group by. 그룹에 맞춰 가져옴. 그 열의 데이터가 같은걸 모아 출력.
+- df.drop_duplicate(subset=[열이름], inplace=True) : 열에서 중복 내용 제거.
   
-- 데이터["칼럼명"] > 그 열의 인덱스, 값 들, 이름, 데이터 타입 출력. 차원이 여러개일 경우는 [5, 1:3]처럼 차원별로 인덱스를 지정해 주어야 함.
-- 데이터["칼럼1","2","3"] > 열(칼럼) 다중 선택. [칼럼1:칼럼3]식으로 선택할 수 도 있음.
-- 데이터[dataFrame.Age > 30] > 이런식으로 데이터를 선택해서 표시할 수도 있음
+- 데이터["칼럼명"] : 그 열의 인덱스, 값 들, 이름, 데이터 타입 출력. 차원이 여러개일 경우는 [5, 1:3]처럼 차원별로 인덱스를 지정해 주어야 함.
+- 데이터["칼럼1","2","3"] : 열(칼럼) 다중 선택. [칼럼1:칼럼3]식으로 선택할 수 도 있음.
+- 데이터[dataFrame.Age : 30] : 이런식으로 데이터를 선택해서 표시할 수도 있음
 
-- 데이터["칼럼명"].astype("int/float") > 데이터 수치형으로 변경
-- 데이터["칼럼명"].astype("category") > 데이터 범주형으로 변경. 원핫인코딩이 가능해짐.
-- 데이터["칼럼명"].replace(요소1, 요소2) > 그 칼럼의 값 중 요소 1과 일치하는 값을 요소 2로 바꿈. [x1,x2],[y1,y2] 식으로 넣어 여러개의 값을 변환할 수 도 있음.
-- 데이터["칼럼명"].fillna(평균값) > 특정 열의 na에 평균값을 넣어 오류를 없앨 수 있음.
-- 데이터["칼럼명"].value_counts() > 그 칼럼에 등장하는 값의 종류를 그 값이 나온 수와 함께 나타냄.
-- 데이터["칼럼명"].nunique() > 열에서 중복된 샘플을 제외한 샘플의 개수 출력. 중복된 값이 있다면 단 하나의 값만 남게 됨.
+- 데이터.loc[인덱스] : 데이터 로드. 값만 받는 그냥 인덱스와 다르게 받아볼 수 있음.
+- 데이터["칼럼명"].astype("int/float") : 데이터 수치형으로 변경
+- 데이터["칼럼명"].astype("category") : 데이터 범주형으로 변경. 원핫인코딩이 가능해짐.
+- 데이터["칼럼명"].replace(요소1, 요소2) : 그 칼럼의 값 중 요소 1과 일치하는 값을 요소 2로 바꿈. [x1,x2],[y1,y2] 식으로 넣어 여러개의 값을 변환할 수 도 있음.
+- 데이터["칼럼명"].fillna(평균값) : 특정 열의 na에 평균값을 넣어 오류를 없앨 수 있음.
+- 데이터["칼럼명"].value_counts() : 그 칼럼에 등장하는 값의 종류를 그 값이 나온 수와 함께 나타냄.
+- 데이터["칼럼명"].nunique() : 열에서 중복된 샘플을 제외한 샘플의 개수 출력. 중복된 값이 있다면 단 하나의 값만 남게 됨.
+- 데이터["칼럼명"].str.replace(패턴, 바꿀 값) : 정규 표현식 패턴에 일치하는 값을 바꿈.
   
-- 차트 = 데이터.plot(kind='bar', title='날씨', figsize=(12, 4), legend=True, fontsize=12) > 차트 종류,제목,크기,범례 유무,폰트 크기 설정
+- 차트 = 데이터.plot(kind='bar', title='날씨', figsize=(12, 4), legend=True, fontsize=12) : 차트 종류,제목,크기,범례 유무,폰트 크기 설정
 - 차트.set_xlabel('도시', fontsize=12)          # x축 정보 표시
 - 차트.set_ylabel('기온/습도', fontsize=12)     # y축 정보 표시
 - 차트.legend(['기온', '습도'], fontsize=12)    # 범례 지정
@@ -242,18 +244,19 @@
 ***
 
 ##### layers
-- tf.keras.layers.Input(shape=(입력 차원)) > 입력차원 만큼 입력레이어 구성.
-- tf.keras.layers.Dense(히든레이어 노드수,activation="swish/relu")(X) > 전밀집층(모든 노드가 이전 혹은 다음 노드와 연결) 제작. input_dim 매개변수로 입력의 차원을 지정해주면 input 없이 바로 사용할 수도 있음. 뒤에 (input_layer)를 붙여 function API 를 이용한 모델 제작이 가능함.
+- tf.keras.layers.Input(shape=(입력 차원)) : 입력차원 만큼 입력레이어 구성.
+- tf.keras.layers.Dense(히든레이어 노드수,activation="swish/relu")(X) : 전밀집층(모든 노드가 이전 혹은 다음 노드와 연결) 제작. input_dim 매개변수로 입력의 차원을 지정해주면 input 없이 바로 사용할 수도 있음. 뒤에 (input_layer)를 붙여 function API 를 이용한 모델 제작이 가능함.
 
-- tf.keras.layers.Conv2D(컨볼루션 크기(행,렬), 필터 이미지 개수(한 행렬의 크기 x,y), padding(='same' 입출력 사이즈 동일), activation, inputShape) > 이미지에 convolution filter 를 사용해 행렬을 만듦.
-- tf.keras.layers.MaxPooling2D((줄일 행렬의 크기 x, y)) > 이미지를 MaxPooling 해 크기를 줄임.
+- tf.keras.layers.Conv2D(컨볼루션 크기(행,렬), 필터 이미지 개수(한 행렬의 크기 x,y), padding(='same' 입출력 사이즈 동일), activation, inputShape) : 이미지에 convolution filter 를 사용해 행렬을 만듦.
+- tf.keras.layers.MaxPooling2D((줄일 행렬의 크기 x, y)) : 이미지를 MaxPooling 해 크기를 줄임.
 - tf.keras.layers.Embedding(총 단어 개수, 결과 벡터의 크기, 입력 시퀀스 길이) : 단어를 밀집벡터로 만듦(임베딩 층(Dense 같은)제작). (샘플개수, 입력길이)형태의 정수 인코딩이 된 2차원 정수 배열을 입력받아 워드 임베딩 후 3차원 배열을 반환. 
-- tf.keras.layers.Dropout(rate) > Overfitting 을 방지하기 위해 DropOut. rate 는 1 = 100% 다.
+- tf.keras.layers.Dropout(rate) : Overfitting 을 방지하기 위해 DropOut. rate 는 1 = 100% 다.
 
 - tf.keras.layers.SimpleRNN(hidden_size) : RNN 사용. hidden_size 는 은닉상태의 크기. input_shape 매개변수에 (timesteps(입력 시퀀스 길이), input_dim(입력 크기)) 로 넣어 입력을 정의해 줄 수 도 있음. return_sequences(전체 은닉상태 출력)와 return_state(마지막 은닉상태 한번 더 출력)매개변수 사용 가능.
-- tf.keras.layers.LSTM(hidden_size, input_shape=(time_steps, input_dim)) > RNN 의 일종인 LSTM 사용. RNN 층은 (batch_size(배치 크기, 한번에 학습할 데이터 양), timesteps(시점, 문장의 길이), input_dim(단어 벡터 차원)) 크기의 3D 텐서를 입력으로 받음. return state 를 true 로 하면 마지막 셀 상태까지 반환, 양방향이면 정방향,역방향 둘 다 은닉상태와 셀상태 반환(fh,fc,bh,bc 순). 
-- tf.keras.layers.GRU(hidden_size, input_shape=(time_steps, input_dim)) > LSTM 을 개량한 GRU 사용. LSTM 에 비해 구조가 간단하고, 데이터 양이 적을떄 LSTM 보다 낫다고 알려져 있음.
-- tf.keras.layers.GlobalAveragePooling1D() > 입력으로 들어오는 모든 벡터들의 평균을 구함. 흔히 임베딩 층 뒤에 사용됨.
+- tf.keras.layers.LSTM(hidden_size, input_shape=(time_steps, input_dim)) : RNN 의 일종인 LSTM 사용. RNN 층은 (batch_size(배치 크기, 한번에 학습할 데이터 양), timesteps(시점, 문장의 길이), input_dim(단어 벡터 차원)) 크기의 3D 텐서를 입력으로 받음. return state 를 true 로 하면 마지막 셀 상태까지 반환, 양방향이면 정방향,역방향 둘 다 은닉상태와 셀상태 반환(fh,fc,bh,bc 순). 
+- tf.keras.layers.GRU(hidden_size, input_shape=(time_steps, input_dim)) : LSTM 을 개량한 GRU 사용. LSTM 에 비해 구조가 간단하고, 데이터 양이 적을떄 LSTM 보다 낫다고 알려져 있음.
+- tf.keras.layers.GlobalAveragePooling1D() : 입력으로 들어오는 모든 벡터들의 평균을 구함. 흔히 임베딩 층 뒤에 사용됨.
+- tf.keras.layers.Bidirectional(layer) : 입력한 층을 양방향으로 만들어 줌. SimpleRNN, LSTM 등이 들어감.
 
 - tensorflow.keras.preprocessing.sequence.pad_sequences(data, maxlen) : 데이터(리스트)의 요소 개수를 maxlen으로 고정. 적으면 0을 채우고 많으면 버림.
 
@@ -266,12 +269,12 @@
 ##### model make
 - 케라스는 Sequential API, Functional API, Subclassing API 의 구현 방식을 지원.
 
-- model = keras.Sequential([  > Sequential API(딘순히 층을 쌓아 구성할 수 있고, 여러 층을 공유하거나 다양한 종류의 입출력을 사용할 수 있지만 그만큼 복잡한 모델 제작에 한계가 있음)를 이용해 모델 설계.   
--   keras.layers.Flatten(input_shape=(x,y)),  > x\*y 픽셀의 2차원 이미지 배열을 (x*y)의 1차원 배열로 반환. input shape 매개변수는 input layer 를 대채할 수 있게 해주며, 배치 크기를 제외하고 차원을 지정하기에 차원이 하나 추가 될 수 있고, 배치까지 지정하려면 batch_input_shape 를 사용한다.  
-- 	keras.layers.Dense(128, activation = 'relu'),  > 밀집연결(densely-connected)층/완전연결층. 128개의 노드(또는 뉴런)을 가짐.
-- 	keras.layers.Dense(10, activation = 'softmax') > 10개의 클래스 각각 그 클래스에 속할 확률을 출력.
-- ]) > 모델(분류기반, 이 경우 최대 세개까지 레이어 추가 가능) 제작.
-- Sequential() > model.add 로도 층 추가가 가능하고, 전결합층(dense)뿐 아니라 임베딩, LSTM, GRU, Flatten, Convolution2D, Batch Normalization 등 다양한 층 추가 가능.
+- model = keras.Sequential([  : Sequential API(딘순히 층을 쌓아 구성할 수 있고, 여러 층을 공유하거나 다양한 종류의 입출력을 사용할 수 있지만 그만큼 복잡한 모델 제작에 한계가 있음)를 이용해 모델 설계.   
+-   keras.layers.Flatten(input_shape=(x,y)),  : x\*y 픽셀의 2차원 이미지 배열을 (x*y)의 1차원 배열로 반환. input shape 매개변수는 input layer 를 대채할 수 있게 해주며, 배치 크기를 제외하고 차원을 지정하기에 차원이 하나 추가 될 수 있고, 배치까지 지정하려면 batch_input_shape 를 사용한다.  
+- 	keras.layers.Dense(128, activation = 'relu'),  : 밀집연결(densely-connected)층/완전연결층. 128개의 노드(또는 뉴런)을 가짐.
+- 	keras.layers.Dense(10, activation = 'softmax') : 10개의 클래스 각각 그 클래스에 속할 확률을 출력.
+- ]) : 모델(분류기반, 이 경우 최대 세개까지 레이어 추가 가능) 제작.
+- Sequential() : model.add 로도 층 추가가 가능하고, 전결합층(dense)뿐 아니라 임베딩, LSTM, GRU, Flatten, Convolution2D, Batch Normalization 등 다양한 층 추가 가능.
 
 - functional API : 함수형 API 는 Sequential API 와 달리 각 층을 일종의 함수로 정의.
 - input(shape) 에서 시작해 Dense(node, activation)(inputs) > Dense()(h1) > Dense()(h2) 후 tf.keras.models.Model(input,output) 식으로 구성.  
@@ -285,24 +288,24 @@
 
 ###### model train, use
 - model.compile(
--  optimizer='adam',  > 데이터와 손실함수를 바탕으로 모델 업데이트 방향 결정.
--  loss='sparse_categorical_crossentropy',  > 훈련중 모델 오차 측정. 
--  metrics=['accuracy']  > 훈련단계와 테스트 단계를 모니터링하기 위한 방법.
-- ) > 모델 컴파일.
+-  optimizer='adam',  : 데이터와 손실함수를 바탕으로 모델 업데이트 방향 결정.
+-  loss='sparse_categorical_crossentropy',  : 훈련중 모델 오차 측정. 
+-  metrics=['accuracy']  : 훈련단계와 테스트 단계를 모니터링하기 위한 방법.
+- ) : 모델 컴파일.
   
 - model.fit(train_data , train_labels , epochs=1000(반복 횟수)) : 학습된 모델 제작. 
   verbose=0 으로 떨어지는 모습을 보지 않을 수 있고, validation_data=(test_data,test_label) 로 테스트용 데이터로 계산한 손실과 정확도를 함꺠 출력시킬 수 있으며,
   callback 매개변수에 callbacks의 함수를 넣어 사용할 수 있음. 여러개면 [one, two]식으로 입력.
   
-- model.save('파일명.h5') > 모델 저장
-- model.evaluate(test_images, test_labels) > 모델 성능 비교. loss, accuracy 순으로 반환. verbose = 0 > silent
+- model.save('파일명.h5') : 모델 저장
+- model.evaluate(test_images, test_labels) : 모델 성능 비교. loss, accuracy 순으로 반환. verbose = 0 > silent
 
-- model.predict([[15]]) > 모델을 사용해 입력에 따른 예측 반환. [[숫자]]나 inde[:5]식으로 모델에 넣을 수 있음. 2차원 이미지를 넣어 2차원 배열이 반환됨. 종속변수가 여러개일 경우 경우 [[종1,종2,종3]]식으로 , 2중 for 문으로 하나씩 뽑을 수 있다.
-- model.get_weights() > 각 독립변수에 대한 가중치 출력.
+- model.predict([[15]]) : 모델을 사용해 입력에 따른 예측 반환. [[숫자]]나 inde[:5]식으로 모델에 넣을 수 있음. 2차원 이미지를 넣어 2차원 배열이 반환됨. 종속변수가 여러개일 경우 경우 [[종1,종2,종3]]식으로 , 2중 for 문으로 하나씩 뽑을 수 있다.
+- model.get_weights() : 각 독립변수에 대한 가중치 출력.
 - model.summary() 로 모델의 정보(이름/none,출력하는 개수/파라미터(가중치의 개수))를 확인 할 수 있다.
 
 
-- tf.keras.utils.to_categorical(정수 리스트) > 정수 리스트에 따라서 원핫 인코딩. [1,3]을 넣으면 [[0,1,0,0],[0,0,0,1]]을 반환하는 식.
+- tf.keras.utils.to_categorical(정수 리스트) : 정수 리스트에 따라서 원핫 인코딩. [1,3]을 넣으면 [[0,1,0,0],[0,0,0,1]]을 반환하는 식.
 - tf.lite.TFLiteConverter.from_keras_model(model).converter() | open('파일명.tflite', 'wb') > tf 모델 tflite 바이너리로 변환. 이렇게 변환한 것은 안드로이드 스튜디오의 에셋에 복사 > app 모듈의 build.gradle 에 패키지 추가 > Main_Activity 에서 이미지 바이너리 변환 > Classifier 에서 모델 사용 > Main_Activity 에서 출력 순으로 사용된다.
 
 
@@ -334,12 +337,6 @@
 - torch.utils.data.DataLoader(트레인 세트, batch_size=i, shuffle=T/F, num_worker=i) > 데이터를 배치 사이즈대로 나눠 로드. 마지막은 프로세스를 몇개 사용하냐 라는 의미로, 오류가 난다면 0으로 하면 된다.
 - torch.FloatTensor(X_data-ndarray 타입) > float 타입 요소를 가진 텐서로 변환. 다른 타입도 존재.
 - 텐서.premute(shape number - 0,3,1,2 식으로) > 텐서의 순서를 변환 (20, 32, 32,3)을 채널수가 사이즈보다 먼저 나오는 텐서에 맞게 (0,3,32,32)로 바꿀 수 있다.
-
-
-
-
-
-
 
 
 # torchvision
@@ -381,6 +378,8 @@
 - sklearn.linear_model.LogisticRegression() > 로지스틱 회귀 분류 모델 로드. 이진분류에서 로지스틱 손실 함수를, 다중 분류에서 crossentropy 손실 함수를 사용함. penalty='l1'으로 l1규제를 사용할 수 있다.
 - sklearn.svm.LinearSVC() > 선형 서포트 벡터 머신 (분류)모델 로드. 로지스틱과 이것은 규제의 강도를 결정하는 매개변수 C를 가지고 있음. C로 낮은 값을 지정하면 가중치를 0에 가깝게 지정함.
 - 선형 회귀의 alpha 와 분류의 C는 각각 클수록/작을수록 모델이 단순해진다는 특징이 있고, 보통 log 스케일(10배씩)로 최적치를 정하며, 중요특성이 믾지 않다고 생각하면 L1규제를, 아니면 기본 L2를 사용한다.
+###### Naive Bayse
+- sklearn.naive_bayes.MultinomiaNB() : 나이브 베이즈 분류기 로드.  alpha, class_prior, fit_prior 등의 매개변수 사용이 가능. 입력으로 DTM이나 TF-IDF 행렬을 입력으로 받음. 
 ###### decision tree
 - sklearn.tree.DecisionTreeClassifier(max_depth=i, random_state=0) > 결정트리 분류기 로드. 최대 깊이 i 까지 가지를 뻗게 한다. 모델.feature_importances_ 로 각 특성들의 중요도를 볼 수 있다.
 - sklearn.tree.export_graphviz(트리모델, out_file='파일명.dot', class_names=["첫번째","두번째"],feature_names=이름들, impurity=bool, filled=bool) > 트리모젤 시각화 해 저장. graphviz 모델 의 .Source(파일.read()) 을 디스플레이해 표시할 수 있다.
@@ -423,6 +422,9 @@
 - sklearn.feature_selection.SelectKBest/SelectPercentile(score_func=f, percentile=i) : 일변량 통계 모델 로드. 고정된 K 개의 특성을/지정된 비율만큼 특성을 선택한다. f 는 분류면 feature_selection.f_classif, 회귀면 feature_selection.f_regression 를 사용하고, i 는 백분율로 입력한다.
 - sklearn.feature_selection.SelectFromModel(모델, threshold='median/mean') : 모델을 이용한 모델기반 자동선택 모델 로드. 중요도가 임계치(threshold)보다 큰 모든 특성을 선택한다. 중간/평균 이며 '1.3*median' 식으로 비율을 지정할 수도 있다. 
 - sklearn.feature_selection.RFE(모델, n_feature_to_select = n) : 모델을 이용해 n개 까지 재귀적 특성 제거를 하는 반복적 특성 선택 모델 로드. 
+###### feature-extraction
+- sklearn.feature_extraction.text.CountVectorizer() : 빈도수 기반 벡터화(정수인코딩) 머신 로드. DTM(서로 다른 Bow 결합)제작. extraction(추출).
+- sklearn.feature_extraction.text.TfidfTransformer() : TF-IDF 생성기 로드. DTM을 자동으로 TF_IDF로 만들어줌. 
 
 
 #### metrics
