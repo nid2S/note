@@ -12,6 +12,8 @@
 > decoder - gpt
 > Bert + gpt -> Bart(generator)
 > mnist-> 영화 감성 분류 (IMDB) -> 캐글 재난 분류
+> 
+> 챗봇 : 의도 분류(Intent Classification)는 개체명 인식(Named Entity Recognition)과 더불어 챗봇의 중요 모듈로서 사용
 - RNN, DL chapter review
 
 # 자연어 처리
@@ -20,7 +22,7 @@
 - EDA(Exploratory Data Analysis) : 탐색적 데이터 분석. 데이터 내 값의 분포, 변수간 관계, 결측값 존재 유뮤 등을 확인하는 데이터 파악 과정.
 
 ### 전처리
-- 순서 : 데이터 생성(로드) > 데이터 확인(길이, null, empty) > 정제(노이즈, 반복, 외국어, 불용어, null 제거, 희귀단어 빈도(빈도) 확인 후 제거) > 토큰화(문장 >> 단어) > 벡터화(W2V, 임베딩, 원핫 인코딩) > 모델 학습(제작)
+- 순서 : 데이터 생성(로드) > 데이터 확인(길이, null, empty) > 토큰화(문장 >> 단어) > 정제(노이즈, 반복, 외국어, 불용어, null 제거, 희귀단어 빈도(빈도) 확인 후 제거) > 벡터화(W2V, 임베딩, 원핫 인코딩) > 모델 학습(제작)
 - 정제 : 등장 빈도가 낮은 단어 제외, 문자가 아닌것을 제외, 소문자화, 불용어 처리, 본문(글자형식)이 아닌것을 제외, 구두점 제거, null 행 제거 등 
 
 ##### 토큰화 
@@ -115,10 +117,20 @@
 
 ##### word embedding (정수 인코딩 + 단어간 유사도 정보)
 - Word Embeddings : 텍스트 내 단어를 밀집 벡터로 만드는 과정. 단어의 유사도(의미)정보도 벡터화 가능. 유사도에 따라 단어가 유사한 값을 띄게 됨.
+- 임베딩 벡터 : 사용자가 설정한 임베딩벡터 사이즈(차원)에 따라 임베딩 벡터가 생성됨. 임베딩 벡터 안에는 각 단어의 정보를 가지고 있는 (임베딩 사이즈)개의 실수가 들어 있음.  
 - 밀집벡터 : 희소벡터(대부분의 값이 0인 벡터)와 달리 대부분의 값이 실수이고 상대적으로 저차원인 벡터. 사용자가 설정한 값으로 벡터의 차원을 맞춤.
 - 분산표현 : 분포 가설(비슷한 위치에서 등장하는 단어는 비슷한 의미를 가짐)에 기초해 만들어진 표현 방법. 단어의 의미를 여러 차원에 분산하여 표현. 단어간 유사도 계산 가능.
 
 - 워드 임베딩 평균 : 임베딩층 뒤에 GlobalAveragePooling1D()를 사용해 할 수 있음. 기타 은닉층의 사용 없어도 높은 정확도의 분류가 가능함.
+
+###### char embedding (글자 임베딩)
+- 글자 임베딩 : 워드 임베딩과는 다르게 단어의 벡터 표현을 얻어 OOV문제를 해결함. 모르는 단어도 뜻을 추측(이해)해서 예측함. 워드 임베딩의 대체로도 사용할 수 있지만, 워드 임베딩과 연결해 신경망의 입력으로 사용하기도 함.
+  
+- 1D CNN 이용 : FastText가 글자의 N-gram조함을 이용하듯이, 전체입력 내부의 더 작은 시퀀스로부터(N-gram) 정보를 얻음.
+- 1D CNN 방법 : 단어를 글자단위로 분리, 글자에 대해 임베딩(이후 패딩 가능), 그 후 1D CNN을 적용. 나온 벡터를 풀링층을 거쳐 스칼라로 만들고, 이를 연결해 하나의 벡터로 만듦. 이 벡터가 단어의 벡터.
+  
+- BiLSTM 이용 : 단어를 글자로 쪼갠 뒤 임베딩, 정방향/역방향 LSTM을 사용, 둘의 마지막 은닉 상태를 연결해 벡터화, 이를 단어의 벡터로 사용. 
+
 
 ###### Word2Vec
 - word to vector : 워드 임베딩을 하는 대표적 방법. 은닉층에 활성화 함수가 존재하지 않으며, 룩업테이블(투사층)이 그 역할을 대신함. 유사한 단어를 나타낼 수 도 있어 단어 임베딩 뿐 아니라 추천 시스템에도 사용되고 있음. 동믕 이의어 를 잘 반영하지 못한다는 문제점이 있다.
@@ -247,6 +259,7 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 
 ###### LSTM
 - LSTM : 장단기 메모리(Long Short-Term Memory). 장기 의존성 문제를 해결하기 위해, 메모리 셀에 입력게이트, 망각 게이트, 출력게이트를 추가해 불필요한 기억을 지움. 셀 상태 라는 값이 추가됨. 긴 시퀀스의 입력을 처리하는데 탁월.
+- LSTM 처리 : 각 단어가 벡터로 면환된 문장 행렬로 입력을 받아(DTM등)시점마다 한 행식 입력으로 받아 처리.
 - BoLSTM : 양방향 LSTM. 두개의 독립적 LSTM 아키텍쳐를 함께 사용. 
 
 - 셀 상태(장기상태) : LSTM 에서 추가된 값. 이전시점의 셀 상태가 다음의 셀 상태를 구하기 위한 입력으로 사용됨. 입력게이트에서 나온 두 값을 원소곱(같은 위치끼리 곱)을 하고, 이걸 삭제 게이트 결과값에 더헤 현재 셀 상태를 구함.
@@ -261,10 +274,14 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 
 ##### CNN
 - CNN(Convolution Neural Network) : 합성곱 신경망. 원래는 비전 분야에서 주로 사용되지만 NLP에 사용하기 위한 다양한 시도가 있었음.
-- 
+- 1D CNN : 자연어 처리에 활용되는 합성곱. 각 단어가 벡터로 변환된 문장 행렬을 입력으로 받음(LSTM과 동일). 
+- 1D CNN 커널 : 커널은 너비를 임베딩 벡터 차원과 동일하게 설정하고, 높이만 따로 설정해 커널의 사이즈라고 칭함. 너비가 임베딩 벡터와 동일하니 높이 방향으로만 움직임.
+- 풀링 : 합성곱층 이후에 풀링층읗 추가하는데, 이곳에서 대표적으로 사용되는것이 맥스풀링(최대값을 빼냄)이다. 
+- 학습 방법 : 사이즈가 같거나 다른 커널 여러개를 사용해 벡터를 여러개 얻고, 거기에 풀링을 거쳐 스칼라화 한 다음, 그것들을 모두 연결해 하나의 벡터로 만듦. 이를 출력층에 연결해 텍스트 분류를 실행.
+
 
 ##### GPT
-- Generative Pre Training of a language model 의 약어.
+- Generative Pre Training of a language model 의 약어. opne-AI 제작. google은 BERT.
 - language model : 현재 알고있는 단어를 기반으로 다음 단어를 예측하는데 많이 사용되는 모델. 레이블링이 불필요하다는 장점이 있음. GPT-1의 핵심. 비지도, GPT-1은 다 분야의 엄청난 양의 데이터로 pre trained 됨.  
 - generative model : 머신러닝 모델의 학습 방법 중 하나. 데이터가 많을수록 학습이 잘 됨.
 - BPE(바이트 페어 인코딩) : 자주 함께 사용되는 char 를 하나의 묶음으로 사용(최소한의 단어). 워드 임베딩과 캐릭터 임베딩의 장점을 모두 가지고 있음. (word)단어간의 유사도와 (char)처음보는 문자의 예측 모두가 가능함. 
@@ -340,23 +357,31 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - nltk.probability.LidstoneProbDist(fd, gamma=f, bins = n) = 최대 우도 추정 사용. fd(빈도분포)를 기반으로 f(0~1)를 사용해 n개의 샘플을 생성. 샘플들의 총 합은 1. 
 
 # tensorflow | 토큰,벡터화,임베딩,RNN등
+### preprocessing
 ##### tokenize
+- tf.keras.preprocessing.text.text_to_word_sequence(sentence) : 모든 알파벳을 소문자로 변환, 구두점 제거, 죽약형은 분리하지 않는 단어 토큰화 함수.  정제와 단어 토큰화를 동시에 적용.
 - tf.keras.preprocessing.text.Tokenizer() : 정수 인코딩을 위한 토크나이저 로드. .fit_on_texts(단어집합) 으로 단어 빈도수가 높은 순으로 낮은 정수 인덱스를 부여할 수 있다. .word_index 로 단어와 인덱스를 확인할 수 있고, .word_counts 로 단어의 개수를 확인 할 수 있다. 
 - Tokenizer() : .texts_to_matrix(문장배열,mode='count')로 DTM(인덱스 0부터 시작)을 생성할 수 있다. 모드가 'binary' 면 단어의 존재여부만 보여주는 행렬을, tfidf 는 tfidf 행렬을, freq 는 (단어 등장 횟수/문서 단어 총합)의 행렬을 보여준다. 
-- tf.keras.preprocessing.text.text_to_word_sequence(sentence) : 모든 알파벳을 소문자로 변환, 구두점 제거, 죽약형은 분리하지 않는 단어 토큰화 함수.  정제와 단어 토큰화를 동시에 적용.
 ##### vectorize
 - tf.keras.utils.to_categorical(벡터) : 원 핫 인코딩을 해줌. (요소 개수, 요소 종류)의 형태를 가짐.
 - tokenizer.texts_to_sequences(단어집합) : 각 단어를 이미 정해진 인덱스로 변환. 만약 토크나이저 로드시 인수로 i+1을 넣었다면 i 까지의 인덱스를 가진 단어만을 사용하고 나머지는 버린다.
 - tf.keras.preprocessing.sequence.pad_sequences(인코딩된 단어 집합) : 가장 긴 문장의 길이에 맞게 문장의 앞에 0을 삽이비해 ndarray 로 반환. padding='post' 로 문장 뒤에 0을 삽입할 수 있고, maxlen 매개변수로 길이를 지정할 수 있다.
 ##### embedding
 - tf.keras.layers.Embedding(총 단어 개수, 결과 벡터의 크기, 입력 시퀀스 길이) : 단어를 밀집벡터로 만듦(임베딩 층(Dense 같은)제작). 모델 내에서 (num of sample, input_length)형태의 정수 인코딩이 완료된 2차원 정수 배열을 입력받아 워드 임베딩 후 3차원 배열을 반환. weights 매개변수에 사전 훈련된 임베딩 벡터의 값들을 넣어 이미 훈련된 임베딩 벡터 사용 가능.  
+##### pooling
+- tf.keras.layers.GlobalMaxPooling1D() : 1차원 풀링 실행. Conv1D 뒤에 위치.
+
+### model
 ##### RNN
 - tf.keras.layers.SimpleRNN(hidden_size) : RNN 사용. hidden_size는 출력(은닉층, 다음 시점에 보내질 값)의 크기. input_shape 매개변수에 (timesteps(입력 시퀀스, 각 문서의 단어 길이), input_dim(입력 크기, 각 단어 벡터 표현의 차원 수)) 로 넣어 입력을 정의해 줄 수 도 있음. 임베딩 > RNN > 출력층 만으로도 간단한 자연어 처리(메일 분류 등)가 가능.
+##### CNN 
+- tf.keras.layers.Conv1D(kernel, kernel_size, padding, activation) : 1차원 합성곱신경망 사용.
 
 # sklearn | BOW, TFID, LDA 등
 - sklearn.feature_extraction.text.CountVectorizer() : BOW 표현을 하게 해주는 변환기 로드. .fit(문자열이 담긴 리스트)로 사용, .vocabulary_ 속성에서 반환된 {단어:등장횟수} 형태의 딕셔너리를 볼 수 있음.  tf-idf 와 함께 ngram_range=(연속 토큰 최소길이, 최대길이) 로 연속된 토큰을 고려할 수 있다. 보통은 하나만 하지만 많을 때 바이그램정도로 추가하면 도움이 된다.  
 - Bow 표현을 만드려면 .transform(list), Scipy 희소 행렬(원소 대부분 0) 저장되어 있으며, .get_feature_names()로 각 특성에 해당하는 단어들을 볼 수 있음. min_df 매개변수로 토큰이 나타날 최소 문서 개수를 지정할 수 있고, max_df 매개변수로 자주 나타나는 단어를 제거할 수 있다. stop_words 매개변수에 "english" 를 넣으면 내장된 불용어를 사용한다.
-  
+- sklearn.preprocessing.LabelEncoder() : 여러개의 카테고리가 존재하는 데이터를 고유한 정수로 인코딩하는 클래스 로드..  
+
 - sklearn.feature_extraction.text.TfidVectorizer(min_df=i) : 텍스트 데이터를 입력받아 BOW 특성 추출과 tf-idf 를 실행하고 L2정규화(스케일 조정)까지 적용하는 모델로드. 훈련데이터의 통걔적 속성을 사용하므로 파이프 라인을 이용한 그리드 서치를 해 주어야 한다. .idf_ 에서 훈련세트의 idf 값을 볼 수 있다. idf 값이 낮으면 자주 나타나 덜 중요하다 생각되는 것이다.
 - sklearn.decomposition.LatentDirichletAllocation(n_components=n, learn_method="online", random_state=k, max_iter=i) : LDA 수행. .fit_transform(X), .components_ 등을 사용할 수 있다.
 

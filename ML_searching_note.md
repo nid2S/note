@@ -246,17 +246,22 @@
 ##### layers
 - tf.keras.layers.Input(shape=(입력 차원)) : 입력차원 만큼 입력레이어 구성.
 - tf.keras.layers.Dense(히든레이어 노드수,activation="swish/relu")(X) : 전밀집층(모든 노드가 이전 혹은 다음 노드와 연결) 제작. input_dim 매개변수로 입력의 차원을 지정해주면 input 없이 바로 사용할 수도 있음. 뒤에 (input_layer)를 붙여 function API 를 이용한 모델 제작이 가능함.
-
-- tf.keras.layers.Conv2D(컨볼루션 크기(행,렬), 필터 이미지 개수(한 행렬의 크기 x,y), padding(='same' 입출력 사이즈 동일), activation, inputShape) : 이미지에 convolution filter 를 사용해 행렬을 만듦.
-- tf.keras.layers.MaxPooling2D((줄일 행렬의 크기 x, y)) : 이미지를 MaxPooling 해 크기를 줄임.
+ 
 - tf.keras.layers.Embedding(총 단어 개수, 결과 벡터의 크기, 입력 시퀀스 길이) : 단어를 밀집벡터로 만듦(임베딩 층(Dense 같은)제작). (샘플개수, 입력길이)형태의 정수 인코딩이 된 2차원 정수 배열을 입력받아 워드 임베딩 후 3차원 배열을 반환. 
 - tf.keras.layers.Dropout(rate) : Overfitting 을 방지하기 위해 DropOut. rate 는 1 = 100% 다.
+- tf.keras.layers.Bidirectional(layer) : 입력한 층을 양방향으로 만들어 줌. SimpleRNN, LSTM 등이 들어감.
+
+- tf.keras.layers.Conv1D(kernel, kernel_size, padding, activation) : 1차원 합성곱신경망 사용.
+- tf.keras.layers.Conv2D(컨볼루션 크기(행,렬), 필터 이미지 개수(한 행렬의 크기 x,y), padding(='same' 입출력 사이즈 동일), activation, inputShape) : 이미지에 convolution filter 를 사용해 행렬을 만듦.
+  
+- tf.keras.layers.GlobalMaxPooling1D() : 1차원 풀링 실행. Conv1D 뒤에 위치.
+- tf.keras.layers.GlobalAveragePooling1D() : 입력으로 들어오는 모든 벡터들의 평균을 구함. 흔히 임베딩 층 뒤에 사용됨.
+- tf.keras.layers.MaxPooling2D((줄일 행렬의 크기 x, y)) : 이미지를 MaxPooling 해 크기를 줄임.
 
 - tf.keras.layers.SimpleRNN(hidden_size) : RNN 사용. hidden_size 는 은닉상태의 크기. input_shape 매개변수에 (timesteps(입력 시퀀스 길이), input_dim(입력 크기)) 로 넣어 입력을 정의해 줄 수 도 있음. return_sequences(전체 은닉상태 출력)와 return_state(마지막 은닉상태 한번 더 출력)매개변수 사용 가능.
 - tf.keras.layers.LSTM(hidden_size, input_shape=(time_steps, input_dim)) : RNN 의 일종인 LSTM 사용. RNN 층은 (batch_size(배치 크기, 한번에 학습할 데이터 양), timesteps(시점, 문장의 길이), input_dim(단어 벡터 차원)) 크기의 3D 텐서를 입력으로 받음. return state 를 true 로 하면 마지막 셀 상태까지 반환, 양방향이면 정방향,역방향 둘 다 은닉상태와 셀상태 반환(fh,fc,bh,bc 순). 
 - tf.keras.layers.GRU(hidden_size, input_shape=(time_steps, input_dim)) : LSTM 을 개량한 GRU 사용. LSTM 에 비해 구조가 간단하고, 데이터 양이 적을떄 LSTM 보다 낫다고 알려져 있음.
-- tf.keras.layers.GlobalAveragePooling1D() : 입력으로 들어오는 모든 벡터들의 평균을 구함. 흔히 임베딩 층 뒤에 사용됨.
-- tf.keras.layers.Bidirectional(layer) : 입력한 층을 양방향으로 만들어 줌. SimpleRNN, LSTM 등이 들어감.
+
 
 - tensorflow.keras.preprocessing.sequence.pad_sequences(data, maxlen) : 데이터(리스트)의 요소 개수를 maxlen으로 고정. 적으면 0을 채우고 많으면 버림.
 
@@ -404,6 +409,7 @@
 - sklearn.preprocessing.PowerTransformer() : 데이터의 특성별로 정규분표에 가깝게 변환해주는 스케일러 로드. method='yeo_johnson'(양수 음수 값 둘 다 지원, 기본값) 과 method='box-cox'(양수만 지원.)를 지정해 줄 수 있다. 
 - sklearn.preprocessing.KBinsDiscretizer(n_bins=n, strategy='uniform') : n개로 구간 분할 모델 로드. .bin_edges_ 에 각 특성별 경곗값이 저장되어 있다. transform 메서드는 각 데이터 포인트를 해당 구간으로 인코딩하는 역할을 한다. 기본적으로 구간에 원 핫 인코딩을 적용한다. transform 결과.toarray()로 원핫 인코딩된 결과를 볼 수 있다.  
 - sklearn.preprocessing.PolynomialFeatures(degree=i, include_bias=bool) : x**i 까지 고차항(다항식)을 추가해 특성을 풍부하게 나타내는(구간 분할과 비슷한 효과) 모델 로드. bool 이 T 면 절편에 해당하는 1인 특성을 추가한다. 다항식 특성을 선형 모델과 같이 사용하면 전형적인 다항 회귀 모델(결과가 곡선)이 된다. 고차원 다항식은 데이터가 부족한 영역에서는 너무 민감하게 동작한다는 문제점이 있다.    
+- sklearn.preprocessing.LabelEncoder() : 여러개의 카테고리가 존재하는 데이터를 고유한 정수로 인코딩하는 클래스 로드..
 ###### decomposition
 - sklearn.decomposition.PCA() : 주성분 분석(PCA) 프로세서 로드. 기본값은 데이터를 회전,이동만 시키고 모든 주성분을 유지하지만 n_component 매개변수에 값을 넣어 유지시킬 주성분의 개수를 정할 수 있다. fit 시 모델.components_ 속성에 주성분이 저장된다. whiten=T 로 주성분의 스케일이 같아지게 할 수 있다. .inverse_transform 을 사용해 원본 공간으로 되돌릴 수 있다. 
 - sklearn.decomposition.NMF(random_state = 0) : NMF 프로세서 로드. n_component 매개변수에 값을 넣어 유지시킬 주성분의 개수를 정할 수 있다. 
