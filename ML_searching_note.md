@@ -250,7 +250,7 @@
 - tf.keras.layers.Embedding(총 단어 개수, 결과 벡터의 크기, 입력 시퀀스 길이) : 단어를 밀집벡터로 만듦(임베딩 층(Dense 같은)제작). (샘플개수, 입력길이)형태의 정수 인코딩이 된 2차원 정수 배열을 입력받아 워드 임베딩 후 3차원 배열을 반환. 
 - tf.keras.layers.Dropout(rate) : Overfitting 을 방지하기 위해 DropOut. rate 는 1 = 100% 다.
 - tf.keras.layers.Bidirectional(layer) : 입력한 층을 양방향으로 만들어 줌. SimpleRNN, LSTM 등이 들어감.
-- tf.keast.layers.TimeDistributed(layers) : (?)
+- tf.keras.layers.TimeDistributed(layers) : RNN에서 각 스텝마다 오류를 계산해 하위스텝(앞쪽)으로 전파하게 시킴. return_sequences=True 와 이것을 사용해 RNN이 macy-to-many문제를 해결(시퀀스를 입력받아 시퀀스를 출력)할 수 있도록 함. 각 스텝에서 손실을 계산해 출력을 낼 수 있도록 하며, 없다면 각 스텝의 출력이 마지막 스텝에 모여 순차적으로 FC에 들어가 출력이 된다. 
 
 - tf.keras.layers.Conv1D(kernel, kernel_size, padding, activation) : 1차원 합성곱신경망 사용.
 - tf.keras.layers.Conv2D(컨볼루션 크기(행,렬), 필터 이미지 개수(한 행렬의 크기 x,y), padding(='same' 입출력 사이즈 동일), activation, inputShape) : 이미지에 convolution filter 를 사용해 행렬을 만듦.
