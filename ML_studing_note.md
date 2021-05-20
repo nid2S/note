@@ -225,14 +225,14 @@ hypo(테스트 데이터) 로 훈련된 모델 사용가능.
 - tf 에서 딥러닝 모델 생성 : 데이터 생성 > 전처리 > 모델 레이어 제작 > compile > fit > predict 의 순서로 이뤄진다.
 
 ##### 머신러닝 모델 구현 (keras)
+###### Sequential
+- 시퀀셜 : 단순하게 층을 쌓는 방식으로 쉽고 간단하게 사용가능. 다수의 입출력을 가진 보댈이나 층간 연결, 덧셈등의 연산을 하는 모델을 구현하기에 부적합. 
+- 구현 방법 : model = Sequential() 후 model.add(layer)로 층을 추가해 만들 수 있음. 시퀀셜 모델 제작시 초기 매개변수로 최대 세개까지 층을 추가할 수 있다. 
 ###### function API
 - function : 각 층이 함수형태로 되어 있음. 시퀀셜로는 구현하기 어려운 복잡한 모델 구현 가능. layer()(이전레이어) 로 제작됨.
 - 선형 회귀 : output = Dense(1, activation='linear')(inputs) > Model(input, output) 으로 제작 후, compile(optimizer=SGD(), loss='mse', metrics=['mse'])로 컴파일
 - 로지스틱 회귀 분류(이진분류): output = Dense(1, activation='sigmoid')(inputs) > Model(inputs, output).  
 - 다중입력을 받는 모델 : input 을 여러개 만들고, 각 입력에 대해 모델을 만든 뒤, concatenate([m1.output, m2.output])로 둘의 출력을 연결, Dense(2, activation="relu")(result)식으로 연결값을 입력으로 받는 층 추가 > 출력층 추가 > Model(inputs=[x.input, y.input], outputs=z)로 최종 모델 제작  의 과정을 거쳐 만들 수 있음.    
-###### Sequential
-- 시퀀셜 : 단순하게 층을 쌓는 방식으로 쉽고 간단하게 사용가능. 다수의 입출력을 가진 보댈이나 층간 연결, 덧셈등의 연산을 하는 모델을 구현하기에 부적합. 
-- 구현 방법 : model = Sequential() 후 model.add(layer)로 층을 추가해 만들 수 있음. 시퀀셜 모델 제작시 초기 매개변수로 최대 세개까지 층을 추가할 수 있다. 
 ###### Subclassing API
 - Subclassing : 모델이 클래스 형태로 되어 있음. 객체지향에 익숙해야 해 코드 사용이 가장 까다로움. Model 클래스를 부모로 하는 클래스를 하나 만들고, __init__속에 super(LinearRegression, self).__init\__()식의 초기화와 각 층을 넣고, 그 층(모델)을 사용해 값을 반환하는 call 을 구현한다. 그 후 그걸 모델로 사용해 컴파일, fit 의 과정을 거쳐 사용한다.
 - 사용 이유 : 간단한 모델을 구현하기에 적합하고, 함수형 API 로 구현이 불가능한 모델(재귀 네트워크, 트리 RNN 등. 함수형 API 가 모델을 DAG 로 취금하기 때문)도 구현가능한 경우가 있음.
