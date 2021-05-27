@@ -241,6 +241,7 @@
 - 질의응답 : 질문에 대한 답변 출력. 
 - 메모리 네트워크 : 두개의 입력(스토리/질문 문장)을 받아 스토리는 두개(A,C), 질문은 하나(B)의 임베딩층을 통해 각각 단어임베딩이 되고, C와 B를 내적을 통해 유사도를 구한 뒤, softmax를 지나 A에 더해짐(어텐션-V,Q,K, 스토리문장표현). 이를 질문표현(질문문장임베딩)과 연결해 LSTM과 밀집층의 입력으로 사용.
 - 이를 이용해 스토리 단어들과 질문 단어의 유사도를 구하고 하는 과정을 거쳐 질의응답기능을 만들 수 있음. (?)
+- 챗봇 데이터 : [urllib.request.urlretrieve("https://raw.githubusercontent.com/songys/Chatbot_data/master/ChatbotData%20.csv", filename="ChatBotData.csv")]
 
 #### 머신러닝
 
