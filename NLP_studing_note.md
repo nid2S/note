@@ -30,7 +30,7 @@
   언어모델 구조 변경 - 마스크드 언어 모델(입력 단어 집합의 15%를 랜덤으로 마스킹, 이 단어들을 예측하게 함)을 이용해 단방향 언어모델을 기존 예측할 단어를 이미 관측해버려 잘 쓰이지 않았던 양방향 언어모델로 바꿈. 
 
 - TPU 사용 : TPU초기화(tf.config... | tf.tpu...) > Strategy셋팅(tf.distribute) > 모델정의시 strategy.scope내에서 이뤄져야 함(함수를 만들고 내부에서 호출, 컴파일 하는 방식).
-  
+    
 ### 전처리
 - 순서 : 데이터 생성(로드) > 데이터 확인(길이, null, empty) > 토큰화(문장 >> 단어) > 정제(노이즈, 반복, 외국어, 불용어, null 제거, 희귀단어 빈도(빈도) 확인 후 제거) > 패딩(가장 긴 길이로 / 적당히 자르기) > 벡터화(W2V, 임베딩, 원핫 인코딩) > 모델 학습(제작)
 - 정제 : 등장 빈도가 낮은 단어 제외, 문자가 아닌것을 제외, 소문자화, 불용어 처리, 본문(글자형식)이 아닌것을 제외, 구두점 제거, null 행 제거 등 
@@ -573,6 +573,7 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 > - 특수 문자 : .(임의 문자 1개), ?(앞 문자 0 또는 1개), *(앞 문자 0개 이상), +(앞 문자 1개 이상), ^(뒤 문자로 문자열 시작), $(앞 문자로 문자열 종료)
 > - 특수기호 : \d(숫자), \D(숫자가 아닌것), \s(whitespace, \t\n\r\f\v), \w(문자+숫자), \W(문자+숫자의 부정)등이 있다.
 > - 범위 : 문자{n,m}은 n번 부터 m이하 반복, {n}은 반드시 n번 반복으로 사용된다.
+> - 캡쳐그룹 : 패턴을 ()로 감싸면 캡쳐그룹으로 만듦. \1,\2 등으로 그 순서의 그룹을 패턴에 사용할 수 있음(' \1' 식으로 하나 띄어쓰는 식).
 
 - re.compile() : 정규 표현식 컴파일. 결과 객체 반환. re.S(.이 \n을 포함하게 함) 등을 매개변수로 줄 수도 있다.
 - re.sub(r'패턴([]X)', 바꿀문자, 바뀔 문장) : 바뀔 문장에서 패턴에 일치하는 부분을 바꿀 문자로 바꾼다.
@@ -585,7 +586,29 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - 컴파일.finditer(sent) : 정규 표현식에 맞는 단어만 각각을 매치 객체의 형태로 하여 반복 가능한 개채의 형태로 돌려준다. 
 - 컴파일의 메서드는 전부 re.메서드(표현식, 문자열) 형태로 사용할 수 있다.
 
-# urllib | url 이용
-- url 이용 라이브러리.
+# os | os(파일, 디렉토리)관련 명령
+- os.getcwd() : 현재 작업 폴더 반환.
+- os.chdir(경로) : 디렉토리 변경.
+- os.path.abspath(상대 경로) : 절대 경로 반환. 
+- os.path.dirname(경로) : 디렉토리명만 반환.
+- os.path.basename(경로) : 파일 이름만 반환.
+- os.listdir(경로) : 경로 안의 파일 이름을 전부 반환.
+- os.path.join(상위, 하위) : 경로를 병합해 새 경로 생성. ('C:\Tmp', 'a', 'b')식으로 넣는다.
+- os.path.isdir(경로) : 폴더의 존재 여부를 반환.
+- os.path.isfile(경로) : 파일의 존재 여부를 반환.
+- os.path.exists(경로) : 파일 혹은 디렉토리의 존재 여부를 반환.
+- os.path.getsize(경로) : 파일의 크기 반환.
+
+# urllib,unicodedata | url,uni
+- urllib : url 이용 라이브러리. urllib3 은 따로 install, import가 필요함. 
 - urllib.request.urlretrieve(주소, filename) : 주소의 파일을 파일 이름으로 다운로드.
+- urllib3.PoolManager() : url poolManager 로드. url이용에 사용가능.
+- http(Pool).request('GET', url, preload_content=False) : url 오픈. with 등을 이용해 파일객체로 열 수 있고, 다운로드를 위해 shutil이 필요.
+
+- unicodedata.normalize('NFD', s) : 입력한 문자를 폼에 맞춰 유니코드로 변환. 〈NFC〉, 〈NFKC〉, 〈NFD〉, 〈NFKD〉등이 될 수 있음.
+- unicodedata.category(c) : 문자에 할당된 일반 범주(general category)를 문자열로 반환. Mn(Mark, no spacing. 엑센트등 로마자)등과 같이 나옴.
+
+# shutil,zipfile | 파일다운, unzip
+- shutil.copyfileobj(url 파일, out 파일) : url에서 파일을 다운받아 out파일에 저장. 둘 다 파일객체여야 함.
+- zipfile.ZipFile(zipfilepath, 'r') : zip파일객체 오픈. .extractall(path)로 압축을 헤재할 수 있음.
 
