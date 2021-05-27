@@ -1,2 +1,2 @@
 # GO
-- 경쟁 : node.js
+- VS : node.js
