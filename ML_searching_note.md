@@ -286,6 +286,7 @@
 
 - functional API : 함수형 API 는 Sequential API 와 달리 각 층을 일종의 함수로 정의.
 - input(shape) 에서 시작해 Dense(node, activation)(inputs) > Dense()(h1) > Dense()(h2) 후 tf.keras.models.Model(input,output) 식으로 구성.  
+- Embedding()(input_layer) 와 Embedding_layer = Embedding() > Embedding_layer(input_layer) 는 차이가 있음/없음 (?)
 
 - Subclassing API : Subclassing API 는 모델을 클래스 형태로 제작해 사용. 
                
@@ -305,7 +306,8 @@
   verbose=0 으로 떨어지는 모습을 보지 않을 수 있고, validation_data=(test_data,test_label) 로 테스트용 데이터로 계산한 손실과 정확도를 함꺠 출력시킬 수 있으며,
   callback 매개변수에 callbacks의 함수를 넣어 사용할 수 있음. 여러개면 [one, two]식으로 입력.
   
-- model.save('파일명.h5') : 모델 저장
+- model.save('파일명.h5') : 모델 저장. 모델 전체를 저장하는 게 아니라 가중치 등 일부만 저장한 뒤 재사용(transfer learning)히는 방법도 있음. (?)
+- model = tf.keras.models.load_model(모델명) : 저장된 모델 로드.  
 - model.evaluate(test_images, test_labels) : 모델 성능 비교. loss, accuracy 순으로 반환. verbose = 0 > silent
 
 - model.predict([[15]]) : 모델을 사용해 입력에 따른 예측 반환. [[숫자]]나 inde[:5]식으로 모델에 넣을 수 있음. 2차원 이미지를 넣어 2차원 배열이 반환됨. 종속변수가 여러개일 경우 경우 [[종1,종2,종3]]식으로 , 2중 for 문으로 하나씩 뽑을 수 있다.

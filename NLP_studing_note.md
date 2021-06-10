@@ -474,6 +474,7 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - tf.keras.preprocessing.text.text_to_word_sequence(sentence) : 모든 알파벳을 소문자로 변환, 구두점 제거, 죽약형은 분리하지 않는 단어 토큰화 함수.  정제와 단어 토큰화를 동시에 적용.
 - tf.keras.preprocessing.text.Tokenizer() : 정수 인코딩을 위한 토크나이저 로드. .fit_on_texts(단어집합) 으로 단어 빈도수가 높은 순으로 낮은 정수 인덱스를 부여할 수 있다. .word_index 로 단어와 인덱스를 확인할 수 있고, .word_counts 로 단어의 개수를 확인 할 수 있다. 
 - Tokenizer() : .texts_to_matrix(문장배열,mode='count')로 DTM(인덱스 0부터 시작)을 생성할 수 있다. 모드가 'binary' 면 단어의 존재여부만 보여주는 행렬을, tfidf 는 tfidf 행렬을, freq 는 (단어 등장 횟수/문서 단어 총합)의 행렬을 보여준다.
+- Tokenizer() : filter, lower 매개변수 사용가능. (?)
 ##### vectorize
 - tf.keras.utils.to_categorical(벡터) : 원 핫 인코딩을 해줌. (요소 개수, 요소 종류)의 형태를 가짐.
 - tokenizer.texts_to_sequences(단어집합) : 각 단어를 이미 정해진 인덱스로 변환. 만약 토크나이저 로드시 인수로 i+1을 넣었다면 i 까지의 인덱스를 가진 단어만을 사용하고 나머지는 버린다.
