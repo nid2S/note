@@ -239,8 +239,28 @@ hypo(테스트 데이터) 로 훈련된 모델 사용가능.
 - 로지스틱 회귀 분류(이진분류): output = Dense(1, activation='sigmoid')(inputs) > Model(inputs, output).  
 - 다중입력을 받는 모델 : input 을 여러개 만들고, 각 입력에 대해 모델을 만든 뒤, concatenate([m1.output, m2.output])로 둘의 출력을 연결, Dense(2, activation="relu")(result)식으로 연결값을 입력으로 받는 층 추가 > 출력층 추가 > Model(inputs=[x.input, y.input], outputs=z)로 최종 모델 제작  의 과정을 거쳐 만들 수 있음.    
 ###### Subclassing API
-- Subclassing : 모델이 클래스 형태로 되어 있음. 객체지향에 익숙해야 해 코드 사용이 가장 까다로움. Model 클래스를 부모로 하는 클래스를 하나 만들고, __init__속에 super(LinearRegression, self).__init\__()식의 초기화와 각 층을 넣고, 그 층(모델)을 사용해 값을 반환하는 call 을 구현한다. 그 후 그걸 모델로 사용해 컴파일, fit 의 과정을 거쳐 사용한다.
+- Subclassing : 모델이 클래스 형태로 되어 있음. 객체지향에 익숙해야 해 코드 사용이 가장 까다로움. pytorch와 비슷한 방식.
 - 사용 이유 : 간단한 모델을 구현하기에 적합하고, 함수형 API 로 구현이 불가능한 모델(재귀 네트워크, 트리 RNN 등. 함수형 API 가 모델을 DAG 로 취금하기 때문)도 구현가능한 경우가 있음.
+- 구조 : 
+```python
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Input, Dense
+
+class MyModel(Model):  # 모델을 상속하는 모델클래스 생성  
+    def __init__(self):
+        super(MyModel, self).__init__()             # 자기자신을 인자로 넘기며 __init__()
+        self.dense1 = Dense(64, activation='relu')  # 사용할 층 정의
+        self.dense2 = Dense(10, activation='softmax')
+
+    def call(self, x):
+        x = self.dense1(x)  # 정의한 층을 이용해(input은 입력됨)모델 생성, 최종 층 반환
+        x = self.dense2(x)
+        return x
+    
+    def summary(self):      # 모델 요약 생성
+        inputs = Input((1, 10))  # 입력은 미리 정의, 다르게 할 수도 있음
+        Model(inputs, self.call(inputs)).summary()  # 입력층과 출력층을 인자로 넣고 요약정보 호출
+```
 
 ## DeepLearning
 ***
@@ -270,7 +290,7 @@ hypo(테스트 데이터) 로 훈련된 모델 사용가능.
 - 기울기 소실(gradient vanishing) : 역전파 과정에서 입력층으로 갈 수록 기울기가 0에 가까워져 가중치가 한없이 작아지는 문제.
 - 기울기 폭주(gradient exploding) : 반대로 기울기가 커져 가중치가 커지는 바람에 결국 발산되어 한곳으로 모여들지를 못하는 문제.
   
-- Gradient Clipping : 기울기 폭주를 막기 위해 임계값을 넘지 않도록 입계치만큼 크기를 감소시킴. RNN 에서 유용. keras 에서 optimizer.옵티마이저(clipnorm) 매개변수를 이용햐 수행할 수 있다. 
+- Gradient Clipping : 기울기 폭주를 막기 위해 임계값을 넘지 않도록 임계치만큼 크기를 감소시킴. RNN 에서 유용. keras 에서 optimizer.옵티마이저(clipnorm) 매개변수를 이용햐 수행할 수 있다. 
 - 가중치 초기화 : 기울기 소실과 폭주를 막음. 가중치가 어떤 초기값을 가졌느냐에 따라 모델의 훈련 결과가 달라지기도 하기에 시행. 세이비어 초기화(균등분포/정규분포 로 나눠 이전층과 다음층의 뉴런 개수를 이용해 초기화 범위, 조건 지정. sigmoid, tanh 함수의 초기화)와 He 초기화(세이비어와 비슷하나 다음 뉴런 개수 이용X, ReLU 계열 함수의 초기화)등이 있음.
 - 배치 정규화 : 기울기 소실과 폭주를 막는 또다른 방법. 신경망의 각 층에 들어가는 입력을 배치단위로, 평균과 분산으로 정규화. 활성화 함수를 통과하기 전에 시행. 평균을 0으로 > 정규화 > 스케일,시프트 수행 순으로 이뤄짐. 
 - 배치 정규화 한계 : 미니 배치 크기에 의존적(작으면 잘 동작 X)이고, RNN 에 적용하기 어렵다는 단점이 있음.
@@ -291,6 +311,7 @@ hypo(테스트 데이터) 로 훈련된 모델 사용가능.
 
 ###활성화 도구(Optimizer)
 ***
+![이미지](img/img.png)
 - 손실함수에서 나온 손실을 이용해 가중치와 편향을 조정하는 알고리즘(도구).
 - GD(Gradient descent) : 경사 하강법. 가장 기본 알고리즘. 경사를 따라 내려가면서 W 업데이트. 
 - BGD(Batch Gradient Desent) : 배치 경사 하강법. 가장 기본적 경사 하강법. 오차를 구할 때 전체 데이터를 고려함. 한 학습당 시간이 오래 걸리고 메모리를 크게 요구하나 글로벌 미니멈을 찾을 수 있음.

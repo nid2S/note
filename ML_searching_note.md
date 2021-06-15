@@ -260,7 +260,7 @@
 - tf.keras.layers.GlobalAveragePooling1D() : 입력으로 들어오는 모든 벡터들의 평균을 구함. 흔히 임베딩 층 뒤에 사용됨.
 - tf.keras.layers.MaxPooling2D((줄일 행렬의 크기 x, y)) : 이미지를 MaxPooling 해 크기를 줄임.
 
-- tf.keras.layers.SimpleRNN(hidden_size) : RNN 사용. hidden_size 는 은닉상태의 크기. input_shape 매개변수에 (timesteps(입력 시퀀스 길이), input_dim(입력 크기)) 로 넣어 입력을 정의해 줄 수 도 있음. return_sequences(전체 은닉상태 출력)와 return_state(마지막 은닉상태 한번 더 출력)매개변수 사용 가능.
+- tf.keras.layers.SimpleRNN(hidden_size) : RNN 사용. hidden_size 는 은닉상태의 크기. (batch_)input_shape 매개변수에 ((batch_size,) timesteps(입력 시퀀스 길이), input_dim(입력 크기)) 로 넣어 입력을 정의해 줄 수 도 있음. return_sequences(전체 은닉상태 출력)와 return_state(마지막 은닉상태 한번 더 출력)매개변수 사용 가능.
 - tf.keras.layers.LSTM(hidden_size, input_shape=(time_steps, input_dim)) : RNN 의 일종인 LSTM 사용. RNN 층은 (batch_size(배치 크기, 한번에 학습할 데이터 양), timesteps(시점, 문장의 길이), input_dim(단어 벡터 차원)) 크기의 3D 텐서를 입력으로 받음. return state 를 true 로 하면 마지막 셀 상태까지 반환, 양방향이면 정방향,역방향 둘 다 은닉상태와 셀상태 반환(fh,fc,bh,bc 순). 
 - tf.keras.layers.GRU(hidden_size, input_shape=(time_steps, input_dim)) : LSTM 을 개량한 GRU 사용. LSTM 에 비해 구조가 간단하고, 데이터 양이 적을떄 LSTM 보다 낫다고 알려져 있음.
 
