@@ -320,6 +320,7 @@
 
 # Pytorch ( torch )
 ***
+- [pytorch_studing_note](pytorch_studing_note.md)
 - Tensor > Numpy 의 ndarray 와 유사. GPU 연산가속도 가능. 튜플타입을 가져, 모든 튜플 연산을 지원(+ 등 가능). 인덱싱도 가능.
 
 - torch.empty(y, x) > 초기화 되지 않은 y*x의 행렬 생성. 그 시점에 할당된 메모리에 존재하던 값이 초기값으로 나타남. 
