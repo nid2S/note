@@ -241,6 +241,19 @@
 
 # tensorflow
 ***
+##### data
+- tf.Variable(수식, name="변수명") : 변수 선언 후 수식으로 정의. x+4 식으로 수식을 지정해 변수에 할당하는 방식.
+- tf.constant(상수, name="상수명") : 상수 선언 후 값 지정. y = tf.constant(20, name="y) 식으로 사용.
+- tf.linespace() : (?)
+
+- tf.get_default_graph() : (?)
+- tf.summary.Filewriter() : (?)
+
+- session : 일종의 실행창. 텐서의 내용과 연산 결과를 볼 수 있음. 세션 선언, 실행, 종료 문으로 구분됨.
+- tf.Session() : 세션 선언.
+- tf.global_variables_initializer() : 변수 초기화. model에 할당해 초기화를 할 수도 있음. 
+- sess.run(텐서) : 실행. sess.run(model) > sess.run(변수) 식으로 사용할 수 있음.
+- sess.close() : 세션 종료.
 
 ##### layers
 - tf.keras.layers.Input(shape=(입력 차원)) : 입력차원 만큼 입력레이어 구성.
@@ -265,13 +278,6 @@
 
 - tensorflow.keras.preprocessing.sequence.pad_sequences(data, maxlen) : 데이터(리스트)의 요소 개수를 maxlen으로 고정. 적으면 0을 채우고 많으면 버림.
 
-
-
-- session : 일종의 실행창. 텐서의 내용과 연산 결과를 볼 수 있음. 세션 선언, 실행, 종료 문으로 구분됨.
-- tf.Session()/InteractiveSession() : 세션 선언 / 자동으로 기본 세션을 지정해주는 세션 선언.
-- sess.run(tf.global_variables_initializer()) : 변수 초기화.
-- sess.run(텐서) : 실행. 흔히 eval 사용.  |  텐서.eval() : 텐서 객체 데이터 확인.
-- sess.close() : 세션 종료.
 
 ##### model make
 - 케라스는 Sequential API, Functional API, Subclassing API 의 구현 방식을 지원.
