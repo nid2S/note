@@ -6,7 +6,7 @@
 
 - torch.FloatTensor(array) : array로 32bit 부동소수점 자료형의 텐서 생성.
 - torch.자료형Tensor(array) : array로 지정된 자료형의 텐서 생성.
-- torch.zeros_like(array) : array와 동일한 차원의 0으로 채워진 텐서 생성.
+- torch.zeros_like(array) : array와 동일한 차원의 0으로 채워진 텐서 생성. requires_grad 매개변수로 학습을 통해 값이 변경되는 변수(가중치, 편향)인지 명시해줄 수 있음.
 - torch.ones_like(array) : array와 동일한 차원의 1으로 채워진 텐서 생성.
 
 - 텐서.shape/dim()/size()/sum()/argmax()/max(-dim=i-)/mean(-dim=i-)/matmul(텐서)/mul(텐서) : 텐서에 대해 사용할 수 있는 연산들.
@@ -23,6 +23,15 @@
 - 2D Tensor : (batch size, dim)
 - 3D Tensor : (batch size, length(time step), dim)
 
+## model
+- 가설 선언 후 비용함수, 옵티마이저를 이용해 가중치, 편향등을 갱신해 올바른 값을 찾는 방식.
+- 비용함수를 미분해 grandient 계산. 
+### optimizer
+- 옵티마이저.zero_grad() : gradient 0으로 초기화.
+- 옵티마이저.step() : 주어진 학습대상들 업데이트.  
+- torch.optim.SGD(\[가중치(학습대상1), 편향(학습대강2)], lr=러닝레이트) : 경사하강법. 
 
+### Linear Regression
+- 선형회귀 : 
 
 
