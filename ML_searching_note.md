@@ -259,7 +259,7 @@
 - tf.keras.layers.Input(shape=(입력 차원)) : 입력차원 만큼 입력레이어 구성.
 - tf.keras.layers.Dense(노드수,activation="swish/relu")(X) : 전밀집층(모든 노드가 이전 혹은 다음 노드와 연결, 전결합층)제작. input_dim(입력차원)매개변수 사용가능. ((입력의 마지막차원+1(bias))*노드수)개의 파라미터가 생성, (None, 최초입력의 마지막 제외 차원, 노드수) 형태의 반환값을 반환.
  
-- tf.keras.layers.Embedding(총 단어 개수, 결과 벡터의 크기, 입력 시퀀스 길이) : 단어를 밀집벡터로 만듦(임베딩 층 제작, 단어를 랜덤한 값을 가지는 밀집 벡터로 변환). (샘플개수, 입력길이)형태의 정수 인코딩이 된 2차원 정수 배열을 입력받아 워드 임베딩 후 3차원 배열을 반환. 
+- tf.keras.layers.Embedding(총 단어 개수, 결과 벡터의 크기, 입력 시퀀스 길이) : 단어를 밀집벡터로 만듦(임베딩 층 제작, 단어를 랜덤한 값을 가지는 밀집 벡터로 변환 후 학습과정을 거침). (샘플개수, 입력길이)형태의 정수 인코딩이 된 2차원 정수 배열을 입력받아 워드 임베딩 후 3차원 배열을 반환. 
 - tf.keras.layers.Dropout(rate) : Overfitting 을 방지하기 위해 DropOut. rate 는 1 = 100% 다.
 - tf.keras.layers.Bidirectional(layer) : 입력한 층을 양방향으로 만들어 줌. SimpleRNN, LSTM 등이 들어감.
 - tf.keras.layers.TimeDistributed(layers) : RNN에서 각 스텝마다 오류를 계산해 하위스텝(앞쪽)으로 전파하게 시킴. return_sequences=True 와 이것을 사용해 RNN이 macy-to-many문제를 해결(시퀀스를 입력받아 시퀀스를 출력)할 수 있도록 함. 각 스텝에서 손실을 계산해 출력을 낼 수 있도록 하며, 없다면 각 스텝의 출력이 마지막 스텝에 모여 순차적으로 FC에 들어가 출력이 된다.
