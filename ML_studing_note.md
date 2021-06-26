@@ -507,7 +507,18 @@ class MyModel(Model):  # 모델을 상속하는 모델클래스 생성
    - numpy의 자료형은 Boolean, Integer, Unsigned Integer, Float, Complex, Sting이 있음.
    - python 기본 자료형에 비해 사용가능한 함수와 속성이 훨씬 많음. 
 
-5. numpy에서 deep copy는 뭔가요?
+5. numpy에서 deep copy는 뭔가요? : 전혀 다른 메모리 공간에 값만 같은 배열을 복사하는 것.
+   - numpy 에는 세가지 복사가 있는데, 평범한 대입, ViewCopy, DeepCopy 임.
+   - 평범한 대입 : 대입한 변수의 값을 바꾸면 본래 배열에도 영향이 가는, 그저 이름만 다른 변수를 하나 생성하는 것(메모리 공간 공유).
+   - View Copy : ndarray.view() 로 복사할때. 복사한 배열의 크기등을 바꾸는건 본래의 배열과 상관이 없지만, 데이터를 바꾸면 원래 배열의 데이터값도 바뀜.
    
-6. numpy 같은 syntax는 어떻게 구현할 수 있나요?
-7. numpy 데이터를 보관하는 방법은 어떤게 있을까요?
+6. numpy 같은 syntax는 어떻게 구현할 수 있나요? : 평범하게 배열이나 C의 List등을 써서 만들 수 있음. (?)
+   - numpy(Numerical(수치)Python)는 C에서 구현된 파이썬 라이브러리. 고성능의 수치계산을 위해 제작.
+   - array라는 단위로 데이터를 관리, 이에 대해 연산. 따라서 데이터 타입을 가진 행렬을 통해 데이터를 관리하고, 그에 대해 연산하면 구현 가능하지 않을까 함.
+   
+7. numpy 데이터를 보관하는 방법은 어떤게 있을까요? : np.save(), .savez(), .savez_compressed(), .saveText() 등의 함수를 사용해 가능.
+   - .save() : 배열 한개를 numpy 포맷의 binary파일로 저장(.npy)
+   - .savez() : 여러개의 배열을 1개의 압축되지 않은 (.npz) 포맷 파일로 저장.
+   - .savez_compressed() : 여러개의 배열을 1개의 압축된 (.npz) 포맷 파일로 저장.
+   - .savetext() : 여러개의 배열을 텍스트 파일로 저장(.txt)
+   
