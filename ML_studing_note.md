@@ -309,6 +309,7 @@ class MyModel(Model):  # 모델을 상속하는 모델클래스 생성
 - Sigmoid : 입력을 전부 0~1의 미분가능한 수로 변환. 이진 분류의 출력층에서 주로 사용. |  1/(1+np.exp(-x)).  | 시그모이드에서 기울기가 0에 가까운 양 극은 기울기와 같은 값이 나오게 되는데 이를 곱하면 기울기 소실 문제(앞에 기울기 잘 전달 X)가 발생한다.    
 - tanh(Hyperbolic Tangent) : 입력을 -1~1의 미분 가능한 수로 변환. 시그모이드의 대체제. 시그모이드와 함께 Vanishing gradient problem(기울기 소실 문제)을 가지고 있으나 조금 더 나은 편. | (2/1+e^-2x) - 1
 - softmax : 입력을 전부 0~1사이로 정규화. 출력의 총합이 1. 다중 분류의 출력층에서 주로 사용. |  np.exp(x) / np.sum(np.exp(x))
+- hierarchical softmax(계층적) : (?)
 
 ###활성화 도구(Optimizer)
 ***
