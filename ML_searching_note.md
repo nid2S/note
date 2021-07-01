@@ -254,6 +254,7 @@
 - tf.global_variables_initializer() : 변수 초기화. model에 할당해 초기화를 할 수도 있음. 
 - sess.run(텐서) : 실행. sess.run(model) > sess.run(변수) 식으로 사용할 수 있음.
 - sess.close() : 세션 종료.
+- (?)
 
 ##### layers
 - tf.keras.layers.Input(shape=(입력 차원)) : 입력차원 만큼 입력레이어 구성.
@@ -297,7 +298,7 @@
                
 - model.summary() : 모델의 정보(layer(type), outputShape, param(파라미터(매개변수, 노드)수))를 확인할 수 있음
 
-- tensorflow.keras.callbacks.EarlyStopping(monito"val_loss", mode="min", verbose, patience) : 과정합 방지를 위한 조기 종료 설정. patience회 검증 데이터의 손실이 증가하면 학습을 조기종료함. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능.
+- tensorflow.keras.callbacks.EarlyStopping(monito="val_loss", mode="min", verbose, patience) : 과정합 방지를 위한 조기 종료 설정. patience회 검증 데이터의 손실이 증가하면 학습을 조기종료함. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능.
 - tensorflow.keras.callbacks.ModelCheckpoint(모델명.h5, monitor="val_acc", mode="max", verbose=1, save_best_only=True) : 검증 데이터의 정확도가 이전보다 좋아지면 모델 저장. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능.
 
 ###### model train, use
@@ -307,7 +308,7 @@
 -  metrics=['accuracy']  : 훈련단계와 테스트 단계를 모니터링하기 위한 방법.
 - ) : 모델 컴파일.
   
-- model.fit(train_data , train_labels , epochs=1000(반복 횟수)) : 학습된 모델 제작. 
+- model.fit(train_data , train_labels , epochs=1000(반복 횟수)) : 학습된 모델 제작. 이 과정에서 오류가 난다면 .astype으로 자료형을 지정해주면 된다.
   verbose=0 으로 떨어지는 모습을 보지 않을 수 있고, validation_data=(test_data,test_label) 로 테스트용 데이터로 계산한 손실과 정확도를 함꺠 출력시킬 수 있으며,
   callback 매개변수에 callbacks의 함수를 넣어 사용할 수 있음. 여러개면 [one, two]식으로 입력.
   
@@ -315,7 +316,7 @@
 - model = tf.keras.models.load_model(모델명) : 저장된 모델 로드.  
 - model.evaluate(test_images, test_labels) : 모델 성능 비교. loss, accuracy 순으로 반환. verbose = 0 > silent
 
-- model.predict([[15]]) : 모델을 사용해 입력에 따른 예측 반환. [[숫자]]나 inde[:5]식으로 모델에 넣을 수 있음. 2차원 이미지를 넣어 2차원 배열이 반환됨. 종속변수가 여러개일 경우 경우 [[종1,종2,종3]]식으로 , 2중 for 문으로 하나씩 뽑을 수 있다.
+- model.predict(X) : 모델을 사용해 입력에 따른 예측 반환.
 - model.get_weights() : 각 독립변수에 대한 가중치 출력.
 - model.summary() 로 모델의 정보(이름/none,출력하는 개수/파라미터(가중치의 개수))를 확인 할 수 있다.
 
@@ -355,7 +356,7 @@
 - 텐서.premute(shape number - 0,3,1,2 식으로) > 텐서의 순서를 변환 (20, 32, 32,3)을 채널수가 사이즈보다 먼저 나오는 텐서에 맞게 (0,3,32,32)로 바꿀 수 있다.
 
 
-# torchvision
+## torchvision
 ***
 - torchvision.datasets.데이터이름(root=다운파일 저장경로, train=T/F 트레이닝 데이터/테스트 데이터, download=True, transform=전처리방법(torchvision.transform.Compose( [ tr.Resize(사이즈 x*x),tf.ToTensor(),그외 전처리 방법들 ] ) 식으로) ) : 데이터 셋 다운로드. PIL 이미지 형식이다. 채널수가 앞에 있어 size 가 3,8,8 처럼 나온다.
 - torchvision.datasets.load_files("경로") : 파일 로드. .data 로 데이터, .target 으로 레이블을 받아 올 수 있다.
@@ -489,12 +490,6 @@
 >+ konlpy.tag.Okt() >  Okt 클래스 객체 생성. .morphs(text)로 형태소 분석이 가능하다.
 
 
-
-
-
-### RL
-
-
 # os
 - os.getcwd() : 현재 작업 폴더 반환.
 - os.chdir(경로) : 디렉토리 변경.
@@ -508,4 +503,8 @@
 - os.path.exists(경로) : 파일 혹은 디렉토리의 존재 여부를 반환.
 - os.path.getsize(경로) : 파일의 크기 반환.
 
+# Scrapy
+- (?)
 
+# tensorboard
+- (?)
