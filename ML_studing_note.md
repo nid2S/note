@@ -258,9 +258,6 @@ class MyModel(Model):  # 모델을 상속하는 모델클래스 생성
         x = self.dense2(x)
         return x
     
-    def summary(self):      # 모델 요약 생성
-        inputs = Input((1, 10))  # 입력은 미리 정의, 다르게 할 수도 있음
-        Model(inputs, self.call(inputs)).summary()  # 입력층과 출력층을 인자로 넣고 요약정보 호출
 ```
 
 ## DeepLearning
