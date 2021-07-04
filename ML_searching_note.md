@@ -256,6 +256,9 @@
 - sess.close() : 세션 종료.
 - (?)
 
+- tf.keras.utils.to_categorical(정수 리스트) : 정수 리스트에 따라서 원핫 인코딩. [1,3]을 넣으면 [[0,1,0,0],[0,0,0,1]]을 반환하는 식.
+- tf.lite.TFLiteConverter.from_keras_model(model).converter() | open('파일명.tflite', 'wb') > tf 모델 tflite 바이너리로 변환. 이렇게 변환한 것은 안드로이드 스튜디오의 에셋에 복사 > app 모듈의 build.gradle 에 패키지 추가 > Main_Activity 에서 이미지 바이너리 변환 > Classifier 에서 모델 사용 > Main_Activity 에서 출력 순으로 사용된다.
+
 ##### layers
 - tf.keras.layers.Input(shape=(입력 차원)) : 입력차원 만큼 입력레이어 구성.
 - tf.keras.layers.Dense(노드수,activation="swish/relu")(X) : 전밀집층(모든 노드가 이전 혹은 다음 노드와 연결, 전결합층)제작. input_dim(입력차원)매개변수 사용가능. ((입력의 마지막차원+1(bias))*노드수)개의 파라미터가 생성, (None, 최초입력의 마지막 제외 차원, 노드수) 형태의 반환값을 반환.
@@ -319,10 +322,6 @@
 - model.predict(X) : 모델을 사용해 입력에 따른 예측 반환.
 - model.get_weights() : 각 독립변수에 대한 가중치 출력.
 - model.summary() 로 모델의 정보(이름/none,출력하는 개수/파라미터(가중치의 개수))를 확인 할 수 있다.
-
-
-- tf.keras.utils.to_categorical(정수 리스트) : 정수 리스트에 따라서 원핫 인코딩. [1,3]을 넣으면 [[0,1,0,0],[0,0,0,1]]을 반환하는 식.
-- tf.lite.TFLiteConverter.from_keras_model(model).converter() | open('파일명.tflite', 'wb') > tf 모델 tflite 바이너리로 변환. 이렇게 변환한 것은 안드로이드 스튜디오의 에셋에 복사 > app 모듈의 build.gradle 에 패키지 추가 > Main_Activity 에서 이미지 바이너리 변환 > Classifier 에서 모델 사용 > Main_Activity 에서 출력 순으로 사용된다.
 
 
 # Pytorch ( torch )
