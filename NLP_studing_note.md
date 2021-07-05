@@ -347,7 +347,6 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - 추출적 요약 : 원문에서 핵심 문장 또는 단어구를 몇 개 뽑아 이로 구성된 요약문을 만드는 방법. 모델의 언어표현능력이 제한된다는 단점이 있음.
 - 텍스트랭크 : 추출적 요약의 대표적 알고리즘. 페이지랭크(검색엔진에서 웹페이지의 순위를 정하기 위해 사용되던 알고리즘)알고리즘이 기반이 됨. 노드는 문장, 간선의 가중치는 문장간 유사도를 의미함.
 
-
 - 추상적 요약 : 원문에 없던 문장이하도 핵심문맥을 반영한 새로운 문장을 생성해 원문을 요약하는 방법. 사람이 요약하는것 같은 방법, 대표적으로 S2S. 지도학습이라 실제 요약문도 필요로 한다는 단점이 있음.
 - 한국어 추상적 요약 : [링크](https://www.slideshare.net/BOAZbigdata/deeptitle?fbclid=IwAR2GHvEwLC-cvnlbjhvbKc0dxT7Xyof0CjooXvrcejqJoPN_cFLk6ewbMjQ)
 
