@@ -302,7 +302,7 @@
 - model.summary() : 모델의 정보(layer(type), outputShape, param(파라미터(매개변수, 노드)수))를 확인할 수 있음
 
 - tensorflow.keras.callbacks.EarlyStopping(monitor="val_loss", mode="min", verbose, patience) : 과정합 방지를 위한 조기 종료 설정. patience회 검증 데이터의 손실이 증가하면 학습을 조기종료함. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능.
-- tensorflow.keras.callbacks.ModelCheckpoint(모델명.h5, monitor="val_acc", mode="max", verbose=1, save_best_only=True) : 검증 데이터의 정확도가 이전보다 좋아지면 모델 저장. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능.
+- tensorflow.keras.callbacks.ModelCheckpoint(모델명.h5, monitor="val_accuracy", mode="max", verbose=1, save_best_only=True) : 검증 데이터의 정확도가 이전보다 좋아지면 모델 저장. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능.
 
 ###### model train, use
 - model.compile(
