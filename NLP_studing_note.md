@@ -419,6 +419,7 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 
 # NLTK | NLP(영어, 그 외 다른 언어 일부)
 - nltk.download() : NLTK 세트 다운로드. 특정 세트의 이름을 넣으면 그것만 다운로드한다.
+- nltk.Text(tokens) : 토큰들을 다시 문장(iter가능)화. .tokens{토큰확인}, .plot(), .concordance(word){비슷한단어추출}, .vocab(){단어빈도수체크, .most_common(i)사용가능.} 
 
 ### tokenize
 - nltk.tokenize.sent_tokenize(text) : 문장 토큰화함수. 문서를 문장단위로 나눠준다. PunktSentenceTokenizer 인스턴스(문장의 시작과 끝을 표시하는 문자나 문장 기호에 기초해 다른 유럽언어로 토큰화를 수행)를 사용한다. 
@@ -471,6 +472,7 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 
 ### translate
 - nltk.translate.bleu_score(candidate.split(), refrences.split()) : BLEU score 측정. 
+
 
 # tensorflow | 토큰,벡터화,임베딩,RNN등
 ### preprocessing
@@ -550,7 +552,8 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 # KoNLpy | 한글 분석(토큰화, 태깅)
 - konlpy : 한글 분석을 가능하게 함. 자바로 이뤄져 있어 JDK 1.7 이상과 JPype 가 설치되어 있어야 함. 각 분석기는 성능과 결과가 다르게 나와 용도에 따라 적절한 것을 선택해야 함.
 - 종류 : Okt(Open Korea Text, Twitter), 꼬꼬마(Kkma), 메캅(Mecab, 속도 중시), 코모란(Komoran), 한나눔(Hannanum) 등의 형태소 분석기 사용 가능.
-- 함수 : .morphs(text){토큰화, stem=true로 일정 수준의 정규화}, .pos(text){형태소 토큰화 후 품사 태깅}, .nouns(text){명사만} 등이 사용가능하다.
+- 함수 : .morphs(text){토큰화}, .pos(text){토큰화 후 품사 태깅}, .nouns(text){명사만 추출}, .phrases(text){어절만 추출}, .sentences(text){문장을 추출, 일부만}등이 사용가능하다.
+- 매개변수 : .pos(), .morphs() 사용시 norm=bool(일정 수준의 정규화), stem=bool(표제어(원본글자)로 변형) 등의 매개변수를 사용할 수 있음.
   
 - konlpy.tag.Okt() :  Okt 형태소 분석기 객체 생성. 
 - konlpy.tag.Kkma() : 꼬꼬마 형태소 토크나이저 로드. Okt 보다 조금 더 세분화(한 > 하,ㄴ)해 분리하지만 매우 느리다.
@@ -575,11 +578,12 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 # re | 정규표현식
 - 정규 표현식 사용을 지원.
 - 정규표현식
-> - [] : []안의 문자들과 매치. [abc]면 a,b,c중 하나와 매치를 뜻함. [a-c],[a-zA-Z]식으로 범위를 지정할 수 도 있고, 패턴 앞에 ^ 를 붙혀 패턴 부정을 나타낼 수 도 있다.
+> - [] : []안의 문자들 중 하나와 매치. [abc]면 a,b,c중 하나와 매치를 뜻함. [a-c],[a-zA-Z]식으로 범위를 지정할 수 도 있고, 패턴 앞에 ^ 를 붙혀 패턴 부정을 나타낼 수 도 있음. []가 없으면 그 패턴과 정확히 일치.
 > - 특수 문자 : .(임의 문자 1개), ?(앞 문자 0 또는 1개), *(앞 문자 0개 이상), +(앞 문자 1개 이상), ^(뒤 문자로 문자열 시작), $(앞 문자로 문자열 종료)
-> - 특수기호 : \d(숫자), \D(숫자가 아닌것), \s(whitespace, \t\n\r\f\v), \w(문자+숫자), \W(문자+숫자의 부정)등이 있다.
-> - 범위 : 문자{n,m}은 n번 부터 m이하 반복, {n}은 반드시 n번 반복으로 사용된다.
-> - 캡쳐그룹 : 패턴을 ()로 감싸면 캡쳐그룹으로 만듦. \1,\2 등으로 그 순서의 그룹을 패턴에 사용할 수 있음(' \1' 식으로 하나 띄어쓰는 식).
+> - 메타문자 : 정규 표현식 내에서 특수한 역할을 하는 문자. 앞에 \를 붙여야 패턴으로 인식됨. |`$ *+.?([\^{ | 총 12개. []안에선 | \^-] | 만이 메타문자.
+> - 특수기호 : \d(숫자), \D(숫자가 아닌것), \s(whitespace, \t\n\r\f\v), \S(부정), \w(문자+숫자), \W(문자+숫자의 부정), \b(단어경계(단어-비단어)), \B(부정,(단어-단어|비단어-비단어))등이 있다.
+> - 범위 : 문자{n,m}은 n번 부터 m이하 반복, {n}은 반드시 n번 반복으로 사용된다. a|b|c 는 여러 문자중 하나에 매칭임. 
+> - 캡쳐그룹 : 패턴을 ()로 감싸면 캡쳐그룹으로 만듦. \1,\2 등으로 그 순서의 그룹을 사용 가능하며, 매칭되지 않았다면 반환하지 않음. (?P<이름>표현식), (?P=이름)으로 그룹에 이름을 줘 사용.
 
 - re.compile() : 정규 표현식 컴파일. 결과 객체 반환. re.S(.이 \n을 포함하게 함) 등을 매개변수로 줄 수도 있다.
 - re.sub(r'패턴([]X)', 바꿀문자, 바뀔 문장) : 바뀔 문장에서 패턴에 일치하는 부분을 바꿀 문자로 바꾼다.
