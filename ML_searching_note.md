@@ -123,6 +123,7 @@
 - plot - color : r(red),g(green),b(blue),c(cyan),m(magenta),y(yellow),k(black),w(white) , color='css_color_name/#rgb'으로 다양한 색상 지정 가능.
 - plot - LineStyle : -(solid),--(dashed),-.(dashed-dot),:(dotted).
 - plot - Markers : o(circle),s(square),*(star),p(pentagon),+(plus),x(X),D(diamond),|/_(h/v line),^/v/</>(triangle),1/2/3/4(tri)
+- plot - style : plt.style.use(스타일) 로 각종 스타일 사용가능. 종류 - 'seaborn-white', (?)
 
 - plt.title(title) : 그래프 제목 설정. loc-타이틀 위치('right','left'), pad-타이틀&그래프간격, 폰트 크기와 두께 설정 가능.
 - plt.xlabel(text) : x축에 레이블(축제목) 설정.
@@ -506,4 +507,10 @@
 - (?)
 
 # tensorboard
+- (?)
+
+# Ipython
+- (?)
+
+# librosa
 - (?)
