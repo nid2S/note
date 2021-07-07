@@ -123,7 +123,7 @@
 - plot - color : r(red),g(green),b(blue),c(cyan),m(magenta),y(yellow),k(black),w(white) , color='css_color_name/#rgb'으로 다양한 색상 지정 가능.
 - plot - LineStyle : -(solid),--(dashed),-.(dashed-dot),:(dotted).
 - plot - Markers : o(circle),s(square),*(star),p(pentagon),+(plus),x(X),D(diamond),|/_(h/v line),^/v/</>(triangle),1/2/3/4(tri)
-- plot - style : plt.style.use(스타일) 로 각종 스타일 사용가능. 종류 - 'seaborn-white', (?)
+- plot - style : plt.style.use(스타일) 로 각종 스타일 사용가능. 종류는 'seaborn-white'등, plt.style.available 에서 확인가능함.
 
 - plt.title(title) : 그래프 제목 설정. loc-타이틀 위치('right','left'), pad-타이틀&그래프간격, 폰트 크기와 두께 설정 가능.
 - plt.xlabel(text) : x축에 레이블(축제목) 설정.
@@ -265,7 +265,7 @@
 - tf.keras.layers.Dense(노드수,activation="swish/relu")(X) : 전밀집층(모든 노드가 이전 혹은 다음 노드와 연결, 전결합층)제작. input_dim(입력차원)매개변수 사용가능. ((입력의 마지막차원+1(bias))*노드수)개의 파라미터가 생성, (None, 최초입력의 마지막 제외 차원, 노드수) 형태의 반환값을 반환.
  
 - tf.keras.layers.Embedding(총 단어 개수, 결과 벡터의 크기, 입력 시퀀스 길이) : 단어를 밀집벡터로 만듦(임베딩 층 제작, 단어를 랜덤한 값을 가지는 밀집 벡터로 변환 후 학습과정을 거침). (샘플개수, 입력길이)형태의 정수 인코딩이 된 2차원 정수 배열을 입력받아 워드 임베딩 후 3차원 배열을 반환. 
-- tf.keras.layers.Dropout(rate) : Overfitting 을 방지하기 위해 DropOut. rate 는 1 = 100% 다.
+- tf.keras.layers.Dropout(rate) : Overfitting 을 방지하기 위해 DropOut(나온(중간) 값의 일부를 누락시킴). rate 는 1 = 100%.
 - tf.keras.layers.Bidirectional(layer) : 입력한 층을 양방향으로 만들어 줌. SimpleRNN, LSTM 등이 들어감.
 - tf.keras.layers.TimeDistributed(layers) : RNN에서 각 스텝마다 오류를 계산해 하위스텝(앞쪽)으로 전파하게 시킴. return_sequences=True 와 이것을 사용해 RNN이 macy-to-many문제를 해결(시퀀스를 입력받아 시퀀스를 출력)할 수 있도록 함. 각 스텝에서 손실을 계산해 출력을 낼 수 있도록 하며, 없다면 각 스텝의 출력이 마지막 스텝에 모여 순차적으로 FC에 들어가 출력이 된다.
 - tf.keras.layers.LayerNormalization/(layers) : 층 정규화 시행. 
@@ -296,7 +296,7 @@
 
 - functional API : 함수형 API 는 Sequential API 와 달리 각 층을 일종의 함수로 정의.
 - input(shape) 에서 시작해 Dense(node, activation)(inputs) > Dense()(h1) > Dense()(h2) 후 tf.keras.models.Model(input,output) 식으로 구성.  
-- Embedding()(input_layer) 와 Embedding_layer = Embedding() > Embedding_layer(input_layer) 는 차이가 있음/없음 (?)
+- Embedding()(input_layer) 와 Embedding_layer = Embedding() > Embedding_layer(input_layer) 는 둘다 앞(밖)의 모델 call > 뒤(안)의 모델 call | 모델을 잇는것과 인자로 보내는 것의 차이는 있지 않을까 함. (?)
 
 - Subclassing API : Subclassing API 는 모델을 클래스 형태로 제작해 사용. 
                
@@ -316,7 +316,7 @@
   verbose=0 으로 떨어지는 모습을 보지 않을 수 있고, validation_data=(test_data,test_label) 로 테스트용 데이터로 계산한 손실과 정확도를 함꺠 출력시킬 수 있으며,
   callback 매개변수에 callbacks의 함수를 넣어 사용할 수 있음. 여러개면 [one, two]식으로 입력.
   
-- model.save('파일명.h5') : 모델 저장. 모델 전체를 저장하는 게 아니라 가중치 등 일부만 저장한 뒤 재사용(transfer learning)히는 방법도 있음. (?)
+- model.save('파일명.h5') : 모델 저장. 모델 전체를 저장하는 게 아니라 가중치 등 일부만 저장한 뒤 재사용(transfer learning)히는 방법도 있음.
 - model = tf.keras.models.load_model(모델명) : 저장된 모델 로드.  
 - model.evaluate(test_images, test_labels) : 모델 성능 비교. loss, accuracy 순으로 반환. verbose = 0 > silent
 

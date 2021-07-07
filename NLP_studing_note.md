@@ -241,8 +241,8 @@
 ###### 질의응답
 - 질의응답 : 질문에 대한 답변 출력. 
 - 메모리 네트워크 : 두개의 입력(스토리/질문 문장)을 받아 스토리는 두개(A,C), 질문은 하나(B)의 임베딩층을 통해 각각 단어임베딩이 되고,
-  C와 B를 내적을 통해 유사도를 구한 뒤, softmax를 지나 A에 더해짐(어텐션-V,Q,K, 스토리문장표현). 이를 질문표현(질문문장임베딩)과 연결해 LSTM과 밀집층의 입력으로 사용.
-- 이를 이용해 스토리 단어들과 질문 단어의 유사도를 구하고 하는 과정을 거쳐 질의응답기능을 만들 수 있음. (?)
+  이것들에 어텐션(V-B,Q-C,K-A)이 적용됨. 이를 질문표현(질문문장임베딩)과 연결해 LSTM과 밀집층의 입력으로 사용.
+- 이를 이용해 스토리 단어들과 질문 단어의 유사도를 구해 가장 자연스러운 답변을 생성하는 과정을 거쳐 질의응답기능을 만들 수 있음.
 - 챗봇 데이터 : [urllib.request.urlretrieve("https://raw.githubusercontent.com/songys/Chatbot_data/master/ChatbotData%20.csv", filename="ChatBotData.csv")]
 
 #### 머신러닝
@@ -477,10 +477,14 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 # tensorflow | 토큰,벡터화,임베딩,RNN등
 ### preprocessing
 ##### tokenize
-- tf.keras.preprocessing.text.text_to_word_sequence(sentence) : 모든 알파벳을 소문자로 변환, 구두점 제거, 죽약형은 분리하지 않는 단어 토큰화 함수.  정제와 단어 토큰화를 동시에 적용.
-- tf.keras.preprocessing.text.Tokenizer() : 정수 인코딩을 위한 토크나이저 로드. .fit_on_texts(단어집합)으로 단어 빈도수가 높은 순으로 낮은 정수 인덱스를 부여, texts_to_sequences로 변환. .word_index 로 단어와 인덱스를 확인할 수 있고, .word_counts 로 단어의 개수를 확인 할 수 있다. 
-- Tokenizer() : .texts_to_matrix(문장배열,mode='count')로 DTM(인덱스 0부터 시작)을 생성할 수 있다. 모드가 'binary' 면 단어의 존재여부만 보여주는 행렬을, tfidf 는 tfidf 행렬을, freq 는 (단어 등장 횟수/문서 단어 총합)의 행렬을 보여준다.
-- Tokenizer() : filter, lower 매개변수 사용가능. (?)
+- tf.keras.preprocessing.text.text_to_word_sequence(sentence) : 모든 알파벳을 소문자로 변환, 구두점 제거, 죽약형은 분리하지 않는 단어 토큰화 함수. 정제와 단어 토큰화를 동시에 적용.
+- tf.keras.preprocessing.text.Tokenizer() : 정수 인코딩을 위한 토크나이저 로드. .fit_on_texts(단어집합)으로 단어 빈도수가 
+  높은 순으로 낮은 정수 인덱스를 부여, texts_to_sequences로 변환. .word_index 로 단어와 인덱스를 확인할 수 있고, .word_counts 로 단어의 개수를 확인 할 수 있다. 
+- Tokenizer() 매서드 : .texts_to_matrix(문장배열,mode='count')로 DTM(인덱스 0부터 시작)을 생성할 수 있다. 모드가 'binary' 면 단어의 존재여부만 보여주는 행렬을, 
+  tfidf 는 tfidf 행렬을, freq 는 (단어 등장 횟수/문서 단어 총합)의 행렬을 보여준다.
+- Tokenizer() 메개변수 : num_words(단어 빈도순으로 num_words개 보존), filters(걸러낼 문자모음. 디폴트 - !"#$%&()*+,-./:;<=>?@[\]^_`{|}~\t\n),
+  lower(입력 문자열 소문자 변환여부. bool), split(단어분리기준. str), char_level(문자를 토큰으로 취급. bool),
+  oov_token(값이 지정된 경우, text_to_sequence 호출 과정에서 word_index에 추가되어 out-of-vocabulary words를 대채) 매개변수 사용가능.
 ##### vectorize
 - tf.keras.utils.to_categorical(벡터) : 원 핫 인코딩을 해줌. (요소 개수, 요소 종류)의 형태를 가짐.
 - tokenizer.texts_to_sequences(단어집합) : 각 단어를 이미 정해진 인덱스로 변환. 만약 토크나이저 로드시 인수로 i+1을 넣었다면 i 까지의 인덱스를 가진 단어만을 사용하고 나머지는 버린다.
@@ -530,7 +534,8 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 # SentencePiece | subword
 - sentencepiece : BPE를 포함한 기타 서브워트 토크나이징(내부단어분리)알고리즘 내장 패키지. 사전 토큰화 작업 없이 단어분리 토큰화를 수행해 언어무관 사용가능.
   
-- sentencepiece.SentencePieceTraner.Train() : 서브워드 토큰화. 단어 집합과 각 단어를 정수 인코딩. 결과로 설정파일명.model 과 파일명.vocap 의 파일이 생성, vocab 파일에서 학습된 서브워드들을 확인할 수 있음. --매개변수=값 --매개변수-값 식으로도 줄 수 있음(?)
+- sentencepiece.SentencePieceTraner.Train() : 서브워드 토큰화. 단어 집합과 각 단어를 정수 인코딩. 
+  결과로 설정파일명.model 과 파일명.vocap 의 파일이 생성, vocab 파일에서 학습된 서브워드들을 확인할 수 있음.
 - 사용가능 매개변수 : input(학습시킬 파일), model_prefix(만들어질 파일(모델) 이름), vocab_size(단어 집합의 크기), model_type(사용할 모델 (unigram(default), bpe, char, word)).
 - 사용가능 매개변수 : pad_id, pad_piece(pad token id, 값), unk_id, unk_piece(unknown token id, 값), os_id, bos_piece(begin of sentence token id, 값), eos_id, eos_piece(end of sequence token id, 값).
 - 사용가능 매개변수 : max_sentence_length(문장의 최대 길이), user_defined_symbols(사용자 정의 토큰).
