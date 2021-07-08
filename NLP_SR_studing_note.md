@@ -35,3 +35,45 @@
 - 신경망 : 생체의 지능 시스템을 수학적으로 해석.
 - 시뮬레이티드 어닐링 : 고온에서 액체인 물질이 식는 속도에 따라 최종결정상태가 바뀌는 현상을 통해, 함수의 최솟값을 결정할 수 있는 알고리즘 발명.
 - 유전 알고리즘 : 교배, 돌연변이 등을 수학적으로 표현해 결국 최고 인구를 같게 되는 알고리즘. 
+
+
+## CNN in Audio
+- 2DCNN : 주로 사용. 타임과 주파수 영역 모두를 이용해 Conv층을 쌓음. 시감/주파수 두 영역에서 패턴을 찾음.
+- 1DCNN : 시간화 특화된 값을 뽑아낼 때 사용. NLP에서의 CNN과 비슷하게, 커널의 너비를 frequncy로 고정하고 Time에 따라 움직이며 압축을 수행함.
+- Sample CNN : 화자인식등 페이즈(음색등의 정보)영역이 필요한 모델에서 사용. CNN사용시 row한 오디오 인풋을 어느정도 패딩간격을 두며 사용.
+  Sampling rate(1초당 가져오는 소리정보)가 8000/16000/44200정도로 커지며 샘플레벨에서 CNN을 돌리기엔 필요한 연산 과정이 너무 커져 사용. 
+
+## RNN in Audio
+- 입력의 크기(길이)가 어떻든 커버할 수 있고, 모델의 크기가 증가하지 않기에 사용됨.
+- 과거의 정보(Historical Infomation)를 잘 활용하고, 시간축에 따름 가중치 공유가 진행됨.
+
+
+
+#
+***
+
+
+# SpeechRecognition | STT
+- SpeechRecognition : 파이썬 음성인식(STT) 라이브러리. WAV, AIFF, AIFF-C, FLAC 파일 형식을 지원.
+
+- speech_recognition.Recognizer() : Recognizer 객체 생성. 여러 기업에서 제공하는 음성인식 기술 사용 가능.
+- SR객체 음성인식 메서드 : .recognize_/google()/google_cloud()/bing()/houndify()/ibm()/wit()/sphinx().
+  차례대로 {Google Web Speech API}, {Google Cloud Speech}, {Microsoft Bing Speech}, {SoundHound Houndify} 
+  {IBM Speech to Text}, {Wit.ai}, {CMU SPhinx}. sphinx() 제외 모든 함수는 인테넷 연결이 되어야만 사용가능.
+```python  
+# 음성파일을 텍스트화
+with sr.AudioFile(파일명) as source:
+    audio = r.recode(source)  # offset=i로 가져오기 시작할 초를, duration=i 로 가져올 초를 설정할 수 있음.
+txt = r.recognize_google(audio_data=audio, language='en-US')  # 구글 웹 API제외 키 등 필요. 언어는 '언어-국가'('ko-KR':한국어).
+```
+
+
+# pyttsx3 | 음성합성(TTS)
+- 이 외에도 gtts, speech, sound등의 TTS 패키지가 있음.
+```python  
+# TTS 패키지 pyttsx3 사용 예
+import pyttsx3
+engine = pyttsx3.init()
+engine.say(str('Good morning.'))
+engine.runAndWait()
+```
