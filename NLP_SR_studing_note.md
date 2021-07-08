@@ -7,7 +7,10 @@
 - 소리 : 진동으로 인한 공기의 압축. 압축이 된 정도를 파동으로 표시. 대부분의 소리는 복합파(서로다른 정현파의 합으로 이뤄짐).
 - 소리에서 얻을 수 있는 물리량 : 진폭(진폭 세기, 소리크기), 주파수(떨림의 빠르기/압축된정도, 음정/높낮이/진동수), 위상(파동모양, 음색/소리감각).
 
+- 샘플링 : 아날로그 신호(소리)를 디지털 신호로 변환하는 과정. 초당 샘플링 횟수를 샘플링 레이트 라고 함.
 - 푸리에변환 : 임의의 입력신호를 다양한 주파수를 갖는 주기함수(복수지수함수)의 합으로 분해해 표현. 변환 후 복소수(절댓값-주파수강도|phase-위상)를 결과로 얻음.
+
+- 채널 : 정보가 저장된 방식의 개수. 컬러이미지의 경우(RGB) 세가지, 오디오의 경우 녹음과정에서 나눈 소리의 방향(1~7.1까지 있음).
 
 ## 음성
 - 음성 : 사람이 조음기관(목,입,입술 등)을 사용해 뜻을 전달하기 위해 의도적으로 만들어낸 소리. 음소의 합으로 구성되어 있음.
@@ -41,7 +44,7 @@
 - 2DCNN : 주로 사용. 타임과 주파수 영역 모두를 이용해 Conv층을 쌓음. 시감/주파수 두 영역에서 패턴을 찾음.
 - 1DCNN : 시간화 특화된 값을 뽑아낼 때 사용. NLP에서의 CNN과 비슷하게, 커널의 너비를 frequncy로 고정하고 Time에 따라 움직이며 압축을 수행함.
 - Sample CNN : 화자인식등 페이즈(음색등의 정보)영역이 필요한 모델에서 사용. CNN사용시 row한 오디오 인풋을 어느정도 패딩간격을 두며 사용.
-  Sampling rate(1초당 가져오는 소리정보)가 8000/16000/44200정도로 커지며 샘플레벨에서 CNN을 돌리기엔 필요한 연산 과정이 너무 커져 사용. 
+  Sampling rate(1초당 가져오는 소리정보)가 8000/16000/44100정도로 커지며 샘플레벨에서 CNN을 돌리기엔 필요한 연산 과정이 너무 커져 사용. 
 
 ## RNN in Audio
 - 입력의 크기(길이)가 어떻든 커버할 수 있고, 모델의 크기가 증가하지 않기에 사용됨.
@@ -76,4 +79,67 @@ import pyttsx3
 engine = pyttsx3.init()
 engine.say(str('Good morning.'))
 engine.runAndWait()
+```
+
+
+
+# pyaudio | 음성녹음
+- portaudio library를 python을 이용하여 사용할 수 있도록 함.
+  
+- pyaudio.PyAudio() : PyAudio객체 생성.
+  
+- 객체.get_device_count() : 디바이스들의 인덱스 리스트 반환. 
+- 객체.get_device_info_by_index(인덱스) : 디바이스의 정보를 가져옴. desc["name"\], desc["defaultSampleRate"\]등으로 정보 휙득.
+
+- 객체.open(format, channels, rate, input, frames_per_buffer) : 레코드(스트림)객체 오픈. .read(CHUNK)로 소리를 읽을 수 있음. 
+  각 인자들은 FORMAT(pyaudio.paint16, 데이터 저장이 어떤 방식(크기)로 될지 지정), CHANNELS(int, 보통 1), RATE(int, 8000/16000/44100), 
+  RECORD_SECONDS(int, 녹음할 시간. RATE/CHUNK*SEC 로 사용), INPUT(bool, 인풋스트림인지 지정), CHUNK(int, 1024/버퍼당 프레임)를 값으로 받음.
+```python 
+# 소리 녹화
+CHUNK = 1024                # 버퍼당 연산할 프레임(샘플)수.
+FORMAT = pyaudio.paInt16    # 데이터 저장 포맷(16bit/24bit 등)지정.
+CHANNELS = 1                # 녹음과정에서 소리가 녹음된 방향의 개수. 
+RATE = 44100                # 1초당 샘플링할 횟수(가져올 샘플의 개수).
+RECORD_SECONDS = 5          # 녹음할 시간.
+WAVE_OUTPUT_FILENAME = "output.wav"  # 결과 wav 파일 이름.
+
+p = pyaudio.PyAudio()       # pyAudio객체 생성.
+
+# 사전에 설정해둔 값 대로 객체 설정 후 오픈.
+stream = p.open(format=FORMAT,
+                channels=CHANNELS,
+                rate=RATE,
+                input=True,  # 이 스트림이 입력 스트림인지(소리를 입력받는 용도인지)설정
+                frames_per_buffer=CHUNK)
+
+print("Start to record the audio.")
+
+frames = []   # 오디오가 저장될 배열 선언
+
+for i in range(int(RATE / CHUNK * RECORD_SECONDS)):   # 가져온 샘플의 개수를 한번에 읽을 양으로 나눈 뒤 초를 곱한(지정 초 동안 계산할 수)만큼 반복. 
+    data = stream.read(CHUNK)                         # 청크 만큼 음성 데이터를 읽음
+    frames.append(data)                               # 읽어온 음성 데이터를 저장
+
+print("Recording is finished.")
+
+stream.stop_stream()  # 녹음 종료(시작은 open/read)
+stream.close()
+```
+
+# wave
+- .wav 파일의 처리를 위한 패키지
+  
+- wave.open(파일명, 모드) : wave객체 오픈.
+- wf(객체).setnchannels(CHANNELS) : 채널(녹음 과정에서 나눈 방향의 개수. 보통 1, 좌우음향 등이 2)설정. 
+- wf.setsampwidth(오디오객체.get_sample_size(FORMAT)) : 샘플의 길이(한번 샘플링시 얼마나 샘플링 할지. 포맷으로 미리 정의됨)설정.
+- wf.setframerate(RATE) : 프레임당 rate(샘플링 횟수) 설정.
+- wf.writeframes(b''.join(녹화된 소리)) : 바이트단위로 바뀐 소리를 파일에 작성(저장).
+```python 
+# 녹화된 소리를 .wav파일로 저장
+wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
+wf.setnchannels(CHANNELS)
+wf.setsampwidth(p.get_sample_size(FORMAT))
+wf.setframerate(RATE)
+wf.writeframes(b''.join(frames))
+wf.close()
 ```

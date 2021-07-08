@@ -296,7 +296,7 @@
 
 - functional API : 함수형 API 는 Sequential API 와 달리 각 층을 일종의 함수로 정의.
 - input(shape) 에서 시작해 Dense(node, activation)(inputs) > Dense()(h1) > Dense()(h2) 후 tf.keras.models.Model(input,output) 식으로 구성.  
-- Embedding()(input_layer) 와 Embedding_layer = Embedding() > Embedding_layer(input_layer) 는 둘다 앞(밖)의 모델 call > 뒤(안)의 모델 call | 모델을 잇는것과 인자로 보내는 것의 차이는 있지 않을까 함. (?)
+- Embedding()(input_layer) 와 Embedding_layer = Embedding() > Embedding_layer(input_layer) 는 둘다 모델의 층을 연결(functional API)함.
 
 - Subclassing API : Subclassing API 는 모델을 클래스 형태로 제작해 사용. 
                
