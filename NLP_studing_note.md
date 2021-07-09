@@ -616,14 +616,16 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 
 # urllib,unicodedata | url,uni
 - urllib : url 이용 라이브러리. urllib3 은 따로 install, import가 필요함. 
-- urllib.request.urlretrieve(주소, filename) : 주소의 파일을 파일 이름으로 다운로드.
 - urllib3.PoolManager() : url poolManager 로드. url이용에 사용가능.
 - http(Pool).request('GET', url, preload_content=False) : url 오픈. with 등을 이용해 파일객체로 열 수 있고, 다운로드를 위해 shutil이 필요.
+  
+- urllib.request.urlretrieve(주소, filename) : 주소의 파일을 파일 이름으로 다운로드.
 
 - unicodedata.normalize('NFD', s) : 입력한 문자를 폼에 맞춰 유니코드로 변환. 〈NFC〉, 〈NFKC〉, 〈NFD〉, 〈NFKD〉등이 될 수 있음.
 - unicodedata.category(c) : 문자에 할당된 일반 범주(general category)를 문자열로 반환. Mn(Mark, no spacing. 엑센트등 로마자)등과 같이 나옴.
 
 # shutil,zipfile | 파일다운, unzip
 - shutil.copyfileobj(url 파일, out 파일) : url에서 파일을 다운받아 out파일에 저장. 둘 다 파일객체여야 함.
+  
 - zipfile.ZipFile(zipfilepath, 'r') : zip파일객체 오픈. .extractall(path)로 압축을 헤재할 수 있음.
 

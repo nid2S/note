@@ -7,10 +7,14 @@
 - 소리 : 진동으로 인한 공기의 압축. 압축이 된 정도를 파동으로 표시. 대부분의 소리는 복합파(서로다른 정현파의 합으로 이뤄짐).
 - 소리에서 얻을 수 있는 물리량 : 진폭(진폭 세기, 소리크기), 주파수(떨림의 빠르기/압축된정도, 음정/높낮이/진동수), 위상(파동모양, 음색/소리감각).
 
+- 음성파일 형식 : \[무압축] .wav(윈도우)/aiff(맥), \[소실압축] .mp3/aac(Higher quality at lower bitrate)/ogg(Vorbis),
+  \[무손실 압축] .flac/alac, \[?] .m4a/wma
+  
 - 샘플링 : 아날로그 신호(소리)를 디지털 신호로 변환하는 과정. 초당 샘플링 횟수를 샘플링 레이트 라고 함.
 - 푸리에변환 : 임의의 입력신호를 다양한 주파수를 갖는 주기함수(복수지수함수)의 합으로 분해해 표현. 변환 후 복소수(절댓값-주파수강도|phase-위상)를 결과로 얻음.
 
-- 채널 : 정보가 저장된 방식의 개수. 컬러이미지의 경우(RGB) 세가지, 오디오의 경우 녹음과정에서 나눈 소리의 방향(1~7.1까지 있음).
+- 채널 : 정보가 저장된 방식의 개수. 컬러이미지의 경우(RGB) 세가지, 오디오의 경우 녹음과정에서 나눈 소리의 방향/종류(1~7.1 까지).
+
 
 ## 음성
 - 음성 : 사람이 조음기관(목,입,입술 등)을 사용해 뜻을 전달하기 위해 의도적으로 만들어낸 소리. 음소의 합으로 구성되어 있음.
@@ -32,6 +36,7 @@
 - 판정기준 : 화자독립성(화자가 달라져도 기능 수행 가능), 연속단어 처리 가능(단어 사이에 묵음이 없어도 인식 가능), 
   처리 단어수(처리할 수 있는 단어 수) 총 세가지(+인식률,문법,잡음처리)가 판정 기준. 고전 음성인식 알고리즘에선 이 기준들이 상충되기도 함.  
 - 어려움 : 변화가 큰(각 음소/음운의 문장 내 위치, 발화기관 상태에 따라 달라짐)데이터 임.
+
 
 #### 관련 알고리즘
 - 퍼지이론 : 어떤 속성을 나타내는 집합 설정 후, 원소들이 이 집합에 속하는 정도를 0~1로 나타냄. 
@@ -61,13 +66,13 @@
 
 - speech_recognition.Recognizer() : Recognizer 객체 생성. 여러 기업에서 제공하는 음성인식 기술 사용 가능.
 - SR객체 음성인식 메서드 : .recognize_/google()/google_cloud()/bing()/houndify()/ibm()/wit()/sphinx().
-  차례대로 {Google Web Speech API}, {Google Cloud Speech}, {Microsoft Bing Speech}, {SoundHound Houndify} 
-  {IBM Speech to Text}, {Wit.ai}, {CMU SPhinx}. sphinx() 제외 모든 함수는 인테넷 연결이 되어야만 사용가능.
+  차례대로 {Google Web Speech API}, {Google Cloud Speech, google-cloud-speech 설치필요}, {Microsoft Bing Speech}, {SoundHound Houndify} 
+  {IBM Speech to Text}, {Wit.ai}, {CMU SPhinx, PocketSphinx 설치 필요}. sphinx()제외 모든 함수는 인테넷 연결이 되어야만 사용가능.
 ```python  
 # 음성파일을 텍스트화
 with sr.AudioFile(파일명) as source:
-    audio = r.recode(source)  # offset=i로 가져오기 시작할 초를, duration=i 로 가져올 초를 설정할 수 있음.
-txt = r.recognize_google(audio_data=audio, language='en-US')  # 구글 웹 API제외 키 등 필요. 언어는 '언어-국가'('ko-KR':한국어).
+    audio = Recognizer객체.record(source)  # offset=i로 가져오기 시작할 초를, duration=i 로 가져올 초를 설정할 수 있음.
+txt = recognizer객체.recognize_google(audio_data=audio, language='en-US')  # 구글 웹 API제외 키 등 필요. 언어는 '언어-국가'('ko-KR':한국어).
 ```
 
 
@@ -80,7 +85,6 @@ engine = pyttsx3.init()
 engine.say(str('Good morning.'))
 engine.runAndWait()
 ```
-
 
 
 # pyaudio | 음성녹음
@@ -98,7 +102,7 @@ engine.runAndWait()
 # 소리 녹화
 CHUNK = 1024                # 버퍼당 연산할 프레임(샘플)수.
 FORMAT = pyaudio.paInt16    # 데이터 저장 포맷(16bit/24bit 등)지정.
-CHANNELS = 1                # 녹음과정에서 소리가 녹음된 방향의 개수. 
+CHANNELS = 1                # 녹음과정에서 소리가 녹음된 종류(방향)의 개수. 
 RATE = 44100                # 1초당 샘플링할 횟수(가져올 샘플의 개수).
 RECORD_SECONDS = 5          # 녹음할 시간.
 WAVE_OUTPUT_FILENAME = "output.wav"  # 결과 wav 파일 이름.
@@ -126,6 +130,7 @@ stream.stop_stream()  # 녹음 종료(시작은 open/read)
 stream.close()
 ```
 
+
 # wave
 - .wav 파일의 처리를 위한 패키지
   
@@ -143,3 +148,13 @@ wf.setframerate(RATE)
 wf.writeframes(b''.join(frames))
 wf.close()
 ```
+
+
+# PyDub | 오디오데이터 전처리
+- pydub.AudioSegment.from_파일형식(오디오파일명) : 오디오 파일을 불러옴.
+- 오디오파일 속성 : .channels(채널 수), .sample_width(샘플길이), .frame_rate(프레임율), .frame_width(프레임폭)
+- 오디오파일.export(out_f=파일경로.파일형식, format=파일형식(wav)) : 불러온 다른 형식으로 변경.
+- 오디오파일.split_to_채널(mono)() : 음성을 해당 채널로 쪼개 리스트로 반환. 원 채널은 오디오파일.channels로 볼 수 있음.
+
+
+
