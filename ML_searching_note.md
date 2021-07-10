@@ -245,6 +245,7 @@
 ##### data
 - tf.Variable(수식, name="변수명") : 변수 선언 후 수식으로 정의. x+4 식으로 수식을 지정해 변수에 할당하는 방식.
 - tf.constant(상수, name="상수명") : 상수 선언 후 값 지정. y = tf.constant(20, name="y) 식으로 사용.
+  
 - tf.linespace() : (?)
 
 - tf.get_default_graph() : (?)
@@ -255,7 +256,6 @@
 - tf.global_variables_initializer() : 변수 초기화. model에 할당해 초기화를 할 수도 있음. 
 - sess.run(텐서) : 실행. sess.run(model) > sess.run(변수) 식으로 사용할 수 있음.
 - sess.close() : 세션 종료.
-- (?)
 
 - tf.keras.utils.to_categorical(정수 리스트) : 정수 리스트에 따라서 원핫 인코딩. [1,3]을 넣으면 [[0,1,0,0],[0,0,0,1]]을 반환하는 식.
 - tf.lite.TFLiteConverter.from_keras_model(model).converter() | open('파일명.tflite', 'wb') > tf 모델 tflite 바이너리로 변환. 이렇게 변환한 것은 안드로이드 스튜디오의 에셋에 복사 > app 모듈의 build.gradle 에 패키지 추가 > Main_Activity 에서 이미지 바이너리 변환 > Classifier 에서 모델 사용 > Main_Activity 에서 출력 순으로 사용된다.
