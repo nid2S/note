@@ -70,6 +70,7 @@
 
 # pandas
 ***
+(?)
 - 판다스는 시리즈, 데이터프레임, 패널 총 세개의 데이터 구조를 사용함.
   
 - pd.Series(1차원 리스트 , index(인덱스가 될 리스트)) : 시리즈(1차원 배열의 각 값에 대응하는 인덱스를 부여할 수 있는 구조) 생성. 인덱스는 정수뿐 아닌 문자열등도 가능함.
@@ -257,7 +258,7 @@
 - sess.run(텐서) : 실행. sess.run(model) > sess.run(변수) 식으로 사용할 수 있음.
 - sess.close() : 세션 종료.
 
-- tf.keras.utils.to_categorical(정수 리스트) : 정수 리스트에 따라서 원핫 인코딩. [1,3]을 넣으면 [[0,1,0,0],[0,0,0,1]]을 반환하는 식.
+- tf.keras.utils.to_categorical(정수 리스트) : 정수 리스트에 따라서 원핫 인코딩. \[1,3]을 넣으면 \[\[0,1,0,0],\[0,0,0,1]]을 반환하는 식.
 - tf.lite.TFLiteConverter.from_keras_model(model).converter() | open('파일명.tflite', 'wb') > tf 모델 tflite 바이너리로 변환. 이렇게 변환한 것은 안드로이드 스튜디오의 에셋에 복사 > app 모듈의 build.gradle 에 패키지 추가 > Main_Activity 에서 이미지 바이너리 변환 > Classifier 에서 모델 사용 > Main_Activity 에서 출력 순으로 사용된다.
 
 ##### layers
@@ -509,8 +510,3 @@
 # tensorboard
 - (?)
 
-# Ipython
-- (?)
-
-# librosa
-- (?)

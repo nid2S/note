@@ -2,6 +2,18 @@
 [음성인식](../../Git_project/NLP/NLP_SR/SpeechRecognition.py)
 - 음성인식 : 음성을 듣고 이해하는 능력. 사람이 내는 소리를 짧은 단위(음소)로 추출하고, 이를 조합해 소리의 의미/의도를 파악하는 과정.
 - 사람의 음성 인식 : 정보를 음파형태로 받아 > 공기/액체매질을 통과하는 밀도파로 > 코르티기관에서 전기신호로 변환 > 뇌에 전달되며 정보 처리.
+- 음성파일 확인
+```python 
+# 음성 확인
+print("녹음된 소리를 출력합니다.")
+winsound.PlaySound(WAVE_OUTPUT_FILENAME, winsound.SND_FILENAME)     # 음성 재생
+
+plt.style.use("seaborn-white")
+fig = plt.figure(figsize=(14, 4))
+wav, rate = librosa.core.load(WAVE_OUTPUT_FILENAME)
+librosa.display.waveplot(wav, sr=rate)                              # 음성 그래프화
+plt.show()
+```
 
 ## 소리
 - 소리 : 진동으로 인한 공기의 압축. 압축이 된 정도를 파동으로 표시. 대부분의 소리는 복합파(서로다른 정현파의 합으로 이뤄짐).
@@ -96,8 +108,8 @@ engine.runAndWait()
 - 객체.get_device_info_by_index(인덱스) : 디바이스의 정보를 가져옴. desc["name"\], desc["defaultSampleRate"\]등으로 정보 휙득.
 
 - 객체.open(format, channels, rate, input, frames_per_buffer) : 레코드(스트림)객체 오픈. .read(CHUNK)로 소리를 읽을 수 있음. 
-  각 인자들은 FORMAT(pyaudio.paint16, 데이터 저장이 어떤 방식(크기)로 될지 지정), CHANNELS(int, 보통 1), RATE(int, 8000/16000/44100), 
-  RECORD_SECONDS(int, 녹음할 시간. RATE/CHUNK*SEC 로 사용), INPUT(bool, 인풋스트림인지 지정), CHUNK(int, 1024/버퍼당 프레임)를 값으로 받음.
+  각 인자들은 FORMAT(pyaudio.paint16, 데이터 저장이 어떤 방식(크기)로 될지 지정), CHANNELS(int, 보통 1), RATE(int, 샘플링레이트), 
+  RECORD_SECONDS(int, 녹음할 시간. RATE/CHUNK*SEC 로 사용), INPUT(True, OUTPUT일 경우 재생용 스트림), CHUNK(int, 1024/버퍼당 프레임)를 값으로 받음.
 ```python 
 # 소리 녹화
 CHUNK = 1024                # 버퍼당 연산할 프레임(샘플)수.
@@ -157,4 +169,9 @@ wf.close()
 - 오디오파일.split_to_채널(mono)() : 음성을 해당 채널로 쪼개 리스트로 반환. 원 채널은 오디오파일.channels로 볼 수 있음.
 
 
+# winsound | 오디오 재생(윈도우)
+- winsound.PlaySound(파일명, winsound.SND_FILENAME) : 소리재생
 
+
+# librosa | (?)
+- (?)
