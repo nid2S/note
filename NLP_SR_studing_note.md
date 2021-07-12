@@ -76,9 +76,13 @@ plt.show()
 # SpeechRecognition | STT
 - SpeechRecognition : 파이썬 음성인식(STT) 라이브러리. WAV, AIFF, AIFF-C, FLAC 파일 형식을 지원.
 
-- speech_recognition.Recognizer() : Recognizer 객체 생성. 여러 기업에서 제공하는 음성인식 기술 사용 가능.
-- SR객체 음성인식 메서드 : .recognize_/google()/google_cloud()/bing()/houndify()/ibm()/wit()/sphinx().
-  차례대로 {Google Web Speech API}, {Google Cloud Speech, google-cloud-speech 설치필요}, {Microsoft Bing Speech}, {SoundHound Houndify} 
+- speech_recognition.Recognizer() : Recognizer 객체 생성. 여러 기업에서 제공하는 음성인식 기술 사용 가능. 
+- speech_recognition.AudioFile(파일경로/파일객체) : 오디오파일(소스)오픈. 문자열(경로)이거나 io.ByteIO(소스, 이와 비슷한것도 가능)여야 함.
+
+- sr객체.record(오디오소스) : STT API를 사용할 수 있도록 sr객체에 오디오소스를 등록.   
+
+- SR객체 음성인식 메서드 : sr객체.recognize_/google()/google_cloud()/bing()/houndify()/ibm()/wit()/sphinx().
+  차례대로 {Google Web Speech API}, {Google Cloud Speech, google-cloud-speech 설치필요}, {Microsoft Bing Speech}, {SoundHound Houndify},
   {IBM Speech to Text}, {Wit.ai}, {CMU SPhinx, PocketSphinx 설치 필요}. sphinx()제외 모든 함수는 인테넷 연결이 되어야만 사용가능.
 ```python  
 # 음성파일을 텍스트화
@@ -110,6 +114,8 @@ engine.runAndWait()
 - 객체.open(format, channels, rate, input, frames_per_buffer) : 레코드(스트림)객체 오픈. .read(CHUNK)로 소리를 읽을 수 있음. 
   각 인자들은 FORMAT(pyaudio.paint16, 데이터 저장이 어떤 방식(크기)로 될지 지정), CHANNELS(int, 보통 1), RATE(int, 샘플링레이트), 
   RECORD_SECONDS(int, 녹음할 시간. RATE/CHUNK*SEC 로 사용), INPUT(True, OUTPUT일 경우 재생용 스트림), CHUNK(int, 1024/버퍼당 프레임)를 값으로 받음.
+  
+- 스트림.read(CHUNK) : CHUNK만큼 소리 녹음. CHUNK개의 샘플(프레임)을 스트림(소리)에서 읽어옴.
 ```python 
 # 소리 녹화
 CHUNK = 1024                # 버퍼당 연산할 프레임(샘플)수.
@@ -120,7 +126,6 @@ RECORD_SECONDS = 5          # 녹음할 시간.
 WAVE_OUTPUT_FILENAME = "output.wav"  # 결과 wav 파일 이름.
 
 p = pyaudio.PyAudio()       # pyAudio객체 생성.
-
 # 사전에 설정해둔 값 대로 객체 설정 후 오픈.
 stream = p.open(format=FORMAT,
                 channels=CHANNELS,
