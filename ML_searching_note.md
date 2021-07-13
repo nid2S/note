@@ -39,7 +39,8 @@
 - np.percentile(배열, [분위]) : 배열에서 분위에 해당하는 샘플을 추출해 반환. [0,25,50,75,100]식으로 지정하면 된다.
   
 - np.dot(배열1, 배열2) : 내적곱(점곱) 생성. 배열1의 열 개수와 배열 2의 행 개수가 동일해야 함. 1의 행과 2의 열 개수를 가짐. 행렬곱의(i,j)는 (1의 i행합 * 2의 j열합)의 요소값을 가짐. 2차원에서는 아래와 같으나 고차원에서는 다른 역할을 수행함.
-- np.matmul(배열1, 배열2)   행렬곱 생성. 2차원 이상의 배열은 2차원 배열을 여러개 가지고 있다 보기에((1,2,3,4) > (3,4)를(1,2)개) 행렬 1의 마지막 차원 요소 개수와 행렬2의 뒤에서 두번째 차원 요소 개수가 같아야 한다.
+- np.matmul(배열1, 배열2) : 행렬곱 생성. 2차원 이상의 배열은 2차원 배열을 여러개 가지고 있다 보기에((1,2,3,4) > (3,4)를(1,2)개) 행렬 1의 마지막 차원 요소 개수와 행렬2의 뒤에서 두번째 차원 요소 개수가 같아야 한다.
+- np.square(배열) : 배열의 제곱 반환.
 - np.float32(배열) : ndarray 의 데이터 타입을 변환. 다른타입도 가능, 부동소수점 데이터 유형으로 변환시 작업 중 오버플로우를 방지의 기능이 있음.
 - np.argmax(배열) : 배열중 최대치의 인덱스 반환
 - np.mean(배열) : 배열의 평균을 출력. (x == y)식으로 하면 두 배열의 동일도를 받아볼 수 있음.
@@ -155,43 +156,6 @@
 - plt.show() : 생성한 plot(그래프)를 보여줌.
 
 
-# plotnine
-***
-- (plotnine.ggplot(petitions)  : 데이터로 그래프 제작
--  plotnine.aes('category')  : 데이터 축 설정. x='' , y='' 식으로 레이블을 지정하지 않고 하나만 지정하면 x로 들어감.
--  plotnine.geom_bar(fill='green')) : 데이터 종류 설정. geom_point() 식으로 하면 산점도 타입이다.
-- plotnine.ggplot(data=데이터, mapping= plotnine.aes(x=, y=, color=) + plotnine.geom_point(alpha=f)) : 식으로도 가능하다.   
-
-
-# wordcloud
-***
-> wordcloud = wordcloud.WordCloud(  : 워드 클라우드 제작. plt imshow 로 출력.
->                        font_path = fontpath, 
->                        stopwords = [문자열 리스트], 
->                        background_color = 색('white'), 
->                         width = width, height = height).generate(data)
-
-
-# Scipy
-***
-- scipy.sparse.csr_matrix(eye) > 주어진 배열 중 0이 아닌 요소만 위치와 값을 저장(희소행렬).
-- scipy.sparse.coo_matrix((ones, (arange, arange)) > 주어진 배열 중 0이 아닌 요소만 위치와 값을 저장(희소행렬).
-
-
-# mglearn
-***
-- mglearn.discrete_scatter(X[:, 0, X[:, 1], y) > 산점도를 그림.
-
-- mglearn.dataset.make/load_데이터이름() > 데이터셋 로드.
-- mglearn.dataset.make_forge() > 인위적인 이진분류 대이터셋 로드. x,y에 각각 특성이 들어간다.
-
-- mglearn.plots.plot_모델이름() > 그 모델의 그래프를 그리는 듯.
-- mglearn.plots.plot_2d_classification(fit 된 모델, X, fill=bool, alpha=) > 선형 이진 분류 그래프를 결정경계와 함께 그린다.
-- mglearn.plots.plot_knn_classification(n_neighbors = k) > knn 분류를 그래프로 그림.
-- mglearn.plots.plot_knn_regression(n_neighbors = k) > knn 회귀를 그래프로 그림.
-- mglearn.plots.plot_ridge_n_samples() > 리지 회귀를 그래프로 그림.
-
-
 # dlib
 ***
 - viola & Jones 알고리즘 > Face Detection(얼굴에 Bounding Box) 가능하게 함. Face Landmark Detection 이 더 자세한 개념.
@@ -253,12 +217,30 @@
 - tf.Variable(수식, name="변수명") : 변수 선언 후 수식으로 정의. x+4 식으로 수식을 지정해 변수에 할당하는 방식.
 - tf.constant(상수, name="상수명") : 상수 선언 후 값 지정. y = tf.constant(20, name="y") 식으로 사용.
   
-- tf.linespace() : (?)
+- tf.zeros/ones(shape) = shape대로 0/1으로 채워진 텐서 생성. 
+- tf.random.uniform(shape, min, max) : shape형태의, min~max사이의 랜덤 값을 가진 텐서 생성.
+- tf.random.normal(shape, mean, stddev) : shape형태의, 평균이 mean이고 표준편차가 stddev인(기본은 0,1) 랜덤 값을 가진 정규분포 텐서 생성.
+- tf.rank(텐서) : 텐서의 랭크(차원), 모양, 데이터 타입 출력. tf.Tensor(rank, shape=(), dytpe=type).  
+  
+- tf.add/subtract/multiply(텐서a, 텐서b) : 텐서에 대한 연산 지원. 이 세가지 말고도 다양한(넘파이에서 되는건 대부분)연산을 지원.
+- tf.matmul(텐서a, 텐서b) : 두 텐서간 행렬곱. transpose_a/b = True 로 두 행렬중 하나를 전치 후 곱할 수 있음.
+- tf.transpose(텐서) : 텐서의 모양을 반전함. ().T
+- tf.cast(자료형) : 자료형 변환.
+- tf.convert_to_tensor(배열(ndarray)) : 배열 텐서로 변환
+- 텐서.numpy() : 텐서 넘파이 변환.
+- 텐서\[..., i, tf.newaxis] : 행은 자동으로, 열은 i로 형상변환. 평범한 슬라이스([i:j, i:j\])도 지원.  
 
-- tf.get_default_graph() : (?)
-- tf.summary.Filewriter() : (?)
+- @tf.function : 데코레이터 아래의 함수를 텐서플로우 함수로 변환. 자동그래프(빠른 연산)생성, GPU연산가능 등의 특징이 있음. 
+  파이썬의 함수를 텐서플로우의 그래프(텐서로 자료형,연산 등)형태로 다루고 싶을때 사용. 원본 함수는 (tf.funciton).python_function()으로 받을 수 있음.
+- tf.function(함수) : 함수를 텐서플로우 함수로 변환. 내부에서의 연산, 반환값 등이 모두 텐서가 됨.
+- tf.autograph.to_code(파이썬함수) : 코드(함수)를 기반으로 그래프함수 제작.
 
-- session : 일종의 실행창. 텐서의 내용과 연산 결과를 볼 수 있음. 세션 선언, 실행, 종료 문으로 구분됨.
+- Autograd(자동미분) : tf.GradientTape API 이용, 일부입력(tf.Variable등)에 대한 기울기 계산. 기본적으로 한번만 사용, 변수가 포함된 연산만 기록함.
+- tf.GradientTape().gradient(식, 변수) : 식을 변수로 미분한 값을 반환. 변수는 리스트 형태로 여러개 입력할 수 있고, 결과인 미분값로 리스트 형태로 반환됨.
+  presistent=True로 설정하지 않으면 하나에 식에 대해 한번의 호출만 가능.
+  
+- session : 일종의 실행창. 텐서의 내용과 연산 결과를 볼 수 있음. 세션 선언, 실행, 종료 문으로 구분됨. 
+  1.x버전에선 그래프생성 > 초기화 > 세션을 통해 값을 흐르게 하는 과정을 거쳐야만 실행이 가능했음(즉시실행모드(EagerMode, EagerTensor) 미지원).
 - tf.Session() : 세션 선언.
 - tf.global_variables_initializer() : 변수 초기화. model에 할당해 초기화를 할 수도 있음. 
 - sess.run(텐서) : 실행. sess.run(model) > sess.run(변수) 식으로 사용할 수 있음.
@@ -305,8 +287,8 @@
 - input(shape) 에서 시작해 Dense(node, activation)(inputs) > Dense()(h1) > Dense()(h2) 후 tf.keras.models.Model(input,output) 식으로 구성.  
 - Embedding()(input_layer) 와 Embedding_layer = Embedding() > Embedding_layer(input_layer) 는 둘다 모델의 층을 연결(functional API)함.
 
-- Subclassing API : Subclassing API 는 모델을 클래스 형태로 제작해 사용. 
-               
+- Subclassing API : Subclassing API 는 모델을 클래스 형태로 제작해 사용. tf.keras.Model을 상속시키고, init에서 입력과 사용할 층을 정의, call에서 층을 쌓아(연결해)반환.
+  
 - model.summary() : 모델의 정보(layer(type), outputShape, param(파라미터(매개변수, 노드)수))를 확인할 수 있음
 
 - tensorflow.keras.callbacks.EarlyStopping(monitor="val_loss", mode="min", verbose, patience) : 과정합 방지를 위한 조기 종료 설정. patience회 검증 데이터의 손실이 증가하면 학습을 조기종료함. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능.
@@ -510,9 +492,49 @@
 - os.path.exists(경로) : 파일 혹은 디렉토리의 존재 여부를 반환.
 - os.path.getsize(경로) : 파일의 크기 반환.
 
+
+# plotnine
+***
+- (plotnine.ggplot(petitions)  : 데이터로 그래프 제작
+-  plotnine.aes('category')  : 데이터 축 설정. x='' , y='' 식으로 레이블을 지정하지 않고 하나만 지정하면 x로 들어감.
+-  plotnine.geom_bar(fill='green')) : 데이터 종류 설정. geom_point() 식으로 하면 산점도 타입이다.
+- plotnine.ggplot(data=데이터, mapping= plotnine.aes(x=, y=, color=) + plotnine.geom_point(alpha=f)) : 식으로도 가능하다.   
+
+
+# wordcloud
+***
+> wordcloud = wordcloud.WordCloud(  : 워드 클라우드 제작. plt imshow 로 출력.
+>                        font_path = fontpath, 
+>                        stopwords = [문자열 리스트], 
+>                        background_color = 색('white'), 
+>                         width = width, height = height).generate(data)
+
+
+# Scipy
+***
+- scipy.sparse.csr_matrix(eye) > 주어진 배열 중 0이 아닌 요소만 위치와 값을 저장(희소행렬).
+- scipy.sparse.coo_matrix((ones, (arange, arange)) > 주어진 배열 중 0이 아닌 요소만 위치와 값을 저장(희소행렬).
+
+
+# mglearn
+***
+- mglearn.discrete_scatter(X[:, 0, X[:, 1], y) > 산점도를 그림.
+
+- mglearn.dataset.make/load_데이터이름() > 데이터셋 로드.
+- mglearn.dataset.make_forge() > 인위적인 이진분류 대이터셋 로드. x,y에 각각 특성이 들어간다.
+
+- mglearn.plots.plot_모델이름() > 그 모델의 그래프를 그리는 듯.
+- mglearn.plots.plot_2d_classification(fit 된 모델, X, fill=bool, alpha=) > 선형 이진 분류 그래프를 결정경계와 함께 그린다.
+- mglearn.plots.plot_knn_classification(n_neighbors = k) > knn 분류를 그래프로 그림.
+- mglearn.plots.plot_knn_regression(n_neighbors = k) > knn 회귀를 그래프로 그림.
+- mglearn.plots.plot_ridge_n_samples() > 리지 회귀를 그래프로 그림.
+
+
 # Scrapy
 - (?)
 
 # tensorboard
 - (?)
 
+# timeit
+- timeit.timeit(함수) : 함수의 시작부터 끝까지 걸린 시간을 측정.
