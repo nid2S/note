@@ -8,16 +8,16 @@
 - 대부분의 이미지 형식은 image header 와 data 부분으로 나뉨.
 - numpy 에 저장되는 색 데이터는 당시 유행했던 BGR 방식을 채용했음.
 
-- 머신러닝 과정은 크게 데이터 수집 > 데이터 점검,탐색(분석) > 전처리,정제 > 모델링,훈련 > 평가 > 배포 총 6단계로 나뉜다. 
+- 머신러닝 과정은 크게 데이터 수집 > 데이터 점검,탐색(분석) > 전처리,정제 > 모델링,훈련 > 평가 > 배포 총 6단계로 나뉜다.
 - 머신러닝에 이용되는 라이브러리 중에서는 lasagna 라는 theano 기반 라이브러리도 있다.
 
 
 # numpy
 ***
 - numpy : 수치연산에 최적화. 배열,행렬,배열에서 작동하는 다양한 수학함수를 지원, 배열의 모양은 각 차원을 따라 크기를 제공하는 정수형 튜플. 다차원 배열 슬라이싱을 하려면 각 차원별로 슬라이스 범위를 지정해 줘야 함.
-  
+
 - np.array(리스트) : 리스트에 해당하는 배열 생성
-- np.array([[1,1,1],[2,2,2]]) : 2행 3열짜리 2차원 np배열 생성. shape()로는 (2,3)이 출력되며, x[1,2] 식으로 두번째 열의 세번째 요소를 뽑아낼 수 있다. 
+- np.array([[1,1,1],[2,2,2]]) : 2행 3열짜리 2차원 np배열 생성. shape()로는 (2,3)이 출력되며, x[1,2] 식으로 두번째 열의 세번째 요소를 뽑아낼 수 있다.
 
 - np.array() : 리스트, 튜플, 배열로 부터 ndarray 생성
 - np.asarray() : 기존의 array 로  부터 ndarray 생성
@@ -35,9 +35,9 @@
 - np.sin(x) : 사인 함수를 이용해 배열 x와 대응하는 배열 생성
 - np.random.permutation(i) : i 까지 랜덤으로 섞인 배열 반환.
 - np.random.seed(i) : random 유사난수화. 랜덤에서 난수 생성시 사용되는 시드를 고정시켜 유사난수로 만든다.
-- np.unique(배열) : 배열에 있는 값의 종류를 배열로 반환.  
+- np.unique(배열) : 배열에 있는 값의 종류를 배열로 반환.
 - np.percentile(배열, [분위]) : 배열에서 분위에 해당하는 샘플을 추출해 반환. [0,25,50,75,100]식으로 지정하면 된다.
-  
+
 - np.dot(배열1, 배열2) : 내적곱(점곱) 생성. 배열1의 열 개수와 배열 2의 행 개수가 동일해야 함. 1의 행과 2의 열 개수를 가짐. 행렬곱의(i,j)는 (1의 i행합 * 2의 j열합)의 요소값을 가짐. 2차원에서는 아래와 같으나 고차원에서는 다른 역할을 수행함.
 - np.matmul(배열1, 배열2) : 행렬곱 생성. 2차원 이상의 배열은 2차원 배열을 여러개 가지고 있다 보기에((1,2,3,4) > (3,4)를(1,2)개) 행렬 1의 마지막 차원 요소 개수와 행렬2의 뒤에서 두번째 차원 요소 개수가 같아야 한다.
 - np.square(배열) : 배열의 제곱 반환.
@@ -47,7 +47,7 @@
 - np.expand_dims(np 배열,index) : np 배열의 index 위치에 데이터를 추가해 차원을 늘림.
 - np.reshape(배열, 차원) : 배열을 같은 크기의 다른 형태로 차원 변형. 요소의 총 개수는 같아야 함. 차원에 -1이 들어갔다면 개수에 맞게 알아서 지정된다는 뜻임.
 
-- np.linalg.svd(ndarray) : SVD 사용. SVD 대로 직교행렬 U, 대각 행렬의 특이값 리스트 S, 또 다른 직교행렬 VT 를 반환함.  
+- np.linalg.svd(ndarray) : SVD 사용. SVD 대로 직교행렬 U, 대각 행렬의 특이값 리스트 S, 또 다른 직교행렬 VT 를 반환함.
 
 - ndarray.flags : 어레이의 메모리 레이아웃에 대한 정보.
 - ndarray.shape : 배열 차원의 튜플.
@@ -57,7 +57,7 @@
 - ndarray.dtype : 배열의 데이터 타입.
 - ndarray.data : 배열 데이터의 시작을 가리키는 파이썬 버퍼 객체.
 - ndarray.nbytes : 배열의 요소가 사용한 총 바이트.
-- ndarray.T : 배열의 행과 열의 크기 교체.  
+- ndarray.T : 배열의 행과 열의 크기 교체.
 - ndarray.round(i) : 배열의 소수의 소수점 이하 i까지 출력.
 
 - np.save(이름,배열) : 1개의 배열을 NumPy format 의 바이너리 파일로 저장.
@@ -66,62 +66,80 @@
 - np.load(경로) : 저장된 ndarray 파일을 load. close()를 해주어야 하며, 닫은 후에는 불러온 파일을 사용할 수 없다.
 
 - np.savetext() : 여러개의 배열을 텍스트 파일로 저장. header="", footer="" 로 파일 시작과 끝에 #으로 시작하는 주석을 달아 줄 수 있고, fmt="%.1f" 식으로 들어가는 인수들에 대한 포맷을 지정할 수 있다.
-- np.loadtext() : 텍스트 파일을 배열로 불러옴. ndarray로 불려옴. 
+- np.loadtext() : 텍스트 파일을 배열로 불러옴. ndarray로 불려옴.
 
 
 # pandas
 ***
-(?)
 - 판다스는 시리즈, 데이터프레임, 패널 총 세개의 데이터 구조를 사용함.
-  
-- pd.Series(1차원 리스트 , index(인덱스가 될 리스트)) : 시리즈(1차원 배열의 각 값에 대응하는 인덱스를 부여할 수 있는 구조) 생성. 인덱스는 정수뿐 아닌 문자열등도 가능함.
-- pd.DataFrame(2차원 리스트, index(행이름), columns(열이름)) : 데이터프레임(행과 열이 존재)생성. index 나 columns 등을 안쓰면 0부터 자동할당되고, 리스트,시리즈,딕셔너리(키가 열이름),ndarray 등으로도 생성할 수 있음.
+- 시리즈 : 1차원 배열, 딕셔너리. 1차원 배열의 각 값에 해당하는 인덱스를 부여할 수 있는 구조.
+- 데이터프레임 : 2차원 배열. 행과 열이 존재하는 배열. 시리즈의 모음.
+- 패널 : 3차원 배열. 데이터프레임의 모음.
 
-- pd.read_csv("/경로/파일명.csv") : 파일읽기. 자신과 같은 디렉토리에 있으면 그냥 써도, 그냥 웹상의 주소를 써도 됨. 문자열의 형태로 읽힌다.
-- pd.get_dummies(범주형 데이터) : one hot encoding. 범주형 종속변수가 그 종류만큼 (이름)_(데이터이름)의 형태로 나뉜다.
+- pd.Series(1차원 리스트 , index(인덱스가 될 리스트)) : 시리즈생성. 인덱스는 정수뿐만 아니라 문자열등도 가능하며, 배열을 제외한 모든 인수는 생략 가능함.
+- pd.DataFrame(리스트, index(행이름), columns(열이름)) : 데이터프레임 생성. index나 columns생략시 0부터 자동할당, 리스트,시리즈,딕셔너리,ndarray 등으로 생성, 인덱스등 가능.
+- pd.DataFrame.from_dict(dict) : 딕셔너리를 데이터프레임 객체로 바꿈. Collection의 OrderedDictionary를 사용하면 좋음.
+- pd.DataFrame.from_records(리스트, columns=열이름리스트) : 리스트틀로부터 데이터프레임 생성.
+- pd.DataFrame.from_items(리스트([열이름, 값리스트\]형태)) : 주어진 리스트대로 데이터프레임 생성.
 
-- df.columns  : 칼럼이름 Index 객체로 반환.
+- pd.read_csv(파일경로) : 파일읽기. csv파일이 아니더라도 읽을 수 있고, delimiter(구분이 될 문자 지정), header(헤더설정, None으로 해주면 첫번째 열이 해더가 되지 않음.), name(각 열의 이름 설정)등의 인수를 쓸 수 있음.
+- pd.get_dummies(범주형 데이터) : one hot encoding. 나오는 값들이 그 종류만큼 (이름)_(데이터이름)의 형태로 나뉨.
+- pd.concat(df1, df2) : 두 데이터프레임을(행으로)합침. ignore_index=True로 기존의 인덱스를 무시하고 이어넣을 수 있음. append와 동일한 기능을 함.
+- pd.concat([df1, df2\], axis=1) : 두 데이터프레임을 열로 함침. 인덱스가 동일한 항목들의 열을 합쳐 칼럼이 늘어나게 함. ignore_index를 사용하면 순서대로 합쳐짐. 딕셔너리로 넣어 열이름을 주고 합칠수도 있음({"label":label, "pred":pred"} 식).
+
+- df.columns : 칼럼이름 Index 객체로 반환. 여기에 값을 할당해 헤더를 지정해 줄 수도 있음.
 - df.values  : 값들 배열형태로 반환.
-- df.index : 인덱스+타입 Index 객체로 반환. 
+- df.index   : 인덱스+타입 Index 객체로 반환.
 - df.columns : 칼럼+타입 Index 객체로 반환.
-- df.values : 값만 리스트로 반환.
+- df.values  : 값만 리스트로 반환.
+- df.loc[인덱스\] : 데이터 로드. 값만 받는 그냥 인덱스와 다르게 받아볼 수 있음.
+- df.iloc[인덱스\] : 인덱스와 함께 데이터 로드.
 
-- df.head() : 위쪽 데이터 5개. 
+- df["칼럼명"\] : 그 열의 인덱스, 값 들, 이름, 데이터 타입 출력. 차원이 여러개일 경우는 [5, 1:3\]처럼 차원별로 인덱스를 지정해 주어야 함.
+- df["칼럼1","2","3"\] : 열(칼럼) 다중 선택. [칼럼1:칼럼3\]식으로 선택할 수 도 있음.
+- df[dataFrame.Age == 30\] : 데이터를 선택해서(조건을 줘서)표시 가능
+
+- df.head() : 위쪽 데이터 5개.
 - df.tail() : 끝쪽 데이터 5개. 안에 숫자를 넣으면 그 숫자큼 나옴.
 - df.info() : 데이터프레임의 정보 볼 수 있음
-- df.isna().sum() : na의 위치(혹은 개수, 결측치)를 확인 할 수 있음.
 - df.mean() : 데이터들의 평균값을 얻을 수 있움.
+- df.reset_index() : 인덱스 리셋. 인덱스를 0부터 시작하게 함.
 - df.plot() : 데이터를 가지고 그래프를 그림. kind="bar" 등으로 종류를 지정해 줄 수 도 있음.
-- df.groupby([열]) : group by. 그룹에 맞춰 가져옴. 그 열의 데이터가 같은걸 모아 출력.
-- df.drop_duplicate(subset=[열이름], inplace=True) : 열에서 중복 내용 제거.
+- df.isna()/isnull() : 데이터프레임속 값이 널값인지 여부를 표시. .sum()으로 널값의 총 개수를 확인할 수 있음.
+- df.fillna(널값을 대체할 값) : 널값을 다른값으로 대체함. df.열이름.fillna()로 속성별로 다르게 널값을 바꿀수 도 있음. inplace=bool로 데이터프레임에 바로 적용되게 할건지 결정가능.
+  df[na열이름\].fillna(df.groupbu(열이름)[na열이름\].transform("median"(바꿀값, max등)), inplace=True)처럼 사용해 na를 그럴듯한(중간값)으로 설정하는것도 가능.
+- df.duplicated() : 행마다 중복된 데이터인지 반환. 인자로 열을 넣어 중복기준 설정 가능(생략시 모든 내용이 동일해야 함).
+- df.drop_duplicate() : 열에서 중복 내용 제거. 인자로 열을 넣어 중복기준 설정가능, keep="lsat"로 중복된 값 중 마지막 값을 유지할 수 있음(first가 기본).
   
-- 데이터["칼럼명"] : 그 열의 인덱스, 값 들, 이름, 데이터 타입 출력. 차원이 여러개일 경우는 [5, 1:3]처럼 차원별로 인덱스를 지정해 주어야 함.
-- 데이터["칼럼1","2","3"] : 열(칼럼) 다중 선택. [칼럼1:칼럼3]식으로 선택할 수 도 있음.
-- 데이터[dataFrame.Age : 30] : 이런식으로 데이터를 선택해서 표시할 수도 있음
+- df.filter(조건) : 조건에 맞게 데이터를 가져옴. 조건은 문자열(like가능)이나, regex인수를 이용해 정규표현식등이 가능하고, axis등의 인수가 사용가능함.  
+- df.groupby([열\]) : group by. 그룹에 맞춰 가져옴. 그 열의 데이터가 같은걸 모음. .groups로 생성된 그룹과 해당 그룹의 인덱스, 데이터타입을 확인할 수 있음. __next__시 그룹이름과 그룹요소 개수가 나옴.
+- df.query(조건) : 데이터프레임에서 조건에 맞는 값들을 가져옴. 인덱스에 조건을 넣는 것과 동일.
+- df.append(df2) : 데이터프레임에 데이터프레임을(행으로)추가. ignore_index=True로 본래의 인덱스를 무시하고 기존값에 인덱스를 이어 넣을 수 있음. axis=1로 열로 합칠 수 있음.
+- df.to_csv(filename) : 데이터 프레임을 csv파일로 저장. index=bool. header=bool 인수로 인덱스,헤더의 존재여부를, na_rep인수로 na를 어떻게 표시할지를 설정 가능.
+  
+- df[칼럼명\].astype("int/float") : 데이터 수치형으로 변경. df[칼럼명\]은 df.칼럼명 과 같음.
+- df[칼럼명\].astype("category") : 데이터 범주형으로 변경. 원핫인코딩이 가능해짐.
+- df[칼럼명\].apply(함수) : 데이터프레임 해당 열속 모든 행에 함수를 적용. 함수는 row(이름달라도 가능)를 꼭 인자로 받아야함. 함수에 직접 값을 전달하려면 apply(함수, 변수명=값)식으로 가능, 함수 내부에서 row.열이름 으로 행의 특정 값에 접근가능.
+- df[칼럼명\].map(함수/딕셔너리) : 데이터프레임 해당 열(칼럼)속 모든 행에 주어진것을 적용. 함수 전달시 apply와 동일하게 사용,작동. 딕셔너리는 {원래값:바뀔값}형식으로 넣어 데이터프레임(해당 행)의 값을 바꿀 수 있음.
+- df.applymap(함수) : 데이터프레임속 모든 값에 함수를 적용.
+- df[칼럼명\].nunique() : 열에서 중복된 샘플을 제외한 샘플의 개수 출력. 중복된 값이 있다면 단 하나의 값만 남게 됨.
+- df[칼럼명\].value_counts() : 그 칼럼에 등장하는 값의 종류를 그 값이 나온 수와 함께 나타냄.
+- df[칼럼명\].replace(요소1, 요소2) : 그 칼럼의 값 중 요소 1과 일치하는 값을 요소 2로 바꿈. [x1,x2\],[y1,y2\] 식으로 넣어 여러개의 값을 변환할 수 도 있음.
+- df[칼럼명\].str.replace(패턴, 바꿀 값) : 정규 표현식 패턴에 일치하는 값을 바꿈.
 
-- 데이터.loc[인덱스] : 데이터 로드. 값만 받는 그냥 인덱스와 다르게 받아볼 수 있음.
-- 데이터["칼럼명"].astype("int/float") : 데이터 수치형으로 변경
-- 데이터["칼럼명"].astype("category") : 데이터 범주형으로 변경. 원핫인코딩이 가능해짐.
-- 데이터["칼럼명"].replace(요소1, 요소2) : 그 칼럼의 값 중 요소 1과 일치하는 값을 요소 2로 바꿈. [x1,x2],[y1,y2] 식으로 넣어 여러개의 값을 변환할 수 도 있음.
-- 데이터["칼럼명"].fillna(평균값) : 특정 열의 na에 평균값을 넣어 오류를 없앨 수 있음.
-- 데이터["칼럼명"].value_counts() : 그 칼럼에 등장하는 값의 종류를 그 값이 나온 수와 함께 나타냄.
-- 데이터["칼럼명"].nunique() : 열에서 중복된 샘플을 제외한 샘플의 개수 출력. 중복된 값이 있다면 단 하나의 값만 남게 됨.
-- 데이터["칼럼명"].str.replace(패턴, 바꿀 값) : 정규 표현식 패턴에 일치하는 값을 바꿈.
-  
-- 차트 = 데이터.plot(kind='bar', title='날씨', figsize=(12, 4), legend=True, fontsize=12) : 차트 종류,제목,크기,범례 유무,폰트 크기 설정
+- 차트 = df.plot(kind='bar', title='날씨', figsize=(12, 4), legend=True, fontsize=12) : 차트 종류,제목,크기,범례 유무,폰트 크기 설정
 - 차트.set_xlabel('도시', fontsize=12)          # x축 정보 표시
-- 차트.set_ylabel('기온/습도', fontsize=12)     # y축 정보 표시
-- 차트.legend(['기온', '습도'], fontsize=12)    # 범례 지정
+- 차트.set_ylabel('기온/습도', fontsize=12)      # y축 정보 표시
+- 차트.legend(['기온', '습도'\], fontsize=12)    # 범례 지정
 
 - pip install -U pandas-profiling 로 설치할 수 있는 pandas_profiling 은 명령어 한번으로 데이터 탐색을 시켜준다.
-- df.profile_report() : 프로파일 결과를 반환. .to_file('경로.html')로 html 으로도 확인할 수 있다. 
-
+- df.profile_report() : 프로파일 결과를 반환. .to_file('경로.html')로 html 으로도 확인할 수 있다.
 
 # matplotlib.pyplot
 ***
-- plt.plot(정수형 리스트) : 리스트대로 선 또는 마커그래프 생성. 리스트를 한개 넣으면 y값 으로 인식하고 x를 자동생성하고, 두개면 순서대로 x,y 라고 인식한다. 
+- plt.plot(정수형 리스트) : 리스트대로 선 또는 마커그래프 생성. 리스트를 한개 넣으면 y값 으로 인식하고 x를 자동생성하고, 두개면 순서대로 x,y 라고 인식한다.
 - plt.plot(정수형 리스트, 'ro') : ro - 빨간색 원형 마커. 이런식으로 색과 그래프 마커를 지정해 줄 수 있음.
-- plt.plot(x,y,type,x,y,type) : 이런 식으로 매개변수를 넣거나 plot 을 여러번 사용하면 여러개의 그래프를 그릴 수 있다. 
+- plt.plot(x,y,type,x,y,type) : 이런 식으로 매개변수를 넣거나 plot 을 여러번 사용하면 여러개의 그래프를 그릴 수 있다.
 - plot - color : r(red),g(green),b(blue),c(cyan),m(magenta),y(yellow),k(black),w(white) , color='css_color_name/#rgb'으로 다양한 색상 지정 가능.
 - plot - LineStyle : -(solid),--(dashed),-.(dashed-dot),:(dotted).
 - plot - Markers : o(circle),s(square),*(star),p(pentagon),+(plus),x(X),D(diamond),|/_(h/v line),^/v/</>(triangle),1/2/3/4(tri)
@@ -138,7 +156,7 @@
 - plt.grid(bool) : 그래프에 격자 표시 여부 결정. axis='y/x' 로 가로/세로 방향의 그래프만 그릴 수 있음. color,alpha,linestyle 등의 매개변수 사용가능.
 - plt.legend() : 그래프에 레이블(범례) 표시, plot 에서 label="" 로 준 레이블이 그 그래프의 레이블이 된다.
 - plt.xticks(number 리스트) : x축에 눈금 표시. label 매개변수에 리스트를 넣어 각 눈금의 이름을 지정해 줄 수 있음.
-- plt.yticks(number 리스트) : y축에 눈금 표시. 
+- plt.yticks(number 리스트) : y축에 눈금 표시.
 - plt.tick_params() : 눈금 스타일 설정. axis-적용축('x','y','both'), direction-눈금위치('in','out','inout'), pad-눈금&레이블 거리, length/width/color-눈금 길이/너비/색, labelsize/labelcolor-레이블 크기/색, t,b,l,r - bool&눈금표시 위치.
 
 - plt.axhline(y, x_min(0~1), x_max(0~1)) : y에 min 부터 max 까지 수평선을 그음. color, linestyle, linewidth 등 매개변수 사용가능.
@@ -148,7 +166,7 @@
 
 - plt.bar(x, y) : 막대그래프를 그림. width(너비),align(눈금위치. 히스토그램처럼 눈금을 막대 끝으로 이동가능,'edge'),color,edgecolor,linewidth(테두리두께),tick_label,log(bool, y를 로그스케일로) 등의 매개변수 사용 가능.
 - plt.barh(x, y) : 수평 막대그래프를 그림. height 를 제외하면 매개변수 동일. width/height 를 음수로 지정하면 막대 위쪽에 눈금 표시.
-- plt.scatter(x, y) : 산점도(상관관계표현)를 그림. s(마커 면적),c(마커 색),alpha(투명도) 등의 매개변수 사용가능. 
+- plt.scatter(x, y) : 산점도(상관관계표현)를 그림. s(마커 면적),c(마커 색),alpha(투명도) 등의 매개변수 사용가능.
 - plt.hist(리스트) : 히스토그램(도수분포표 그래프)을 그림. 리스트에 나온 계급과 그 빈도를 분석해 자동으로 히스토그램으로 만들어줌. bins(쪼갤영역수),density(bool,막대사이를 이어 하나로), histtype(막대 내부를 채울지,'step') 등 매개변수 사용가능.
 - plt.errorbar(x, y, yerr) : 에러바(데이터편차표현)를 그림. yerr 는 각 y의 편차로 위아래 대칭인 오차로 표시, [(error), (error)]식으로 넣으면 아래방향/위방향 편차를 나타내게 됨. uplims/lolims(bool, 상한/하한 기호표시) 매개변수 사용가능.
 - plt.pie(ratio(각 영역 비율 리스트), label(각 영역 이름 리스트)) : 파이차트(범주별 구성비율 원형표시)를 그림. autopct(영역안에 표시될 숫자 형식 지정), startangle(시작각도), counterclock(bool,반시계 여부), explode(0~1실수 리스트, 차트중심에서 이탈도), shadow(bool,그림자), colors(리스트,색이름/코드), wedgeprops({'width': 0.7, 'edgecolor': 'w', 'linewidth': 5}, 반지름 비율, 테두리색, 테두리너비) 매개변수 사용가능.
@@ -200,8 +218,8 @@
 - videoWriter 객체.write(read 로 얻은 이미지) > 저장
 
 - 이미지 모델 학습시에는 np.ndarray(shape=(image_amount, image_size[1], image_size[0]), dtype=np.float32) 식으로 준비된 이미지 파일과
-  np.ndarray(shape=(image_amount,), dtype=np.int32)식으로 준비된 레이블에 
-  이미지 오픈 > fit > asarray > normalized(astype(np.float32)>/255.0 ) > all_images[i]에 넣은 이미지를 사용해야 한다. 
+  np.ndarray(shape=(image_amount,), dtype=np.int32)식으로 준비된 레이블에
+  이미지 오픈 > fit > asarray > normalized(astype(np.float32)>/255.0 ) > all_images[i]에 넣은 이미지를 사용해야 한다.
   mnist, PIL > (number, y, x) 로 train. | openCv > (number, y, x ,3) 으로 train
 
 
@@ -209,28 +227,28 @@
 ***
 ##### info
 - 구글이 주도적으로 개발한, 가장 널리 쓰이는 딥러닝 프레임워크중 하나. keras중심 고수준 API 통합 지원.
-- Python, C++, JS, Java, Go, Swift등 다양한 프로그래밍언어의 API를 지원. 
+- Python, C++, JS, Java, Go, Swift등 다양한 프로그래밍언어의 API를 지원.
 - TPU지원, 일반적으로 32bit의 곱셈연산을 16bit로 줄임 등의 특성이 있음.
 - Estimators(객체지향 레벨) > layers,losses,metrics > Python/C++ Tensorflow > CPU/GPU/TPU 순으로 아키텍쳐(API)가 구성되어 있음.
 
-##### data
+##### tensor
 - tf.Variable(수식, name="변수명") : 변수 선언 후 수식으로 정의. x+4 식으로 수식을 지정해 변수에 할당하는 방식.
 - tf.constant(상수, name="상수명") : 상수 선언 후 값 지정. y = tf.constant(20, name="y") 식으로 사용.
-  
-- tf.zeros/ones(shape) = shape대로 0/1으로 채워진 텐서 생성. 
+
+- tf.zeros/ones(shape) = shape대로 0/1으로 채워진 텐서 생성.
 - tf.random.uniform(shape, min, max) : shape형태의, min~max사이의 랜덤 값을 가진 텐서 생성.
 - tf.random.normal(shape, mean, stddev) : shape형태의, 평균이 mean이고 표준편차가 stddev인(기본은 0,1) 랜덤 값을 가진 정규분포 텐서 생성.
-- tf.rank(텐서) : 텐서의 랭크(차원), 모양, 데이터 타입 출력. tf.Tensor(rank, shape=(), dytpe=type).  
-  
+- tf.rank(텐서) : 텐서의 랭크(차원), 모양, 데이터 타입 출력. tf.Tensor(rank, shape=(), dytpe=type).
+
 - tf.add/subtract/multiply(텐서a, 텐서b) : 텐서에 대한 연산 지원. 이 세가지 말고도 다양한(넘파이에서 되는건 대부분)연산을 지원.
 - tf.matmul(텐서a, 텐서b) : 두 텐서간 행렬곱. transpose_a/b = True 로 두 행렬중 하나를 전치 후 곱할 수 있음.
 - tf.transpose(텐서) : 텐서의 모양을 반전함. ().T
 - tf.cast(자료형) : 자료형 변환.
 - tf.convert_to_tensor(배열(ndarray)) : 배열 텐서로 변환
 - 텐서.numpy() : 텐서 넘파이 변환.
-- 텐서\[..., i, tf.newaxis] : 행은 자동으로, 열은 i로 형상변환. 평범한 슬라이스([i:j, i:j\])도 지원.  
+- 텐서\[..., i, tf.newaxis] : 행은 자동으로, 열은 i로 형상변환. 평범한 슬라이스([i:j, i:j\])도 지원.
 
-- @tf.function : 데코레이터 아래의 함수를 텐서플로우 함수로 변환. 자동그래프(빠른 연산)생성, GPU연산가능 등의 특징이 있음. 
+- @tf.function : 데코레이터 아래의 함수를 텐서플로우 함수로 변환. 자동그래프(빠른 연산)생성, GPU연산가능 등의 특징이 있음.
   파이썬의 함수를 텐서플로우의 그래프(텐서로 자료형,연산 등)형태로 다루고 싶을때 사용. 원본 함수는 (tf.funciton).python_function()으로 받을 수 있음.
 - tf.function(함수) : 함수를 텐서플로우 함수로 변환. 내부에서의 연산, 반환값 등이 모두 텐서가 됨.
 - tf.autograph.to_code(파이썬함수) : 코드(함수)를 기반으로 그래프함수 제작.
@@ -238,12 +256,12 @@
 - Autograd(자동미분) : tf.GradientTape API 이용, 일부입력(tf.Variable등)에 대한 기울기 계산. 기본적으로 한번만 사용, 변수가 포함된 연산만 기록함.
 - tf.GradientTape().gradient(식, 변수) : 식을 변수로 미분한 값을 반환. 변수는 리스트 형태로 여러개 입력할 수 있고, 결과인 미분값로 리스트 형태로 반환됨.
   presistent=True로 설정하지 않으면 하나에 식에 대해 한번의 호출만 가능.
-  
-- session : 일종의 실행창. 텐서의 내용과 연산 결과를 볼 수 있음. 세션 선언, 실행, 종료 문으로 구분됨. 
-  1.x버전에선 그래프생성 > 초기화 > 세션을 통해 값을 흐르게 하는 과정을 거쳐야만 실행이 가능했음(즉시실행모드(EagerMode, EagerTensor) 미지원).
+
+- session : 일종의 실행창. 텐서의 내용과 연산 결과를 볼 수 있음. 세션 선언, 실행, 종료 문으로 구분됨.
+  1.x버전에선 그래프생성 > 초기화 > 세션을 통해 값을 흐르게 하는 과정을 거쳐야만 실행이 가능했음(즉시실행모드(EagerMode, EagerTensor)미지원).
 - tf.Session() : 세션 선언.
-- tf.global_variables_initializer() : 변수 초기화. model에 할당해 초기화를 할 수도 있음. 
-- sess.run(텐서) : 실행. sess.run(model) > sess.run(변수) 식으로 사용할 수 있음.
+- tf.global_variables_initializer() : 변수 초기화. model에 할당해 초기화를 할 수도 있음.
+- sess.run(텐서) : 실행. sess.run(model) > sess.run(변수) 식으로 사용(값을 흐르게)할 수 있음.
 - sess.close() : 세션 종료.
 
 - tf.keras.utils.to_categorical(정수 리스트) : 정수 리스트에 따라서 원핫 인코딩. \[1,3]을 넣으면 \[\[0,1,0,0],\[0,0,0,1]]을 반환하는 식.
@@ -252,22 +270,22 @@
 ##### layers
 - tf.keras.layers.Input(shape=(입력 차원)) : 입력차원 만큼 입력레이어 구성.
 - tf.keras.layers.Dense(노드수,activation="swish/relu")(X) : 전밀집층(모든 노드가 이전 혹은 다음 노드와 연결, 전결합층)제작. input_dim(입력차원)매개변수 사용가능. ((입력의 마지막차원+1(bias))*노드수)개의 파라미터가 생성, (None, 최초입력의 마지막 제외 차원, 노드수) 형태의 반환값을 반환.
- 
-- tf.keras.layers.Embedding(총 단어 개수, 결과 벡터의 크기, 입력 시퀀스 길이) : 단어를 밀집벡터로 만듦(임베딩 층 제작, 단어를 랜덤한 값을 가지는 밀집 벡터로 변환 후 학습과정을 거침). (샘플개수, 입력길이)형태의 정수 인코딩이 된 2차원 정수 배열을 입력받아 워드 임베딩 후 3차원 배열을 반환. 
+
+- tf.keras.layers.Embedding(총 단어 개수, 결과 벡터의 크기, 입력 시퀀스 길이) : 단어를 밀집벡터로 만듦(임베딩 층 제작, 단어를 랜덤한 값을 가지는 밀집 벡터로 변환 후 학습과정을 거침). (샘플개수, 입력길이)형태의 정수 인코딩이 된 2차원 정수 배열을 입력받아 워드 임베딩 후 3차원 배열을 반환.
 - tf.keras.layers.Dropout(rate) : Overfitting 을 방지하기 위해 DropOut(나온(중간) 값의 일부를 누락시킴). rate 는 1 = 100%.
 - tf.keras.layers.Bidirectional(layer) : 입력한 층을 양방향으로 만들어 줌. SimpleRNN, LSTM 등이 들어감.
 - tf.keras.layers.TimeDistributed(layers) : RNN에서 각 스텝마다 오류를 계산해 하위스텝(앞쪽)으로 전파하게 시킴. return_sequences=True 와 이것을 사용해 RNN이 macy-to-many문제를 해결(시퀀스를 입력받아 시퀀스를 출력)할 수 있도록 함. 각 스텝에서 손실을 계산해 출력을 낼 수 있도록 하며, 없다면 각 스텝의 출력이 마지막 스텝에 모여 순차적으로 FC에 들어가 출력이 된다.
-- tf.keras.layers.LayerNormalization/(layers) : 층 정규화 시행. 
+- tf.keras.layers.LayerNormalization/(layers) : 층 정규화 시행.
 
 - tf.keras.layers.Conv1D(kernel, kernel_size, padding, activation) : 1차원 합성곱신경망 사용.
 - tf.keras.layers.Conv2D(컨볼루션 크기(행,렬), 필터 이미지 개수(한 행렬의 크기 x,y), padding(='same' 입출력 사이즈 동일), activation, inputShape) : 이미지에 convolution filter 를 사용해 행렬을 만듦.
-  
+
 - tf.keras.layers.GlobalMaxPooling1D() : 1차원 풀링 실행. Conv1D 뒤에 위치.
 - tf.keras.layers.GlobalAveragePooling1D() : 입력으로 들어오는 모든 벡터들의 평균을 구함. 흔히 임베딩 층 뒤에 사용됨.
 - tf.keras.layers.MaxPooling2D((줄일 행렬의 크기 x, y)) : 이미지를 MaxPooling 해 크기를 줄임.
 
 - tf.keras.layers.SimpleRNN(hidden_size) : RNN 사용. hidden_size 는 은닉상태의 크기. (batch_)input_shape 매개변수에 ((batch_size,) timesteps(입력 시퀀스 길이), input_dim(입력 크기)) 로 넣어 입력을 정의해 줄 수 도 있음. return_sequences(전체 은닉상태 출력)와 return_state(마지막 은닉상태 한번 더 출력)매개변수 사용 가능.
-- tf.keras.layers.LSTM(hidden_size, input_shape=(time_steps, input_dim)) : RNN 의 일종인 LSTM 사용. RNN 층은 (batch_size(배치 크기, 한번에 학습할 데이터 양), timesteps(시점, 문장의 길이), input_dim(단어 벡터 차원)) 크기의 3D 텐서를 입력으로 받음. return state 를 true 로 하면 마지막 셀 상태까지 반환, 양방향이면 정방향,역방향 둘 다 은닉상태와 셀상태 반환(fh,fc,bh,bc 순). 
+- tf.keras.layers.LSTM(hidden_size, input_shape=(time_steps, input_dim)) : RNN 의 일종인 LSTM 사용. RNN 층은 (batch_size(배치 크기, 한번에 학습할 데이터 양), timesteps(시점, 문장의 길이), input_dim(단어 벡터 차원)) 크기의 3D 텐서를 입력으로 받음. return state 를 true 로 하면 마지막 셀 상태까지 반환, 양방향이면 정방향,역방향 둘 다 은닉상태와 셀상태 반환(fh,fc,bh,bc 순).
 - tf.keras.layers.GRU(hidden_size, input_shape=(time_steps, input_dim)) : LSTM 을 개량한 GRU 사용. LSTM 에 비해 구조가 간단하고, 데이터 양이 적을떄 LSTM 보다 낫다고 알려져 있음.
 
 - tensorflow.keras.preprocessing.sequence.pad_sequences(data, maxlen) : 데이터(리스트)의 요소 개수를 maxlen으로 고정. 적으면 0을 채우고 많으면 버림.
@@ -276,19 +294,19 @@
 ##### model make
 - 케라스는 Sequential API, Functional API, Subclassing API 의 구현 방식을 지원.
 
-- model = keras.Sequential([  : Sequential API(딘순히 층을 쌓아 구성할 수 있고, 여러 층을 공유하거나 다양한 종류의 입출력을 사용할 수 있지만 그만큼 복잡한 모델 제작에 한계가 있음)를 이용해 모델 설계.   
--   keras.layers.Flatten(input_shape=(x,y)),  : x\*y 픽셀의 2차원 이미지 배열을 (x*y)의 1차원 배열로 반환. input shape 매개변수는 input layer 를 대채할 수 있게 해주며, 배치 크기를 제외하고 차원을 지정하기에 차원이 하나 추가 될 수 있고, 배치까지 지정하려면 batch_input_shape 를 사용한다.  
+- model = keras.Sequential([  : Sequential API(딘순히 층을 쌓아 구성할 수 있고, 여러 층을 공유하거나 다양한 종류의 입출력을 사용할 수 있지만 그만큼 복잡한 모델 제작에 한계가 있음)를 이용해 모델 설계.
+-   keras.layers.Flatten(input_shape=(x,y)),  : x\*y 픽셀의 2차원 이미지 배열을 (x*y)의 1차원 배열로 반환. input shape 매개변수는 input layer 를 대채할 수 있게 해주며, 배치 크기를 제외하고 차원을 지정하기에 차원이 하나 추가 될 수 있고, 배치까지 지정하려면 batch_input_shape 를 사용한다.
 - 	keras.layers.Dense(128, activation = 'relu'),  : 밀집연결(densely-connected)층/완전연결층. 128개의 노드(또는 뉴런)을 가짐.
 - 	keras.layers.Dense(10, activation = 'softmax') : 10개의 클래스 각각 그 클래스에 속할 확률을 출력.
 - ]) : 모델(분류기반, 이 경우 최대 세개까지 레이어 추가 가능) 제작.
 - Sequential() : model.add 로도 층 추가가 가능하고, 전결합층(dense)뿐 아니라 임베딩, LSTM, GRU, Flatten, Convolution2D, Batch Normalization 등 다양한 층 추가 가능.
 
 - functional API : 함수형 API 는 Sequential API 와 달리 각 층을 일종의 함수로 정의.
-- input(shape) 에서 시작해 Dense(node, activation)(inputs) > Dense()(h1) > Dense()(h2) 후 tf.keras.models.Model(input,output) 식으로 구성.  
+- input(shape) 에서 시작해 Dense(node, activation)(inputs) > Dense()(h1) > Dense()(h2) 후 tf.keras.models.Model(input,output) 식으로 구성.
 - Embedding()(input_layer) 와 Embedding_layer = Embedding() > Embedding_layer(input_layer) 는 둘다 모델의 층을 연결(functional API)함.
 
 - Subclassing API : Subclassing API 는 모델을 클래스 형태로 제작해 사용. tf.keras.Model을 상속시키고, init에서 입력과 사용할 층을 정의, call에서 층을 쌓아(연결해)반환.
-  
+
 - model.summary() : 모델의 정보(layer(type), outputShape, param(파라미터(매개변수, 노드)수))를 확인할 수 있음
 
 - tensorflow.keras.callbacks.EarlyStopping(monitor="val_loss", mode="min", verbose, patience) : 과정합 방지를 위한 조기 종료 설정. patience회 검증 데이터의 손실이 증가하면 학습을 조기종료함. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능.
@@ -297,16 +315,16 @@
 ###### model train, use
 - model.compile(
 -  optimizer='adam',  : 데이터와 손실함수를 바탕으로 모델 업데이트 방향 결정.
--  loss='sparse_categorical_crossentropy',  : 훈련중 모델 오차 측정. 
+-  loss='sparse_categorical_crossentropy',  : 훈련중 모델 오차 측정.
 -  metrics=['accuracy']  : 훈련단계와 테스트 단계를 모니터링하기 위한 방법.
 - ) : 모델 컴파일.
-  
+
 - model.fit(train_data , train_labels , epochs=1000(반복 횟수)) : 학습된 모델 제작. 이 과정에서 오류가 난다면 .astype으로 자료형을 지정해주면 된다.
   verbose=0 으로 떨어지는 모습을 보지 않을 수 있고, validation_data=(test_data,test_label) 로 테스트용 데이터로 계산한 손실과 정확도를 함꺠 출력시킬 수 있으며,
   callback 매개변수에 callbacks의 함수를 넣어 사용할 수 있음. 여러개면 [one, two]식으로 입력.
-  
+
 - model.save('파일명.h5') : 모델 저장. 모델 전체를 저장하는 게 아니라 가중치 등 일부만 저장한 뒤 재사용(transfer learning)히는 방법도 있음.
-- model = tf.keras.models.load_model(모델명) : 저장된 모델 로드.  
+- model = tf.keras.models.load_model(모델명) : 저장된 모델 로드.
 - model.evaluate(test_images, test_labels) : 모델 성능 비교. loss, accuracy 순으로 반환. verbose = 0 > silent
 
 - model.predict(X) : 모델을 사용해 입력에 따른 예측 반환.
@@ -319,9 +337,9 @@
 - [pytorch_studing_note](pytorch_studing_note.md)
 - Tensor > Numpy 의 ndarray 와 유사. GPU 연산가속도 가능. 튜플타입을 가져, 모든 튜플 연산을 지원(+ 등 가능). 인덱싱도 가능.
 
-- torch.empty(y, x) > 초기화 되지 않은 y*x의 행렬 생성. 그 시점에 할당된 메모리에 존재하던 값이 초기값으로 나타남. 
+- torch.empty(y, x) > 초기화 되지 않은 y*x의 행렬 생성. 그 시점에 할당된 메모리에 존재하던 값이 초기값으로 나타남.
 - torch.rand(y, x) > 무작위로 초기화된 행렬 생성.
-- torch.ones(크기) > 크기에 맞게 1로 채워진 텐서 반환. 
+- torch.ones(크기) > 크기에 맞게 1로 채워진 텐서 반환.
 - torch.zeros(y, x,) > 0으로 채워진 행렬을 생성.
 - torch.tensor(iterator 객체) > 데이터로 텐서 생성.
 - 텐서를 생성할 때는 모두 dtype=long 식으로 데이터 타입을 지정하고, requires_grad=True 를 사용해 그 텐서에 대해 미분이 가능하도록 연산들을 모두 추적할 수 있게 할 수 있다. 이 경우, 그 텐서를 사용한 식은 전부 grad_fn 이라는 속성을 가지게 된다.
@@ -356,7 +374,7 @@
 ***
 #### dataset Load
 - sklearn.datasets.load_데이터셋 이름() > 데이터셋 로드.  데이터셋.keys()로 키들을 볼 수 있고, DESCR 에는 데이터셋 설명이, target_names 에는 클래스가, feature_names 에는 각 특성의 이름이. data 에는 샘플별 데이터가, target 에는 샘플의 종류가 클래스 순서대로 0부터 들어있다. .fit(train_data, train_label)로 train, .predict(test_data)로 예측할 수 있다. n_sample, noise, random_state 등의 매개변수가 있다.
-- 회귀용 데이터셋인 boston_housing, diabetes. 다중 분류용 데이터 셋인 digit, 두개의 달처럼 생겨 선형으로는 분류가 어려운 two_moons 등 다양한 데이터 셋이 있다. 먼저 간단한 모델(선형, 이웃, NB 등)로 성능을 실험해 보며 데이터를 이해한 뒤 다른 모델을 적용시켜 보는게 좋다.ㄴ   
+- 회귀용 데이터셋인 boston_housing, diabetes. 다중 분류용 데이터 셋인 digit, 두개의 달처럼 생겨 선형으로는 분류가 어려운 two_moons 등 다양한 데이터 셋이 있다. 먼저 간단한 모델(선형, 이웃, NB 등)로 성능을 실험해 보며 데이터를 이해한 뒤 다른 모델을 적용시켜 보는게 좋다.ㄴ
 - sklearn.model_selection.train_test_split(x,y,random_state,train_size) > 데이터를 트레인과 테스트로 나눈다. random_state 는 유사 난수 생성으로 꼭 초기화를 해주는 게 좋다.
 - sklearn.model_selection.KFold(k(int), shuffles(bool), random_seed(int)) > k번 K-Fold 를 해주는 머신을 생성한다. .split(data)으로 k개의 train / test 데이터셋을 생성한다. data[train], data[test] 식으로 사용한다.
 
@@ -366,72 +384,72 @@
 #### Regression
 ###### k
 - sklearn.neighbors.KNeighborsRegression(n_neighbors=k) > k개의 이웃을 찾는 knn 회귀모델 로드.
-###### Linear  
+###### Linear
 - sklearn.linear_model.LinearRegression() > OLS(최소제곱법) 선형회귀 모델 로드. 가중치는 .coef_ 에 ndarray 로, 편향은 .intercept_에 저장되어 있다.
 ###### Ridge, Lasso
 - sklearn.linear_model.Ridge(alpha=i) > 리지 선형회귀 모델 로드. 알파 값은 기본 1이며, 높이면 더 단순히(가중치를 0에 가깝게) 만들어 훈련세트의 성능은 나빠져도 일반화는 더 잘되게 만들 수 있다.
 - sklearn.linear_model.Lasso(alpha=i, max_iter) > 라소 선형회귀 모델 로드. 리지와 비슷하나 어떤 값은 진짜 0이 될수 있다. np.coef_ != 0 의 합계를 구하면 사용한 특성수를 알 수 있고, 과소 적합을 피하려면 알파를 줄이고 max_iter 를 늘려야한다.
 ###### decision tree
-- sklearn.tree.DecisionTreeRegressor() > 결정트리 회귀 모델 로드. mex_depth, max_leaf_nodes, min_samples_leaf 중 하나만 지정해도 과대적합을 막을 수 있다. 
+- sklearn.tree.DecisionTreeRegressor() > 결정트리 회귀 모델 로드. mex_depth, max_leaf_nodes, min_samples_leaf 중 하나만 지정해도 과대적합을 막을 수 있다.
 
 
 #### Classification
-.decision_function(test data) > 데이터를 분류하며 그 데이터가 분류한 클래스에 속한다고 생각하는 정도를 기록해 반환. 양수값은 양성 클래스를 의미한다. 
+.decision_function(test data) > 데이터를 분류하며 그 데이터가 분류한 클래스에 속한다고 생각하는 정도를 기록해 반환. 양수값은 양성 클래스를 의미한다.
 .predict_proba(test data) > 각 클래스에 대한 확률. (샘플 수, 클래스 개수) 의 형태를 갖음. 과대적합된 모델은 틀렸어도 확신이 강한 편이고, 복잡도가 낮으면 예측에 불획실성이 더 많다.
 ###### k
-- sklearn.neighbors.KNeighborsClassifier(n_neighbors=k) > k개의 이웃을 찾는 knn 분류모델 로드.     
+- sklearn.neighbors.KNeighborsClassifier(n_neighbors=k) > k개의 이웃을 찾는 knn 분류모델 로드.
 ###### linear
 - sklearn.linear_model.LogisticRegression() > 로지스틱 회귀 분류 모델 로드. 이진분류에서 로지스틱 손실 함수를, 다중 분류에서 crossentropy 손실 함수를 사용함. penalty='l1'으로 l1규제를 사용할 수 있다.
 - sklearn.svm.LinearSVC() > 선형 서포트 벡터 머신 (분류)모델 로드. 로지스틱과 이것은 규제의 강도를 결정하는 매개변수 C를 가지고 있음. C로 낮은 값을 지정하면 가중치를 0에 가깝게 지정함.
 - 선형 회귀의 alpha 와 분류의 C는 각각 클수록/작을수록 모델이 단순해진다는 특징이 있고, 보통 log 스케일(10배씩)로 최적치를 정하며, 중요특성이 믾지 않다고 생각하면 L1규제를, 아니면 기본 L2를 사용한다.
 ###### Naive Bayse
-- sklearn.naive_bayes.MultinomiaNB() : 나이브 베이즈 분류기 로드.  alpha, class_prior, fit_prior 등의 매개변수 사용이 가능. 입력으로 DTM이나 TF-IDF 행렬을 입력으로 받음. 
+- sklearn.naive_bayes.MultinomiaNB() : 나이브 베이즈 분류기 로드.  alpha, class_prior, fit_prior 등의 매개변수 사용이 가능. 입력으로 DTM이나 TF-IDF 행렬을 입력으로 받음.
 ###### decision tree
 - sklearn.tree.DecisionTreeClassifier(max_depth=i, random_state=0) > 결정트리 분류기 로드. 최대 깊이 i 까지 가지를 뻗게 한다. 모델.feature_importances_ 로 각 특성들의 중요도를 볼 수 있다.
 - sklearn.tree.export_graphviz(트리모델, out_file='파일명.dot', class_names=["첫번째","두번째"],feature_names=이름들, impurity=bool, filled=bool) > 트리모젤 시각화 해 저장. graphviz 모델 의 .Source(파일.read()) 을 디스플레이해 표시할 수 있다.
 ###### ensemble
-- sklearn.ensemble.RandomForestClassifier(n_estimators=n, random_state=0) > random forest 분류 모델 로드. n개의 트리를 생성해 예측한다. 각 트리는 .estimators_ 에 저장되어있다.  
+- sklearn.ensemble.RandomForestClassifier(n_estimators=n, random_state=0) > random forest 분류 모델 로드. n개의 트리를 생성해 예측한다. 각 트리는 .estimators_ 에 저장되어있다.
 - sklearn.ensemble.GradientBoostingClassifier(learning_rate=r, n_estimators=n, max_depth=m, random_state=0) > 그래디언팅 부스트 분류 모델 로드. n개의 트리를 생성해 r 의 러닝레이트로 예측한다. 각 트리는 .estimators_ 에 저장되어있다. 기본값은 100개, 0.1, 3의 깊이 다.
-- sklearn.ensemble.BaggingClassifier(모델, n_estimators=n, oob_score=bool, n_jobs=-1, random_state=0) > 모델을 n개 연결한 배깅 분류기 생성. oob 를 T 로 생성하면 부트스트래핑에 포함되지 않은 매개변수로 모델을 평가함.   
-- sklearn.ensemble.ExtraTreesClassifier(n_estimators=n, n_jobs=-1, random_state=0) > 엑스트라 트리 분류 모델 로드.   
+- sklearn.ensemble.BaggingClassifier(모델, n_estimators=n, oob_score=bool, n_jobs=-1, random_state=0) > 모델을 n개 연결한 배깅 분류기 생성. oob 를 T 로 생성하면 부트스트래핑에 포함되지 않은 매개변수로 모델을 평가함.
+- sklearn.ensemble.ExtraTreesClassifier(n_estimators=n, n_jobs=-1, random_state=0) > 엑스트라 트리 분류 모델 로드.
 - sklearn.ensemble.AdaBoostClassifier(n_estimators=n, random_state=0) > 에이다 부스트 분류 모델 로드. 기본적으로 깊이 1의 결정 트리 모델을 사용하나 base_estimator 매개 변수로 다른 모델 지정 가능.
 ###### SVM
-- sklearn.svm.SVC(kernel='rbf', C=i, gamma=r) > 서포트 벡터 머신 로드. r을 키우면 하나의 훈련샘플이 미치는 영향이 제한되고, i 는 규제가 커진다. 커널 SVM 에서는 특성들의 크기차이가 크면 문제가 생겨, 평균을 빼고 표준편차로 나눠 평균을 0, 분산을 1로 만드는 전처리를 해줘야 한다.    
+- sklearn.svm.SVC(kernel='rbf', C=i, gamma=r) > 서포트 벡터 머신 로드. r을 키우면 하나의 훈련샘플이 미치는 영향이 제한되고, i 는 규제가 커진다. 커널 SVM 에서는 특성들의 크기차이가 크면 문제가 생겨, 평균을 빼고 표준편차로 나눠 평균을 0, 분산을 1로 만드는 전처리를 해줘야 한다.
 ###### DL MLP
-- sklearn.neural_network.MLPClassifier(solver='lbfgs', random_state=0, hidden_layer_sizes=[]) > 다중 퍼셉트론 분류 모델 로드. 히든 레이어에 넣은 숫자, 넣은 숫자의 개수대로 히든레이어가 생성된다. alpha 매개변수에 값을 넣어 줄 수 도 있다. svc 와 비슷하게 신경망도 일반화(평균 0, 분산 1)를 해주는게 좋다. sgd 라는 옵션으로 다른 여러 매개변수와 함께 튜닝해 최선의 겨로가를 만들 수 있음. 
+- sklearn.neural_network.MLPClassifier(solver='lbfgs', random_state=0, hidden_layer_sizes=[]) > 다중 퍼셉트론 분류 모델 로드. 히든 레이어에 넣은 숫자, 넣은 숫자의 개수대로 히든레이어가 생성된다. alpha 매개변수에 값을 넣어 줄 수 도 있다. svc 와 비슷하게 신경망도 일반화(평균 0, 분산 1)를 해주는게 좋다. sgd 라는 옵션으로 다른 여러 매개변수와 함께 튜닝해 최선의 겨로가를 만들 수 있음.
 
 
 #### preprocessing
 - 불러온 프로세서들은  .fit(train_data) 로 스케일러를 훈련시키고, .transform(data)로 변환한다. .fit_transform(train_data)로 둘을 한번에 할 수있다. 트레인 데이터와 테스트 데이터 모두 같은 스케일 조정을 해주어야 하기에 테스트 데이터는 0~1의 범위를 벗어날 수 있다.
-###### Scaler  
+###### Scaler
 - sklearn.preprocessing.MinMaxScaler() : 특성마다 최솟값과 최댓값을 계산해 데이터의 스케일을 0~1로 조정하는 MinMax 스케일러 로드.
 - sklearn.preprocessing.StandardScaler() : 모든 특성을 정규 분포로 바꿔준다.
-- sklearn.preprocessing.QuantileTransformer(n_quantile = n) : n개의 분위를 사용해 데이터를 균등하게 분포시키는 스케일러 로드. output_distribution='normal'로 균등 분포가 아니라 정규분포로 출력을 바꿀 수 있음. 
-- sklearn.preprocessing.PowerTransformer() : 데이터의 특성별로 정규분표에 가깝게 변환해주는 스케일러 로드. method='yeo_johnson'(양수 음수 값 둘 다 지원, 기본값) 과 method='box-cox'(양수만 지원.)를 지정해 줄 수 있다. 
-- sklearn.preprocessing.KBinsDiscretizer(n_bins=n, strategy='uniform') : n개로 구간 분할 모델 로드. .bin_edges_ 에 각 특성별 경곗값이 저장되어 있다. transform 메서드는 각 데이터 포인트를 해당 구간으로 인코딩하는 역할을 한다. 기본적으로 구간에 원 핫 인코딩을 적용한다. transform 결과.toarray()로 원핫 인코딩된 결과를 볼 수 있다.  
-- sklearn.preprocessing.PolynomialFeatures(degree=i, include_bias=bool) : x**i 까지 고차항(다항식)을 추가해 특성을 풍부하게 나타내는(구간 분할과 비슷한 효과) 모델 로드. bool 이 T 면 절편에 해당하는 1인 특성을 추가한다. 다항식 특성을 선형 모델과 같이 사용하면 전형적인 다항 회귀 모델(결과가 곡선)이 된다. 고차원 다항식은 데이터가 부족한 영역에서는 너무 민감하게 동작한다는 문제점이 있다.    
+- sklearn.preprocessing.QuantileTransformer(n_quantile = n) : n개의 분위를 사용해 데이터를 균등하게 분포시키는 스케일러 로드. output_distribution='normal'로 균등 분포가 아니라 정규분포로 출력을 바꿀 수 있음.
+- sklearn.preprocessing.PowerTransformer() : 데이터의 특성별로 정규분표에 가깝게 변환해주는 스케일러 로드. method='yeo_johnson'(양수 음수 값 둘 다 지원, 기본값) 과 method='box-cox'(양수만 지원.)를 지정해 줄 수 있다.
+- sklearn.preprocessing.KBinsDiscretizer(n_bins=n, strategy='uniform') : n개로 구간 분할 모델 로드. .bin_edges_ 에 각 특성별 경곗값이 저장되어 있다. transform 메서드는 각 데이터 포인트를 해당 구간으로 인코딩하는 역할을 한다. 기본적으로 구간에 원 핫 인코딩을 적용한다. transform 결과.toarray()로 원핫 인코딩된 결과를 볼 수 있다.
+- sklearn.preprocessing.PolynomialFeatures(degree=i, include_bias=bool) : x**i 까지 고차항(다항식)을 추가해 특성을 풍부하게 나타내는(구간 분할과 비슷한 효과) 모델 로드. bool 이 T 면 절편에 해당하는 1인 특성을 추가한다. 다항식 특성을 선형 모델과 같이 사용하면 전형적인 다항 회귀 모델(결과가 곡선)이 된다. 고차원 다항식은 데이터가 부족한 영역에서는 너무 민감하게 동작한다는 문제점이 있다.
 - sklearn.preprocessing.LabelEncoder() : 여러개의 카테고리가 존재하는 데이터를 고유한 정수로 인코딩하는 클래스 로드..
 ###### decomposition
-- sklearn.decomposition.PCA() : 주성분 분석(PCA) 프로세서 로드. 기본값은 데이터를 회전,이동만 시키고 모든 주성분을 유지하지만 n_component 매개변수에 값을 넣어 유지시킬 주성분의 개수를 정할 수 있다. fit 시 모델.components_ 속성에 주성분이 저장된다. whiten=T 로 주성분의 스케일이 같아지게 할 수 있다. .inverse_transform 을 사용해 원본 공간으로 되돌릴 수 있다. 
-- sklearn.decomposition.NMF(random_state = 0) : NMF 프로세서 로드. n_component 매개변수에 값을 넣어 유지시킬 주성분의 개수를 정할 수 있다. 
-- sklearn.manifold.TSNE(random_state=n) : 매니폴드학습 알고리즘의 t-SNE 알고리즘 모델 로드. 데이터들을 알아서 나눔. 훈련시킨 모델만 변경 가능해 transform 메서드 없이 fit_transform() 메서드만 지원한다. 
-- sklearn.decomposition.LatentDirichletAllocation(n_components=n, learning_method="batch/online", max_iter=i, random_state=0) : n개의 토픽을 생성하는 LDA 로드. 기본 학습 방법인 online 대신 조금 느리지만 성능이 더 나은 batch 방법을 사용할 수 있고, i를 높이면 모델 성능이 좋아진다(기본값은 10). 각 단어의 중요도를 저장한 .components_ 의 크기는 (n, n_words)이다.  
-###### cluster(agglomerative)  
+- sklearn.decomposition.PCA() : 주성분 분석(PCA) 프로세서 로드. 기본값은 데이터를 회전,이동만 시키고 모든 주성분을 유지하지만 n_component 매개변수에 값을 넣어 유지시킬 주성분의 개수를 정할 수 있다. fit 시 모델.components_ 속성에 주성분이 저장된다. whiten=T 로 주성분의 스케일이 같아지게 할 수 있다. .inverse_transform 을 사용해 원본 공간으로 되돌릴 수 있다.
+- sklearn.decomposition.NMF(random_state = 0) : NMF 프로세서 로드. n_component 매개변수에 값을 넣어 유지시킬 주성분의 개수를 정할 수 있다.
+- sklearn.manifold.TSNE(random_state=n) : 매니폴드학습 알고리즘의 t-SNE 알고리즘 모델 로드. 데이터들을 알아서 나눔. 훈련시킨 모델만 변경 가능해 transform 메서드 없이 fit_transform() 메서드만 지원한다.
+- sklearn.decomposition.LatentDirichletAllocation(n_components=n, learning_method="batch/online", max_iter=i, random_state=0) : n개의 토픽을 생성하는 LDA 로드. 기본 학습 방법인 online 대신 조금 느리지만 성능이 더 나은 batch 방법을 사용할 수 있고, i를 높이면 모델 성능이 좋아진다(기본값은 10). 각 단어의 중요도를 저장한 .components_ 의 크기는 (n, n_words)이다.
+###### cluster(agglomerative)
 - .fit_predict(data) 로 각 데이터 포인트가 속한 클러스터들을 리스트 형태로 받아 볼 수 있다.
 - sklearn.cluster.KMeans(n_cluster=n) : n개의 클러스터 중심점을 생성하는 k-평균 알고리즘 모델 로드. .labels_ 에 각 데이터 포인트가 포함된 클러스터들을 리스트 형태로 볼 수 있고, .predict 로 새로운 데이터의 데이터포인트가 어느 클러스터에 속할 지 예측할 수 있다.
-- sklearn.cluster.AgglomerativeClustering(n_cluster=n, linkage="ward/average/complete") : 병합 군집 모델 로드. 모든 클러스터 내의 분산을 가장 적게 증가시키는(기본, 대부분 알맞음)/평균 거리가 가장 짦은/최대 거리가 가장 짦은 두 클러스터를 합친다.   
-- sklearn.cluster.DBSCAN(min_sample=i, eps=j) : DBSCAN 군집 모델 로드. j 거리에 i 개 이상 데이터가 있다면 그 데이터 포인트를 핵심 샘플로 지정한다. 어느 군집에도 속하지 않는 포인트를 noise 로 지정해, -1의 레이블을 가지며 이를 이용해 이산치 검출을 할 수 있다.   
+- sklearn.cluster.AgglomerativeClustering(n_cluster=n, linkage="ward/average/complete") : 병합 군집 모델 로드. 모든 클러스터 내의 분산을 가장 적게 증가시키는(기본, 대부분 알맞음)/평균 거리가 가장 짦은/최대 거리가 가장 짦은 두 클러스터를 합친다.
+- sklearn.cluster.DBSCAN(min_sample=i, eps=j) : DBSCAN 군집 모델 로드. j 거리에 i 개 이상 데이터가 있다면 그 데이터 포인트를 핵심 샘플로 지정한다. 어느 군집에도 속하지 않는 포인트를 noise 로 지정해, -1의 레이블을 가지며 이를 이용해 이산치 검출을 할 수 있다.
 ###### one-hot-encoding
 - sklearn.processing.OneHotEncoder(spares=bool) : 원 핫 인코딩 모델 로드. sparse 가 False 면 희소행렬이 아니라 ndarray 로 반환된다. .fit_transform(data)로 사용, .get_feature_names() 로 원본 데이터의 변수 이름을 얻을 수 있다.
-- sklearn.compose.ColumnTransformer([("scaling",스케일러,['스케일 조정할 연속형 열 이름들']), ("onehot",원핫인코더,['원핫인코딩할 범주형 열 이름들'])]) : 각 열마다 다른 전처리(스케일 조정, 원핫인코딩)을 하게 해주는 ct 로드. 
+- sklearn.compose.ColumnTransformer([("scaling",스케일러,['스케일 조정할 연속형 열 이름들']), ("onehot",원핫인코더,['원핫인코딩할 범주형 열 이름들'])]) : 각 열마다 다른 전처리(스케일 조정, 원핫인코딩)을 하게 해주는 ct 로드.
 - sklearn.compose.make_column_transformer([(['스케일 조정할 연속형 열 이름들'], 스케일러), (['원핫인코딩할 범주형 열 이름들'], 원핫인코더)]) : 클래스 이름을 기반으로 각 단계에 이름을 붙여주는  ct 로드.
 ###### feature-selection
 - sklearn.feature_selection.SelectKBest/SelectPercentile(score_func=f, percentile=i) : 일변량 통계 모델 로드. 고정된 K 개의 특성을/지정된 비율만큼 특성을 선택한다. f 는 분류면 feature_selection.f_classif, 회귀면 feature_selection.f_regression 를 사용하고, i 는 백분율로 입력한다.
-- sklearn.feature_selection.SelectFromModel(모델, threshold='median/mean') : 모델을 이용한 모델기반 자동선택 모델 로드. 중요도가 임계치(threshold)보다 큰 모든 특성을 선택한다. 중간/평균 이며 '1.3*median' 식으로 비율을 지정할 수도 있다. 
-- sklearn.feature_selection.RFE(모델, n_feature_to_select = n) : 모델을 이용해 n개 까지 재귀적 특성 제거를 하는 반복적 특성 선택 모델 로드. 
+- sklearn.feature_selection.SelectFromModel(모델, threshold='median/mean') : 모델을 이용한 모델기반 자동선택 모델 로드. 중요도가 임계치(threshold)보다 큰 모든 특성을 선택한다. 중간/평균 이며 '1.3*median' 식으로 비율을 지정할 수도 있다.
+- sklearn.feature_selection.RFE(모델, n_feature_to_select = n) : 모델을 이용해 n개 까지 재귀적 특성 제거를 하는 반복적 특성 선택 모델 로드.
 ###### feature-extraction
 - sklearn.feature_extraction.text.CountVectorizer() : 빈도수 기반 벡터화(정수인코딩) 머신 로드. DTM(서로 다른 Bow 결합)제작. extraction(추출).
-- sklearn.feature_extraction.text.TfidfTransformer() : TF-IDF 생성기 로드. DTM을 자동으로 TF_IDF로 만들어줌. 
+- sklearn.feature_extraction.text.TfidfTransformer() : TF-IDF 생성기 로드. DTM을 자동으로 TF_IDF로 만들어줌.
 
 
 #### metrics
@@ -439,17 +457,17 @@
 - sklearn.metrics.***_score(테스트 결과, 실제) : 훈련 결과의 정확도를 다양한 방식으로 반환.
 - sklearn.metrics.accuracy_score(테스트 결과, 실제) : 둘의 일치도를 그대로 정확도로 반환.
 - sklearn.metrics.f1_score(테스트 결과, 실제) : F1 Measure 를 이용하여 정확도를 반환.
-  
+
 - sklearn.model_selection.cross_val_score(모델, data, labels, cv=i) : 모델을 이용해 i번 폴드하는 교차 검증 사용. 총 i개 모델의 정확도를 배열로 반환한다. 보통 반환값.mean()을 이용한 평균값으로 간단하게 정확도를 나타낸다. cv 에 KFold 객체 등을 넣어 사용할 수 도 있다. 그리드 서치와 함께 n_jobs 매개변수로 사용할 cpu 수를 지정할 수 있다. 데이터셋과 모델이 너무 클때는 여러 코어를 쓰면 메모리 사용량이 너무 커져 메모리 사용 현환을 모니터링해야 한다.
-- sklearn.model_selection.cross_validate(모델, data, labels, cv=i, return_train_score=bool) : 위와 같지만 훈련과 테스트에 걸린 시간까지 담아 딕셔너리로 반환한다. bool 이 T 면 테스트 스코어도 같이 포함해 반환된다. 모델을 그리드 서치로 사용하면 중첩 교차 검증의 구현이 가능하다. scoring="accuracy/rou_auc"등으로 모델, 최적 매개변수 선택을 위한 평가 방식을 바꿀 수 있다. 
-- sklearn.model_selection.GridSearchCV(모델, 파라미터 딕셔너리({'변수명':[넣어볼 수들의 리스트]}, 딕셔너리의 리스트로 넣으면 조건부로 그리드 탐색), cv=i, return_train_score=bool) : 교차검증을 사용한 그리드 서치 매개변수 조정 방법 로드. .fit(data, label)로 설정된 매개변수 조합에 대해 교차검증을 수행하고, 가장 성능이 좋은 배개변수로 데이터에 대한 새 모델을 자동으로 만듦. 모델엔 .score(test_data, test_label)과 .predict(data)로 접근 가능하다. {.best_params_ : 선택한 매개변수, .best_score_ :  이 설정으로 얻은 정확도 ,  .best_estimator_ :  최고의 모델, .cv_result_ : 각 결과}  
--   
+- sklearn.model_selection.cross_validate(모델, data, labels, cv=i, return_train_score=bool) : 위와 같지만 훈련과 테스트에 걸린 시간까지 담아 딕셔너리로 반환한다. bool 이 T 면 테스트 스코어도 같이 포함해 반환된다. 모델을 그리드 서치로 사용하면 중첩 교차 검증의 구현이 가능하다. scoring="accuracy/rou_auc"등으로 모델, 최적 매개변수 선택을 위한 평가 방식을 바꿀 수 있다.
+- sklearn.model_selection.GridSearchCV(모델, 파라미터 딕셔너리({'변수명':[넣어볼 수들의 리스트]}, 딕셔너리의 리스트로 넣으면 조건부로 그리드 탐색), cv=i, return_train_score=bool) : 교차검증을 사용한 그리드 서치 매개변수 조정 방법 로드. .fit(data, label)로 설정된 매개변수 조합에 대해 교차검증을 수행하고, 가장 성능이 좋은 배개변수로 데이터에 대한 새 모델을 자동으로 만듦. 모델엔 .score(test_data, test_label)과 .predict(data)로 접근 가능하다. {.best_params_ : 선택한 매개변수, .best_score_ :  이 설정으로 얻은 정확도 ,  .best_estimator_ :  최고의 모델, .cv_result_ : 각 결과}
+-
 - sklearn.model_selection.LeaveOneOut() :  LOOCV 로드. 위의 cv 매개변수로 넣어 사용할 수 있다. 큰 데이터 셋에선 시간이 오래 걸리지만, 작은 데이터 셋에선 종종 더 좋은 효과를 낸다.
 - sklearn.model_selection.ShuffleSplit(train_size=i/f, test_siz=i/f, n_split=n) :  i개의 데이터 포인트로/f의 데이터 포인트 비율로 n번 반복분할 하는 임의 분할 교차 검증 로드. cv 매개변수에 넣어 사용할 수 있다.
-- sklearn.model_selection.RepeatedStratifiedKFold/RepeatedKFold(random_state = i) : 반복 교차 검증 로드. 분류/회귀 이며 model_selection.StratifiedKFold/KFold 를 기본으로 사용하기 때문에 import 를 해주어야 한다. cv 에 매개변수. 
- 
+- sklearn.model_selection.RepeatedStratifiedKFold/RepeatedKFold(random_state = i) : 반복 교차 검증 로드. 분류/회귀 이며 model_selection.StratifiedKFold/KFold 를 기본으로 사용하기 때문에 import 를 해주어야 한다. cv 에 매개변수.
+
 - sklearn.metrics.confusion_matrix(label, pred_logreg(예측결과)) : 오차 행렬 표시. [(음성데이터)[음성으로 예측한 수, 양성으로 예측한 수] (양성데이터)[음성으로 예측한 수, 양성으로 예측한 수]] 식으로 반환된다.
-- sklearn.metrics.precision_recall_curve(test_label, 모델.decision_function(test_data)(확신에 대한 측정값)) > 정밀도-재현율 곡선 로드. precision, recall, threshold 총 세가지를 반환한다.가능한 모든 임계값에 대해 정밀도와 재현율의 값을 정렬된 리스트로 반환.   
+- sklearn.metrics.precision_recall_curve(test_label, 모델.decision_function(test_data)(확신에 대한 측정값)) > 정밀도-재현율 곡선 로드. precision, recall, threshold 총 세가지를 반환한다.가능한 모든 임계값에 대해 정밀도와 재현율의 값을 정렬된 리스트로 반환.
 - sklearn.metrics.average_precision_score(test_label, 모델.predict_proba(test data)(확신에 대한 측정값)) > 위 곡선의 아래 면적인 평균 정밀도를 계산해 반환.
 - sklearn.metrics.roc_curve(test_label, 확신에 대한 측정값) > ROC 곡선 로드. FPR, TPR, threshold 총 셋을 반환한다.
 - sklearn.metrics.roc_auc_score(test_label, 확신에 대한 측정값) > ROC 곡선의 아래 면적인 AUC 를 계산해 반환한다.
@@ -459,21 +477,21 @@
 - sklearn.pipeline.make_pipeLine(추정기1, 추정기2) : 파이프 라인과 똑같지만 단계의 이름을 자동으로 만들어 준다. .steps 속성에 각 단계의 이름이 들어있다. 단계 이름을 키로 가진 .named_steps 딕셔너리도 파이프 라인의 각 단계 속성애 쉽게 접근 할 수 있다. 그리드 서치에 파이프 라인을 사용할 때는 모델에 넣는다.
 
 #### text
-- sklearn.feature_extraction.text.CountVectorizer() : BOW 표현을 하게 해주는 변환기 로드. .fit(문자열이 담긴 리스트)로 사용, .vocabulary_ 속성에서 반환된 {단어:등장횟수} 형태의 딕셔너리를 볼 수 있음.  tf-idf 와 함께 ngram_range=(연속 토큰 최소길이, 최대길이) 로 연속된 토큰을 고려할 수 있다. 보통은 하나만 하지만 많을 때 바이그램정도로 추가하면 도움이 된다.  
+- sklearn.feature_extraction.text.CountVectorizer() : BOW 표현을 하게 해주는 변환기 로드. .fit(문자열이 담긴 리스트)로 사용, .vocabulary_ 속성에서 반환된 {단어:등장횟수} 형태의 딕셔너리를 볼 수 있음.  tf-idf 와 함께 ngram_range=(연속 토큰 최소길이, 최대길이) 로 연속된 토큰을 고려할 수 있다. 보통은 하나만 하지만 많을 때 바이그램정도로 추가하면 도움이 된다.
 - Bow 표현을 만드려면 .transform(list), Scipy 희소 행렬로 저장되어 있으며, .get_feature_names()로 각 특성에 해당하는 단어들을 볼 수 있음. min_df 매개변수로 토큰이 나타날 최소 문서 개수를 지정할 수 있고, max_df 매개변수로 자주 나타나는 단어를 제거할 수 있다. stop_words 매개변수에 "english" 를 넣으면 내장된 불용어를 사용한다.
 - sklearn.feature_extraction.text.TfidVectorizer(min_df=i) : 텍스트 데이터를 입력받아 BOW 특성 추출과 tf-idf 를 실행하고 L2정규화(스케일 조정)까지 적용하는 모델로드. 훈련데이터의 통걔적 속성을 사용하므로 파이프 라인을 이용한 그리드 서치를 해 주어야 한다. .idf_ 에서 훈련세트의 idf 값을 볼 수 있다. idf 값이 낮으면 자주 나타나 덜 중요하다 생각되는 것이다.
 
 > ###### spacy
->+ 영어와 독일어를 지원하는 NLP 파이썬 패키지. 표제어 추출 방식이 구현되어 있음. 
+>+ 영어와 독일어를 지원하는 NLP 파이썬 패키지. 표제어 추출 방식이 구현되어 있음.
 >+ python -m spacy download en 으로 언어의 모델을 먼저 다운받아야 함.
->+ spacy.load('en') : spacy 의 영어 모델 로드. 
+>+ spacy.load('en') : spacy 의 영어 모델 로드.
 >+ 모델(document) : 문서 토큰화. 찾은 표제어들 반환.
-   
+
 > ###### nltk
 >+ 포터 어간 추출기가 구현되어 있는 파이썬 패키지.
 >+ nlty.stem.PorterStemmer() : PorterStemmer 객체 생성.
 >+ 객체.stem(토큰.norm_.lower()) > 토큰(어간) 찾기.
- 
+
 > ###### KoNLpy
 >+ 한글 분석을 가능하게 하는 파이썬 패키지.
 >+ konlpy.tag.Okt() >  Okt 클래스 객체 생성. .morphs(text)로 형태소 분석이 가능하다.
@@ -482,10 +500,10 @@
 # os
 - os.getcwd() : 현재 작업 폴더 반환.
 - os.chdir(경로) : 디렉토리 변경.
-- os.path.abspath(상대 경로) : 절대 경로 반환. 
+- os.listdir(경로) : 경로 안의 파일 이름을 전부 반환.
+- os.path.abspath(상대 경로) : 절대 경로 반환.
 - os.path.dirname(경로) : 디렉토리명만 반환.
 - os.path.basename(경로) : 파일 이름만 반환.
-- os.listdir(경로) : 경로 안의 파일 이름을 전부 반환.
 - os.path.join(상위, 하위) : 경로를 병합해 새 경로 생성. ('C:\Tmp', 'a', 'b')식으로 넣는다.
 - os.path.isdir(경로) : 폴더의 존재 여부를 반환.
 - os.path.isfile(경로) : 파일의 존재 여부를 반환.
@@ -498,15 +516,15 @@
 - (plotnine.ggplot(petitions)  : 데이터로 그래프 제작
 -  plotnine.aes('category')  : 데이터 축 설정. x='' , y='' 식으로 레이블을 지정하지 않고 하나만 지정하면 x로 들어감.
 -  plotnine.geom_bar(fill='green')) : 데이터 종류 설정. geom_point() 식으로 하면 산점도 타입이다.
-- plotnine.ggplot(data=데이터, mapping= plotnine.aes(x=, y=, color=) + plotnine.geom_point(alpha=f)) : 식으로도 가능하다.   
+- plotnine.ggplot(data=데이터, mapping= plotnine.aes(x=, y=, color=) + plotnine.geom_point(alpha=f)) : 식으로도 가능하다.
 
 
 # wordcloud
 ***
 > wordcloud = wordcloud.WordCloud(  : 워드 클라우드 제작. plt imshow 로 출력.
->                        font_path = fontpath, 
->                        stopwords = [문자열 리스트], 
->                        background_color = 색('white'), 
+>                        font_path = fontpath,
+>                        stopwords = [문자열 리스트],
+>                        background_color = 색('white'),
 >                         width = width, height = height).generate(data)
 
 

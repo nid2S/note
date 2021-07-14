@@ -313,6 +313,7 @@ for number , name in zip(number_l,name_l):
 - def 함수명():
 -   코드  >>> 로 함수 생성. (a,b)식으로 변수 지정도 가능하고, return 도 사용가능. return 에서 , (튜플처리)로 여러개 반환 가능. 혹은 리스트등도 반환가능.
 - def 바로 밑에 """이렇게""" 독스트링(주석)작성가능. 함수명._doc_로 독스트링 출력 가능.
+- __함수(변수도 동일)\__, 함수 >> public | _함수 >> protected | __함수 >> private.
 
 ## element
 ***
