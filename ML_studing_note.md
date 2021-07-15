@@ -121,71 +121,31 @@
 ***
 ### 지도학습
 - 입출력 데이터기반 예측.
-
-####분류
-- 나올 수 있는 응답이 개별적(국가나 언어등 둘 사이에 무언가가 없음). 레이블이 이산형 범주. 출력층의 노드수는 레이블 개수와 동일해야 함.
-
-- 이진 분류 - 범주 두개(y/n). 대부분의 선형 분류가 속함(로지스틱 제외).
-- 다중분류 - 범주 새개 이상. 이진분류를 다중분류로 확장하기 위해서는 일 대 다 라는 방법을 사용함.
-- 일 대 다 - 각 클래스를 다른 모든것과 비교하도록 훈련시킴.
- 
-- F1-Measure - 데이터가 불균형할 때, 정확도 만으로는 성능 측정이 어려워 통계적으로 보정해주는 방법. 다수보다 소수집단의 정답 여부를 더 크게 반영.
-- K-fold Test - 전체 데이터를 다양한 방법으로 쪼개 훈련,테스트,검증의 과정을 여러번(K번) 반복하며 테스트가 편향되어 있지 않고 설명력을 가지게 하려 시행. 
-
-- AutoEncoder - 입력데이터와 출력 데이터를 같게 하고 중간에 레이어를 넣어 원복하게 만드는 구조. 입력 데이터에 대한 일종의 패턴을 찾아냄. 훈련 데이터가 적을 때 사용.
-```python  # auto encoder clone
-import tensorflow as tf
-import tensorflow.keras.layers as layers
-import tensorflow.keras.models as models
-
-n_inputs = x_train.shape[1]
-n_outputs = 2
-n_latent = 50
-
-inputs = tf.keras.layers.Input(shape=(n_inputs, ))
-x = tf.keras.layers.Dense(100, activation='tanh')(inputs)
-latent = tf.keras.layers.Dense(n_latent, activation='tanh')(x)
-
-# Encoder
-encoder = tf.keras.models.Model(inputs, latent, name='encoder')
-encoder.summary()
-
-latent_inputs = tf.keras.layers.Input(shape=(n_latent, ))
-x = tf.keras.layers.Dense(100, activation='tanh')(latent_inputs)
-outputs = tf.keras.layers.Dense(n_inputs, activation='sigmoid')(x)
-
-# Decoder
-decoder = tf.keras.models.Model(latent_inputs, outputs, name='decoder')
-decoder.summary()
-```
-
-####회귀
-- 나올 수 있는 응답이 연속적. 레이블이 연속형인 숫자.
+- 분류 : 나올 수 있는 응답이 개별적(국가나 언어등 둘 사이에 무언가가 없음). 레이블이 이산형 범주. 출력층의 노드수는 레이블 개수와 동일해야 함.
+> - 이진 분류 : 범주 두개(y/n). 대부분의 선형 분류가 속함(로지스틱 제외).
+> - 다중분류 : 범주 새개 이상. 이진분류를 다중분류로 확장하기 위해서는 일 대 다 라는 방법을 사용함.
+> - 일 대 다 : 각 클래스를 다른 모든것과 비교하도록 훈련시킴.
+> - K-fold Test : 전체 데이터를 다양한 방법으로 쪼개 훈련,테스트,검증의 과정을 여러번(K번) 반복하며 테스트가 편향되어 있지 않고 설명력을 가지게 하려 시행.
+- 회귀 : 나올 수 있는 응답이 연속적. 레이블이 연속형인 숫자.
 ```python 선형 회귀 구현
 learning_late = 0.01  # 학습룰 0.01로 설정
 epoch = 300  # 학습 횟수는 300번으로 설정
 W = tf.Variable(1.0)
 b = tf.Variable(1.0) # 가중치, 편향 선언
-
-def hypo(x):  # 가설(가중치와 편향)을 적용해 값을 반환하는 함수
-  return W*x + b
-
-def mse(y_pred, t):  # 평균 오차 제곱 손실함수
-  return tf.reduce_mean(tf.square(y_pred - y) 차이값을 제곱한 뒤 평균을 구함
-
-optimizer = tf.optimizer.SGD(learning_late)  # 옵티마이저는 경사 하강법, 학습률은 0.01로
-
 X = [1,2,3,4,5]
 y = [12,23,34,45,56]  # 학습 데이터 설정
 
-for i in range(epoch+1):
+def hypo(x):  # 가설(가중치와 편향)을 적용해 값을 반환하는 함수
+  return W*x + b
+def mse(y_pred, t):  # 평균 오차 제곱 손실함수
+  return tf.reduce_mean(tf.square(y_pred - y) 차이값을 제곱한 뒤 평균을 구함
+optimizer = tf.optimizer.SGD(learning_late)  # 옵티마이저는 경사 하강법, 학습률은 0.01로
+
+for i in range(epoch):
   y_pred = hypo(X)  # 식 수행
   cost = mse(y_pred, y)  # 결과의 비용(본래와의 평균 제곱 오차)
   gradients = tf.GradientTape().gradients(zip(gradients, [W, b])  # 비용에 대한 파라미터 미분값 계산
   optimizer.apply_gradients(zip(gradients, [W, b]))  # 파라미터 업데이트
-  # epoch 에 따른 출력문을 넣어줘도 괜찮음.
-
-hypo(테스트 데이터) 로 훈련된 모델 사용가능.
  ```
 
 #### 모델
@@ -303,7 +263,6 @@ class MyModel(Model):  # 모델을 상속하는 모델클래스 생성
 
 - 내부 공변량 변화 : 학습 과정에서 층별로 입력 데이터 분초가 달라지는 현상. 
 
-
 ####딥러닝 활성화 함수(activation function)
 ***
 - 활성화 함수 특징 : 비선형 함수여야함. 선형일 경우 층을 여러개 쌓았을 때 한개만 사용경우와의 차이를 주지 못함.
@@ -322,7 +281,7 @@ class MyModel(Model):  # 모델을 상속하는 모델클래스 생성
 - GD(Gradient descent) : 경사 하강법. 경사를 따라 내려가면서 가중치 업데이트. 비용함수를 미분해 함수의 기울기를 구한 후 비용이 최소화되는 방향을 찾아냄. 
 - BGD(Batch Gradient Desent) : 배치 경사 하강법. 가장 기본적 경사 하강법. 오차를 구할 때 전체 데이터를 고려함. 한 학습당 시간이 오래 걸리고 메모리를 크게 요구하나 글로벌 미니멈을 찾을 수 있음.
 - SGD(Stochastic gradient decent) : 확률적 경사 하강법. 매개변수 중 랜덤으로 선택한 하나의 데이터에 대해 계산. 변경 폭이 불안정하고, 정확도가 더 낮을 수 있으나 속도가 빠름.
-- MBGD(Mini-Batch Gradient Descent) : 미니 배치 경사 하강법. 가장 많이 사용되는 경사 하강법. 정해진 양에 대해서만 계산해 매개변수의 값을 조정.  
+- MBGD(Mini-Batch Gradient Descent) : 미니 배치 경사 하강법. 정해진 양에 대해서만 계산해 매개변수의 값을 조정. 미니배치 손실 계산 > 경사하강법 > 반복. 배치크기는 2의 제곱수를 사용하며, CPU/GPU메모리가 2배수이기 때문에 데이터 송수신의 효율을 높일 수 있기 때문임.
 - Momentum : SGD + Momentum(이전 batch 학습결과 반영, 보통 이전:현재 = 9:1 정도). 관성을 응용. 로컬 미니멈을 글로벌 미니멈으로 인식해 계산이 끝났을 상황에서도 탈출하는 효과를 얻게 됨.
 - AdaGrad : SGD + notation. 각 매개변수에 서로 다른 학습률 적용. 큰 변동 가중치 = 학습률 감소, 저변동 가중치 = 학습률 증가. 무한히 학습시 학습이 아예 안될 수 있음.
 - RMSProp : AdaGrad 보완. 가중치보다 기울기가 크게 반영되도록 하고, 하이퍼 파라미터 p를 추가해 h가 무한히 커지지 않게 함. 

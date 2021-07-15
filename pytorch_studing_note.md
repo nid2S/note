@@ -33,14 +33,28 @@
 ## model
 - 가설 선언 후 비용함수, 옵티마이저를 이용해 가중치, 편향등을 갱신해 올바른 값을 찾음.
 - 비용함수를 미분해 grandient(기울기)계산. 
-- optimizer.zero_grad() > cost.backward() > optimizer.step() 과정을 거쳐 optimizer에 인자로 준 텐서(가중치, 편향)를 갱신함.
+- optimizer.zero_grad() > cost(loss).backward() > optimizer.step() 과정을 거쳐 optimizer에 인자로 준 텐서(가중치, 편향)를 갱신함.
 
 - torch.manual_seed(i) : 랜덤시드 고정.
+### class
+- 파이토치의 대부분의 구현체는 모델 생성시 클래스를 사용.
+- torch.nn.Model상속 클래스 구현 > __init__에서 super().__init__을 호출, 사용할 모델(층)정의 > forward(self,x)(자동실행, 모델 사용 후 값 반환).
+```python
+# 파이토치 모델 클래스 구현.
+import torch
+class LinearRegressionModel(torch.nn.Module):
+    def __init__(self): #
+        super().__init__()
+        self.linear = torch.nn.Linear(1, 1)
+
+    def forward(self, x):  # 모델을 데이터와 함께 호출하면 자동실행.
+        return self.linear(x)
+model = LinearRegressionModel()
+```
+
 ### optimizer
 - 옵티마이저.zero_grad() : gradient 0으로 초기화.
 - 옵티마이저.step() : 주어진 학습대상들을 업데이트.  
-
-- torch.optim.SGD(\[가중치(학습대상1), 편향(학습대상2)], lr= learning_rate) : SGD(확률적 경사하강법)사용.
 ```python
 # 사용 예
 import torch
@@ -58,19 +72,29 @@ optimizer = torch.optim.SGD([w1, w2, w3, b], lr=1e-5)
 epoch = 1000
 for i in range(epoch):
     # 선형회귀 H(x) 계산
-    hypothesis = x1 * w1 + x2 * w2 + x3 * w3 + b
     # hypothesis = X.matmul(W) + B      # 행렬 연산으로 식을 간단히 함.
-    
+    hypothesis = x1 * w1 + x2 * w2 + x3 * w3 + b
     # cost 계산(손실함수 : MSE)
     cost = torch.mean((hypothesis - y) ** 2)
-
     # cost로 H(x) 개선
     optimizer.zero_grad()   # 옵티마이저 초기화
     cost.backward()         # 기울기(식을 w로 미분한 값)계산
     optimizer.step()        # 옵티마이저를 이용해 주어진 값들을 업데이트
-
     print(f'Epoch: {i}/{epoch} w1: {w1.item()} w2: {w2.item()} w3: {w3.item()} b: {b.item()} Cost: {cost.item()}')
 ```
+
+- torch.optim.SGD(\[가중치(학습대상1), 편향(학습대상2)], lr= learning_rate) : SGD(확률적 경사하강법)사용. 모델.parameters()를 넣을 수 있음.
+
+### loss
+- torch.nn.functional.mse_loss(prediction, label) : MSE(평균제곱오차) 손실함수 사용.
+
+### models
+- 모델.parameters() : 모델의 파라미터 출력. w와 b가 순서대로 출력됨. 
+- torch.nn.Linear(input_dim, output_dim) : 선형회귀모델 사용. 모델(x_train)을 넣으면 사용할 수 있음.
+
+
+
+
 
 
 
