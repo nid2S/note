@@ -621,13 +621,137 @@ class MyModel(Model):  # 모델을 상속하는 모델클래스 생성
 - 간단한 Mnist를 TF,PyTorch로 바꾼다면 작성 시간은? CNN아닌 MLP사용 여부, 마지막 레이어, 학습은 BCE, 확인은 MSE를 원한다면 메세지가 갈겁니다.
 - 딥러닝 시 GPU를 쓰면 좋은 이유는? :
 ### 파이썬
+- 리스트와 튜플의 차이점은? : 
+- 키의 특징은? : 
+- 파이썬은 어떤 언어인가? 프로그래밍/스크립팅(scripting)? : 
+- 파이썬은 인터프리터 언어이다. 설명한다면? : 
+- pep8 이란? : 
+- 파이썬에선 어떻게 메모리가 다뤄(managed)지는가? : 
+- 파이썬에서 네임스페이스란? : 
+- PYTHONPATH란? : 
+- 파이썬 모듈이란? built-in 모듈에서 흔하게 사용되는 이름은? : 
+- 파이썬에서 지역변수/전역변수란? : 
+- 파이썬의 케이스는 예민한가? : 
+- 파이썬에서 형변환은 무엇인가? : 
+- 윈도우에서 파이썬을 설치하고 path변수를 설정하는 방법은? : 
+- 파이썬에서 들여쓰기(indentation)가 요구되는가? : 
+- Python Arrays와 List의 차이는? : 
+- 파이썬에서 functions 는 무엇인가? : 
+- __init__은 무엇인가? : 
+- lambda 함수란 무엇인가? : 
+- 파이썬에서 self란? : 
+- break, continue, pass가 어떻게 동작(work)하는가? : 
+- [::-1\]은 무엇(어떻게 작동)을 하는가? : 
+- list의 항목을 랜덤으로 하는 방법은? : 
+- iterator와 iterable의 차이점은? : 
+- 파이썬에서 난수생성방법은? : 
+- range와 xrange의 차이점은? : 
+- 파이썬에서 주석을 다는 방법은? : 
+- pickling/unpickling은 무엇인가? : 
+- 파이썬에서 generators란? : 
+- 문자열의 첫글자를 대문자화 하는 방법은? : 
+- 문자열을 소문자화하는 방법은? : 
+- 여러줄에 주석을 다는 방법은? : 
+- docstring이란? : 
+- 연산자에서 is, not의 목적은? : 
+- help(), dir() 함수의 사용법은? : 
+- 파이썬이 종료될때 마다 모든 메모리가 할당취소되지 않는 이유는? : 
+- 삼항연산자(ternary operators)는 어떻게 사용될 수 있는가? : 
+- *args/**kwargs 의 의미는? 이것을 사용하는 이유는? : 
+- len()이 하는 것은? : 
+- "re"모듈의 split(), sub(), subn()은 무엇인가? : 
+- 음수인 인덱스는 무엇이며 왜 사용되는가? : 
+- Python packages란? : 
+- 파이썬에서 파일은 어떻게 삭제될 수 있는가? : 
+- built-in 타입이란 무엇인가? : 
+- 넘파이 배열이 파이썬 lists보다 뛰어나게 제공하는 장점은? :
+- 파이썬 array에 값을 추가/제거하는 방법은? : 
+- 파이썬은 OOps conceots(개념)을 가지고 있는가? : 
+- deep copy와 shallow copy의 차이는? : 
+- 파이썬에서 멀티쓰레딩이 달성되는 방법은? : 
+- 파이썬의 편집(compliation)과 연결(linking)프로세스는 무엇인가? : 
+- 파이썬의 라이브러리는 무엇인가?(몇 개의 이름과 같이) : 
+- split이 쓰이는 이유는? : 
+- 파이썬에서 모듈 import방법은? : 
+- 파이썬의 상속을 설명한다면?(예와 함께) : 
+- 파이썬에서 클래스 생성 방법은? : 
+- monkey patching이란? : 
+- 파이썬은 다중상속을 지원하는가? : 
+- 파이썬의 다형성(Polymorphism)이란? : 
+- 파이썬엔 캡술화(encapsulation)가 정의되어있는가? : 
+- 파이썬에서 데이터추상화(data abstraction)를 하는 방법은? : 
+- 파이썬은 접근지정자를 생성하는가? : 
+- 파이썬에서 빈 클래스를 만드는 방법은? : 
+- object()가 하는 것은? : 
+- 파이썬에서 map함수란? : 
+- 넘파이가 list보다 더 좋은가? : 
+- 파이썬 언어의 GIL이란 무엇인가? : 
+- CPython과 Python의 차이점은? : 
+- 데코레이터란? : 
+- object interning이란? : 
+- @classmethod, @staticmethod, @property 란? : 
 ### 자료구조
+- 연결리스트 > 단일연결리스트, 이중연결리스트, 원형연결리스트 : 
+- 해쉬 테이블(hash table) : 
+- 스택 : 
+- 큐 > 큐, 원형큐 : 
+- 그래프 : 
+- 트리 > 이진트리, 포화이진트리, 완전이진트리, 이진탐색트리 : 
+- 힙 > 최소 힙, 최대 힙 : 
+- red-black 트리 : 
+- b+ 트리 : 
 ### 알고리즘
+- 시간/공간 복잡도 : 
+- 정렬알고리즘 > 버블/선택/삽입/병합/힙/퀵/Counting/Radix정렬 : 
+- Divide and Conquer : 
+- 다이나믹 프로그래밍 : 
+- Greedy 알고리즘 : 
+- 그래프 > Graph Traversal(BFS, DFS), 최단거리(Dijkstra, Floyd-Warshall, Bellman-Fold), 
+   Minimum Spanning Tree(Prim, Kruskal), Union-find, Topological(위상)sort : 
 ### 네트워크
+- TCP/IP 각 계층 설명, OSI 7계층과 차이 설명 : 
+- Frame, Packet, Segment, Datagram을 비교 : 
+- TCP와 UDP의 차이, 헤더를 비교 설명 : 
+- TCP의 3-way-handshake와 4-way-handshake를 비교셜명 : 
+- TCP의 연결설정과정(3단계)와 연결종료과정(4단계)가 차이나는 이유 :
+- 서버에서 FIN플래그 전송전 전송한 패킷이 FIN패킷보다 늦게 도착하게 된다면? :  
+- 초기 Sequence Number인 ISN을 0부터 시작하는게 아닌 난수를 생성해 설정하는 이유는? : 
+- HTTP, HTTPS와 둘의 차이점에 대해 설명, 동작과정을 비교 : 
+- HTTP 요청/응답 헤더의 구조 설명 : 
+- HTTP GET과 POST 메서드 비교 설명 : 
+- 쿠키(Cookie)와 세션(Session)설명 : 
+- CORS란? : 
+- DNS란? : 
+- REST, RESTful과 차이를 설명 : 
+- 소켓(Socket)이란? (자신있는 언어로 소켓생성 예시) : 
+- Socket.io와 WebSocket의 차이 : 
+- IPv4와 IPv6의 차이 : 
+- MAC Address란? : 
+- 라우터, 스위치, 허브의 차이 : 
+- SMTP란? : 
+- 노트북으로 www.google.com 접속시 요청을 보내고 받는 과정 자세히 설명 : 
+- 여러 네트워크 topology에 대해 설명 : 
+- subnet mask에 대해 설명 : 
+- data encapsulation(캡슐화)란? :  
+- DHCP란? : 
+- routing protocol을 몇가지 설명(link state, distance vector 등) : 
+- 이더넷(ethernet)이란? : 
+- 클라이언트와 서버의 차이점 : 
+- delay, timing(jitter), throughput의 차이 셜명 :
 ### OS
-
-
-
-
-
+- 프로세스와 스레드의 차이점 : 
+- 멀티프로세스 대신 멀티 스레드를 사용하는 이유 : 
+- 캐시의 지역성에 대해 설명 : 
+- Thread-safe에 대해 설명(critical section) : 
+- 뮤텍스와 세마포어의 차이 : 
+- 스케줄러, 단기/중기/장기로 나누는 기준에 대해 설명 : 
+- CPU스케줄러(FCFS, SJF, SRTF, Priority Scheduling, RR)에 대해 설명 : 
+- 동기와 비동기의 차이 : 
+- 메모리 관리 전략의 종류 : 
+- 가상메모리에 대해 설명 : 
+- 교착상태(Deadlock)의 개념과 조건을 설명 : 
+- 사용자 수준 스레드와 커널수준 스레드의 차이 : 
+- 외부단편화와 내부단편화에 대해 설명 : 
+- Context Switching에 대해 설명, 과정나열 : 
+- Swapping에 대해 설명 : 
 
