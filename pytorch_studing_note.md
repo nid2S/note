@@ -23,8 +23,6 @@
 
 - torch.cat(\[텐서1, 텐서2], dim=i) : i 번째 차원을 늘리며 두 텐서를 연결. 기존 차원을 유지한채 지정 차원의 크기만 커짐.
 - torch.stack(\[텐서1, 텐서2, 텐서3], -dim=i-) : 텐서(벡터)들을 순차적으로 쌓음. 차원이 하나 늘어남. i번 차원이 늘어나게 함.
-  
-
 ###### tensor expression
 - 2D Tensor : (batch size, dim)
 - 3D Tensor : (batch size, length(time step), dim)
@@ -37,7 +35,7 @@
 
 - torch.manual_seed(i) : 랜덤시드 고정.
 ### class
-- 파이토치의 대부분의 구현체는 모델 생성시 클래스를 사용.
+- 파이토치의 대부분의 구현체(모델)는 모델 생성시 클래스를 사용.
 - torch.nn.Model상속 클래스 구현 > __init__에서 super().__init__을 호출, 사용할 모델(층)정의 > forward(self,x)(자동실행, 모델 사용 후 값 반환).
 ```python
 # 파이토치 모델 클래스 구현.
@@ -50,6 +48,32 @@ class LinearRegressionModel(torch.nn.Module):
     def forward(self, x):  # 모델을 데이터와 함께 호출하면 자동실행.
         return self.linear(x)
 model = LinearRegressionModel()
+```
+
+### data
+- torch.utils.data.TensorDataset(x, y) : 데이터들을 TensorDataset(PyTorch기본 데이터셋)을 이용해 데이터셋에 저장.
+- torch.utils.data.DataLoader(dataset, batch_size=i, shuffle=True) : 데이터셋을 i개의 미니배치로 학습시킴. shuffle(Epoch마다 데이터 학습순서를 섞음)매개변수 사용가능.
+  반환되는건 iterable객체로, enumerate를 이용해 batch_idx와 sample(x, y)을 꺼낼 수 있음. 반복문이 하나 추가되는걸 제외하고는 배치학습법과 동일.  
+- 커스텀 데이터셋 구현 : torch.utils.data.Dataset을 상속받는 클래스 제작 후 __init\__(전처리), __len\__(길이, 총 샘플 수), __getitem\__(특정샘플, 인덱스)을 구현해 제작.
+```python 
+class CustomDataset(Dataset): 
+  def __init__(self):
+    self.x_data = [[73, 80, 75],
+                   [93, 88, 93],
+                   [89, 91, 90],
+                   [96, 98, 100],
+                   [73, 66, 70]]
+    self.y_data = [[152], [185], [180], [196], [142]]
+
+  # 총 데이터의 개수를 리턴
+  def __len__(self): 
+    return len(self.x_data)
+
+  # 인덱스를 입력받아 그에 맞는 입출력 데이터를 Tensor로 리턴
+  def __getitem__(self, idx): 
+    x = torch.FloatTensor(self.x_data[idx])
+    y = torch.FloatTensor(self.y_data[idx])
+    return x, y
 ```
 
 ### optimizer
@@ -88,7 +112,7 @@ for i in range(epoch):
 ### loss
 - torch.nn.functional.mse_loss(prediction, label) : MSE(평균제곱오차) 손실함수 사용.
 
-### models
+### models(layers)
 - 모델.parameters() : 모델의 파라미터 출력. w와 b가 순서대로 출력됨. 
 - torch.nn.Linear(input_dim, output_dim) : 선형회귀모델 사용. 모델(x_train)을 넣으면 사용할 수 있음.
 
