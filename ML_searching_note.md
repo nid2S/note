@@ -87,6 +87,7 @@
 - pd.get_dummies(범주형 데이터) : one hot encoding. 나오는 값들이 그 종류만큼 (이름)_(데이터이름)의 형태로 나뉨.
 - pd.concat(df1, df2) : 두 데이터프레임을(행으로)합침. ignore_index=True로 기존의 인덱스를 무시하고 이어넣을 수 있음. append와 동일한 기능을 함.
 - pd.concat([df1, df2\], axis=1) : 두 데이터프레임을 열로 함침. 인덱스가 동일한 항목들의 열을 합쳐 칼럼이 늘어나게 함. ignore_index를 사용하면 순서대로 합쳐짐. 딕셔너리로 넣어 열이름을 주고 합칠수도 있음({"label":label, "pred":pred"} 식).
+- pd.set_option('display.max_columns', i) : IPython display설정. 최대로 출력할 열의 개수를 i개로 늘림.
 
 - df.columns : 칼럼이름 Index 객체로 반환. 여기에 값을 할당해 헤더를 지정해 줄 수도 있음.
 - df.values  : 값들 배열형태로 반환.
@@ -96,7 +97,8 @@
 - df.loc[인덱스\] : 데이터 로드. 평범하게 슬라이스 하면 키로 인식되어 사용.
 - df.iloc[인덱스\] : 인덱스와 함께 데이터 로드.
 
-- df["칼럼명"\] : 인덱스 지정. 차원이 여러개일 경우는 [5, 1:3\]처럼 차원별로 인덱스를 지정해 주어야 함.
+- df["칼럼명"\] : 인덱스 지정, 시리즈로 반환. 차원이 여러개일 경우는 [5, 1:3\]처럼 차원별로 인덱스를 지정해 주어야 함.
+- df[["칼럼명"\]\] : 인덱스 지정, 데이터프레임으로 반환.
 - df["칼럼1","2","3"\] : 열(칼럼) 다중 선택. [칼럼1:칼럼3\]식으로 선택할 수 도 있음.
 - df[dataFrame.Age == 30\] : 데이터를 선택해서(조건을 줘서)표시 가능
 
@@ -497,21 +499,6 @@
 >+ 한글 분석을 가능하게 하는 파이썬 패키지.
 >+ konlpy.tag.Okt() >  Okt 클래스 객체 생성. .morphs(text)로 형태소 분석이 가능하다.
 
-
-# os
-- os.getcwd() : 현재 작업 폴더 반환.
-- os.chdir(경로) : 디렉토리 변경.
-- os.listdir(경로) : 경로 안의 파일 이름을 전부 반환.
-- os.path.abspath(상대 경로) : 절대 경로 반환.
-- os.path.dirname(경로) : 디렉토리명만 반환.
-- os.path.basename(경로) : 파일 이름만 반환.
-- os.path.join(상위, 하위) : 경로를 병합해 새 경로 생성. ('C:\Tmp', 'a', 'b')식으로 넣는다.
-- os.path.isdir(경로) : 폴더의 존재 여부를 반환.
-- os.path.isfile(경로) : 파일의 존재 여부를 반환.
-- os.path.exists(경로) : 파일 혹은 디렉토리의 존재 여부를 반환.
-- os.path.getsize(경로) : 파일의 크기 반환.
-
-
 # plotnine
 ***
 - (plotnine.ggplot(petitions)  : 데이터로 그래프 제작
@@ -548,11 +535,78 @@
 - mglearn.plots.plot_knn_regression(n_neighbors = k) > knn 회귀를 그래프로 그림.
 - mglearn.plots.plot_ridge_n_samples() > 리지 회귀를 그래프로 그림.
 
+# os | os(파일, 디렉토리)관련 명령
+- os.getcwd() : 현재 작업 폴더 반환.
+- os.chdir(경로) : 디렉토리 변경.
+- os.path.abspath(상대 경로) : 절대 경로 반환. 
+- os.path.dirname(경로) : 디렉토리명만 반환.
+- os.path.basename(경로) : 파일 이름만 반환.
+- os.listdir(경로) : 경로 안의 파일 이름을 전부 반환.
+- os.path.join(상위, 하위) : 경로를 병합해 새 경로 생성. ('C:\Tmp', 'a', 'b')식으로 넣는다.
+- os.path.isdir(경로) : 폴더의 존재 여부를 반환.
+- os.path.isfile(경로) : 파일의 존재 여부를 반환.
+- os.path.exists(경로) : 파일 혹은 디렉토리의 존재 여부를 반환.
+- os.path.getsize(경로) : 파일의 크기 반환.
 
-# Scrapy
-- (?)
+# selenium
+- 웹 크롤링, 웹상 자동화(메일등)에 이용되는 패키지. 사용자가 웹사이트를 이용하는 방법과 동일하게 동작.
+
+- selenium.webdriver.웹브라우저() : 해당 웹브라우저를 이용한 웹드라이버 객체 생성. .close()로 닫을 수 있음.
+- selenium.webdriver.common.keys.Keys : 다양한 키들을 정의. .RETURN{엔터}등이 정의되어있음.
+- 웹드라이버 메서드 : .get(url){url로 진입(창을 띄움)}, .find_element(s)_by_name/tag(찾을 수단){값(들)을 찾음, 객체(들 시퀀스)로 반환}등 사용가능.
+- 찾은속성.send_keys(값) : 값(키보드 입력값)을 해당 부분으로 전송. 클릭은 .click()로 사용. 클릭이나 엔터 사용시 로딩 시간을 기다리려 time.sleep()메서드를 사용.
+- 찾은속성.get_attribute(속성) : 해당 부분에서 속성 부분을 가져옴. 여기서 url을 얻었다면 urllib.request.urlretrieve를 이용해 다운로드를 할 수 있음.
+
+opener=urllib.request.build_opener()
+opener.addheaders=[('User-Agent','Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')\]
+urllib.request.install_opener(opener)
+urllib.request.urlretrieve(imgUrl, "test.jpg")
+
+- 웹드라이버.execute_script(자바스크립트) : 자바스크립트문 실행.
+```python 
+# 사용 예 (스크롤 전부 내리기)
+last_height = driver.execute_script("return document.body.scrollHeight")  # 브라우저 높이 구하기
+while True:
+  driver.execute_script("window.scrollTo(0, document.body.scrollHeight")  # 스크롤 내리기
+  time.sleep(Load_Time)
+  new_height = driver.execute_script("return document.body.scrollHeight")
+  if new_height == last_height:
+    # 스크롤을 내리면 로딩버튼이 나오는 사이트라면, 그 버튼을 선택 > 클릭하게 하고 더이상 나오지않아 오류가 나게 되면 종료시킬 수 있음. 
+    break
+  last_height = new_height
+```
+- 가끔 사이트의 봇을 막는 기능때문에(urllib.error.HTTPError: HTTP Error 403: Forbidden)안된다면 특정 코드를 사용해 브라우저로 위장해야 함.
+```python 
+# 브라우저인 것처럼 속이는 헤더 추가.
+opener=urllib.request.build_opener()            # 오프너 생성.
+opener.addheaders=[('User-Agent','Mozilla/5.0 (Windows NT 6.1; WOW64)\  # 자기 정보(브라우저 헤더에 넣을)입력
+ AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')]
+urllib.request.install_opener(opener)           # 오프너 오픈
+urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
+```
+
+# urllib(?),unicodedata | url,uni
+- urllib : url 이용 라이브러리. urllib3 은 따로 install, import가 필요함. 
+- urllib3.PoolManager() : url poolManager 로드. url이용에 사용가능.
+- http(Pool).request('GET', url, preload_content=False) : url 오픈. with 등을 이용해 파일객체로 열 수 있고, 다운로드를 위해 shutil이 필요.
+  
+- urllib.request.urlretrieve(주소, filename) : 주소의 파일을 파일 이름으로 다운로드.
+- urllib.request.build_opener() : 오프너 생성.
+- 오프너.addheaders=[넣을 헤더\] : 오프너에 브라우저 헤더추가.
+- urllib.request.install_opener(opener) : 오프너로 오픈. 이 이후 평범하게 코드 사용.
+
+- unicodedata.normalize('NFD', s) : 입력한 문자를 폼에 맞춰 유니코드로 변환. 〈NFC〉, 〈NFKC〉, 〈NFD〉, 〈NFKD〉등이 될 수 있음.
+- unicodedata.category(c) : 문자에 할당된 일반 범주(general category)를 문자열로 반환. Mn(Mark, no spacing. 엑센트등 로마자)등과 같이 나옴.
+
+# shutil,zipfile | 파일다운, unzip
+- shutil.copyfileobj(url 파일, out 파일) : url에서 파일을 다운받아 out파일에 저장. 둘 다 파일객체여야 함.
+  
+- zipfile.ZipFile(zipfilepath, 'r') : zip파일객체 오픈. .extractall(path)로 압축을 헤재할 수 있음.
 
 # tensorboard
+- (?)
+
+# Scrapy
 - (?)
 
 # timeit

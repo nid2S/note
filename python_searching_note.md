@@ -12,6 +12,9 @@
 
 #sequence
 ***
+- 개체 : entity. 메서드 등. 
+- 객체 : object. 어떠한 속성값과 행동을 가지고 있는 데이터. 파이썬의 모든것.
+  
 - 시퀀스자료형 : 투플,리스트,range,문자열등 값이 연속적으로 이어진 자료형
 - 시퀀스 객체 : 시퀀스 자료형으로 만든 객체. 요소는 시퀀스 객체속 각 값. a[0]식으로 요소에 접근 가능
 - 리스트, 튜플, 딕셔너리, 세트를 컨테이너라고 부름.
@@ -701,7 +704,7 @@ for number , name in zip(number_l,name_l):
 # Virtual environment
 ***
 - python -m venv 가상환경이름 을 가상환경을 만들 폴더에서 사용하면 가상환경 폴더 생성
-- 그 폴더로 이동해 .\Scripts\Activate.bat 파일을 실행하면 가상 환경이 활성화됨. 이 명령을 실행한 파이썬의 버전이 가상환경의 버전이 됨.
+- 그 폴더로 이동해 .\Scripts\Activate.bat 파일을 실행하면(혹은 activate 실행)가상 환경이 활성화됨. 이 명령을 실행한 파이썬의 버전이 가상환경의 버전이 됨.
 - 성공적으로 가상환경을 만들면 (가상환경이름)이 표시되는데, 그 상태에서 pip 로 패키지를 설치하면 \Lib\site-packages 안에 패키지가 저장되며 그 패키지에서만 사용할 수 있다.
 - 'pip freeze > requirements.txt' : requirements.txt 파일에 설치된 패키지 목록 저장. 그 목록대로 설치하려면 pip install -r requirements.txt , 삭제하려면 uninstall.
 - 가상환경 폴더를 옮겼다면 activate.bat, Activate.ps1, activate 파일 안의 VIRTUAL_ENV 부분을 이동시킨 폴더 경로로 수정.
