@@ -4,7 +4,7 @@
 - 텐서 : pytorch의 행렬(데이터)를 저장하는 자료형. numpy의 ndarray와 비슷함. 인덱스접근, 슬라이싱 등이 전부 가능함.
 - 브로드 캐스팅 : 크기가 다른 행렬(텐서)들의 크기를 자동으로 맞춰 연산을 가능하게 해주는 기능. 연산시 더 큰 차원에 맞춰짐(요소 복제).
 
-- torch.tensor(i) : 텐서 생성.
+- torch.tensor(i) : 텐서 생성. .item()으로 값을 받아올 수 있음. 
 - torch.zeros(shape) : 0으로 초기화된 shape의 텐서 생성.
 
 - torch.자료형Tensor(array) : array로 지정된 자료형의 텐서 생성(ex-Float:32bit 부동소수점). 
@@ -21,6 +21,8 @@
 - 텐서.자료형() : 텐서의 자료형을 변환(TypeCasting).
 - 텐서.연산_() : 기존의 값을 저장하며 연산. x.mul(2.)의 경우 x에 다시 저장하지 않으면 x엔 영향이 없으나, x.mul_()은 연산과 동시에 덮어씀.
 
+- torch.log(텐서) : 텐서의 모든 요소에 로그를 적용.
+- torch.exp(텐서) : 텐서의 모든 요소에 ln(log_e)를 적용.
 - torch.cat(\[텐서1, 텐서2], dim=i) : i 번째 차원을 늘리며 두 텐서를 연결. 기존 차원을 유지한채 지정 차원의 크기만 커짐.
 - torch.stack(\[텐서1, 텐서2, 텐서3], -dim=i-) : 텐서(벡터)들을 순차적으로 쌓음. 차원이 하나 늘어남. i번 차원이 늘어나게 함.
 ###### tensor expression
@@ -76,6 +78,9 @@ class CustomDataset(Dataset):
     return x, y
 ```
 
+### activation function
+- torch.sigmoid(텐서(식)) : 시그모이드 사용.
+
 ### optimizer
 - 옵티마이저.zero_grad() : gradient 0으로 초기화.
 - 옵티마이저.step() : 주어진 학습대상들을 업데이트.  
@@ -106,16 +111,19 @@ for i in range(epoch):
     optimizer.step()        # 옵티마이저를 이용해 주어진 값들을 업데이트
     print(f'Epoch: {i}/{epoch} w1: {w1.item()} w2: {w2.item()} w3: {w3.item()} b: {b.item()} Cost: {cost.item()}')
 ```
-
 - torch.optim.SGD(\[가중치(학습대상1), 편향(학습대상2)], lr= learning_rate) : SGD(확률적 경사하강법)사용. 모델.parameters()를 넣을 수 있음.
 
 ### loss
 - torch.nn.functional.mse_loss(prediction, label) : MSE(평균제곱오차) 손실함수 사용.
+- torch.nn.functional.binary_cross_entropy(prediction, label) : 이진분류(로지스틱 회귀)의 손실함수 사용.
 
-### models(layers)
+### module(layers)
 - 모델.parameters() : 모델의 파라미터 출력. w와 b가 순서대로 출력됨. 
-- torch.nn.Linear(input_dim, output_dim) : 선형회귀모델 사용. 모델(x_train)을 넣으면 사용할 수 있음.
+- torch.nn.Linear(input_dim, output_dim) : 선형회귀모델 사용. 이대로 모델로 쓸 수도, 모델에 층으로 넣을수도 있음.
+- torch.nn.Sigmoid() : 시그모이드 층을 쌓음. Linear() > Sigmoid() 로 로지스틱 회귀 구현 가능.
 
+### model
+- torch.nn.Sequential(layers) : 시퀀셜 모델 생성. nn.Module층을 쉽게 쌓을 수 있도록 함. 대부분의 파이토치 모델은 클래스로 구성되나 아주 간단한 모델의 경우 가끔 사용됨.
 
 
 

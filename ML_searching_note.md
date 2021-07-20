@@ -107,7 +107,7 @@
 - df.info() : 데이터프레임의 정보 볼 수 있음.
 - df.mean() : 데이터들의 평균값을 얻을 수 있움.
 - df.reset_index() : 인덱스 리셋. 인덱스를 0부터 시작하게 함.
-- df.plot() : 데이터를 가지고 그래프를 그림. kind="bar" 등으로 종류를 지정해 줄 수 도 있음.
+- df.plot() : 데이터를 가지고 그래프를 그림. kind="bar" 등으로 종류를 지정해 줄 수 도 있고, stacked=True로 밑을 덮는 형태로도 가능함.
 - df.to_csv(filename) : 데이터 프레임을 csv파일로 저장. index=bool. header=bool 인수로 인덱스,헤더의 존재여부를, na_rep인수로 na를 어떻게 표시할지를 설정 가능.
   
 - df[열이름\].nunique() : 열에서 중복된 샘플을 제외한 샘플의 개수 출력. 중복된 값이 있다면 단 하나의 값만 남게 됨.
@@ -550,17 +550,19 @@
 
 # selenium
 - 웹 크롤링, 웹상 자동화(메일등)에 이용되는 패키지. 사용자가 웹사이트를 이용하는 방법과 동일하게 동작.
-
+- import selenium.webdriver 으로 import해야 webdriver사용가능.
+  
 - selenium.webdriver.웹브라우저() : 해당 웹브라우저를 이용한 웹드라이버 객체 생성. .close()로 닫을 수 있음.
-- selenium.webdriver.common.keys.Keys : 다양한 키들을 정의. .RETURN{엔터}등이 정의되어있음.
 - 웹드라이버 메서드 : .get(url){url로 진입(창을 띄움)}, .find_element(s)_by_name/tag(찾을 수단){값(들)을 찾음, 객체(들 시퀀스)로 반환}등 사용가능.
-- 찾은속성.send_keys(값) : 값(키보드 입력값)을 해당 부분으로 전송. 클릭은 .click()로 사용. 클릭이나 엔터 사용시 로딩 시간을 기다리려 time.sleep()메서드를 사용.
-- 찾은속성.get_attribute(속성) : 해당 부분에서 속성 부분을 가져옴. 여기서 url을 얻었다면 urllib.request.urlretrieve를 이용해 다운로드를 할 수 있음.
+- selenium.webdriver.common.keys.Keys : 다양한 키들을 정의. .RETURN{엔터}등이 정의되어있음.
+- 타겟속성.send_keys(값) : 값(키보드 입력값)을 해당 부분으로 전송. 클릭은 .click(), 새로고침은 .refresh()로 사용. 클릭이나 엔터 사용시 로딩 시간을 기다리려 time.sleep()메서드를 사용.
+- 타겟속성.get_attribute(속성) : 해당 부분에서 속성 부분을 가져옴. 여기서 url을 얻었다면 urllib.request.urlretrieve를 이용해 다운로드를 할 수 있음.
 
-opener=urllib.request.build_opener()
-opener.addheaders=[('User-Agent','Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')\]
-urllib.request.install_opener(opener)
-urllib.request.urlretrieve(imgUrl, "test.jpg")
+- xpath : W3C의 표준. XML문서 구조를 통해 항목을 배치/처리하는 방법을 기술한 언어. XML보다 쉽고, 약어로 되어 있으며 문서 노드정의를 위해 경로식을 사용.
+> - driver.find_element(s)_by_xpath()로 xpath를 이용해 노드를 찾음.
+> - 노드선택 : /(루트노드로부터 선택), //(현 노드로부터 문서상의 모든 노드 조회), .(현 노드), ..(부모노드), @(현 노드의 모든 속성), 노드명(노드이름이 노드명인 노드 선택)
+> - 술부 : []형태로 기술, 특정 값/조건에 해당되는지 반별. *(매칭되는 모든 ElementNode), @\*(매칭되는 모든 속성노드), Node()(현 노드로부터 문서상 모든 노드 조회)등이 주로 사용. 여러 경로 선택시 | 를 이용해 나눔.
+> - 예시 : //div[@class='language-text highlighter-rouge'\]/pre[@class='highlight'\]/code (현 노드에서 특정 클래스의 div속 특정 클래스의 pre속 code 선택).
 
 - 웹드라이버.execute_script(자바스크립트) : 자바스크립트문 실행.
 ```python 
@@ -585,7 +587,7 @@ urllib.request.install_opener(opener)           # 오프너 오픈
 urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 ```
 
-# urllib(?),unicodedata | url,uni
+# urllib(3),unicodedata | url,uni
 - urllib : url 이용 라이브러리. urllib3 은 따로 install, import가 필요함. 
 - urllib3.PoolManager() : url poolManager 로드. url이용에 사용가능.
 - http(Pool).request('GET', url, preload_content=False) : url 오픈. with 등을 이용해 파일객체로 열 수 있고, 다운로드를 위해 shutil이 필요.
