@@ -85,9 +85,9 @@
 - pd.read_csv(파일경로) : 파일읽기. csv파일이 아니더라도 읽을 수 있고, sep/delimiter(구분이 될 문자 지정), header(헤더설정, None으로 해주면 첫번째 열이 해더가 되지 않음.),
   name(각 열의 이름 설정), index_col=[열이름/정수\](인덱스가 될 칼럼 선택)등의 인수를 쓸 수 있음.
 - pd.get_dummies(범주형 데이터) : one hot encoding. 나오는 값들이 그 종류만큼 (이름)_(데이터이름)의 형태로 나뉨.
+- pd.set_option('display.max_columns', i) : IPython display설정. 최대로 출력할 열의 개수를 i개로 늘림.
 - pd.concat(df1, df2) : 두 데이터프레임을(행으로)합침. ignore_index=True로 기존의 인덱스를 무시하고 이어넣을 수 있음. append와 동일한 기능을 함.
 - pd.concat([df1, df2\], axis=1) : 두 데이터프레임을 열로 함침. 인덱스가 동일한 항목들의 열을 합쳐 칼럼이 늘어나게 함. ignore_index를 사용하면 순서대로 합쳐짐. 딕셔너리로 넣어 열이름을 주고 합칠수도 있음({"label":label, "pred":pred"} 식).
-- pd.set_option('display.max_columns', i) : IPython display설정. 최대로 출력할 열의 개수를 i개로 늘림.
 
 - df.columns : 칼럼이름 Index 객체로 반환. 여기에 값을 할당해 헤더를 지정해 줄 수도 있음.
 - df.values  : 값들 배열형태로 반환.
@@ -122,7 +122,7 @@
 - df[열이름\].astype("int/float") : 데이터타입 변경. df[칼럼명\]은 df.칼럼명 과 같음. "category"로 설정시 데이터가 범주형으로 변경, 원핫인코딩이 가능해짐.
 - df[열이름\].replace(요소1, 요소2) : 그 칼럼의 값 중 요소1(정규표현식 패턴도 가능)과 일치하는 값을 요소2로 바꿈. [x1,x2\],[y1,y2\] 식으로 넣어 여러개의 값을 변환할 수 도 있음.
 - df[열이름\].apply(함수) : 데이터프레임 해당 열속 모든 행에 함수를 적용. 함수는 row(이름달라도 가능)를 꼭 인자로 받아야함. 함수에 직접 값을 전달하려면 apply(함수, 변수명=값)식으로 가능, 함수 내부에서 row.열이름 으로 행의 특정 값에 접근가능.
-- df[열이름\].map(함수/딕셔너리) : 데이터프레임 해당 열(칼럼)속 모든 행에 주어진것을 적용. 함수 전달시 apply와 동일하게 사용,작동. 딕셔너리는 {원래값:바뀔값}형식으로 넣어 데이터프레임(해당 행)의 값을 바꿀 수 있음.
+- df[열이름\].map(함수/딕셔너리) : 데이터프레임 해당 열(칼럼)속 모든 행에 주어진것을 적용. 함수 전달시 apply와 동일하게 사용,작동. 딕셔너리는 {원래값:바뀔값}형식으로 넣어 데이터프레임(해당 행)의 값을 바꿀 수 있음(값이 없으면 nan).
 - df.applymap(함수) : 데이터프레임속 모든 값에 함수를 적용.
   
 - df.append(df2) : 데이터프레임에 데이터프레임을(행으로)추가. ignore_index=True로 본래의 인덱스를 무시하고 기존값에 인덱스를 이어 넣을 수 있음. 열을 추가하려면 
@@ -167,12 +167,18 @@
 - plt.hlines(y, x_min, x_max) : y에 min 부터 max 까지 수평선을 그음. min,max 가 0~1로 표현되지 않음.
 - plt.vlines(x, y_min, y_max) : x에 min 부터 max 까지 수직선을 그음.
 
+- plt.line(x, y) : 
 - plt.bar(x, y) : 막대그래프를 그림. width(너비),align(눈금위치. 히스토그램처럼 눈금을 막대 끝으로 이동가능,'edge'),color,edgecolor,linewidth(테두리두께),tick_label,log(bool, y를 로그스케일로) 등의 매개변수 사용 가능.
 - plt.barh(x, y) : 수평 막대그래프를 그림. height 를 제외하면 매개변수 동일. width/height 를 음수로 지정하면 막대 위쪽에 눈금 표시.
 - plt.scatter(x, y) : 산점도(상관관계표현)를 그림. s(마커 면적),c(마커 색),alpha(투명도) 등의 매개변수 사용가능.
 - plt.hist(리스트) : 히스토그램(도수분포표 그래프)을 그림. 리스트에 나온 계급과 그 빈도를 분석해 자동으로 히스토그램으로 만들어줌. bins(쪼갤영역수),density(bool,막대사이를 이어 하나로), histtype(막대 내부를 채울지,'step') 등 매개변수 사용가능.
 - plt.errorbar(x, y, yerr) : 에러바(데이터편차표현)를 그림. yerr 는 각 y의 편차로 위아래 대칭인 오차로 표시, [(error), (error)]식으로 넣으면 아래방향/위방향 편차를 나타내게 됨. uplims/lolims(bool, 상한/하한 기호표시) 매개변수 사용가능.
 - plt.pie(ratio(각 영역 비율 리스트), label(각 영역 이름 리스트)) : 파이차트(범주별 구성비율 원형표시)를 그림. autopct(영역안에 표시될 숫자 형식 지정), startangle(시작각도), counterclock(bool,반시계 여부), explode(0~1실수 리스트, 차트중심에서 이탈도), shadow(bool,그림자), colors(리스트,색이름/코드), wedgeprops({'width': 0.7, 'edgecolor': 'w', 'linewidth': 5}, 반지름 비율, 테두리색, 테두리너비) 매개변수 사용가능.
+- plt.box(x, y) : 최소, 최대, 밀집구역(상자)등을 알 수 있는 그래프를 그림.
+- plt.hexbin(x, y) : 각 데이터가 겹치는(밀집된)정도를 볼 수 있는 그래프를 그림.
+- plt.area(x, y) : 각 데이터의 영역을 볼 수 있는 그래프를 그림.
+- plt.density(x, y) : (?)
+
 
 - plt.show() : 생성한 plot(그래프)를 보여줌.
 
@@ -567,11 +573,11 @@
 - 웹드라이버.execute_script(자바스크립트) : 자바스크립트문 실행.
 ```python 
 # 사용 예 (스크롤 전부 내리기)
-last_height = driver.execute_script("return document.body.scrollHeight")  # 브라우저 높이 구하기
+last_height = driver.execute_script("return document.body.scrollHeight)")  # 브라우저 높이 구하기
 while True:
-  driver.execute_script("window.scrollTo(0, document.body.scrollHeight")  # 스크롤 내리기
+  driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")  # 스크롤 내리기
   time.sleep(Load_Time)
-  new_height = driver.execute_script("return document.body.scrollHeight")
+  new_height = driver.execute_script("return document.body.scrollHeight)")
   if new_height == last_height:
     # 스크롤을 내리면 로딩버튼이 나오는 사이트라면, 그 버튼을 선택 > 클릭하게 하고 더이상 나오지않아 오류가 나게 되면 종료시킬 수 있음. 
     break

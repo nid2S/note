@@ -6,11 +6,12 @@
 
 - torch.tensor(i) : 텐서 생성. .item()으로 값을 받아올 수 있음. 
 - torch.zeros(shape) : 0으로 초기화된 shape의 텐서 생성.
+- torch.randint(shape) : shape의 랜덤으로 값이 할당된 텐서 생성.
 
 - torch.자료형Tensor(array) : array로 지정된 자료형의 텐서 생성(ex-Float:32bit 부동소수점). 
 - torch.zeros_like(array) : array와 동일한 차원의 0으로 채워진 텐서 생성. requires_grad 매개변수로 학습을 통해 값이 변경되는 변수(가중치, 편향)인지 명시해줄 수 있음.
 - torch.ones_like(array) : array와 동일한 차원의 1으로 채워진 텐서 생성.
-  
+
 - required_grade = bool : 텐서.grad에 텐서에 대한 기울기를 저장. 텐서 생성시 매개변수로 줄 수 있음. 
 - 텐서.backword() : 역전파. 해당 수식의 텐서(w)에 대한 기울기를 계산. w가 속한 수식을 w로 미분.
 
@@ -18,6 +19,7 @@
 - 텐서.view(array) : 텐서의 크기(차원)변경. numpy의 reshape와 같이 전체 원소수는 동일해야 하고, -1 인자를 사용할 수 있음.
 - 텐서.squeeze() : 차원의 크기가 1인 경우 해당차원 제거.
 - 텐서.unsqueeze(i) : i 위치(shape의 위치)에 크기가 1인 차원을 추가.
+- 텐서.scatter(dim, 텐서, 넣을 인자) : dim차원에서, 텐서의 데이터(내부 데이터를 인덱스로)대로 넣을 인자를 삽입(할당).  
 - 텐서.자료형() : 텐서의 자료형을 변환(TypeCasting).
 - 텐서.연산_() : 기존의 값을 저장하며 연산. x.mul(2.)의 경우 x에 다시 저장하지 않으면 x엔 영향이 없으나, x.mul_()은 연산과 동시에 덮어씀.
 
@@ -77,9 +79,15 @@ class CustomDataset(Dataset):
     y = torch.FloatTensor(self.y_data[idx])
     return x, y
 ```
-
+```python 
+# 원-핫 인코딩
+y_one_hot = torch.zeros_like(hypothesis) 
+y_one_hot.scatter_(1, y.unsqueeze(1), 1)
+```
 ### activation function
 - torch.sigmoid(텐서(식)) : 시그모이드 사용.
+- torch.nn.functional.softmax(텐서) : 소프트맥스 사용. dim=i매개변수(적용될 차원 선택)사용가능.
+- torch.nn.functional.log_softmax(텐서) : 로그 소프트맥스 사용. torch.log(F.softmax())와 동일.
 
 ### optimizer
 - 옵티마이저.zero_grad() : gradient 0으로 초기화.
@@ -116,6 +124,7 @@ for i in range(epoch):
 ### loss
 - torch.nn.functional.mse_loss(prediction, label) : MSE(평균제곱오차) 손실함수 사용.
 - torch.nn.functional.binary_cross_entropy(prediction, label) : 이진분류(로지스틱 회귀)의 손실함수 사용.
+- torch.nn.functional.cross_entropy(prediction, label) : cross-entropy 손실함수 사용. F.nll_loss(F.log_softmax(z, dim=1), y)와 동일함.
 
 ### module(layers)
 - 모델.parameters() : 모델의 파라미터 출력. w와 b가 순서대로 출력됨. 
