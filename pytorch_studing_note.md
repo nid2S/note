@@ -1,5 +1,10 @@
 # pytorch
 
+## device
+- torch.cuda.is_available() : 현 환경에서 GPU 사용가능 여부를 반환.
+- torch.device("cuda") : GPU연산 사용. ("cuda" if USE_CUDA(위의 결과) else "cpu")식으로, GPU 사용이 가능할 때만 사용하게 사용. 
+- 모델(함수).to(device(위의 결과)) : 연산을 수행할 위치를 지정.  
+
 ## tensor
 - 텐서 : pytorch의 행렬(데이터)를 저장하는 자료형. numpy의 ndarray와 비슷함. 인덱스접근, 슬라이싱 등이 전부 가능함.
 - 브로드 캐스팅 : 크기가 다른 행렬(텐서)들의 크기를 자동으로 맞춰 연산을 가능하게 해주는 기능. 연산시 더 큰 차원에 맞춰짐(요소 복제).
@@ -38,6 +43,7 @@
 - optimizer.zero_grad() > cost(loss).backward() > optimizer.step() 과정을 거쳐 optimizer에 인자로 준 텐서(가중치, 편향)를 갱신함.
 
 - torch.manual_seed(i) : 랜덤시드 고정.
+- torch.cuda.manual_seed_all(i) : GPU 사용시 랜덤시드 고정.
 ### class
 - 파이토치의 대부분의 구현체(모델)는 모델 생성시 클래스를 사용.
 - torch.nn.Model상속 클래스 구현 > __init__에서 super().__init__을 호출, 사용할 모델(층)정의 > forward(self,x)(자동실행, 모델 사용 후 값 반환).
@@ -56,10 +62,12 @@ model = LinearRegressionModel()
 
 ### data
 - torch.utils.data.TensorDataset(x, y) : 데이터들을 TensorDataset(PyTorch기본 데이터셋)을 이용해 데이터셋에 저장.
-- torch.utils.data.DataLoader(dataset, batch_size=i, shuffle=True) : 데이터셋을 i개의 미니배치로 학습시킴. shuffle(Epoch마다 데이터 학습순서를 섞음)매개변수 사용가능.
+- torch.utils.data.DataLoader(dataset, batch_size=i) : 데이터셋을 i개의 미니배치로 학습시킴. shuffle=bool(Epoch마다 데이터 학습순서를 섞음)매개변수와
+  drop_last=bool(batch_size로 배치를 나눈 뒤, 남은(batch_size 미만의)데이터셋을 버릴지)매개변수 사용가능.
   반환되는건 iterable객체로, enumerate를 이용해 batch_idx와 sample(x, y)을 꺼낼 수 있음. 반복문이 하나 추가되는걸 제외하고는 배치학습법과 동일.  
 - 커스텀 데이터셋 구현 : torch.utils.data.Dataset을 상속받는 클래스 제작 후 __init\__(전처리), __len\__(길이, 총 샘플 수), __getitem\__(특정샘플, 인덱스)을 구현해 제작.
 ```python 
+# 커스텀 데이터셋
 class CustomDataset(Dataset): 
   def __init__(self):
     self.x_data = [[73, 80, 75],
@@ -84,6 +92,7 @@ class CustomDataset(Dataset):
 y_one_hot = torch.zeros_like(hypothesis) 
 y_one_hot.scatter_(1, y.unsqueeze(1), 1)
 ```
+
 ### activation function
 - torch.sigmoid(텐서(식)) : 시그모이드 사용.
 - torch.nn.functional.softmax(텐서) : 소프트맥스 사용. dim=i매개변수(적용될 차원 선택)사용가능.
@@ -130,13 +139,19 @@ for i in range(epoch):
 - 모델.parameters() : 모델의 파라미터 출력. w와 b가 순서대로 출력됨. 
 - torch.nn.Linear(input_dim, output_dim) : 선형회귀모델 사용. 이대로 모델로 쓸 수도, 모델에 층으로 넣을수도 있음.
 - torch.nn.Sigmoid() : 시그모이드 층을 쌓음. Linear() > Sigmoid() 로 로지스틱 회귀 구현 가능.
+- torch.nn.CrossEntropyLoss() : cross-entropy 손실함수 층 사용. softmax함수 포함.
 
 ### model
 - torch.nn.Sequential(layers) : 시퀀셜 모델 생성. nn.Module층을 쉽게 쌓을 수 있도록 함. 대부분의 파이토치 모델은 클래스로 구성되나 아주 간단한 모델의 경우 가끔 사용됨.
 
 
+## torchvision/text
+- torchvision : 비전분야의 유명 데이터셋, 모델, 전처리도구가 포함된 패키지.
+- torchtext : 자연어처리 분야의 유명 데이터셋, 모델, 전처리도구가 포함된 패키지.
+### vision
+- torchvision.datasets.MNIST(경로, train=bool, transform=트랜스폼, download=bool) : MNIST 다운로드. train=false면 test데이터 다운로드, download는 경로에 데이터가 없으면 다운로드받음.
+- torchvision.transforms.ToTensor() : 받은 데이터셋을 어떻게 변환할지 선택, 텐서로 변환. 다운로드중 transform매개변수에 넣어 사용.
 
-
-
+### text
 
 

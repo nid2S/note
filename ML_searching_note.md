@@ -374,10 +374,15 @@
 
 ## torchvision
 ***
+- 비전 분야의 유명한 데이터셋, 모델, 전처리 도구가 포함된 패키지.
 - torchvision.datasets.데이터이름(root=다운파일 저장경로, train=T/F 트레이닝 데이터/테스트 데이터, download=True, transform=전처리방법(torchvision.transform.Compose( [ tr.Resize(사이즈 x*x),tf.ToTensor(),그외 전처리 방법들 ] ) 식으로) ) : 데이터 셋 다운로드. PIL 이미지 형식이다. 채널수가 앞에 있어 size 가 3,8,8 처럼 나온다.
 - torchvision.datasets.load_files("경로") : 파일 로드. .data 로 데이터, .target 으로 레이블을 받아 올 수 있다.
 - torchvision.datasets.ImageFolder(root=경로, transform=전처리방법) : 폴더 안의 이미지 파일을 전부 긁어 와준다. Dataloader 에 넣을 수 있다.
 
+## torchtext
+***
+- 자연어처리 분야의 데이터셋, 모델, 전처리 도구가 포함된 패키지.
+- (?)
 
 # scikit learn
 ***
