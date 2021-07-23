@@ -24,12 +24,13 @@
 - 텐서.view(array) : 텐서의 크기(차원)변경. numpy의 reshape와 같이 전체 원소수는 동일해야 하고, -1 인자를 사용할 수 있음.
 - 텐서.squeeze() : 차원의 크기가 1인 경우 해당차원 제거.
 - 텐서.unsqueeze(i) : i 위치(shape의 위치)에 크기가 1인 차원을 추가.
-- 텐서.scatter(dim, 텐서, 넣을 인자) : dim차원에서, 텐서의 데이터(내부 데이터를 인덱스로)대로 넣을 인자를 삽입(할당).  
+- 텐서.scatter(dim, 텐서, 넣을 인자) : dim차원에서, 텐서의 데이터(내부 데이터를 인덱스로)대로 넣을 인자를 삽입(할당).
 - 텐서.자료형() : 텐서의 자료형을 변환(TypeCasting).
 - 텐서.연산_() : 기존의 값을 저장하며 연산. x.mul(2.)의 경우 x에 다시 저장하지 않으면 x엔 영향이 없으나, x.mul_()은 연산과 동시에 덮어씀.
 
 - torch.log(텐서) : 텐서의 모든 요소에 로그를 적용.
 - torch.exp(텐서) : 텐서의 모든 요소에 ln(log_e)를 적용.
+- torch.argmax(텐서) : 텐서 내부의 요소중 최댓값을 반환. dim=i 매개변수를 사용해 특정 차원을 기준으로 볼 수 있음(없으면 전체 요소).
 - torch.cat(\[텐서1, 텐서2], dim=i) : i 번째 차원을 늘리며 두 텐서를 연결. 기존 차원을 유지한채 지정 차원의 크기만 커짐.
 - torch.stack(\[텐서1, 텐서2, 텐서3], -dim=i-) : 텐서(벡터)들을 순차적으로 쌓음. 차원이 하나 늘어남. i번 차원이 늘어나게 함.
 ###### tensor expression
@@ -151,7 +152,8 @@ for i in range(epoch):
 ### vision
 - torchvision.datasets.MNIST(경로, train=bool, transform=트랜스폼, download=bool) : MNIST 다운로드. train=false면 test데이터 다운로드, download는 경로에 데이터가 없으면 다운로드받음.
 - torchvision.transforms.ToTensor() : 받은 데이터셋을 어떻게 변환할지 선택, 텐서로 변환. 다운로드중 transform매개변수에 넣어 사용.
-
+- 데이터.test_data : 테스트 데이터를 가져옴.
+- 데이터.test_labels : 테스트 레이블을 가져옴.
 ### text
 
 
