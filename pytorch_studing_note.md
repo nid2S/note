@@ -141,6 +141,7 @@ for i in range(epoch):
 - torch.nn.Linear(input_dim, output_dim) : 선형회귀모델 사용. 이대로 모델로 쓸 수도, 모델에 층으로 넣을수도 있음.
 - torch.nn.Sigmoid() : 시그모이드 층을 쌓음. Linear() > Sigmoid() 로 로지스틱 회귀 구현 가능.
 - torch.nn.CrossEntropyLoss() : cross-entropy 손실함수 층 사용. softmax함수 포함.
+- torch.nn.BCELoss() : Binary-cross-entropy 손실함수 층 사용.
 
 ### model
 - torch.nn.Sequential(layers) : 시퀀셜 모델 생성. nn.Module층을 쉽게 쌓을 수 있도록 함. 대부분의 파이토치 모델은 클래스로 구성되나 아주 간단한 모델의 경우 가끔 사용됨.
