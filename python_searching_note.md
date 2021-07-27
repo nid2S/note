@@ -729,10 +729,10 @@ import org.tensorflow
 
 # git
 ***
-- 터미널에 git clone (깃허브 디렉토리 주소) .(현재 디렉토리) > 깃 디렉토리의 파일을 전부 복사해옴
-- git diff > 마지막 수정 이후 추가한 내용을 알려줌
-- git add (더할 파일) > 필드에 올림
-- git commit -m "(버전-설명-)" 으로 깃허브에 등록할 수 있다
-- git log > 생성한 버전 보여줌
-- 컴퓨터에 만든 버전을 깃허브에 넣으려면 git push 명령어를 사용한다.
-- git status > 상태(수정한 부분)보여줌
+- git clone (깃허브 디렉토리 주소) .(현재 디렉토리) : github 디렉토리의 파일을 전부 복사해옴
+- git diff : 마지막 수정 이후 추가한 내용을 알려줌
+- git add (더할 파일) : 필드(커밋시 git에 등록될 파일이 있는 공간)에 올림
+- git commit -m "(버전-설명-)" : 컴퓨터 내의 git에 등록.
+- git log : 생성한 버전 보여줌
+- git push : 컴퓨터에 저장된 git파일을 깃허브에 등록.
+- git status : 상태(수정한 부분)보여줌
