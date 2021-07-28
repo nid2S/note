@@ -15,6 +15,7 @@
 - torch.자료형Tensor(array) : array로 지정된 자료형의 텐서 생성(ex-Float:32bit 부동소수점). 
 - torch.zeros(shape) : 0으로 초기화된 shape의 텐서 생성.
 - torch.ones(shape) : 1으로 초기화된 shape의 텐서 생성.
+- torch.range(start, end, step) : start~end까지 step의 간격으로 채워진 텐서 생성. python내장함수 range와 동일하게 작동.  
 - torch.rand(shape) : shape의 랜덤으로 값이 할당된 텐서 생성.
 - torch.randn(shape) : shape의, 표준정규분포(평균0, 분산1)내의 범위에서 랜덤으로 값이 할당된 텐서 생성.
 - torch.randint(low, high, shape) : shape의, low~high의 범위에서 랜덤으로 값이 할당된 텐서 생성. low는 포함, high는 미포함.
@@ -23,7 +24,7 @@
 - required_grade = bool : 텐서.grad에 텐서에 대한 기울기를 저장. 텐서 생성시 매개변수로 줄 수 있음. 
 - 텐서.backword() : 역전파. 해당 수식의 텐서(w)에 대한 기울기를 계산. w가 속한 수식을 w로 미분.
 
-- 텐서에 식 적용 : 
+- 텐서에 식 적용 : 텐서 + a , 텐서 > 0.5 등 텐서를 식에 사용하면 텐서내의 모든 데이터에 적용됨(applymap).
 - 텐서.shape/dim()/size()/sum()/argmax()/max(-dim=i-)/mean(-dim=i-)/matmul(텐서)/mul(텐서) : 텐서에 대해 사용할 수 있는 연산들. dim 인자는 해당 차원을 제거(해당 차원을 1로 만듦)함.
 - 텐서.view(array) : 텐서의 크기(차원)변경. numpy의 reshape와 같이 전체 원소수는 동일해야 하고, -1 인자를 사용할 수 있음.
 - 텐서.squeeze() : 차원의 크기가 1인 경우 해당차원 제거.
@@ -49,7 +50,7 @@
 ## model
 - 가설 선언 후 비용함수, 옵티마이저를 이용해 가중치, 편향등을 갱신해 올바른 값을 찾음.
 - 비용함수를 미분해 grandient(기울기)계산. 
-- optimizer.zero_grad() > cost(loss).backward() > optimizer.step() 과정을 거쳐 optimizer에 인자로 준 텐서(가중치, 편향)를 갱신함.
+- optimizer.zero_grad() > model(X) > loss_func(Y_pre, Y) > loss(cost).backward() > optimizer.step() 과정을 거쳐 optimizer에 인자로 준 텐서(가중치, 편향)를 갱신함.
 
 - torch.manual_seed(i) : 랜덤시드 고정.
 - torch.cuda.manual_seed_all(i) : GPU 사용시 랜덤시드 고정.
@@ -148,7 +149,7 @@ for i in range(epoch):
 - 모델.parameters() : 모델의 파라미터 출력. w와 b가 순서대로 출력됨. 
 - torch.nn.Linear(input_dim, output_dim) : 선형회귀모델 사용. 이대로 모델로 쓸 수도, 모델에 층으로 넣을수도 있음.
 - torch.nn.Sigmoid() : 시그모이드 층을 쌓음. Linear() > Sigmoid() 로 로지스틱 회귀 구현 가능.
-- torch.nn.CrossEntropyLoss() : cross-entropy 손실함수 층 사용. softmax함수 포함.
+- torch.nn.CrossEntropyLoss() : cross-entropy 손실함수 층 사용. softmax함수가 포함되어있음.
 - torch.nn.BCELoss() : Binary-cross-entropy 손실함수 층 사용.
 
 ### model
