@@ -26,7 +26,8 @@
 
 - 텐서에 식 적용 : 텐서 + a , 텐서 > 0.5 등 텐서를 식에 사용하면 텐서내의 모든 데이터에 적용됨(applymap).
 - 텐서.shape/dim()/size()/sum()/argmax()/max(-dim=i-)/mean(-dim=i-)/matmul(텐서)/mul(텐서) : 텐서에 대해 사용할 수 있는 연산들. dim 인자는 해당 차원을 제거(해당 차원을 1로 만듦)함.
-- 텐서.view(array) : 텐서의 크기(차원)변경. numpy의 reshape와 같이 전체 원소수는 동일해야 하고, -1 인자를 사용할 수 있음.
+- 텐서.view(shape) : 텐서의 크기(차원)변경. numpy의 reshape와 같이 전체 원소수는 동일해야 하고, -1 인자를 사용할 수 있음.
+- 텐서.view_as(텐서) : 텐서의 크기를 입력한 텐서와 동일하게 변경. 마찬가지로 데이터의 개수는 동일해야 함.  
 - 텐서.squeeze() : 차원의 크기가 1인 경우 해당차원 제거.
 - 텐서.unsqueeze(i) : i 위치(shape의 위치)에 크기가 1인 차원을 추가.
 - 텐서.scatter(dim, 텐서, 넣을 인자) : dim차원에서, 텐서의 데이터(내부 데이터를 인덱스로)대로 넣을 인자를 삽입(할당).
@@ -37,9 +38,11 @@
 
 - 텐서.cpu() : cpu 메모리에 올려진 텐서 반환.
 
+- 텐서.eq(텐서) : 텐서와 입력된 텐서의 데이터가 동일한지 반환
 - torch.log(텐서) : 텐서의 모든 요소에 로그를 적용.
 - torch.exp(텐서) : 텐서의 모든 요소에 ln(log_e)를 적용.
-- torch.argmax(텐서) : 텐서 내부의 요소중 최댓값을 반환. dim=i 매개변수를 사용해 특정 차원을 기준으로 볼 수 있음(없으면 전체 요소).
+- torch.max(텐서) : 텐서 내부의 요소중 최댓값을 텐서로 반환. 이 외에도 텐서.연산()으로 사용가능한 모든 연산은 torch.연산(텐서)으로 사용가능.  
+- torch.argmax(텐서) : 텐서 내부의 요소중 최댓값의 인덱스를 반환. dim=i 매개변수를 사용해 특정 차원을 기준으로 볼 수 있음(없으면 전체 요소).
 - torch.cat(\[텐서1, 텐서2], dim=i) : i 번째 차원을 늘리며 두 텐서를 연결. 기존 차원을 유지한채 지정 차원의 크기만 커짐.
 - torch.stack(\[텐서1, 텐서2, 텐서3], -dim=i-) : 텐서(벡터)들을 순차적으로 쌓음. 차원이 하나 늘어남. i번 차원이 늘어나게 함.
 ###### tensor expression
@@ -48,9 +51,10 @@
 
 
 ## model
-- 가설 선언 후 비용함수, 옵티마이저를 이용해 가중치, 편향등을 갱신해 올바른 값을 찾음.
-- 비용함수를 미분해 grandient(기울기)계산. 
-- optimizer.zero_grad() > model(X) > loss_func(Y_pre, Y) > loss(cost).backward() > optimizer.step() 과정을 거쳐 optimizer에 인자로 준 텐서(가중치, 편향)를 갱신함.
+- 가설 선언 후 비용함수, 옵티마이저를 이용해 가중치, 편향등을 갱신해 올바른 값을 찾음(비용함수를 미분해 grandient(기울기)계산). 
+
+- 모델.eval() : 모델을 추론모드로 전환. 모델 test시 사용.
+- torch.no_grad() : 미분을 하지 않음. 파라미터를 갱신하지 않는 test시 사용.  
 
 - torch.manual_seed(i) : 랜덤시드 고정.
 - torch.cuda.manual_seed_all(i) : GPU 사용시 랜덤시드 고정.
@@ -73,7 +77,7 @@ model = LinearRegressionModel()
 ### data
 - torch.utils.data.TensorDataset(x, y) : 데이터들을 TensorDataset(PyTorch기본 데이터셋)을 이용해 데이터셋에 저장.
 - torch.utils.data.DataLoader(dataset, batch_size=i) : 데이터셋을 i개의 미니배치로 학습시킴. shuffle=bool(Epoch마다 데이터 학습순서를 섞음)매개변수와
-  drop_last=bool(batch_size로 배치를 나눈 뒤, 남은(batch_size 미만의)데이터셋을 버릴지)매개변수 사용가능.
+  drop_last=bool(batch_size로 배치를 나눈 뒤, 남은(batch_size 미만의)데이터셋을 버릴지)매개변수 사용가능. .dataset으로 내부의 데이터셋 확인가능.
   반환되는건 iterable객체로, enumerate를 이용해 batch_idx와 sample(x, y)을 꺼낼 수 있음. 반복문이 하나 추가되는걸 제외하고는 배치학습법과 동일.  
 - 커스텀 데이터셋 구현 : torch.utils.data.Dataset을 상속받는 클래스 제작 후 __init\__(전처리), __len\__(길이, 총 샘플 수), __getitem\__(특정샘플, 인덱스)을 구현해 제작.
 ```python 
@@ -110,7 +114,8 @@ y_one_hot.scatter_(1, y.unsqueeze(1), 1)
 
 ### optimizer
 - 옵티마이저.zero_grad() : gradient 0으로 초기화.
-- 옵티마이저.step() : 주어진 학습대상들을 업데이트.  
+- 옵티마이저.step() : 주어진 학습대상들을 업데이트.
+- 옵티마이저 매개변수 : 학습시킬 매개변수들, lr(learning rate), weight_decay(가중치감쇠(L2규제)의 강도)등의 매개변수 사용가능.
 ```python
 # 사용 예
 import torch
@@ -147,14 +152,14 @@ for i in range(epoch):
 
 ### module(layers)
 - 모델.parameters() : 모델의 파라미터 출력. w와 b가 순서대로 출력됨. 
-- torch.nn.Linear(input_dim, output_dim) : 선형회귀모델 사용. 이대로 모델로 쓸 수도, 모델에 층으로 넣을수도 있음.
+- torch.nn.Linear(input_dim, output_dim) : 선형회귀모델 사용. 이대로 모델로 쓸 수도, 모델에 층으로 넣을수도 있음. bias=bool 로 편향의 존재를 지정할 수 있음.
 - torch.nn.Sigmoid() : 시그모이드 층을 쌓음. Linear() > Sigmoid() 로 로지스틱 회귀 구현 가능.
 - torch.nn.CrossEntropyLoss() : cross-entropy 손실함수 층 사용. softmax함수가 포함되어있음.
 - torch.nn.BCELoss() : Binary-cross-entropy 손실함수 층 사용.
 
 ### model
 - torch.nn.Sequential(layers) : 시퀀셜 모델 생성. nn.Module층을 쉽게 쌓을 수 있도록 함. 대부분의 파이토치 모델은 클래스로 구성되나 아주 간단한 모델의 경우 가끔 사용됨.
-
+- 시퀀셜모델.add_model("레이어명", 레이어) : 모델에 층 추가. 모델생성시 레이어를 넣어 생성하는것과 동일하나, 층의 이름을 지정할 수 있음.
 
 ## torchvision/text
 - torchvision : 비전분야의 유명 데이터셋, 모델, 전처리도구가 포함된 패키지.
@@ -165,5 +170,32 @@ for i in range(epoch):
 - 데이터.test_data : 테스트 데이터를 가져옴.
 - 데이터.test_labels : 테스트 레이블을 가져옴.
 ### text
+
+## train/test
+### train
+- 옵티마이저 지정 : torch.optim.SGD([파라미터(모델.parameters())\], lr=1e-5)식으로, torch.optim의 함수들에 파라미터들과 하이퍼파라미터를 지정해 옵티마이저 생성가능.
+- 모델 학습 과정 : optimizer.zero_grad()    : 가중치 초기화
+                > model(X)                : 정의한 모델(가설)로 데이터를 예측, 예측값을 얻음 
+                > loss_func(Y_pre, Y)     : 지정한 손실함수를 이용해 예측값과 레이블간의 손실(비용)계산 
+                > loss.backward()         : 손실을 미분 
+                > optimizer.step()        : 미분한 결과와 옵티마이저를 이용해 지정된 파라미터 갱신
+                과정을 거쳐 optimizer에 인자로 준 텐서(가중치, 편향)를 갱신함.
+- 미니배치 모델 학습과정 : 
+      > torch.utils.data.TensorDataset(X, y)   : 데이터와 레이블로 데이터셋 생성. TensorDataset 대신 다른 함수를 사용할 수도 있음.
+      > torch.utils.data.DataLoader(데이터셋, batch_size, shuffle=bool, drop_last=bool) : 데이터셋을 실어 미니배치를 생성함.
+      > for data, targets in 데이터로더          : 데이터로더에서 지정한 배치사이즈만큼 데이터와 레이블을 가져옴.
+      > 위의 full-batch모델 학습과정과 동일.
+### test
+- 모델 테스트 과정:
+      model.eval() : 모델 추론모드로 전환
+      > for data, target in 데이터셋 : 로더에서 미니배치를 하나씩 꺼내 추론을 수행
+      > model(data) : 데이터를 이용해 출력 계산
+      > [_, predicted = torch.max(outputs.data, 1)] : 확률이 가장 높은 레이블 계산(다중분류).
+      > [count += predicted.eq(targets.data.view_as(predicted)).sum()] : 정답과 일치한 경우 카운트 증가(다중분류).
+      > [count += (targets == (output > 0.5).float()).float().sum()] : 예측값 1/0으로 변환 후, 정답과 일치한 경우 카운트 증가(이진분류).
+      > [count/len(데이터로더.dataset)] : 정확도(accuracy)계산.
+
+
+
 
 
