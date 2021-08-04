@@ -56,12 +56,14 @@
 
 - 모델.eval() : 모델을 추론모드로 전환. 모델 test시 사용.
 - torch.no_grad() : 미분을 하지 않음. 파라미터를 갱신하지 않는 test시 사용.  
+- torch.nn.init.xavier_uniform_(self.층.weight) : 특정 층 한정으로 가중치 초기화. 형태 변경을 위한 전결합층 등 파라미터 갱신을 원하지 않는 층에 사용.
 
 - torch.manual_seed(i) : 랜덤시드 고정.
 - torch.cuda.manual_seed_all(i) : GPU 사용시 랜덤시드 고정.
 ### class
 - 파이토치의 대부분의 구현체(모델)는 모델 생성시 클래스를 사용.
 - torch.nn.Model상속 클래스 구현 > __init__에서 super().__init__을 호출, 사용할 모델(층)정의 > forward(self,x)(자동실행, 모델 사용 후 값 반환).
+- self.레이어명 = 층 : 사용할 모델의 층을 정의. 층의 경우 torch.nn의 모델도, 시퀀셜 모델이 될 수 도 있음.
 ```python
 # 파이토치 모델 클래스 구현.
 import torch
@@ -110,7 +112,7 @@ y_one_hot.scatter_(1, y.unsqueeze(1), 1)
 
 ### activation function
 - torch.sigmoid(텐서(식)) : 시그모이드 사용.
-- torch.nn.functional.softmax(텐서) : 소프트맥스 사용. dim=i매개변수(적용될 차원 선택)사용가능.
+- torch.nn.functional.softmax(텐서) : 소프트맥스 사용. dim=i매개변수(적용될 차원 선택)사용가능. 손실함수에 포함되어있어 잘 쓰이지 않음.
 - torch.nn.functional.log_softmax(텐서) : 로그 소프트맥스 사용. torch.log(F.softmax())와 동일.
 
 ### optimizer
@@ -144,7 +146,8 @@ for i in range(epoch):
     optimizer.step()        # 옵티마이저를 이용해 주어진 값들을 업데이트
     print(f'Epoch: {i}/{epoch} w1: {w1.item()} w2: {w2.item()} w3: {w3.item()} b: {b.item()} Cost: {cost.item()}')
 ```
-- torch.optim.SGD(\[가중치(학습대상1), 편향(학습대상2)], lr= learning_rate) : SGD(확률적 경사하강법)사용. 모델.parameters()를 넣을 수 있음.
+- torch.optim.SGD(\[가중치(학습대상1), 편향(학습대상2)], lr = learning_rate) : SGD(확률적 경사하강법)사용. 모델.parameters()를 넣을 수 있음.
+- torch.optim.Adam(모델 파라미터, lr) : 아담 옵티마이저 사용.
 
 ### loss
 - torch.nn.functional.mse_loss(prediction, label) : MSE(평균제곱오차) 손실함수 사용.
@@ -157,25 +160,31 @@ for i in range(epoch):
 - torch.nn.Conv2d(input_dim, output_dim, kernel_size) : (2차원)CNN층 사용. i의 커널사이즈를 가짐. padding, stride등도 설정해줄 수 있음. 
 - torch.nn.MaxPool2d(kernel_size, stride) : (2차원)맥스풀링층 사용. 하나의 정수만 넣으면 커널사이즈와 스트라이드 둘 다 해당값으로 지정됨.   
 
-- torch.nn.Sigmoid() : 시그모이드 층을 쌓음. Linear() > Sigmoid() 로 로지스틱 회귀 구현 가능.
+- torch.nn.Sigmoid() : 활성화함수 시그모이드 층을 쌓음. Linear() > Sigmoid() 로 로지스틱 회귀 구현 가능.
+- torch.nn.ReLU() : 활성화함수 ReLU(렐루)층을 쌓음.
   
 - torch.nn.CrossEntropyLoss() : cross-entropy 손실함수 층 사용. softmax함수가 포함되어있음.
 - torch.nn.BCELoss() : Binary-cross-entropy 손실함수 층 사용.
 
 ### model
-- torch.nn.Sequential(layers) : 시퀀셜 모델 생성. nn.Module층을 쉽게 쌓을 수 있도록 함. 대부분의 파이토치 모델은 클래스로 구성되나 아주 간단한 모델의 경우 가끔 사용됨.
+- torch.nn.Sequential(layers) : 시퀀셜 모델 생성. 클래스 형태로 구현되는 모델에서 층의 역할을 함. 아주아주 간단한 모델의 경우엔 모델 그 자체로 이용되기도 함.
 - 시퀀셜모델.add_model("레이어명", 레이어) : 모델에 층 추가. 모델생성시 레이어를 넣어 생성하는것과 동일하나, 층의 이름을 지정할 수 있음.
 
 ## torchvision/text
 - torchvision : 비전분야의 유명 데이터셋, 모델, 전처리도구가 포함된 패키지.
-- torchtext : 자연어처리 분야의 유명 데이터셋, 모델, 전처리도구가 포함된 패키지.
+- torchtext : 자연어처리 분야의 유명 데이터셋, 모델, 전처리도구(텍스트에 대한 추상화기능)가 포함된 패키지.
 ### vision
 - torchvision.datasets.MNIST(경로, train=bool, transform=트랜스폼, download=bool) : MNIST 다운로드. train=false면 test데이터 다운로드, download는 경로에 데이터가 없으면 다운로드받음.
 - torchvision.transforms.ToTensor() : 받은 데이터셋을 어떻게 변환할지 선택, 텐서로 변환. 다운로드중 transform매개변수에 넣어 사용.
 - 데이터.test_data : 테스트 데이터를 가져옴.
 - 데이터.test_labels : 테스트 레이블을 가져옴.
 ### text
-- vision과 내장된 데이터, 전처리, 모델등의 차이가 있을 뿐 기본 사용법은 동일함.
+- 제공기능 : 파일로드(다양한 코퍼스 로드), 토큰화(단어단위), 단어집합, 정수인코딩(단어들을 고유한 정수로 맵핑), 단어벡터(단어들에 고유 임베딩벡터 제작), 패딩/배치화(훈련샘플의 배치화). 데이터의 분리와 단어-벡터간 맵핑(룩업테이블)은 별도로 해주어야 함.
+  
+- torchtext.data.Field() : 필드(앞으로 할 전처리를 정의, 텍스트/레이블 등을 정의)지정. 
+- Field인자 : sequential(bool, 시퀀스데이터 여부), use_vocab(bool, 단어집합생성 여부), tokenize(함수, 사용할 토큰화함수), lower(bool. 소문자화 여부),
+  batch_first(bool, 미니배치차원을 맨 앞으로 해 데이터 로드 여부), is_target(bool, 레이블데이터 여부), fix_length(int, 최대허용길이/패딩길이) 인자를 사용할 수 있음.
+
 
 ## train/test
 ### train
