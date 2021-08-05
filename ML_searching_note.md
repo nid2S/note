@@ -84,6 +84,8 @@
 
 - pd.read_csv(파일경로) : 파일읽기. csv파일이 아니더라도 읽을 수 있고, sep/delimiter(구분이 될 문자 지정), header(헤더설정, None으로 해주면 첫번째 열이 해더가 되지 않음.),
   name(각 열의 이름 설정), index_col=[열이름/정수\](인덱스가 될 칼럼 선택)등의 인수를 쓸 수 있음.
+- pd.read_table/fwf/excel/hdf/sql/json/html/stata/clipboard/pickle/gbq() : 해당 포맷의 파일을 읽음. table(일반구분파일),fwf(고정너비형식 테이블),clipboard(클립보드에서 읽은 후 csv로), pickle(pickled object), gbq(Google BigQuery)
+
 - pd.get_dummies(범주형 데이터) : one hot encoding. 나오는 값들이 그 종류만큼 (이름)_(데이터이름)의 형태로 나뉨.
 - pd.set_option('display.max_columns', i) : IPython display설정. 최대로 출력할 열의 개수를 i개로 늘림.
 - pd.concat(df1, df2) : 두 데이터프레임을(행으로)합침. ignore_index=True로 기존의 인덱스를 무시하고 이어넣을 수 있음. append와 동일한 기능을 함.
