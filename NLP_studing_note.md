@@ -135,8 +135,11 @@
 ##### word embedding (정수 인코딩 + 단어간 유사도 정보)
 - Word Embeddings : 텍스트 내 단어를 밀집 벡터로 만드는 과정. 단어의 유사도(의미)정보도 벡터화 가능. 유사도에 따라 단어가 유사한 값을 띄게 됨. 정수 인코딩(원핫인코딩)된 벡터를 입력으로 받음.
 - 임베딩 벡터 : 사용자가 설정한 임베딩벡터 사이즈(차원)에 따라 임베딩 벡터가 생성됨. 임베딩 벡터 안에는 각 단어의 정보를 가지고 있는 (임베딩 사이즈)개의 실수가 들어 있음.  
-- 밀집벡터 : 희소벡터(대부분의 값이 0인 벡터)와 달리 대부분의 값이 실수이고 상대적으로 저차원인 벡터. 사용자가 설정한 값으로 벡터의 차원을 맞춤.
+- 밀집벡터 : 희소벡터(대부분의 값이 0인 벡터)와 달리 대부분의 값이 실수이고 상대적으로 저차원인 벡터. 사용자가 설정한 값으로 벡터의 차원을 맞춤. 특정 단어와 맵핑되는 정수를 인덱스로 가지는 테이블로브터 임베딩 벡터값을 가져오는 룩업테이블.
 - 분산표현 : 분포 가설(비슷한 위치에서 등장하는 단어는 비슷한 의미를 가짐)에 기초해 만들어진 표현 방법. 단어의 의미를 여러 차원에 분산하여 표현. 단어간 유사도 계산 가능.
+
+- 임베딩 층 : 정수 인코딩된 단어들을 입력으로 받아 밀집벡터(임베딩벡터)로 변환. 입력 정수에 대해 밀집벡터로 맵핑하고, 이 벡터는 가중치가 학습되는 것과 같은 방식으로 훈련됨. 
+  원-핫 벡터를 입력으로 받으면 룩업테이블과 내적곱을 해 임베딩 벡터를 가져오고, 정수인코딩된 단어를 입력으로 받으면 인덱스로 가져옴.
 
 - 워드 임베딩 평균 : 임베딩층 뒤에 GlobalAveragePooling1D()를 사용해 할 수 있음. 기타 은닉층의 사용 없어도 높은 정확도의 분류가 가능함.
 ###### char embedding (글자 임베딩)
@@ -170,11 +173,14 @@
 - 사전훈련된 W2V(GloVe)코드 : [urlretrieve("https://s3.amazonaws.com/dl4j-distribution/GoogleNews-vectors-negative300.bin.gz", filename="GoogleNews-vectors-negative300.bin.gz")
                             word2vec_model = gensim.models.KeyedVectors.load_word2vec_format('GoogleNews-vectors-negative300.bin.gz', binary=True))]
 
+- LSA(잠재 의미 분석) : 각 단어의 빈도수를 카운트한 행렬(DTM)을 입력으로 받아 차원을 축소(Truncated SVD)해 잠재된 의미를끌어내는 방법론. 토픽모델링 기법이자 워드 임베딩 방법.
+- 단점 : 카운트 기반으로 코퍼스의 전체적인 통계정보를 고려하기는 하지만, 단어의 의미 유치 작업에서 성능이 떨어짐.  
+
 ###### GloVe
 - GloVe : 또 다른 워드 임베딩 방법. 카운트 기반과 예측 기반 모두 사용하는 방법론. 카운트 기반의 LSA(잠재 의미 분석)과 W2V의 단점을 지적, 보완한다는 목적으로 나와 W2V와 비슷한 성능을 보여줌.  
-- GloVe 아이디어 : 임베딩된 중심 단어와 주변 단어 벡터의 내적곱이 전체 데이터에서의 동시 등장 확률이 되도록 만드는 것. 
-- 윈도우 기반 동시 등장 행렬(Window based Co-occurrence Matrix) : 행과 열을 전체 단어의 집합으로 구성한 뒤, i단어의 윈도우 안에서 j단어가 등장한 횟수를 (i,j)에 나타낸 행렬.
-- 동시 등장 확률(Co-occurrence Probability) : 동시 등장 행렬에서 특정 단어(i)의 전체 등장 횟수와 특정 단어(i)가 등장했을때 특정 단어(j)가 등장한 횟수를 카운트해 계산한 조건부 확률. 
+- GloVe 아이디어 : 임베딩된 중심 단어와 주변 단어 벡터의 내적곱이 전체 데이터에서의 동시 등장 확률(log(P(i,j)))이 되도록 만드는 것. 
+- 윈도우 기반 동시 등장 행렬(Window based Co-occurrence Matrix) : 행과 열을 전체 단어의 집합으로 구성한 뒤, i단어의 윈도우 안에서 j단어가 등장한 횟수를 (i,j)에 나타낸 행렬. 전치해도 동일한 행렬.
+- 동시 등장 확률(Co-occurrence Probability) : 동시 등장 행렬에서 특정 단어(i)의 전체 등장 횟수와 특정 단어(i)가 등장했을때 특정 단어(j)가 등장한 횟수를 카운트해 계산((i,j)/sum(i))한 조건부 확률. 
 
 ###### FastText
 - FastText : 페이스북 개발 워드 임베딩 방법. 메커니즘은 W2V와 비슷하지만, 하나의 단어 안에도 여러 단어들이 존재한다고 생각(내부단어 고려)함. W2V, LSA와 달리 OOV와 RaerWord에 대한 대응이 가능함.
@@ -524,13 +530,13 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - [google_W2V](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit) : 구글 제공 3백만개의 사전훈련된 W2V 단어 벡터 로드. load_word2vec_format으로 .bin 의 다운 파일 사용 가능.  
 - [ko_W2V](https://drive.google.com/file/d/0B0ZXk88koS2KbDhXdWg1Q2RydlU/view) : 박규병 님 제공 한국어 W2V 단어 벡터 로드. 
 
-- [Vis_Emb](https://projector.tensorflow.org/) : 임베딩 벡터 시각화 사이트. [!python -m gensim.scripts.word2vec2tensor --input 모델이름 --output 모델이름] 명령어를 사용해 모델명_metadata.tsv파일과 모델명_tensor.tsv 파일을 생성한 후 사용할 수 있음.
+- [embedding_Projector](https://projector.tensorflow.org/) : 임베딩 벡터 시각화 사이트. [!python -m gensim.scripts.word2vec2tensor --input 모델이름 --output 모델이름] 명령어를 사용해 모델명_metadata.tsv파일과 모델명_tensor.tsv 파일을 생성한 후 사용할 수 있음.
 
 # glove | GloVe
 - glove : pip install glove_python 으로 다운로드 가능. 워드 임베딩의 방법 중 하나인 glove를 사용할 수 있음.
 - glove.Corpus() : 글로브 동시 등장 행렬 생성기 로드. .fit(corpus, window)로 사용가능. 
 - glove.Glove(no_components, learning_rate) : GloVe를 수행 클래스 로드. .fit(등시등장행렬.matrix, epochs, no_threads, verbose)로 사용가능.
-- glove 메서드 : .add_dictionary(동시등장행렬.dictionary) > 사전 추가. .most_similar(word) > 비슷한 단어들과 유사도 반환. 
+- glove 메서드 : .add_dictionary(동시등장행렬.dictionary) > 사전 추가 | .most_similar(word) > 비슷한 단어들과 유사도 반환. 
 
 # SentencePiece | subword
 - sentencepiece : BPE를 포함한 기타 서브워트 토크나이징(내부단어분리)알고리즘 내장 패키지. 사전 토큰화 작업 없이 단어분리 토큰화를 수행해 언어무관 사용가능.
