@@ -156,11 +156,16 @@ for i in range(epoch):
 
 ### module(layers)
 - 모델.parameters() : 모델의 파라미터 출력. w와 b가 순서대로 출력됨. 
+  
 - torch.nn.Linear(input_dim, output_dim) : 선형회귀모델/전결합층 사용. 이대로 모델로 쓸 수도, 모델에 층으로 넣을수도 있음. bias=bool 로 편향 존재여부 지정가능.
 - torch.nn.Conv2d(input_dim, output_dim, kernel_size) : (2차원)CNN층 사용. i의 커널사이즈를 가짐. padding, stride등도 설정해줄 수 있음. 
 - torch.nn.MaxPool2d(kernel_size, stride) : (2차원)맥스풀링층 사용. 하나의 정수만 넣으면 커널사이즈와 스트라이드 둘 다 해당값으로 지정됨.
+- torch.nn.RNN(input_size, hidden_size) : RNN층 사용. batch_first(bool, 입력텐서의 첫번째 차원은 배치크기), num_layer(int, 은닉층개수(깊은RNN으로 만듦)), bidirectional(bool, 양방향순환신경망으로 만듦)인자 사용가능.  
+- torch.nn.LSTM(input_size, hidden_size) : LSTM층 사용. RNN과 동일한 인자 사용가능.
+
 - torch.nn.Embedding(num_embedding, embedding_dim) : 학습가능한 임베딩 테이블 생성. .weight 로 벡터 확인 가능.
   num_embedidng(단어집합 크기(임베딩할 단어개수)), embedding_dim(임베딩벡터의 차원)와 선택적으로 padding_idx(패딩을 위한 토큰의 인덱스)인자 사용가능.
+- torch.nn.Embedding.from_pretrained(임베딩 벡터(필드.vocab.vectors), freeze=False) : 사전휸련된 임베딩벡터를 사용해 임베딩층 생성.
 
 - torch.nn.Sigmoid() : 활성화함수 시그모이드 층을 쌓음. Linear() > Sigmoid() 로 로지스틱 회귀 구현 가능.
 - torch.nn.ReLU() : 활성화함수 ReLU(렐루)층을 쌓음.
@@ -187,12 +192,16 @@ for i in range(epoch):
 - torchtext.data.Field() : 필드(앞으로 할 전처리를 정의, 텍스트/레이블 등을 정의)지정. 
 - Field인자 : sequential(bool, 시퀀스데이터 여부), use_vocab(bool, 단어집합생성 여부), tokenize(함수, 사용할 토큰화함수), lower(bool. 소문자화 여부),
   batch_first(bool, 미니배치 크기(fix_lenX배치크기)->(배치크기Xfix_len)), is_target(bool, 레이블데이터 여부), fix_length(int, 최대허용길이/패딩길이) 인자를 사용할 수 있음.
-- 필드.build_vocab(데이터셋) : 단어집합 생성. min_freq(int, 단어의 최소등장빈도 조건 추가), max_size(int, (특별토큰제외)단어집합 최대크기)인자 사용가능. [필드.vocab]을 통해 단어집합에 접근할 수 있고, [필드.vocab.stoi]를 통해 생성된 단어집합 내의 단어 확인가능
+- 필드.build_vocab(데이터셋) : 단어집합 생성. vectors(사전훈련된 임베딩벡터 사용), min_freq(int, 단어의 최소등장빈도 조건 추가), max_size(int, (특별토큰제외)단어집합 최대크기)인자 사용가능. 
+  [필드.vocab]을 통해 단어집합에 접근할 수 있고, [필드.vocab.stoi]를 통해 생성된 단어집합 내의 단어를, [필드.vocab.vectors]로 벡터값을 확인가능.
 
 - torchtext.data.TabularDataset.splits() : 데이터셋을 만들며(데이터를 불러오며)필드에서 정의했던 토큰화방법으로 토큰화를 수행.
 - TabularDataset.splits인자 : path(파일 경로), train/test(train,test파일명), format(데이터 포맷(csv 등)), fields(위에서 정의한 필드. [("필드를 호칭할 이름", 필드)\]형식), skip_header(bool, 데이터 첫줄 무시 여부)인자 사용가능.
 
 - torchtext.data.Iterator(데이터셋, batch_size=i) : 데이터셋을 이용해 i의 배치크기 만큼 데이터를 로드하게 하는 데이터로더 생성. 배치.정의한필드명 으로 실제 데이터텐서에 접근가능. 
+
+- torchtext.vocap.Vectors(name=W2V파일명) : 사전훈련된 Word2Vec모델 사용.
+- torchtext.vocab.Glove(name, dim) : 토치텍스트 제공 사전훈련된 임베딩벡터(영어)사용. (6B, 50/100/200/300)등이 있음.필드.build_vocap()의 vectors 인자의 입력으로 사용.
 
 ## train/test
 ### train
