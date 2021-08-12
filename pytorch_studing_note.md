@@ -39,7 +39,8 @@
 
 - 텐서.cpu() : cpu 메모리에 올려진 텐서 반환.
 
-- 텐서.eq(텐서) : 텐서와 입력된 텐서의 데이터가 동일한지 반환
+- 텐서.eq(텐서) : 텐서와 입력된 텐서의 데이터가 동일한지 반환.
+- 텐서.data.sub_(1) : 값을 0과 1로 변환.  
 - torch.log(텐서) : 텐서의 모든 요소에 로그를 적용.
 - torch.exp(텐서) : 텐서의 모든 요소에 ln(log_e)를 적용.
 - torch.max(텐서) : 텐서 내부의 요소중 최댓값을 텐서로 반환. 이 외에도 텐서.연산()으로 사용가능한 모든 연산은 torch.연산(텐서)으로 사용가능.  
@@ -53,6 +54,9 @@
 
 ## model
 - 가설 선언 후 비용함수, 옵티마이저를 이용해 가중치, 편향등을 갱신해 올바른 값을 찾음(비용함수를 미분해 grandient(기울기)계산). 
+
+- torch.save(모델.state_dict(), 경로) : 모델의 현재 가중치를 경로에 저장.
+- 모델.load_state_dict(torch.load(경로)) : 경로의 가중치를 로드해 모델의 가중치로 사용.
 
 - 모델.eval() : 모델을 추론모드로 전환. 모델 test시 사용.
 - torch.no_grad() : 미분을 하지 않음. 파라미터를 갱신하지 않는 test시 사용.  
@@ -151,7 +155,7 @@ for i in range(epoch):
 
 ### loss
 - torch.nn.functional.mse_loss(prediction, label) : MSE(평균제곱오차) 손실함수 사용.
-- torch.nn.functional.binary_cross_entropy(prediction, label) : 이진분류(로지스틱 회귀)의 손실함수 사용.
+- torch.nn.functional.binary_cross_entropy(prediction, label) : 이진분류(로지스틱 회귀)의 손실함수 사용. reduction인자에 'sum'등을 넣어 (?).
 - torch.nn.functional.cross_entropy(prediction, label) : cross-entropy 손실함수 사용. F.nll_loss(F.log_softmax(z, dim=1), y)와 동일함.
 
 ### module(layers)
@@ -161,11 +165,13 @@ for i in range(epoch):
 - torch.nn.Conv2d(input_dim, output_dim, kernel_size) : (2차원)CNN층 사용. i의 커널사이즈를 가짐. padding, stride등도 설정해줄 수 있음. 
 - torch.nn.MaxPool2d(kernel_size, stride) : (2차원)맥스풀링층 사용. 하나의 정수만 넣으면 커널사이즈와 스트라이드 둘 다 해당값으로 지정됨.
 - torch.nn.RNN(input_size, hidden_size) : RNN층 사용. batch_first(bool, 입력텐서의 첫번째 차원은 배치크기), num_layer(int, 은닉층개수(깊은RNN으로 만듦)), bidirectional(bool, 양방향순환신경망으로 만듦)인자 사용가능.  
-- torch.nn.LSTM(input_size, hidden_size) : LSTM층 사용. RNN과 동일한 인자 사용가능.
+- torch.nn.LSTM(input_size, hidden_size) : LSTM층 사용. RNN과 동일한 인자 사용가능. RNN계열은 사용시(x, h_0)를 입력으로 해야 하며, h_0는 처음에 초기화가 필요함. 
+- torch.nn.GRU(input_size, hidden_size) : GRU층 사용. RNN과 동일한 인자 사용 가능. 
 
-- torch.nn.Embedding(num_embedding, embedding_dim) : 학습가능한 임베딩 테이블 생성. .weight 로 벡터 확인 가능.
+- torch.nn.Embedding(num_embedding, embedding_dim) : 학습가능한 임베딩 테이블 생성. .weight 로 벡터 확인 가능. 이후 층에서 input_size를 embed_dim으로 변경해주어야 함.
   num_embedidng(단어집합 크기(임베딩할 단어개수)), embedding_dim(임베딩벡터의 차원)와 선택적으로 padding_idx(패딩을 위한 토큰의 인덱스)인자 사용가능.
 - torch.nn.Embedding.from_pretrained(임베딩 벡터(필드.vocab.vectors), freeze=False) : 사전휸련된 임베딩벡터를 사용해 임베딩층 생성.
+- torch.nn.Dropout(f) : f의 비율로 드롭아웃을 시행하는 층 사용. 
 
 - torch.nn.Sigmoid() : 활성화함수 시그모이드 층을 쌓음. Linear() > Sigmoid() 로 로지스틱 회귀 구현 가능.
 - torch.nn.ReLU() : 활성화함수 ReLU(렐루)층을 쌓음.
@@ -197,8 +203,12 @@ for i in range(epoch):
 
 - torchtext.data.TabularDataset.splits() : 데이터셋을 만들며(데이터를 불러오며)필드에서 정의했던 토큰화방법으로 토큰화를 수행.
 - TabularDataset.splits인자 : path(파일 경로), train/test(train,test파일명), format(데이터 포맷(csv 등)), fields(위에서 정의한 필드. [("필드를 호칭할 이름", 필드)\]형식), skip_header(bool, 데이터 첫줄 무시 여부)인자 사용가능.
+- torchtext.datasets.데이터셋이름.splits(TEXT필드, LABEL필드) : 데이터 셋을 필드에 가져온 후 train/test 데이터를 나눔. vars(나눠진데이터셋[0\])등으로 데이터 확인 가능.
+- 데이터셋.split(split_ratio) : 데이터셋을 나눔. train데이터를 나눠 검증 데이터를 만드는 등에 사용. 지정한 비율이 첫번째 데이터셋의 데이터 비율.
 
-- torchtext.data.Iterator(데이터셋, batch_size=i) : 데이터셋을 이용해 i의 배치크기 만큼 데이터를 로드하게 하는 데이터로더 생성. 배치.정의한필드명 으로 실제 데이터텐서에 접근가능. 
+- torchtext.data.Iterator(데이터셋, batch_size=i) : 데이터셋을 이용해 i의 배치크기 만큼 데이터를 로드하게 하는 데이터로더 생성. 배치.필드명 으로 실제 데이터텐서에 접근가능.
+- torchtext.data.BucketIterator(데이터셋, batch_size, shuffle=bool, repeat=bool) : 모든 데이터를 배치처리 후 단어를 인덱스 번호로 대체하는 데이터로더 생성. (데이터셋1,데이터셋2)처럼 넣어 여러 데이터셋에도 적용 가능.
+- 데이터로더에서 반복문으로 각 배치를 꺼낼 수 있으며, batch.text 로 해당 배치의 실제 데이터에 접근가능.
 
 - torchtext.vocap.Vectors(name=W2V파일명) : 사전훈련된 Word2Vec모델 사용.
 - torchtext.vocab.Glove(name, dim) : 토치텍스트 제공 사전훈련된 임베딩벡터(영어)사용. (6B, 50/100/200/300)등이 있음.필드.build_vocap()의 vectors 인자의 입력으로 사용.

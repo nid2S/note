@@ -142,6 +142,13 @@
 
 # matplotlib.pyplot
 ***
+- matplotlib.font_manager.FontProperties(fname(폰트경로)).get_name() : 경로의 폰트의 이름을 얻음.
+- matplotlib.rc('font', family = 폰트이름) : 폰트변경. 기본폰트가 sans-erif 이기에 한글폰트가 깨질 수 있는데, 이를 방지하기 위해 사용.
+
+- plt.figure(figsize=(n,m)) : 그래프 크기 조절.
+- plt.show() : 생성한 plot(그래프)를 보여줌.
+- plt.savefig("저장경로") : 그래프 저장.
+
 - plt.plot(정수형 리스트) : 리스트대로 선 또는 마커그래프 생성. 리스트를 한개 넣으면 y값 으로 인식하고 x를 자동생성하고, 두개면 순서대로 x,y 라고 인식한다.
 - plt.plot(정수형 리스트, 'ro') : ro - 빨간색 원형 마커. 이런식으로 색과 그래프 마커를 지정해 줄 수 있음.
 - plt.plot(x,y,type,x,y,type) : 이런 식으로 매개변수를 넣거나 plot 을 여러번 사용하면 여러개의 그래프를 그릴 수 있다.
@@ -151,38 +158,42 @@
 - plot - style : plt.style.use(스타일) 로 각종 스타일 사용가능. 종류는 'seaborn-white'등, plt.style.available 에서 확인가능함.
 
 - plt.title(title) : 그래프 제목 설정. loc-타이틀 위치('right','left'), pad-타이틀&그래프간격, 폰트 크기와 두께 설정 가능.
-- plt.xlabel(text) : x축에 레이블(축제목) 설정.
-- plt.ylabel(text) : y축에 레이블(축제목) 설정.
-- plt.axis([x min, x max, y min, y max]) : 축의 범위 지정.
+- plt.x/ylabel(text) : x/y축에 레이블(축제목) 설정.
+- plt.x/yticks(number 리스트) : x/y축에 눈금 표시. label 매개변수에 리스트를 넣어 각 눈금의 이름을 지정해 줄 수 있음.
+- plt.x/ylim([min,max\]) : x/y축 범위 설정. 
+- plt.axis([x min, x max, y min, y max\]) : 축의 범위 지정.
+- plt.x/yaxis(rotation, fontsize) : x/y축의 폰트 회전 및 크기 설정.
 
-- plt.fill_between(x, y, alpha) : 그래프에서 그 범위를 채움. (x,y1,y2)식으로 두 그래프 사이의 영역을 채울 수 도 있음. color 매개 변수로 색 지정 가능.
-- plt.fill(x,y,alpha) : x,y 점들로 정의되는 다각형의 영역을 자유롭게 채울 수 있음.
-
-- plt.grid(bool) : 그래프에 격자 표시 여부 결정. axis='y/x' 로 가로/세로 방향의 그래프만 그릴 수 있음. color,alpha,linestyle 등의 매개변수 사용가능.
+- plt.grid() : 그래프에 격자 표시. axis='y/x' 로 가로/세로 방향의 그래프만 그릴 수 있음. color,alpha,linestyle 등의 매개변수 사용가능.
 - plt.legend() : 그래프에 레이블(범례) 표시, plot 에서 label="" 로 준 레이블이 그 그래프의 레이블이 된다.
-- plt.xticks(number 리스트) : x축에 눈금 표시. label 매개변수에 리스트를 넣어 각 눈금의 이름을 지정해 줄 수 있음.
-- plt.yticks(number 리스트) : y축에 눈금 표시.
-- plt.tick_params() : 눈금 스타일 설정. axis-적용축('x','y','both'), direction-눈금위치('in','out','inout'), pad-눈금&레이블 거리, length/width/color-눈금 길이/너비/색, labelsize/labelcolor-레이블 크기/색, t,b,l,r - bool&눈금표시 위치.
+- plt.tick_params() : 눈금 스타일 설정. axis-적용축('x','y','both'), direction-눈금위치('in','out','inout'),
+  pad-눈금&레이블 거리, length/width/color-눈금 길이/너비/색, labelsize/labelcolor-레이블 크기/색, t,b,l,r - bool&눈금표시 위치.
 
+- plt.text(x, y, "text") : 텍스트 표시.
 - plt.axhline(y, x_min(0~1), x_max(0~1)) : y에 min 부터 max 까지 수평선을 그음. color, linestyle, linewidth 등 매개변수 사용가능.
 - plt.axvline(x, y_min, y_max) : x에 min 부터 max 까지 수직선을 그음. 왼쪽 아래부터 오른쪽 끝까지 0~1로 표현.
 - plt.hlines(y, x_min, x_max) : y에 min 부터 max 까지 수평선을 그음. min,max 가 0~1로 표현되지 않음.
 - plt.vlines(x, y_min, y_max) : x에 min 부터 max 까지 수직선을 그음.
-
-- plt.line(x, y) : 
-- plt.bar(x, y) : 막대그래프를 그림. width(너비),align(눈금위치. 히스토그램처럼 눈금을 막대 끝으로 이동가능,'edge'),color,edgecolor,linewidth(테두리두께),tick_label,log(bool, y를 로그스케일로) 등의 매개변수 사용 가능.
+- plt.fill_between(x, y, alpha) : 그래프에서 그 범위를 채움. (x,y1,y2)식으로 두 그래프 사이의 영역을 채울 수 도 있음. color 매개 변수로 색 지정 가능.
+- plt.fill(x,y,alpha) : x,y 점들로 정의되는 다각형의 영역을 자유롭게 채울 수 있음.
+  
+- plt.bar(x, y) : 막대그래프를 그림. width(너비),align(눈금위치. 히스토그램처럼 눈금을 막대 끝으로 이동가능,'edge'),
+  color,edgecolor,linewidth(테두리두께),tick_label,log(bool, y를 로그스케일로) 등의 매개변수 사용 가능.
 - plt.barh(x, y) : 수평 막대그래프를 그림. height 를 제외하면 매개변수 동일. width/height 를 음수로 지정하면 막대 위쪽에 눈금 표시.
 - plt.scatter(x, y) : 산점도(상관관계표현)를 그림. s(마커 면적),c(마커 색),alpha(투명도) 등의 매개변수 사용가능.
-- plt.hist(리스트) : 히스토그램(도수분포표 그래프)을 그림. 리스트에 나온 계급과 그 빈도를 분석해 자동으로 히스토그램으로 만들어줌. bins(쪼갤영역수),density(bool,막대사이를 이어 하나로), histtype(막대 내부를 채울지,'step') 등 매개변수 사용가능.
-- plt.errorbar(x, y, yerr) : 에러바(데이터편차표현)를 그림. yerr 는 각 y의 편차로 위아래 대칭인 오차로 표시, [(error), (error)]식으로 넣으면 아래방향/위방향 편차를 나타내게 됨. uplims/lolims(bool, 상한/하한 기호표시) 매개변수 사용가능.
-- plt.pie(ratio(각 영역 비율 리스트), label(각 영역 이름 리스트)) : 파이차트(범주별 구성비율 원형표시)를 그림. autopct(영역안에 표시될 숫자 형식 지정), startangle(시작각도), counterclock(bool,반시계 여부), explode(0~1실수 리스트, 차트중심에서 이탈도), shadow(bool,그림자), colors(리스트,색이름/코드), wedgeprops({'width': 0.7, 'edgecolor': 'w', 'linewidth': 5}, 반지름 비율, 테두리색, 테두리너비) 매개변수 사용가능.
-- plt.box(x, y) : 최소, 최대, 밀집구역(상자)등을 알 수 있는 그래프를 그림.
+- plt.hist(리스트(x, y도 가능)) : 히스토그램(도수분포표 그래프)을 그림. 리스트에 나온 계급과 그 빈도를 분석해 자동으로 히스토그램으로 만들어줌. 
+  bins(쪼갤영역수),density(bool,막대사이를 이어 하나로), histtype(막대 내부를 채울지,'step') 등 매개변수 사용가능.
+- plt.hist2d(x,y,(가로 셀 개수, 세로 셀 개수)) : 격자로 나눠서 빈도를 확인할 수 있는 2차원 히스토그램을 그림. scatter과 같이 쓰면 좋고, hist의 모든 인자사용가능. 
+- plt.errorbar(x, y, yerr) : 에러바(데이터편차표현)를 그림. yerr 는 각 y의 편차로 위아래 대칭인 오차로 표시, 
+  [(error), (error)\]식으로 넣으면 아래방향/위방향 편차를 나타내게 됨. uplims/lolims(bool, 상한/하한 기호표시) 매개변수 사용가능.
+- plt.pie(ratio(각 영역 비율 리스트), label(각 영역 이름 리스트)) : 파이차트(범주별 구성비율 원형표시)를 그림. 
+  autopct(영역안에 표시될 숫자 형식 지정), startangle(시작각도), counterclock(bool,반시계 여부), explode(0~1실수 리스트, 차트중심에서 이탈도), 
+  shadow(bool,그림자), colors(리스트,색이름/코드), wedgeprops({'width': 0.7, 'edgecolor': 'w', 'linewidth': 5}, 반지름 비율, 테두리색, 테두리너비) 매개변수 사용가능.
+- plt.box(x, y) :  극단치, 최소, 최대, 각 사분위, 중앙값, 사분위범위(상자)등을 알 수 있는(기초통계,편차 확인)그래프를 그림.
 - plt.hexbin(x, y) : 각 데이터가 겹치는(밀집된)정도를 볼 수 있는 그래프를 그림.
 - plt.area(x, y) : 각 데이터의 영역을 볼 수 있는 그래프를 그림.
-- plt.density(x, y) : (?)
 
 
-- plt.show() : 생성한 plot(그래프)를 보여줌.
 
 
 # dlib
@@ -550,6 +561,7 @@
 # os | os(파일, 디렉토리)관련 명령
 - os.getcwd() : 현재 작업 폴더 반환.
 - os.chdir(경로) : 디렉토리 변경.
+- os.makedirs(dir명) : 디렉토리 생성.  
 - os.path.abspath(상대 경로) : 절대 경로 반환. 
 - os.path.dirname(경로) : 디렉토리명만 반환.
 - os.path.basename(경로) : 파일 이름만 반환.
@@ -616,6 +628,9 @@ urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 - shutil.copyfileobj(url 파일, out 파일) : url에서 파일을 다운받아 out파일에 저장. 둘 다 파일객체여야 함.
   
 - zipfile.ZipFile(zipfilepath, 'r') : zip파일객체 오픈. .extractall(path)로 압축을 헤재할 수 있음.
+
+# folium
+- python 지도 시각화 패키지.
 
 # tensorboard
 - (?)
