@@ -115,9 +115,15 @@ y_one_hot.scatter_(1, y.unsqueeze(1), 1)
 ```
 
 ### activation function
-- torch.sigmoid(텐서(식)) : 시그모이드 사용.
+- torch.nn.functional.relu(텐서) : 렐루(ReLU)사용. F.relu(층) 처럼 사용. 모델 제작시 활성화 함수를 꼭 사용해 주어야 함.
+- torch.nn.functional.sigmoid(텐서) : 시그모이드 사용. torch.sigmoid(텐서(식))로도 사용가능. 
 - torch.nn.functional.softmax(텐서) : 소프트맥스 사용. dim=i매개변수(적용될 차원 선택)사용가능. 손실함수에 포함되어있어 잘 쓰이지 않음.
 - torch.nn.functional.log_softmax(텐서) : 로그 소프트맥스 사용. torch.log(F.softmax())와 동일.
+
+### loss
+- torch.nn.functional.mse_loss(prediction, label) : MSE(평균제곱오차) 손실함수 사용.
+- torch.nn.functional.binary_cross_entropy(prediction, label) : 이진분류(로지스틱 회귀)의 손실함수 사용. reduction인자에 'sum'등을 넣어 출력에 적용할 축소를 지정할 수 있음.
+- torch.nn.functional.cross_entropy(prediction, label) : cross-entropy 손실함수 사용. F.nll_loss(F.log_softmax(z, dim=1), y)와 동일함.
 
 ### optimizer
 - 옵티마이저.zero_grad() : gradient 0으로 초기화.
@@ -152,11 +158,6 @@ for i in range(epoch):
 ```
 - torch.optim.SGD(\[가중치(학습대상1), 편향(학습대상2)], lr = learning_rate) : SGD(확률적 경사하강법)사용. 모델.parameters()를 넣을 수 있음.
 - torch.optim.Adam(모델 파라미터, lr) : 아담 옵티마이저 사용.
-
-### loss
-- torch.nn.functional.mse_loss(prediction, label) : MSE(평균제곱오차) 손실함수 사용.
-- torch.nn.functional.binary_cross_entropy(prediction, label) : 이진분류(로지스틱 회귀)의 손실함수 사용. reduction인자에 'sum'등을 넣어 (?).
-- torch.nn.functional.cross_entropy(prediction, label) : cross-entropy 손실함수 사용. F.nll_loss(F.log_softmax(z, dim=1), y)와 동일함.
 
 ### module(layers)
 - 모델.parameters() : 모델의 파라미터 출력. w와 b가 순서대로 출력됨. 

@@ -633,7 +633,23 @@ urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 - python 지도 시각화 패키지.
 
 # tensorboard
-- (?)
+- 텐서보드 : 머신러닝 실험에 필요한 시각화 및 도구를 제공. 실시간으로 학습과정을 그래프로 확인가능하며, 기존에 학습했던 것과 동시 비교 분석이 가능.
+- 제공기능 : 측정항목(손실/정확도등)추적/시각화, 모델그래프(레이어)시각화, 가중치/편향/기타텐서의 경과에 따른 히스토그램,
+   저차원공간에 임베딩 투영, 이미지/테스트/오디오 데이터 표시, 텐서플로우 프로그램 프로파일링, 그 외 다양한 도구 제공.
+- 사용 : 텐서플로우의 함수들(tf.summary의 scalar/marge_all/FileWriter등)을 이용해 파일을 생성한 후 
+  cmd에 [tensorboard --logdir=./logs/ 혹은 python -m tensorboard.main]를 입력해 사용할 수 있음.
+##### 텐서플로우 함수들 (?)
+###### 저장할 것 설정
+- tf.summary.scalar(name, scalar) : 
+- tf.summary.image(name, image) : 
+- tf.summary.histogram(name, histogram) : 
+###### 기록할 장소 설정
+- tf.summary.merge_all() : 
+- tf.summary.merge(summaries) : 
+- tf.summary.FileWriter(log_dir, graph) : 
+###### 기록
+- summary = sess.sun(merge) : 
+- writer.add_summary(summary, global_step) : 
 
 # Scrapy
 - (?)
