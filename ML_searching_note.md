@@ -279,8 +279,8 @@
 - tf.GradientTape().gradient(식, 변수) : 식을 변수로 미분한 값을 반환. 변수는 리스트 형태로 여러개 입력할 수 있고, 결과인 미분값로 리스트 형태로 반환됨.
   presistent=True로 설정하지 않으면 하나에 식에 대해 한번의 호출만 가능.
 
-- session : 일종의 실행창. 텐서의 내용과 연산 결과를 볼 수 있음. 세션 선언, 실행, 종료 문으로 구분됨.
-  1.x버전에선 그래프생성 > 초기화 > 세션을 통해 값을 흐르게 하는 과정을 거쳐야만 실행이 가능했음(즉시실행모드(EagerMode, EagerTensor)미지원).
+- session : 일종의 실행창. 텐서의 내용과 연산 결과를 볼 수 있음. 세션 선언, 실행, 종료 문으로 구분됨. 텐서플로우2에선 tf.compat.v1.Session으로 사용가능.
+- tf.compat.v1.disable_eager_execution() : tf2에서 세션의 사용이 가능하게 함(disable eager 제공).
 - tf.Session() : 세션 선언.
 - tf.global_variables_initializer() : 변수 초기화. model에 할당해 초기화를 할 수도 있음.
 - sess.run(텐서) : 실행. sess.run(model) > sess.run(변수) 식으로 사용(값을 흐르게)할 수 있음.
@@ -629,30 +629,31 @@ urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
   
 - zipfile.ZipFile(zipfilepath, 'r') : zip파일객체 오픈. .extractall(path)로 압축을 헤재할 수 있음.
 
-# folium
-- python 지도 시각화 패키지.
-
 # tensorboard
 - 텐서보드 : 머신러닝 실험에 필요한 시각화 및 도구를 제공. 실시간으로 학습과정을 그래프로 확인가능하며, 기존에 학습했던 것과 동시 비교 분석이 가능.
 - 제공기능 : 측정항목(손실/정확도등)추적/시각화, 모델그래프(레이어)시각화, 가중치/편향/기타텐서의 경과에 따른 히스토그램,
    저차원공간에 임베딩 투영, 이미지/테스트/오디오 데이터 표시, 텐서플로우 프로그램 프로파일링, 그 외 다양한 도구 제공.
 - 사용 : 텐서플로우의 함수들(tf.summary의 scalar/marge_all/FileWriter등)을 이용해 파일을 생성한 후 
   cmd에 [tensorboard --logdir=./logs/ 혹은 python -m tensorboard.main]를 입력해 사용할 수 있음.
-##### 텐서플로우 함수들 (?)
+##### 텐서플로우 함수들 
 ###### 저장할 것 설정
-- tf.summary.scalar(name, scalar) : 
-- tf.summary.image(name, image) : 
-- tf.summary.histogram(name, histogram) : 
+- 추후 텐서보드에서의 분석을 위해 데이터(summary)를 작성.
+- tf.summary.scalar(name, scalar) : 스칼라 summary를 작성. 텐서보드 내의 SCALARS 메뉴(대쉬보드)에 넣음.
+- tf.summary.image(name, image) : 이미지 summary를 작성. 텐서보드 내의 IMAGES 메뉴에 넣음.
+- tf.summary.histogram(name, histogram) : 히스토그램 summary를 작성. 텐서보드 내의 HISTOGRAMS 메뉴에 넣음.
 ###### 기록할 장소 설정
-- tf.summary.merge_all() : 
-- tf.summary.merge(summaries) : 
-- tf.summary.FileWriter(log_dir, graph) : 
+- tf.summary.merge_all() : 앞서 지정한 모든 summary를 통합(marge).
+- tf.summary.merge(summaries) : 원하는 summaries를 통합. 
+- tf.summary.FileWriter(log_dir, graph) : 텐서보드를 위해 생성된 파일들(marge>sun>add)을 저장. tf.session()을 돌리고 sess.graph로 그래프를 넣으면 됨. 넣은 순간 텐서보드에서 그려짐.  
 ###### 기록
-- summary = sess.sun(merge) : 
-- writer.add_summary(summary, global_step) : 
+- summary = sess.run(merge) : 원하는 스텝마다 merge를 실행해 summary값을 구함. 스텝은 batch_num(epoch마다 나옴)보단 global step(반복x 0부터)으로 넣어주면 좋음.
+- writer.add_summary(summary, global_step) : 나온 summary를 FileWriter에 추가함. 넣을때마다 새로운 event가 저장됨. tf.train.global_step()으로 글로벌 스텝 획득가능.
 
 # Scrapy
-- (?)
+- scrapy : 파이썬 웹 크롤링(스크래핑) 패키지.
+
+# folium
+- python 지도 시각화 패키지.
 
 # timeit
 - timeit.timeit(함수) : 함수의 시작부터 끝까지 걸린 시간을 측정.
