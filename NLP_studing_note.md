@@ -583,6 +583,9 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - soynlp.normalizer.emoticon_normalize(sent, num_repeats=i) : ㅋㅋ,ㅎㅎ 등의 이모티콘을 i개 까지만 반복되도록 변환.
 - soynlp.normalizer.repeat_normalize(sent, num_repeats=i) : 의미없이 반복되는 글자를 i개 까지만 반복되도록 변환.
 
+# hgtk | 한국어 자소단위로 쪼개기
+- hgtk.text.decompose(sent) : 문장을 자소단위로 쪼갬. 뒤에 jamo_sent.replace('ᴥ', '')를 쓰면 더 깔끔하게 볼 수 있음.
+
 # 한국어 전처리 | 띄어쓰기, 맞춤법, 문장 토큰화
 - PyKoSpacing : 한국어 띄어쓰기 패키지. 띄어쓰기가 없는 문장을 띄어쓰기를 한 문장으로 변환해줌. pykospacing.spacing(문장)으로 사용할 수 있음. 
 - Py-Hanspell : 네이버 맞춤법 검사기를 바탕으로 제작된 맞춤법(띄어쓰기 포함)보정 패키지. hanspell.spell_checker.check(문장).checked 로 개선된 문장을 볼 수 있음.

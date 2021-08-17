@@ -178,5 +178,15 @@ wf.close()
 - winsound.PlaySound(파일명, winsound.SND_FILENAME) : 소리재생
 
 
-# librosa | (?)
-- (?)
+# librosa | 음성파일분석 
+- librosa : 파이썬 음성파일분석 라이브러리. 사용시 ffmpeg의 설치가 필요함(음성파일로드).
+- librosa.load(오디오파일경로) : 오디오파일 로드. 하나의 오디오파일로 반환받거나, y(음원 파형데이터)/sr(샘플링레이트, 주파수분석/파형의 간격)으로 나눠받을 수 있음.
+
+- librosa.stft(y(파형), n_fft, win_length, hop_length) : Time도메인 파형을 Frequency도메인으로 변형시키는 푸리에변환. 전체파형을 대상으로 하면 제대로 분석이 불가하기에, 짧은 시간단위로 분리해 각 구간에 대해 변환. 
+- librosa.power_to_db(np.abs(stft결과)) : 파워 스펙트로그램(stft)을 dB(decibel)유닛으로 변환. 절댓값을 취하면 역변환시 음원으로 재변형이 불가능해짐.
+- librosa.feature.melspectrogrma(np.abs(stft결과), sr, n_mels, win_len, hop_len) : Mel스케일 변환을 통해 사람의 뒤에 맞춰진 스펙트로그램 생성.
+- librosa.feature.mfcc(p2db결과, sr, n_mfcc) : Mel스펙트로그램에 DCT를 거쳐 나온 결과값. 압축된 정보를 담고 있으며, 과정에서 노이즈가 제거되는 효과가 있음.
+  역변환시 원본 파형데이터 형태로도 연산이 가능해, 음성데이터 분석시 주로 사용.
+- librosa.inverse.[mel/mfcc\]_to\_[stft/audio/mel/audio\] : 역변환. mel과 앞의 두개, mfcc와 뒤에 두개를 사용가능. 단계순서에 관계없이도 역변환이 가능.
+
+- librosa.display.specshow(결과) : 스펙트로그램, chromagram, cqt, 그 외 여러가지를 display. plt로 show()해서 인자로 넣은 결과의 그래프를 볼 수 있음.
