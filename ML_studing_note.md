@@ -313,11 +313,15 @@ class MyModel(Model):  # 모델을 상속하는 모델클래스 생성
 - AdaGrad : SGD + notation. 각 매개변수에 서로 다른 학습률 적용. 큰 변동 가중치 = 학습률 감소, 저변동 가중치 = 학습률 증가. 무한히 학습시 학습이 아예 안될 수 있음.
 - RMSProp : AdaGrad 보완. 가중치보다 기울기가 크게 반영되도록 하고, 하이퍼 파라미터 p를 추가해 h가 무한히 커지지 않게 함. 
 - Adam : RMSProp + Momentum. 방향과 학습률 두가지를 모두 잡기 위함. 각각 v와 h가 0으로 초기화 되면 학습 초반 W가 0으로 biased 되었는데, 이를 해결.
-- lbfgs :  Limited BFGS. 준 뉴턴 방식 (quasi-Newton methods)의 알고리즘 중 가장 흔히 쓰이는 방법. 많은 변수를 가진 최적화 문제에 적합. 
-  제한된 메모리 내 에서 f(x)(스칼라 함수, 비선형 미분가능)를 제한 조건이 없는 실수 벡터 x에 대해서 최소화 시키는 것.
-- nag(Nesterov Accelerated Gradient, Nesterov Momentum) : Momentum을 진행한 상태에서 기울기를 계산해 더함. 모멘텀방식의 추월현상이 줄어듦.
+- NAG(Nesterov Accelerated Gradient, Nesterov Momentum) : Momentum을 진행한 상태에서 기울기를 계산해 더함. 모멘텀방식의 추월현상이 줄어듦.
   (현 기울기 + 이전 기울기 - 이전 기울기 누적치)의 변형공식이 있음. Momentum에 비해 성능이 크게 향상되진 않음.
-- Second Order : (?)
+- NAdam : Adam+NAG.  
+
+- Second Order optimization : first-order optimization(SGD)와 그 변형으로 이뤄진 위의 것들과는 다른 방식의 optimization. 
+  단순한 이것의 사용을 위해서 Hessian Matrix란 2차행렬을 계산한 후 역행렬을 구해야 하는데, 이 과정의 계산량이 상대적으로 많아 특정 분야를 제외하곤 잘 쓰이지 않음.
+  Newton's Method(뉴턴방식)를 기반으로 BFGS/L-BFGS(Hessian Matrix를 근사/추정하며 계산), Hessian-Free Optimization(헤시안 행렬을 직접 계산 x)등의 변형이 있음.
+- L-BFGS :  Limited BFGS. 준 뉴턴 방식(quasi-Newton methods)의 알고리즘 중 가장 흔히 쓰이는 방법. 많은 변수를 가진 최적화 문제에 적합. 
+  제한된 메모리 내 에서 f(x)(스칼라 함수, 비선형 미분가능)를 제한 조건이 없는 실수 벡터 x에 대해서 최소화 시키는 것.
 
 ####손실함수(loss)
 ***
