@@ -156,6 +156,7 @@
 - plot - LineStyle : -(solid),--(dashed),-.(dashed-dot),:(dotted).
 - plot - Markers : o(circle),s(square),*(star),p(pentagon),+(plus),x(X),D(diamond),|/_(h/v line),^/v/</>(triangle),1/2/3/4(tri)
 - plot - style : plt.style.use(스타일) 로 각종 스타일 사용가능. 종류는 'seaborn-white'등, plt.style.available 에서 확인가능함.
+- plt.subplot(nrow, ncol, pos) : 여러개의 그래프를 그림(격자형). nrow, ncol은 고정한 채 해당 그래프의 코드 앞에 pos를 증가시키며 사용.
 
 - plt.title(title) : 그래프 제목 설정. loc-타이틀 위치('right','left'), pad-타이틀&그래프간격, 폰트 크기와 두께 설정 가능.
 - plt.x/ylabel(text) : x/y축에 레이블(축제목) 설정.
@@ -163,9 +164,10 @@
 - plt.x/ylim([min,max\]) : x/y축 범위 설정. 
 - plt.axis([x min, x max, y min, y max\]) : 축의 범위 지정.
 - plt.x/yaxis(rotation, fontsize) : x/y축의 폰트 회전 및 크기 설정.
+- plt.annotate(str, xy, xytext, arrowprops) : xy((x, y))부터 xytext((x, y))까지 설정에 따라({'color':'green'})화살표를 그린 후 문자열을 표시.
 
 - plt.grid() : 그래프에 격자 표시. axis='y/x' 로 가로/세로 방향의 그래프만 그릴 수 있음. color,alpha,linestyle 등의 매개변수 사용가능.
-- plt.legend() : 그래프에 레이블(범례) 표시, plot 에서 label="" 로 준 레이블이 그 그래프의 레이블이 된다.
+- plt.legend() : 그래프에 레이블(범례) 표시, plot 에서 label="" 로 준 레이블이 그 그래프의 레이블이 됨. loc=위치("upper right"/2 등)인자로 위치를 지정해줄수도 있음.
 - plt.tick_params() : 눈금 스타일 설정. axis-적용축('x','y','both'), direction-눈금위치('in','out','inout'),
   pad-눈금&레이블 거리, length/width/color-눈금 길이/너비/색, labelsize/labelcolor-레이블 크기/색, t,b,l,r - bool&눈금표시 위치.
 
@@ -193,7 +195,13 @@
 - plt.hexbin(x, y) : 각 데이터가 겹치는(밀집된)정도를 볼 수 있는 그래프를 그림.
 - plt.area(x, y) : 각 데이터의 영역을 볼 수 있는 그래프를 그림.
 
-
+# plotnine(ggplot)
+***
+- plotnine : 업데이트가 멈춘 ggplot이란 시각화패키지를 다시 포팅한 패키지. 커스터마이징이 되어있음. 다른 시각화 패키지로는 seaborn, Altair, Ploty등이 있음. 
+- plotnine.ggplot(petitions)  : 데이터로 그래프 제작
+- plotnine.aes('category')  : 데이터 축 설정. x='' , y='' 식으로 레이블을 지정하지 않고 하나만 지정하면 x로 들어감.
+- plotnine.geom_bar(fill='green')) : 데이터 종류 설정. geom_point() 식으로 하면 산점도 타입이다.
+- plotnine.ggplot(data=데이터, mapping= plotnine.aes(x=, y=, color=) + plotnine.geom_point(alpha=f)) : 식으로도 가능하다.
 
 
 # dlib
@@ -203,7 +211,6 @@
 - dlib.get_frontal_face_detector() > face Detection 을 기능하게 하는 face detector 생성.
 - dlib.shape_predictor(데이터셋(얼굴 랜드마크)이 있는 경로) > Landmark detector 생성.
 - faceDetector(이미지,업스케일 횟수(0,1,2)) > 이미지에서 얼굴을 찾음.
-
 
 # OpenCv (cv2)
 ***
@@ -352,7 +359,6 @@
 - model.predict(X) : 모델을 사용해 입력에 따른 예측 반환.
 - model.get_weights() : 각 독립변수에 대한 가중치 출력.
 - model.summary() 로 모델의 정보(이름/none,출력하는 개수/파라미터(가중치의 개수))를 확인 할 수 있다.
-
 
 # Pytorch ( torch )
 ***
@@ -522,13 +528,6 @@
 >+ 한글 분석을 가능하게 하는 파이썬 패키지.
 >+ konlpy.tag.Okt() >  Okt 클래스 객체 생성. .morphs(text)로 형태소 분석이 가능하다.
 
-# plotnine
-***
-- (plotnine.ggplot(petitions)  : 데이터로 그래프 제작
--  plotnine.aes('category')  : 데이터 축 설정. x='' , y='' 식으로 레이블을 지정하지 않고 하나만 지정하면 x로 들어감.
--  plotnine.geom_bar(fill='green')) : 데이터 종류 설정. geom_point() 식으로 하면 산점도 타입이다.
-- plotnine.ggplot(data=데이터, mapping= plotnine.aes(x=, y=, color=) + plotnine.geom_point(alpha=f)) : 식으로도 가능하다.
-
 
 # wordcloud
 ***
@@ -623,6 +622,12 @@ urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 
 - unicodedata.normalize('NFD', s) : 입력한 문자를 폼에 맞춰 유니코드로 변환. 〈NFC〉, 〈NFKC〉, 〈NFD〉, 〈NFKD〉등이 될 수 있음.
 - unicodedata.category(c) : 문자에 할당된 일반 범주(general category)를 문자열로 반환. Mn(Mark, no spacing. 엑센트등 로마자)등과 같이 나옴.
+
+# pygame
+- (?)
+
+# tkinter
+- (?)
 
 # shutil,zipfile | 파일다운, unzip
 - shutil.copyfileobj(url 파일, out 파일) : url에서 파일을 다운받아 out파일에 저장. 둘 다 파일객체여야 함.
