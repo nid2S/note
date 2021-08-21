@@ -315,7 +315,7 @@ class MyModel(Model):  # 모델을 상속하는 모델클래스 생성
 - Adam : RMSProp + Momentum. 방향과 학습률 두가지를 모두 잡기 위함. 각각 v와 h가 0으로 초기화 되면 학습 초반 W가 0으로 biased 되었는데, 이를 해결.
 - NAG(Nesterov Accelerated Gradient, Nesterov Momentum) : Momentum을 진행한 상태에서 기울기를 계산해 더함. 모멘텀방식의 추월현상이 줄어듦.
   (현 기울기 + 이전 기울기 - 이전 기울기 누적치)의 변형공식이 있음. Momentum에 비해 성능이 크게 향상되진 않음.
-- NAdam : Adam+NAG. (?)
+- NAdam : Adam+NAG. NAG를 조금 변형한 후 Adam과 합침.
 
 - Second Order optimization : first-order optimization(SGD)와 그 변형으로 이뤄진 위의 것들과는 다른 방식의 optimization. 
   단순한 이것의 사용을 위해서 Hessian Matrix란 2차행렬을 계산한 후 역행렬을 구해야 하는데, 이 과정의 계산량이 상대적으로 많아 특정 분야를 제외하곤 잘 쓰이지 않음.
@@ -583,8 +583,9 @@ class MyModel(Model):  # 모델을 상속하는 모델클래스 생성
   Global : 전역적인 해. 전 학습 과정에서 에러가 최소인 구간.
   극복방법 : 실제 딥러닝에서는 로컬 minima에 빠질 확률이 거의 없음(모든 파라미터가 로컬 옵티마(미니마)에 빠져야 하기 때문).
 
-- 차원의 저주란? : (?)
+- 차원의 저주란? : 학습을 위해 차원이 증가함에 따라 모델의 성능이 저하되는 현상. 개별차원 내 학습데이터가 줄어들어 발생. 차원을 줄이거나 데이터를 많이 해 해결가능.
 - 차원축소기법의 종류는? : 
+  
 - PCA가 차원축소기법이자, 데이터압축기법이자, 노이즈제거기법이기도 한 이유는? : 
 - LSA,LDA,SVD의 뜻은? 서로간의 관계는? : 
 - Markov Chain이란? : 

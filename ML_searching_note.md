@@ -156,11 +156,13 @@
 - plot - LineStyle : -(solid),--(dashed),-.(dashed-dot),:(dotted).
 - plot - Markers : o(circle),s(square),*(star),p(pentagon),+(plus),x(X),D(diamond),|/_(h/v line),^/v/</>(triangle),1/2/3/4(tri)
 - plot - style : plt.style.use(스타일) 로 각종 스타일 사용가능. 종류는 'seaborn-white'등, plt.style.available 에서 확인가능함.
-- plt.subplot(nrow, ncol, pos) : 여러개의 그래프를 그림(격자형). nrow, ncol은 고정한 채 해당 그래프의 코드 앞에 pos를 증가시키며 사용.
+- plt.subplot(nrow, ncol, pos) : 여러개의 그래프를 그림(격자형). nrow, ncol은 고정한 채 해당 그래프의 코드 앞에 pos를 증가시키며 사용. pos는 1부터 시작. 
+- plt.subplots() : (?). constrained_layout=True로 각 플롯간 간격을 자동조절가능.
+- plt.subplot_adjust(left, bottom, right, top, wspace, hspace) : 서브플롯들의 위치를 직접 조정. 모든 값은 0~1의 소수(비율). 뒤의 둘은 너비/높이의 비율.
 
 - plt.title(title) : 그래프 제목 설정. loc-타이틀 위치('right','left'), pad-타이틀&그래프간격, 폰트 크기와 두께 설정 가능.
 - plt.x/ylabel(text) : x/y축에 레이블(축제목) 설정.
-- plt.x/yticks(number 리스트) : x/y축에 눈금 표시. label 매개변수에 리스트를 넣어 각 눈금의 이름을 지정해 줄 수 있음.
+- plt.x/yticks(number 리스트) : x/y축에 눈금 표시. 빈리스트를 넣으면 제거. label 매개변수에 리스트를 넣어 각 눈금의 이름을 지정해 줄 수 있음.
 - plt.x/ylim([min,max\]) : x/y축 범위 설정. 
 - plt.axis([x min, x max, y min, y max\]) : 축의 범위 지정.
 - plt.x/yaxis(rotation, fontsize) : x/y축의 폰트 회전 및 크기 설정.
@@ -197,11 +199,29 @@
 
 # plotnine(ggplot)
 ***
-- plotnine : 업데이트가 멈춘 ggplot이란 시각화패키지를 다시 포팅한 패키지. 커스터마이징이 되어있음. 다른 시각화 패키지로는 seaborn, Altair, Ploty등이 있음. 
+- plotnine : 업데이트가 멈춘 시각화패키지 ggplot을 다시 포팅한 패키지. 커스터마이징이 되어있음. 
 - plotnine.ggplot(petitions)  : 데이터로 그래프 제작
 - plotnine.aes('category')  : 데이터 축 설정. x='' , y='' 식으로 레이블을 지정하지 않고 하나만 지정하면 x로 들어감.
 - plotnine.geom_bar(fill='green')) : 데이터 종류 설정. geom_point() 식으로 하면 산점도 타입이다.
-- plotnine.ggplot(data=데이터, mapping= plotnine.aes(x=, y=, color=) + plotnine.geom_point(alpha=f)) : 식으로도 가능하다.
+- plotnine.ggplot(data=데이터, mapping= plotnine.aes(x=, y=, color=) + plotnine.geom_point(alpha=f)) : 식으로도 가능.
+
+# mglearn
+***
+- mglearn.discrete_scatter(X[:, 0, X[:, 1], y) > 산점도를 그림.
+
+- mglearn.dataset.make/load_데이터이름() > 데이터셋 로드.
+- mglearn.dataset.make_forge() > 인위적인 이진분류 대이터셋 로드. x,y에 각각 특성이 들어간다.
+
+- mglearn.plots.plot_모델이름() > 그 모델의 그래프를 그림.
+- mglearn.plots.plot_2d_classification(fit 된 모델, X, fill=bool, alpha=) > 선형 이진 분류 그래프를 결정경계와 함께 그린다.
+- mglearn.plots.plot_knn_classification(n_neighbors = k) > knn 분류를 그래프로 그림.
+- mglearn.plots.plot_knn_regression(n_neighbors = k) > knn 회귀를 그래프로 그림.
+- mglearn.plots.plot_ridge_n_samples() > 리지 회귀를 그래프로 그림.
+
+# 다른 시각화 라이브러리
+- seaborn : matplotlib을 백엔드로 사용하며 타입별 차트를 그리는 인테페이스를 단일함수에서 사용. 디자인이 쉬움. 데이터프레임의 칼럼을 기반으로 데이터추출, 그래프를 그림.
+- Altair : 주피터등 웹 환경에서 유효. 데이터프레임의 칼럼을 기반으로 데이터추출, 다양하고 예쁜 그래프를 쉽게 그림. 
+- Plotly : Altair와 같이 JS로 웹브라우저 상에서 이미지를 렌더링하는 라이브러리. D3.js를 사용해서 시각화.
 
 
 # dlib
@@ -528,6 +548,26 @@
 >+ 한글 분석을 가능하게 하는 파이썬 패키지.
 >+ konlpy.tag.Okt() >  Okt 클래스 객체 생성. .morphs(text)로 형태소 분석이 가능하다.
 
+# tensorboard
+- 텐서보드 : 머신러닝 실험에 필요한 시각화 및 도구를 제공. 실시간으로 학습과정을 그래프로 확인가능하며, 기존에 학습했던 것과 동시 비교 분석이 가능.
+- 제공기능 : 측정항목(손실/정확도등)추적/시각화, 모델그래프(레이어)시각화, 가중치/편향/기타텐서의 경과에 따른 히스토그램,
+   저차원공간에 임베딩 투영, 이미지/테스트/오디오 데이터 표시, 텐서플로우 프로그램 프로파일링, 그 외 다양한 도구 제공.
+- 사용 : 텐서플로우의 함수들(tf.summary의 scalar/marge_all/FileWriter등)을 이용해 파일을 생성한 후 
+  cmd에 [tensorboard --logdir=./logs/ 혹은 python -m tensorboard.main]를 입력해 사용할 수 있음.
+##### 텐서플로우 함수들 
+###### 저장할 것 설정
+- 추후 텐서보드에서의 분석을 위해 데이터(summary)를 작성.
+- tf.summary.scalar(name, scalar) : 스칼라 summary를 작성. 텐서보드 내의 SCALARS 메뉴(대쉬보드)에 넣음.
+- tf.summary.image(name, image) : 이미지 summary를 작성. 텐서보드 내의 IMAGES 메뉴에 넣음.
+- tf.summary.histogram(name, histogram) : 히스토그램 summary를 작성. 텐서보드 내의 HISTOGRAMS 메뉴에 넣음.
+###### 기록할 장소 설정
+- tf.summary.merge_all() : 앞서 지정한 모든 summary를 통합(marge).
+- tf.summary.merge(summaries) : 원하는 summaries를 통합. 
+- tf.summary.FileWriter(log_dir, graph) : 텐서보드를 위해 생성된 파일들(marge>sun>add)을 저장. tf.session()을 돌리고 sess.graph로 그래프를 넣으면 됨. 넣은 순간 텐서보드에서 그려짐.  
+###### 기록
+- summary = sess.run(merge) : 원하는 스텝마다 merge를 실행해 summary값을 구함. 스텝은 batch_num(epoch마다 나옴)보단 global step(반복x 0부터)으로 넣어주면 좋음.
+- writer.add_summary(summary, global_step) : 나온 summary를 FileWriter에 추가함. 넣을때마다 새로운 event가 저장됨. tf.train.global_step()으로 글로벌 스텝 획득가능.
+
 
 # wordcloud
 ***
@@ -537,25 +577,11 @@
 >                        background_color = 색('white'),
 >                         width = width, height = height).generate(data)
 
-
 # Scipy
 ***
 - scipy.sparse.csr_matrix(eye) > 주어진 배열 중 0이 아닌 요소만 위치와 값을 저장(희소행렬).
 - scipy.sparse.coo_matrix((ones, (arange, arange)) > 주어진 배열 중 0이 아닌 요소만 위치와 값을 저장(희소행렬).
 
-
-# mglearn
-***
-- mglearn.discrete_scatter(X[:, 0, X[:, 1], y) > 산점도를 그림.
-
-- mglearn.dataset.make/load_데이터이름() > 데이터셋 로드.
-- mglearn.dataset.make_forge() > 인위적인 이진분류 대이터셋 로드. x,y에 각각 특성이 들어간다.
-
-- mglearn.plots.plot_모델이름() > 그 모델의 그래프를 그리는 듯.
-- mglearn.plots.plot_2d_classification(fit 된 모델, X, fill=bool, alpha=) > 선형 이진 분류 그래프를 결정경계와 함께 그린다.
-- mglearn.plots.plot_knn_classification(n_neighbors = k) > knn 분류를 그래프로 그림.
-- mglearn.plots.plot_knn_regression(n_neighbors = k) > knn 회귀를 그래프로 그림.
-- mglearn.plots.plot_ridge_n_samples() > 리지 회귀를 그래프로 그림.
 
 # os | os(파일, 디렉토리)관련 명령
 - os.getcwd() : 현재 작업 폴더 반환.
@@ -623,36 +649,18 @@ urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 - unicodedata.normalize('NFD', s) : 입력한 문자를 폼에 맞춰 유니코드로 변환. 〈NFC〉, 〈NFKC〉, 〈NFD〉, 〈NFKD〉등이 될 수 있음.
 - unicodedata.category(c) : 문자에 할당된 일반 범주(general category)를 문자열로 반환. Mn(Mark, no spacing. 엑센트등 로마자)등과 같이 나옴.
 
+# shutil,zipfile | 파일다운, unzip
+- shutil.copyfileobj(url 파일, out 파일) : url에서 파일을 다운받아 out파일에 저장. 둘 다 파일객체여야 함.
+  
+- zipfile.ZipFile(zipfilepath, 'r') : zip파일객체 오픈. .extractall(path)로 압축을 헤재할 수 있음.
+
+
 # pygame
 - (?)
 
 # tkinter
 - (?)
 
-# shutil,zipfile | 파일다운, unzip
-- shutil.copyfileobj(url 파일, out 파일) : url에서 파일을 다운받아 out파일에 저장. 둘 다 파일객체여야 함.
-  
-- zipfile.ZipFile(zipfilepath, 'r') : zip파일객체 오픈. .extractall(path)로 압축을 헤재할 수 있음.
-
-# tensorboard
-- 텐서보드 : 머신러닝 실험에 필요한 시각화 및 도구를 제공. 실시간으로 학습과정을 그래프로 확인가능하며, 기존에 학습했던 것과 동시 비교 분석이 가능.
-- 제공기능 : 측정항목(손실/정확도등)추적/시각화, 모델그래프(레이어)시각화, 가중치/편향/기타텐서의 경과에 따른 히스토그램,
-   저차원공간에 임베딩 투영, 이미지/테스트/오디오 데이터 표시, 텐서플로우 프로그램 프로파일링, 그 외 다양한 도구 제공.
-- 사용 : 텐서플로우의 함수들(tf.summary의 scalar/marge_all/FileWriter등)을 이용해 파일을 생성한 후 
-  cmd에 [tensorboard --logdir=./logs/ 혹은 python -m tensorboard.main]를 입력해 사용할 수 있음.
-##### 텐서플로우 함수들 
-###### 저장할 것 설정
-- 추후 텐서보드에서의 분석을 위해 데이터(summary)를 작성.
-- tf.summary.scalar(name, scalar) : 스칼라 summary를 작성. 텐서보드 내의 SCALARS 메뉴(대쉬보드)에 넣음.
-- tf.summary.image(name, image) : 이미지 summary를 작성. 텐서보드 내의 IMAGES 메뉴에 넣음.
-- tf.summary.histogram(name, histogram) : 히스토그램 summary를 작성. 텐서보드 내의 HISTOGRAMS 메뉴에 넣음.
-###### 기록할 장소 설정
-- tf.summary.merge_all() : 앞서 지정한 모든 summary를 통합(marge).
-- tf.summary.merge(summaries) : 원하는 summaries를 통합. 
-- tf.summary.FileWriter(log_dir, graph) : 텐서보드를 위해 생성된 파일들(marge>sun>add)을 저장. tf.session()을 돌리고 sess.graph로 그래프를 넣으면 됨. 넣은 순간 텐서보드에서 그려짐.  
-###### 기록
-- summary = sess.run(merge) : 원하는 스텝마다 merge를 실행해 summary값을 구함. 스텝은 batch_num(epoch마다 나옴)보단 global step(반복x 0부터)으로 넣어주면 좋음.
-- writer.add_summary(summary, global_step) : 나온 summary를 FileWriter에 추가함. 넣을때마다 새로운 event가 저장됨. tf.train.global_step()으로 글로벌 스텝 획득가능.
 
 # Scrapy
 - scrapy : 파이썬 웹 크롤링(스크래핑) 패키지.
