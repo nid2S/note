@@ -142,6 +142,10 @@
 
 # matplotlib.pyplot
 ***
+- 구동방식 : PyplotAPI(matplotlib.pyplot 모듈에 함수로 정의되어있는 커맨드방식)/객체지향API(객체지향 라이브러리를 직접 활용하는 방식)두가지의 사용 방법이 있음.
+- 객체지향API사용 : Figure객체 생성 > 하나 이상의 Axes객체 생성 > 생성된 axes에 대해 조작(헬퍼함수로 primitives생성)  
+- plt.subplots() : Figure객체 생성 후 Figure.subplots()를 호출하여 리턴. fig, ax를 반환. constrained_layout=True로 각 플롯간 간격을 자동조절가능.
+
 - matplotlib.font_manager.FontProperties(fname(폰트경로)).get_name() : 경로의 폰트의 이름을 얻음.
 - matplotlib.rc('font', family = 폰트이름) : 폰트변경. 기본폰트가 sans-erif 이기에 한글폰트가 깨질 수 있는데, 이를 방지하기 위해 사용.
 
@@ -157,7 +161,6 @@
 - plot - Markers : o(circle),s(square),*(star),p(pentagon),+(plus),x(X),D(diamond),|/_(h/v line),^/v/</>(triangle),1/2/3/4(tri)
 - plot - style : plt.style.use(스타일) 로 각종 스타일 사용가능. 종류는 'seaborn-white'등, plt.style.available 에서 확인가능함.
 - plt.subplot(nrow, ncol, pos) : 여러개의 그래프를 그림(격자형). nrow, ncol은 고정한 채 해당 그래프의 코드 앞에 pos를 증가시키며 사용. pos는 1부터 시작. 
-- plt.subplots() : (?). constrained_layout=True로 각 플롯간 간격을 자동조절가능.
 - plt.subplot_adjust(left, bottom, right, top, wspace, hspace) : 서브플롯들의 위치를 직접 조정. 모든 값은 0~1의 소수(비율). 뒤의 둘은 너비/높이의 비율.
 
 - plt.title(title) : 그래프 제목 설정. loc-타이틀 위치('right','left'), pad-타이틀&그래프간격, 폰트 크기와 두께 설정 가능.
@@ -217,6 +220,9 @@
 - mglearn.plots.plot_knn_classification(n_neighbors = k) > knn 분류를 그래프로 그림.
 - mglearn.plots.plot_knn_regression(n_neighbors = k) > knn 회귀를 그래프로 그림.
 - mglearn.plots.plot_ridge_n_samples() > 리지 회귀를 그래프로 그림.
+
+# folium
+- python 지도 시각화 패키지.
 
 # 다른 시각화 라이브러리
 - seaborn : matplotlib을 백엔드로 사용하며 타입별 차트를 그리는 인테페이스를 단일함수에서 사용. 디자인이 쉬움. 데이터프레임의 칼럼을 기반으로 데이터추출, 그래프를 그림.
@@ -654,19 +660,24 @@ urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
   
 - zipfile.ZipFile(zipfilepath, 'r') : zip파일객체 오픈. .extractall(path)로 압축을 헤재할 수 있음.
 
+# Scrapy
+- scrapy : 파이썬 웹 크롤링(스크래핑) 패키지.
+
+# timeit
+- timeit.timeit(함수) : 함수의 시작부터 끝까지 걸린 시간을 측정.
+
 
 # pygame
-- (?)
+- pygame : python을 통해 게임을 만들 수 있도록 지원해주는 모듈. [import->init(초기화)->전역변수선언->이벤트/화면/사용자 행위 설정(반복문)]의 구조로 이뤄짐.
+- pygame.init() : 모듈 초기화. pygame모듈 사용시 필수로 해줘야 함. 
+- pygame.display.set_caption() : 창이 켜질때 창의 이름을 설정.
+- pygame.display.set_mode([x, y\]) : pygame으로 생성할 GUI창의 크기를 설정 후 화면을 설정하기 위한 객체 생성. .fill((r,g,b))으로 배경색을 설정하는 등의 조작이 가능.
+- pygame.time.Clock() : 화면을 초당 몇번 출력하는지(FPS)설정하기위한 Clock객체 생성. .tick(i)로 FPS설정 가능.
+- pygame.event.get() : 게임중간에 발생한 이벤트를 캐치. [event.type == pygame.QUIT]으로 창에서 x버튼이 눌렸는지 등의 이벤트를 검사할 수 있음.
+- pygame.display.filp() : draw함수나 screen(set_mode())로 화면에 작성한 모든것을 업데이트. 
+
+- pygame.draw.rect/polygon/circle/eclipse/arc/line/lines/aaline/aalines() : 도형/선을 그림. 여러 매개변수를 주어 도형의 색/크기/위치/그 외 기타등등을 설정가능.
 
 # tkinter
 - (?)
 
-
-# Scrapy
-- scrapy : 파이썬 웹 크롤링(스크래핑) 패키지.
-
-# folium
-- python 지도 시각화 패키지.
-
-# timeit
-- timeit.timeit(함수) : 함수의 시작부터 끝까지 걸린 시간을 측정.
