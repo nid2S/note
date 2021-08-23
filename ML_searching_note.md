@@ -252,7 +252,7 @@
 - cv2.imshow("윈도우( = 뜰 창) 이름)",이미지) > 이미지 띄울 준비
 - cv2.waitKey(ms) > 입력한 밀리세크(1000ms = 1s)동안 이미지를 띄움. 0일 경우 어느 키보드 입력시까지 띄움.
 - cv2.destroyAllWindows() > 이름 그대로. waitKey 이후에 필수.
-- cv2.resize(이미지, 절대크기(상대면 0,0), x 스케일(절대면 패스), y 스케일(절대면 패스), interpolation=method(cv2.INTER_LINEAR,보간법)) > 이미지 resize. 이미지 crop 의 경우는 이미지 슬라이스로 이미지의 일부만을 잘라낸 후 사용한다.
+- cv2.resize(이미지, 절대크기(상대면 0,0), x 스케일(절대면 패스), y 스케일(절대면 패스), interpolation=method(cv2.INTER_LINEAR,보간법)) > 이미지 resize.
 
 - cv2.line(이미지,시작좌표(x,y),끝좌표(x,y),색(R,G,B),thickness(꽉 채울려면 -1),lineType(기본적으로 윤곽선,CV_LINE_AA=안티엘리어싱)) > 선을 그린다.
 - cv2.polylines(img, pts, isClosed, color, thickness=None, lineType=None, shift=None) > 점들을 이어 선을 그림
@@ -264,18 +264,39 @@
 - cv2.lotation(이미지, cv2.ROTATE_각도_방향) > 이미지 회전. cv2.ROTATE_90_CLOCKWISE = 시계방향 90도. 반시계 방향은 COUNTERCLOCKWISE, 180도는 방향을 쓰지 않는다.
 
 - cv2.VideoCapture(비디오 파일 경로(카메라=0 -여러개일 경우 1씩 추가-)) > VideoCapture 객체 생성.
-- VideoCapture 객체.isopened() > 읽을 영상이 남아 있는지 반환
-- VideoCapture 객체.read() > 영상의 존재 여부와 이미지를 반환.
-- VideoCapture 객체.release() > 동영상 종료
-- VideoCapture 객체.get(cv2.CAP_PROP_FRAME_WIDTH/HEIGHT) > 프레임 너비와 높이 휙득. 실수형이기에 정수형으로 변환 필요.
+- VideoCapture객체.isopened() > 읽을 영상이 남아 있는지 반환.
+- VideoCapture객체.read() > 영상의 존재 여부와 이미지를 반환.
+- VideoCapture객체.release() > 동영상 종료.
+- VideoCapture객체.get(cv2.CAP_PROP_FRAME_WIDTH/HEIGHT) > 프레임 너비와 높이 휙득. 실수형이기에 정수형으로 변환 필요.
 
 - cv2.videoWriter('경로/이름',cv2.VideoWriter_fourcc('M','P','4','V'-MP4/'M','J','P','G'-avi),FPS(33이하),(프레임너비,높이)) > videoWriter 객체 생성.
 - videoWriter 객체.write(read 로 얻은 이미지) > 저장
 
-- 이미지 모델 학습시에는 np.ndarray(shape=(image_amount, image_size[1], image_size[0]), dtype=np.float32) 식으로 준비된 이미지 파일과
+- 이미지 모델 학습시에는 np.ndarray(shape=(image_amount, image_size[1\], image_size[0\]), dtype=np.float32) 식으로 준비된 이미지 파일과
   np.ndarray(shape=(image_amount,), dtype=np.int32)식으로 준비된 레이블에
-  이미지 오픈 > fit > asarray > normalized(astype(np.float32)>/255.0 ) > all_images[i]에 넣은 이미지를 사용해야 한다.
+  이미지 오픈 > fit > asarray > normalized(astype(np.float32)>/255.0 ) > all_images[i\]에 넣은 이미지를 사용해야 한다.
   mnist, PIL > (number, y, x) 로 train. | openCv > (number, y, x ,3) 으로 train
+
+# PIL(Pillow)
+- PIL : Python Imaging Library. 
+- Pillow : PIL의 프로젝트 포크(Fork).
+  
+- PIL.Image.fromarray(frame(cv2비디오캡쳐.read())) : cv2에서 읽은 이미지/비디오의 프레임을 Image객체로 변환.  
+- PIL.ImageTK.PhotoImage(Image객체) : Image객체를 ImageTk객체로 변환. tkinter에서 사용가능.
+```
+# 사용 예
+ret, frame = cap.read() # 프레임이 올바르게 읽히면 ret은 True
+if not ret:
+    cap.release() # 작업 완료 후 해제
+    break
+frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+img = Image.fromarray(frame)          # Image 객체로 변환
+imgtk = ImageTk.PhotoImage(image=img) # ImageTk 객체로 변환
+# OpenCV 동영상
+lbl1.imgtk = imgtk
+lbl1.configure(image=imgtk)
+lbl1.after(10, video_play)
+```
 
 
 # tensorflow
@@ -415,18 +436,6 @@
 - torch.utils.data.DataLoader(트레인 세트, batch_size=i, shuffle=T/F, num_worker=i) > 데이터를 배치 사이즈대로 나눠 로드. 마지막은 프로세스를 몇개 사용하냐 라는 의미로, 오류가 난다면 0으로 하면 된다.
 - torch.FloatTensor(X_data-ndarray 타입) > float 타입 요소를 가진 텐서로 변환. 다른 타입도 존재.
 - 텐서.premute(shape number - 0,3,1,2 식으로) > 텐서의 순서를 변환 (20, 32, 32,3)을 채널수가 사이즈보다 먼저 나오는 텐서에 맞게 (0,3,32,32)로 바꿀 수 있다.
-
-
-## torchvision/text
-- torchvision : 비전 분야의 유명한 데이터셋, 모델, 전처리 도구가 포함된 패키지.
-- torchvision.datasets.데이터이름(root=다운파일 저장경로, train=T/F 트레이닝 데이터/테스트 데이터, download=True, transform=전처리방법(torchvision.transform.Compose( [ tr.Resize(사이즈 x*x),tf.ToTensor(),그외 전처리 방법들 ] ) 식으로) ) : 데이터 셋 다운로드. PIL 이미지 형식이다. 채널수가 앞에 있어 size 가 3,8,8 처럼 나온다.
-- torchvision.datasets.load_files("경로") : 파일 로드. .data 로 데이터, .target 으로 레이블을 받아 올 수 있다.
-- torchvision.datasets.ImageFolder(root=경로, transform=전처리방법) : 폴더 안의 이미지 파일을 전부 긁어 와준다. Dataloader 에 넣을 수 있다.
-- 데이터.test_data : 테스트 데이터를 가져옴.
-- 데이터.test_labels : 테스트 레이블을 가져옴.  
-
-- torchtext : 자연어처리 분야의 데이터셋, 모델, 전처리 도구가 포함된 패키지.
-- vision과 포함된 데이터셋, 모델, 전처리 도구가 다를 뿐 사용법은 동일.
 
 # scikit learn
 ***
@@ -679,5 +688,50 @@ urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 - pygame.draw.rect/polygon/circle/eclipse/arc/line/lines/aaline/aalines() : 도형/선을 그림. 여러 매개변수를 주어 도형의 색/크기/위치/그 외 기타등등을 설정가능.
 
 # tkinter
-- (?)
-
+- tkinter : 파이썬 GUI프로그래밍 패키지. 파이썬에서 기본 제공.
+### 윈도우
+- win = tkinter.Tk() : tk인터 객체 생성. 창에 대한 조작이 이 객체를 통해 이뤄짐.
+- win.mainloop() : 창 실행. 창에 대한 모든 조작/설정이 이뤄진 후에 사용.
+- win.geometry("X(너비)xY(높이)") : 창 크기 조절. (너비x높이+x좌표+y좌표)식으로 사용.
+- win.title(str) : 창 제목 설정.
+- win.option_add("*Font", "맑은고딕(종류) 25(크기)") : 폰트의 종류/크기 설정. tk인터의 기본 폰트가 작아 사용해주어야 함. 
+- win.configure(bg="색") : 창 배경색 설정.
+### 위젯
+- 위젯.config() : 위젯에 설정을 적용. 각 위젯의 생성시 넣을 수 있는 인자는 전부 넣을 수 있음.
+- 위젯.pack() : 설정한 위젯을 pack형식(쌓음)으로 적용(배치). side=top/left/right/bottom으로 위치를, padx/y=i로 패딩을 설정할 수 있음.
+- 위젯.grid() : 위젯을 grid형식(격자)으로 적용(배치). column=i, row=j로 위치를, row/columnspan=n으로 공간 병합을 사용할 수 있음. 위젯의 사이가 빌 수 없음.
+- 위젯.place() : 위젯을 place형식(자유)으로 적용(배치). x=x,y=y로 절대적 위치를, relx/y로 상대적 위치를 지정 가능. 모든 위젯에서 padx/y, width/height등의 옵션은 사용가능함.
+##### button
+- btn = tkinter.Button(win) : win에 버튼 생성. text="버튼"등의 인자를 주어 버튼에 대한 설정이 가능.
+- btn.config(command=함수) : 버튼 클릭시 함수를 적용.  
+##### entry
+- ent = tkinter.Entry(win) : win에 입력창 생성.
+- ent.get() : 입력창에서 입력된 문자열을 가져옴.
+- ent.config(show="*") : 입력 문자를 숨김(입력된 문자로 대체).  
+- ent.insert(i, 문자열) : i부터 문자열을 삽입.
+- ent.delete(i, j) : i~(j-1)까지의 문자열을 삭제. 
+- ent.bind(버튼명, 함수) : 입력창을 버튼으로 클릭했을 때 함수를 실행. 버튼은"<Button-1>"(우클릭)식이며, 함수는 event인자를 받아야 함.
+##### label
+- lab = tkinter.Label(win) : win에 라벨을 생성. text, image(PhotoImage객체)등의 인자를 사용 가능. 
+- img = tkinter.PhotoImage(file="경로", master=win) : 이미지객체 생성.
+- img.subsample(i) : i배로 이미지를 축소.
+##### listbox
+- lb = tkinter.Listbox(win) : 리스트박스 생성. 스택처럼 선택지가 박스형태로 펼쳐져 있음.
+- lb.insert(i, 문자열) : i에 문자열을 삽입.
+- lb.curselection() : 선택한 항목의 인덱스를 튜플형태로 받음.
+- lb.config(selectmode="multiple") : 여러개를 선택할 수 있도록 함.
+##### check/radio button
+- iv = tkinter.intVar() : 들어간 위젯의 상태에 따라 상태가 바뀌는 변수 생성. .get()으로 체크여부(0,1)를 받아볼 수 있음.
+- cb = tkinter.Checkbutton(win, variable=iv) : 체크박스 생성. 체크 상태에 따라 iv.get()의 값이 바뀌며, 선택지마다 위젯을 추가해야함.
+- rb = tkinter.Radiobutton(win, value=값, variable=iv) : 라디오버튼 생성. iv.get()사용시 체크된 라디오버튼의 value값이 반환됨. 
+##### combo box
+- cb = tkinter.ttk.Combobox(win, values=리스트) : 콤보박스 생성. 리스트 속 값을 콤보박스의 값들로 함. 
+- cb.get() : 선택된 값을 반환.
+##### spinbox
+- sb = tkinter.Spinbox(win, from_=min, to=max) : 스핀박스 생성. min에서 max까지 수치를 조절 가능.
+- sb.get() : 선택된 값을 반환.
+##### scale
+- sc = tkinter.Scale(win) : 스케일바(소리조절등에 사용되는 막대)생성. length인자로 길이 조절 가능.
+- sc.config(from_=min, to=max) : 스케일박스의 범위 설정.
+- sc.config(orient="horizontal") : 스케일박스의 방향을 가로로 변경.
+- sc.config(tickinterval=i) : 스케일박스에 표시되는 숫자의 간격을 i로 변경.
