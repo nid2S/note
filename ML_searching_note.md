@@ -651,23 +651,22 @@ urllib.request.install_opener(opener)           # 오프너 오픈
 urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 ```
 
-# urllib(3),unicodedata | url,uni
+# urllib(3)/zipfile | url,zip
 - urllib : url 이용 라이브러리. urllib3 은 따로 install, import가 필요함. 
 - urllib3.PoolManager() : url poolManager 로드. url이용에 사용가능.
 - http(Pool).request('GET', url, preload_content=False) : url 오픈. with 등을 이용해 파일객체로 열 수 있고, 다운로드를 위해 shutil이 필요.
   
 - urllib.request.urlretrieve(주소, filename) : 주소의 파일을 파일 이름으로 다운로드.
-- urllib.request.build_opener() : 오프너 생성.
+- urllib.request.build_opener() : 오프너 생성. urllib.request의 함수들은 import urllib.request로 import해야 사용가능.
 - 오프너.addheaders=[넣을 헤더\] : 오프너에 브라우저 헤더추가.
 - urllib.request.install_opener(opener) : 오프너로 오픈. 이 이후 평범하게 코드 사용.
 
-- unicodedata.normalize('NFD', s) : 입력한 문자를 폼에 맞춰 유니코드로 변환. 〈NFC〉, 〈NFKC〉, 〈NFD〉, 〈NFKD〉등이 될 수 있음.
-- unicodedata.category(c) : 문자에 할당된 일반 범주(general category)를 문자열로 반환. Mn(Mark, no spacing. 엑센트등 로마자)등과 같이 나옴.
-
-# shutil,zipfile | 파일다운, unzip
-- shutil.copyfileobj(url 파일, out 파일) : url에서 파일을 다운받아 out파일에 저장. 둘 다 파일객체여야 함.
-  
 - zipfile.ZipFile(zipfilepath, 'r') : zip파일객체 오픈. .extractall(path)로 압축을 헤재할 수 있음.
+
+# requests | http요청
+- requests : http요청을 보내는 라이브러리. 
+- requests.get/post/delete/head/options(url, timeout=n) : 요청. 상황에 맞게 헤더/파일등을 포함해 요청가능. delete엔 data인자를 꼭 넣어주어야 함. 요청성공시 응답 상태와 데이터가 전송되어 옴. 
+- 인자 구조 :  headers = {'Authorization': 'Mozilla/5.0' } | data = {'key1':val1 'key2':val2'} | files = \[('image', (image.png, open(image.png, 'rb'), 'image/png', {'Expires': '0'}))]의 구조를 가지고 있음. 
 
 # Scrapy
 - scrapy : 파이썬 웹 크롤링(스크래핑) 패키지.
