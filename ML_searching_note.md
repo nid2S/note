@@ -695,6 +695,8 @@ urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 - win.title(str) : 창 제목 설정.
 - win.option_add("*Font", "맑은고딕(종류) 25(크기)") : 폰트의 종류/크기 설정. tk인터의 기본 폰트가 작아 사용해주어야 함. 
 - win.configure(bg="색") : 창 배경색 설정.
+- win.after(지연시간(ms), 실행함수, 함수전달인자1, 2) : 일정시간 후 함수 실행.
+- win.after_cancle(after변수) : after삭제. after를 이용한 재귀를 만든 후 재귀를 탈출/삭제시 유용.
 ### 위젯
 - 위젯.config() : 위젯에 설정을 적용. 각 위젯의 생성시 넣을 수 있는 인자는 전부 넣을 수 있음.
 - 위젯.pack() : 설정한 위젯을 pack형식(쌓음)으로 적용(배치). side=top/left/right/bottom으로 위치를, padx/y=i로 패딩을 설정할 수 있음.
