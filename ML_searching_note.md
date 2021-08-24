@@ -699,7 +699,7 @@ urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 - 위젯.config() : 위젯에 설정을 적용. 각 위젯의 생성시 넣을 수 있는 인자는 전부 넣을 수 있음.
 - 위젯.pack() : 설정한 위젯을 pack형식(쌓음)으로 적용(배치). side=top/left/right/bottom으로 위치를, padx/y=i로 패딩을 설정할 수 있음.
 - 위젯.grid() : 위젯을 grid형식(격자)으로 적용(배치). column=i, row=j로 위치를, row/columnspan=n으로 공간 병합을 사용할 수 있음. 위젯의 사이가 빌 수 없음.
-- 위젯.place() : 위젯을 place형식(자유)으로 적용(배치). x=x,y=y로 절대적 위치를, relx/y로 상대적 위치를 지정 가능. 모든 위젯에서 padx/y, width/height등의 옵션은 사용가능함.
+- 위젯.place() : 위젯을 place형식(자유)으로 적용(배치). x=x,y=y로 절대적 위치를, relx/y로 상대적 위치를 지정 가능.
 ##### button
 - btn = tkinter.Button(win) : win에 버튼 생성. text="버튼"등의 인자를 주어 버튼에 대한 설정이 가능.
 - btn.config(command=함수) : 버튼 클릭시 함수를 적용.  
