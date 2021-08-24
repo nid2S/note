@@ -690,7 +690,7 @@ urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 - tkinter : 파이썬 GUI프로그래밍 패키지. 파이썬에서 기본 제공.
 ### 윈도우
 - win = tkinter.Tk() : tk인터 객체 생성. 창에 대한 조작이 이 객체를 통해 이뤄짐.
-- win.mainloop() : 창 실행. 창에 대한 모든 조작/설정이 이뤄진 후에 사용.
+- win.mainloop() : 창 실행. 창에 대한 모든 조작/설정이 이뤄진 후에 사용. 실행시 창의 종료시까지 더이상 코드가 진행되지 않음.
 - win.geometry("X(너비)xY(높이)") : 창 크기 조절. (너비x높이+x좌표+y좌표)식으로 사용.
 - win.title(str) : 창 제목 설정.
 - win.option_add("*Font", "맑은고딕(종류) 25(크기)") : 폰트의 종류/크기 설정. tk인터의 기본 폰트가 작아 사용해주어야 함. 

@@ -675,9 +675,10 @@ for number , name in zip(number_l,name_l):
 
 ## time
 ***
-- 함수의 실행시간은 time 모듈의 time 함수를 이용하며, time 함수는 현재시간을 반환하는 함수이니 함수 시작 전 과 시작 후 의 차이가 실행시간이다.
+- time.time() : 현재시간 반환. 함수 시작 전 과 시작 후 의 차이를 이용해 함수의 실행시간을 구할 수 도 있음.
+- time.sleep(n) : sleep. n초를 sleep함. n은 실수도 가능.
 - time 모듈의 localtime 함수를 이용하면 UTC 가 아니라 KST 로, 날짜와 시간 형태로 변환해준다.
-- time.strftime('포맷', 시간객체-time.localtime(time.time())-) 로 원하는 포맷으로 사용할 수 있다.
+- time.strftime('포맷', time.localtime(time.time())) 로 원하는 포맷으로 사용할 수 있다.
 
 ## byte
 ***
