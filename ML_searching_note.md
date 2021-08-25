@@ -698,7 +698,7 @@ urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 - win.after(지연시간(ms), 실행함수, 함수전달인자1, 2) : 일정시간 후 함수 실행.
 - win.after_cancle(after변수) : after삭제. after를 이용한 재귀를 만든 후 재귀를 탈출/삭제시 유용.
 ### 위젯
-- 위젯.config() : 위젯에 설정을 적용. 각 위젯의 생성시 넣을 수 있는 인자는 전부 넣을 수 있음.
+- 위젯.config() : 위젯에 설정을 적용. 각 위젯의 생성시 넣을 수 있는 인자는 전부 넣을 수 있음. 각 위젯의 인자는 control+클릭으로 init을 열어보면 볼 수 있음.
 - 위젯.pack() : 설정한 위젯을 pack형식(쌓음)으로 적용(배치). side=top/left/right/bottom으로 위치를, padx/y=i로 패딩을 설정할 수 있음.
 - 위젯.grid() : 위젯을 grid형식(격자)으로 적용(배치). column=i, row=j로 위치를, row/columnspan=n으로 공간 병합을 사용할 수 있음. 위젯의 사이가 빌 수 없음.
 - 위젯.place() : 위젯을 place형식(자유)으로 적용(배치). x=x,y=y로 절대적 위치를, relx/y로 상대적 위치를 지정 가능.
