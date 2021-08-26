@@ -421,68 +421,6 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 ******
 
 
-
-# NLTK | NLP(영어토큰화, 전처리 도구들)
-- nltk.download() : NLTK 세트 다운로드. 특정 세트의 이름을 넣으면 그것만 다운로드한다.
-- nltk.Text(tokens) : 토큰들을 다시 문장(iter가능)화. .tokens{토큰확인}, .plot(), .concordance(word){비슷한단어추출}, .vocab(){단어빈도수체크, .most_common(i)사용가능.} 
-
-### tokenize
-- nltk.tokenize.sent_tokenize(text) : 문장 토큰화함수. 문서를 문장단위로 나눠준다. PunktSentenceTokenizer 인스턴스(문장의 시작과 끝을 표시하는 문자나 문장 기호에 기초해 다른 유럽언어로 토큰화를 수행)를 사용해 punkt의 다운로드를 필요로 함. 
-- 영어가 아닌 언어를 토큰화 하려면 'tokenizer/punkt/언어.pickle' 파일을 로드하고 사용하면 된다.  로드한 언어.pickle 에  .tokenize(text) 매서드를 사용해서도 토큰화를 사용할 수 있다.
-  
-- nltk.tokenize.word_tokenize(sentence) : 단어 토큰화 함수. 문장을 단어 단위로 나눠주며 축약형의 경우 단어의 의미가 유지되게(do , n't)분리한다. TreebankWordTokenizer 를 사용한다.
-- nltk.tokenize.sent_Tokenizer(text) : 문장 토큰화 함수. 문장 내부에 구두점이 포함되어 있어도 잘 작동한다.
-- nltk.tokenize.WordPunctTokenizer() : 또 다른 단어 토크나이저. 구두점을 별도로 분리한다. 축약형의 경우 '전, ', '후 총 세가지로 나눈다.
-- nltk.tokenize.TreebankWordTokenizer() : 트리뱅크워드 토큰화 함수 로드. .tokenize(Sentence) 로 토큰화를 수행할 수 있다. 분리된 축약형('Do', 'n't')으로 작동된다. 
-- nltk.tokenize.WhitespaceTokenizer() : 화이트 스페이스(탭 제외?) 으로 단어 토큰화. 토크나이저.span_tokenize(sent)로 토큰의 오프셋인 튜플의 순서를 받을 수 있다.
-- nltk.tokenize.util.string_span_tokenize(문자열, "separator(구분자)") : 구분자대로 분할해 전송된 토큰의 오프셋을 반환.
-
-- nltk.tokenizer.RegexpTokenizer(정규 표현식) : 정규 표현식을 이용한 단어 토큰화 클래스 로드. .tokenize(String)으로 사용할 수 있다. gaps = True 로 화이트 스페이스를 사용한 토큰화를 할 수 있다. 
-- nltk.tokenizer.regexp_tokenize(sentence, patten='정규 표현식') : 정규 표현식 단어 토큰화 함수 로드. 
-
-### stem
-- nltk.stem.WordNetLemmatizer() : 표제어 추출기 생성. .lemmatize(word)로 표제어 추출 사용 가능. 정확한 추출을 위해선 (word, 품사)식으로 넣어주어야 한다.
-- nltk.stem.PorterStemmer() : PorterStemmer 알고리즘의 어간 추출기 생성. .stem(토큰.norm_.lower()) 으로 어간(용언에서 뜻을 나타내는 불변인 부분)을 찾음.
-- nltk.stem.LancasterStemmer() : Lancaster 어간 추출기 로드. .stem(word) 로 사용할 수 있다.
-
-### Freq
-- nltk.FreqDist(단어집합) : 단어를 키로, 빈도수를 값으로 저장해 리턴. 결과.most_common(i)로 상위 i개의 단어만 보존가능. 아래와 똑같은 효과를 지님.
-- collections.Counter(단어집합) : 단어 집합에서 중복을 제거하고 단어의 모든 빈도를 쉽게 계산함. 이 메서드로 간단하게 등장단어와 빈도 파악이 가능.
-
-- nltk.tag.pos_tag(토큰 리스트) : 품사 태깅을 수행. (단어, 품사)의 형태로 나타남. PRP(인칭대명사),VBP(동사),RB(부사),VBG(현재부사),IN(전치사),NNP(고유명사),NNS(복수명사),CC(접속사),DT(관사)를 의미함.
-- nltk.ne_chunk(품사태깅([(토큰,품사)]형태)) : 개체명 인식을 수행. 개체명 인식이 된것(명사(NNP)만 인식)은 ()로 묶여있고, 최종(S (개체명, 단어) 단어 단어 단어 (개체명, 단어))식으로 배치된다.
-
-### corpus
-- nltk.corpus.stopwords : 불용어 처리 클래스 로드. .words('언어')로 불용어 리스트를 받아올 수 있으며 if w not in words 롤 거를 수 있고, .fileids()로 불용어 목록이 있는 언어를 확인할 수 있다. 한국어 등은 직접 txt 파일등에 목록을 만들어 제거하는게 편함.
-- nltk.corpus.wordnet : 프린스턴 대학의 동의어 집합 세트. synsets(word).definition()으로 단어의 유사어 확인 가능, .path_similarity(synsets)로 단어의 유사도 확인 가능. 
-- nltk.corpus.alpino : 알피노 코퍼스(네덜란드 신문에 나오는 단어 모음) 로드. .word()로 내부의 단어들을 꺼낼 수 있다. 다른 것들도 사용가능. 전부 nltk.download(corpus)뒤에 사용 가능하다.
-
-### metrics
-- nltk.metrics.accuracy(sentence1, sentence2) : 두 토큰화된 단어 리스트의 정확도(같은 정도)반환.
-- nltk.metrics.precision(sentence1, sentence2) : 두 토큰화된 단어 리스트의 정밀도(TP/(TP+FP))반환.
-- nltk.metrics.recall(sentence1, sentence2) : 두 토큰화된 단어 리스트의 재현율(TP/(TP+FN))반환.
-- nltk.metrics.f_measure(sentence1, sentence2) : 두 토큰화된 단어 리스트의 f1점수(정밀도와 재현율의 조화 평균(역수의 평균의 역수,곱/합))반환.
-
-- nltk.metrics.edit_distance(word1, word2) : 두 단어간 편집거리 반환.
-- nltk.metrics.jaccard_distance(set1, set2) : 두 세트간 자카드 계수 반환.
-- nltk.metrics.binary_distance(set1, set2) : 두 세트간 이진거리 계수 반환.
-- nltk.metrics.masi_distance(set1, set2) : 두 세트간 매시거리 계수 반환.
-
-### ngrams
-- nltk.util.ngrams(단어 리스트, n) : n개의 토큰이 연결되어 있는 n그램 생성. 
-- nltk.collocations.BigramCollocationFinder : 바이그램 탐색기. .from_words(tokens)로 토큰을 저장할 수 있다.
-- 토큰저장탐색기.nbest(nltk.metrics.BigramAssocMeasures.likelihood_ratio, n) : n개의 바이그램을 찾아 리스트를 받아볼 수 있다.
-- 토큰저장탐색기.score_ngrams(nltk.collocations.BigramAssocMeasures().raw_freq) : 바이그램을 찾는 또다른 방법.
-- nltk.probability.LidstoneProbDist(fd, gamma=f, bins = n) = 최대 우도 추정 사용. fd(빈도분포)를 기반으로 f(0~1)를 사용해 n개의 샘플을 생성. 샘플들의 총 합은 1. 
-
-### translate
-- nltk.translate.bleu_score(candidate.split(), refrences.split()) : BLEU score 측정. 
-
-# spaCy | 토큰화(영어)
-- spacy.load(언어) : 해당 언어의 처리를 위한 sapcy로드. 언어는 'en'등으로 사용.
-- 로드된spacy.tokenizer(sent) : 문장을 단어단위로 토큰화. 각 토큰들은 .text 로 문자열 형태로 받을 수 있음.
-
-
 # tensorflow | 토큰,벡터화,임베딩,RNN등
 ### preprocessing
 ##### tokenize
@@ -563,9 +501,70 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - replacers.WordReplacer({'바꿀단어':'바뀔단어'}) : 단어를 동의어로 변환하는 클래스 로드. 마찬가지로 사용, 목록에 있는 단어는 바꿔서, 아니면 그대로 반환한다.
 
 
+# NLTK | NLP(영어토큰화, 전처리 도구들)
+- nltk.download() : NLTK 세트 다운로드. 특정 세트의 이름을 넣으면 그것만 다운로드한다.
+- nltk.Text(tokens) : 토큰들을 다시 문장(iter가능)화. .tokens{토큰확인}, .plot(), .concordance(word){비슷한단어추출}, .vocab(){단어빈도수체크, .most_common(i)사용가능.} 
+
+### tokenize
+- nltk.tokenize.sent_tokenize(text) : 문장 토큰화함수. 문서를 문장단위로 나눠준다. PunktSentenceTokenizer 인스턴스(문장의 시작과 끝을 표시하는 문자나 문장 기호에 기초해 다른 유럽언어로 토큰화를 수행)를 사용해 punkt의 다운로드를 필요로 함. 
+- 영어가 아닌 언어를 토큰화 하려면 'tokenizer/punkt/언어.pickle' 파일을 로드하고 사용하면 된다.  로드한 언어.pickle 에  .tokenize(text) 매서드를 사용해서도 토큰화를 사용할 수 있다.
+  
+- nltk.tokenize.word_tokenize(sentence) : 단어 토큰화 함수. 문장을 단어 단위로 나눠주며 축약형의 경우 단어의 의미가 유지되게(do , n't)분리한다. TreebankWordTokenizer 를 사용한다.
+- nltk.tokenize.sent_Tokenizer(text) : 문장 토큰화 함수. 문장 내부에 구두점이 포함되어 있어도 잘 작동한다.
+- nltk.tokenize.WordPunctTokenizer() : 또 다른 단어 토크나이저. 구두점을 별도로 분리한다. 축약형의 경우 '전, ', '후 총 세가지로 나눈다.
+- nltk.tokenize.TreebankWordTokenizer() : 트리뱅크워드 토큰화 함수 로드. .tokenize(Sentence) 로 토큰화를 수행할 수 있다. 분리된 축약형('Do', 'n't')으로 작동된다. 
+- nltk.tokenize.WhitespaceTokenizer() : 화이트 스페이스(탭 제외?) 으로 단어 토큰화. 토크나이저.span_tokenize(sent)로 토큰의 오프셋인 튜플의 순서를 받을 수 있다.
+- nltk.tokenize.util.string_span_tokenize(문자열, "separator(구분자)") : 구분자대로 분할해 전송된 토큰의 오프셋을 반환.
+
+- nltk.tokenizer.RegexpTokenizer(정규 표현식) : 정규 표현식을 이용한 단어 토큰화 클래스 로드. .tokenize(String)으로 사용할 수 있다. gaps = True 로 화이트 스페이스를 사용한 토큰화를 할 수 있다. 
+- nltk.tokenizer.regexp_tokenize(sentence, patten='정규 표현식') : 정규 표현식 단어 토큰화 함수 로드. 
+
+### stem
+- nltk.stem.WordNetLemmatizer() : 표제어 추출기 생성. .lemmatize(word)로 표제어 추출 사용 가능. 정확한 추출을 위해선 (word, 품사)식으로 넣어주어야 한다.
+- nltk.stem.PorterStemmer() : PorterStemmer 알고리즘의 어간 추출기 생성. .stem(토큰.norm_.lower()) 으로 어간(용언에서 뜻을 나타내는 불변인 부분)을 찾음.
+- nltk.stem.LancasterStemmer() : Lancaster 어간 추출기 로드. .stem(word) 로 사용할 수 있다.
+
+### Freq
+- nltk.FreqDist(단어집합) : 단어를 키로, 빈도수를 값으로 저장해 리턴. 결과.most_common(i)로 상위 i개의 단어만 보존가능. 아래와 똑같은 효과를 지님.
+- collections.Counter(단어집합) : 단어 집합에서 중복을 제거하고 단어의 모든 빈도를 쉽게 계산함. 이 메서드로 간단하게 등장단어와 빈도 파악이 가능.
+
+- nltk.tag.pos_tag(토큰 리스트) : 품사 태깅을 수행. (단어, 품사)의 형태로 나타남. PRP(인칭대명사),VBP(동사),RB(부사),VBG(현재부사),IN(전치사),NNP(고유명사),NNS(복수명사),CC(접속사),DT(관사)를 의미함.
+- nltk.ne_chunk(품사태깅([(토큰,품사)]형태)) : 개체명 인식을 수행. 개체명 인식이 된것(명사(NNP)만 인식)은 ()로 묶여있고, 최종(S (개체명, 단어) 단어 단어 단어 (개체명, 단어))식으로 배치된다.
+
+### corpus
+- nltk.corpus.stopwords : 불용어 처리 클래스 로드. .words('언어')로 불용어 리스트를 받아올 수 있으며 if w not in words 롤 거를 수 있고, .fileids()로 불용어 목록이 있는 언어를 확인할 수 있다. 한국어 등은 직접 txt 파일등에 목록을 만들어 제거하는게 편함.
+- nltk.corpus.wordnet : 프린스턴 대학의 동의어 집합 세트. synsets(word).definition()으로 단어의 유사어 확인 가능, .path_similarity(synsets)로 단어의 유사도 확인 가능. 
+- nltk.corpus.alpino : 알피노 코퍼스(네덜란드 신문에 나오는 단어 모음) 로드. .word()로 내부의 단어들을 꺼낼 수 있다. 다른 것들도 사용가능. 전부 nltk.download(corpus)뒤에 사용 가능하다.
+
+### metrics
+- nltk.metrics.accuracy(sentence1, sentence2) : 두 토큰화된 단어 리스트의 정확도(같은 정도)반환.
+- nltk.metrics.precision(sentence1, sentence2) : 두 토큰화된 단어 리스트의 정밀도(TP/(TP+FP))반환.
+- nltk.metrics.recall(sentence1, sentence2) : 두 토큰화된 단어 리스트의 재현율(TP/(TP+FN))반환.
+- nltk.metrics.f_measure(sentence1, sentence2) : 두 토큰화된 단어 리스트의 f1점수(정밀도와 재현율의 조화 평균(역수의 평균의 역수,곱/합))반환.
+
+- nltk.metrics.edit_distance(word1, word2) : 두 단어간 편집거리 반환.
+- nltk.metrics.jaccard_distance(set1, set2) : 두 세트간 자카드 계수 반환.
+- nltk.metrics.binary_distance(set1, set2) : 두 세트간 이진거리 계수 반환.
+- nltk.metrics.masi_distance(set1, set2) : 두 세트간 매시거리 계수 반환.
+
+### ngrams
+- nltk.util.ngrams(단어 리스트, n) : n개의 토큰이 연결되어 있는 n그램 생성. 
+- nltk.collocations.BigramCollocationFinder : 바이그램 탐색기. .from_words(tokens)로 토큰을 저장할 수 있다.
+- 토큰저장탐색기.nbest(nltk.metrics.BigramAssocMeasures.likelihood_ratio, n) : n개의 바이그램을 찾아 리스트를 받아볼 수 있다.
+- 토큰저장탐색기.score_ngrams(nltk.collocations.BigramAssocMeasures().raw_freq) : 바이그램을 찾는 또다른 방법.
+- nltk.probability.LidstoneProbDist(fd, gamma=f, bins = n) = 최대 우도 추정 사용. fd(빈도분포)를 기반으로 f(0~1)를 사용해 n개의 샘플을 생성. 샘플들의 총 합은 1. 
+
+### translate
+- nltk.translate.bleu_score(candidate.split(), refrences.split()) : BLEU score 측정. 
+
+# spaCy | 토큰화(영어)
+- spacy.load(언어) : 해당 언어의 처리를 위한 sapcy로드. 언어는 'en'등으로 사용.
+- 로드된spacy.tokenizer(sent) : 문장을 단어단위로 토큰화. 각 토큰들은 .text 로 문자열 형태로 받을 수 있음.
+
+
 # KoNLpy | 한글 분석(토큰화, 태깅)
 - konlpy : 한글 분석을 가능하게 함. 자바로 이뤄져 있어 JDK 1.7 이상과 JPype 가 설치되어 있어야 함. 각 분석기는 성능과 결과가 다르게 나와 용도에 따라 적절한 것을 선택해야 함.
-- 종류 : Okt(Open Korea Text, Twitter), 꼬꼬마(Kkma), 메캅(Mecab, 속도 중시), 코모란(Komoran), 한나눔(Hannanum) 등의 형태소 분석기 사용 가능.
+- 종류 : Okt(Open Korea Text, Twitter), 꼬꼬마(Kkma), **메캅(Mecab, 속도 중시)**, 코모란(Komoran), 한나눔(Hannanum) 등의 형태소 분석기 사용 가능.
 - 함수 : .morphs(text){토큰화}, .pos(text){토큰화 후 품사 태깅}, .nouns(text){명사만 추출}, .phrases(text){어절만 추출}, .sentences(text){문장을 추출, 일부만}등이 사용가능하다.
 - 매개변수 : .pos(), .morphs() 사용시 norm=bool(일정 수준의 정규화), stem=bool(표제어(원본글자)로 변형) 등의 매개변수를 사용할 수 있음.
   
