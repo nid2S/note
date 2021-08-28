@@ -306,6 +306,9 @@ lbl1.after(10, video_play)
 - Python, C++, JS, Java, Go, Swift등 다양한 프로그래밍언어의 API를 지원.
 - TPU지원, 일반적으로 32bit의 곱셈연산을 16bit로 줄임 등의 특성이 있음.
 - Estimators(객체지향 레벨) > layers,losses,metrics > Python/C++ Tensorflow > CPU/GPU/TPU 순으로 아키텍쳐(API)가 구성되어 있음.
+- tensorflow in java : tf에서 libtensorflow.jar 다운로드 > 압축 해제후 jar파일 src에 복사 > properties 에서 add jar > 다운한 파일선택 > apply 
+  과정을 거친 후 import org.tensorflow로 사용.
+
 
 ##### tensor
 - tf.Variable(수식, name="변수명") : 변수 선언 후 수식으로 정의. x+4 식으로 수식을 지정해 변수에 할당하는 방식.

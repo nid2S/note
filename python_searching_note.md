@@ -229,6 +229,9 @@ for number , name in zip(number_l,name_l):
 - 문자열.find(찾을 문자열) = 찾는 문자열이 가장 처음 나온 곳의 인덱스 반환. 없으면 -1 반환. rfind 는 오른쪽에서부터 찾음. .index 와 rindex 도 같으나 없으면 에러.
 - 문자열.count("문자열") = 문자열에서 문자열이 나오는 개수 반환.
 
+- startswitch() : (?) 
+- await() : (?)
+
 ## format
 ***
 - 문자열(안에 {인덱스}).format(값들) = 인덱스 부분에 format 부분 속 인덱스에 맞는 값 삽입. 같은 인덱스를 여러개 넣거나 인덱스를 생략해도 됨.
@@ -641,34 +644,9 @@ for number , name in zip(number_l,name_l):
 - 패키지를 import 할때 from .모듈 import 변수, 함수, 클래스 를 사용하면 앞에 모듈을 붙일 필요 없이 변수만 사용할 수 있다. from .모듈 import * 을 사용해도 된다.
 - 모듈과 패키지(\_\_init__)의 첫줄에 '''모듈의 독스트링'''처럼 독스트링을 넣을 수 있고, 이걸 출력하려면 .__doc__를 출력하면 된다.
 
-# web crawling
-***
-- requests 모듈 : 웹페이지의 HTML 을 가져옴
-- from bs4 import BeautifulSoup : HTML 을 파싱(텍스트 형태의 HTML 코드를 분석해서 객체로 만든 뒤 검색하거나 편집할 수 있도록 만드는 작업)하는 모듈
+# collections
+- (?)
 
-- a = requests.get("가져올 웹 페이지") > 웹페이지를 가져옴
-- b = BeautifulSoup(a.content, 'html.parser') > 웹 페이지를 BeautifulSoup 객체로 만듦
-- c = b.find("찾을 태그명",{"클래스/아이디등" : "그 클래스의 이름"}) > 그 태그,클래스/아이디의 태그를 찾음.
-- d = c.find_all("찾을 태그명") > 그 태그 전부를 반복가능 객체로 가져옴. list 로 싸서 리스트로 만들 수 있음.
-- d.find("태그") >  그 안에 태그가 있는지 없는지 확인.
-- d.find("태그").text > 태그 안에서 태그 부분을 가져옴. find_all 로 만든 리스트[인덱스].text 로도 가져올 수 있음.
-
-## using web crawling
-***
-- response = requests.get("가져올 웹 페이지")
-- soup = BeautifulSoup(response.content, 'html.parser')
-- table = soup.find('table', { 'class': 'table_develop3' })
-- data=[] > 데이터를 저장할 리스트를 만든 후
-- for tr in table.find_all('tr'):
--  tds = list(tr.find_all("td"))
--  for td in tds:
--   if td.find('a'):
--    point = td.find('a').text > a태그(지점)의 내용을 가져옴
--    temperature = tds[5].text > 인덱스 5의 기온을 가져옴
--    humidity = tds[9].text > 인덱스 9(10번째)인 습도를 가져옴
--    data.append([point, temperature, humidity]) > 가져온 지점,기온,습도를 리스트에 추가
-- print(data)
-- 이것을 CSV 파일에 저장하려면 CSV 파일을 쓰기 모드로 연 후, 칼럼의 이름을 추가하고, 반복문을 통해 줄단위(\n)로 입력하면 된다.
 
 # appendix
 ***
@@ -718,15 +696,6 @@ for number , name in zip(number_l,name_l):
 - 'pip freeze > requirements.txt' : requirements.txt 파일에 설치된 패키지 목록 저장. 그 목록대로 설치하려면 pip install -r requirements.txt , 삭제하려면 uninstall.
 - 가상환경 폴더를 옮겼다면 activate.bat, Activate.ps1, activate 파일 안의 VIRTUAL_ENV 부분을 이동시킨 폴더 경로로 수정.
 - PyCharm 에서 가상 환경을 사용하려면 File > Settings... > Project > Project Interpreter 에서 오른쪽의 톱니바퀴 버튼을 클릭하고, Add Local 을 클릭하고 가상 환경의 파이썬 인터프리터(python.exe)를 추가해주면 됨.
-
-# tensorflow in java
-```java
-import org.tensorflow
-// 로 자바에서 텐서플로우 사용 가능.
-// 사용 전에 텐서플로우에서 libtensorflow.jar 을 다운로드 > 압축 해제후 jar파일 src에 복사 > 프로젝트 우클릭 properties 에서 add jar > 복붙한거 클릭 > apply 를 해주어야 함.
-// 나머지는 구글링
-```
-
 
 # json
 ***

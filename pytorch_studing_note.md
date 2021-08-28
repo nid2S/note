@@ -189,6 +189,30 @@ for i in range(epoch):
 - torch.nn.Sequential(module) : 시퀀셜 모델 생성. 클래스 형태로 구현되는 모델에서 층의 역할을 함. 아주아주 간단한 모델의 경우엔 모델 그 자체로 이용되기도 함.
 - 시퀀셜모델.add_model("레이어명", 레이어) : 모델에 층 추가. 모델생성시 레이어를 넣어 생성하는것과 동일하나, 층의 이름을 지정할 수 있음.
 
+## train/test
+### train
+- 옵티마이저 지정 : torch.optim.SGD([파라미터(모델.parameters())\], lr=1e-5)식으로, torch.optim의 함수들에 파라미터들과 하이퍼파라미터를 지정해 옵티마이저 생성가능.
+- 모델 학습 과정 : optimizer.zero_grad()    : 가중치 초기화
+                > model(X)                : 정의한 모델(가설)로 데이터를 예측, 예측값을 얻음 
+                > loss_func(Y_pre, Y)     : 지정한 손실함수를 이용해 예측값과 레이블간의 손실(비용)계산 
+                > loss.backward()         : 손실을 미분 
+                > optimizer.step()        : 미분한 결과와 옵티마이저를 이용해 지정된 파라미터 갱신
+                과정을 거쳐 optimizer에 인자로 준 텐서(가중치, 편향)를 갱신함.
+- 미니배치 모델 학습과정 : 
+      > torch.utils.data.TensorDataset(X, y)   : 데이터와 레이블로 데이터셋 생성. TensorDataset 대신 다른 함수를 사용할 수도 있음.
+      > torch.utils.data.DataLoader(데이터셋, batch_size, shuffle=bool, drop_last=bool) : 데이터셋을 실어 미니배치를 생성함.
+      > for data, targets in 데이터로더          : 데이터로더에서 지정한 배치사이즈만큼 데이터와 레이블을 가져옴.
+      > 위의 full-batch모델 학습과정과 동일.
+### test
+- 모델 테스트 과정:
+      model.eval() : 모델 추론모드로 전환
+      > for data, target in 데이터셋 : 로더에서 미니배치를 하나씩 꺼내 추론을 수행
+      > model(data) : 데이터를 이용해 출력 계산
+      > [_, predicted = torch.max(outputs.data, 1)] : 확률이 가장 높은 레이블 계산(다중분류).
+      > [count += predicted.eq(targets.data.view_as(predicted)).sum()] : 정답과 일치한 경우 카운트 증가(다중분류).
+      > [count += (targets == (output > 0.5).float()).float().sum()] : 예측값 1/0으로 변환 후, 정답과 일치한 경우 카운트 증가(이진분류).
+      > [count/len(데이터로더.dataset)] : 정확도(accuracy)계산.
+
 ## torchvision/text
 - torchvision : 비전분야의 유명 데이터셋, 모델, 전처리도구가 포함된 패키지.
 - torchtext : 자연어처리 분야의 유명 데이터셋, 모델, 전처리도구(텍스트에 대한 추상화기능)가 포함된 패키지.
@@ -219,31 +243,6 @@ for i in range(epoch):
 - torchtext.vocap.Vectors(name=W2V파일명) : 사전훈련된 Word2Vec모델 사용.
 - torchtext.vocab.Glove(name, dim) : 토치텍스트 제공 사전훈련된 임베딩벡터(영어)사용. (6B, 50/100/200/300)등이 있음.필드.build_vocap()의 vectors 인자의 입력으로 사용.
 
-## train/test
-### train
-- 옵티마이저 지정 : torch.optim.SGD([파라미터(모델.parameters())\], lr=1e-5)식으로, torch.optim의 함수들에 파라미터들과 하이퍼파라미터를 지정해 옵티마이저 생성가능.
-- 모델 학습 과정 : optimizer.zero_grad()    : 가중치 초기화
-                > model(X)                : 정의한 모델(가설)로 데이터를 예측, 예측값을 얻음 
-                > loss_func(Y_pre, Y)     : 지정한 손실함수를 이용해 예측값과 레이블간의 손실(비용)계산 
-                > loss.backward()         : 손실을 미분 
-                > optimizer.step()        : 미분한 결과와 옵티마이저를 이용해 지정된 파라미터 갱신
-                과정을 거쳐 optimizer에 인자로 준 텐서(가중치, 편향)를 갱신함.
-- 미니배치 모델 학습과정 : 
-      > torch.utils.data.TensorDataset(X, y)   : 데이터와 레이블로 데이터셋 생성. TensorDataset 대신 다른 함수를 사용할 수도 있음.
-      > torch.utils.data.DataLoader(데이터셋, batch_size, shuffle=bool, drop_last=bool) : 데이터셋을 실어 미니배치를 생성함.
-      > for data, targets in 데이터로더          : 데이터로더에서 지정한 배치사이즈만큼 데이터와 레이블을 가져옴.
-      > 위의 full-batch모델 학습과정과 동일.
-### test
-- 모델 테스트 과정:
-      model.eval() : 모델 추론모드로 전환
-      > for data, target in 데이터셋 : 로더에서 미니배치를 하나씩 꺼내 추론을 수행
-      > model(data) : 데이터를 이용해 출력 계산
-      > [_, predicted = torch.max(outputs.data, 1)] : 확률이 가장 높은 레이블 계산(다중분류).
-      > [count += predicted.eq(targets.data.view_as(predicted)).sum()] : 정답과 일치한 경우 카운트 증가(다중분류).
-      > [count += (targets == (output > 0.5).float()).float().sum()] : 예측값 1/0으로 변환 후, 정답과 일치한 경우 카운트 증가(이진분류).
-      > [count/len(데이터로더.dataset)] : 정확도(accuracy)계산.
-
-
-
+# Lightning/ig
 
 
