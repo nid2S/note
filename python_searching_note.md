@@ -719,6 +719,18 @@ for number , name in zip(number_l,name_l):
 - 파이썬 객체를 json 문자열로 변환하려면 json.dump(객체-딕셔너리?)로 통과시켜줘야 한다. 가독성을 위해 (객체, indent=들여쓰기할 숫자,sort_keys=True(키 중심으로 정렬))등을 사용할 수 있다.
 - API : API 의 url 을 문자열에 저장한 후 request 모둘의 get(url) 함수로 변환한 후, 그걸 다시 읽을 수 있게 get 한 객체.text 로 변환하고, 그걸 json.load 로 json 파일로 변환한다. 그 후, API 의 참조 파일을 참고해 데이터의 종류를 파악한다.
 
+# argparse
+- argparse : 명령행 인터페이스를 쉽게 작성하도록함. sys.argv를 어떻게 파싱할지 파악하며, 도움말과 사용법메세지를 자동 생성하고, 잘못된 인자를 줄 때 에러를 발생시킴.
+- parser = argparse.ArgumentParser() : ArgumentParser객체 생성. description(도움말 전에 표시될 텍스트)등의 인자 사용가능. 
+- parser.add_argument(옵션명) : 프로그램 인자에 대한 정보를 추가. 명령행의 문자열을 객체로 변환하는 방법을 알려줌. 옵션명은 리스트로 여러개를 지정해 줄 수도 있음.
+- add_argument인자 : action(인자발견시 수행할 액션의 기본형), nargs(소비되야하는 인자의 수), const(일부action및nargs선택시 필요상숫값), 
+  default(인자가 명령행에도 namespace에도 없뇬으면 생성되는 값), type(명령행인자가 변환되야 할 형), choices(인자로 허용되는 값의 컨테이너),
+  required(명령행 옵션 생략가능여부), help(인자기능에 대한 간단한 설명), metavar(사용메세지에 사용되는 인자명), dest(parse_args()의 반환객체에 추가될 속성이름).
+- args = parser.parse_args() : 인자를 파싱. 명령행 검사 -> 인자를 적절한 형으로 변환 -> 적절한 액션을 호출. sys.argv에서 자동으로 명령행인자 결정.
+- args.accumulate(args.인자명) : 해당 인자의 값을 가져옴.
+
+- sys.argv : 파이썬 스크립트에 전달된 명령줄 인자의 리스트. argv[0\]은 스크립트 이름, 인터프리터에 이름이 전달되지 않으면 빈 문자열.
+
 # git
 ***
 - git clone (깃허브 디렉토리 주소) .(현재 디렉토리) : github 디렉토리의 파일을 전부 복사해옴

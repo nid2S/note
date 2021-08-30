@@ -213,15 +213,15 @@ for i in range(epoch):
       > [count += (targets == (output > 0.5).float()).float().sum()] : 예측값 1/0으로 변환 후, 정답과 일치한 경우 카운트 증가(이진분류).
       > [count/len(데이터로더.dataset)] : 정확도(accuracy)계산.
 
-## torchvision/text
+# torchvision/text
 - torchvision : 비전분야의 유명 데이터셋, 모델, 전처리도구가 포함된 패키지.
 - torchtext : 자연어처리 분야의 유명 데이터셋, 모델, 전처리도구(텍스트에 대한 추상화기능)가 포함된 패키지.
-### vision
+## vision
 - torchvision.datasets.MNIST(경로, train=bool, transform=트랜스폼, download=bool) : MNIST 다운로드. train=false면 test데이터 다운로드, download는 경로에 데이터가 없으면 다운로드받음.
 - torchvision.transforms.ToTensor() : 받은 데이터셋을 어떻게 변환할지 선택, 텐서로 변환. 다운로드중 transform매개변수에 넣어 사용.
 - 데이터.test_data : 테스트 데이터를 가져옴.
 - 데이터.test_labels : 테스트 레이블을 가져옴.
-### text
+## text
 - 제공기능 : 파일로드(다양한 코퍼스 로드), 토큰화(단어단위), 단어집합, 정수인코딩(단어들을 고유한 정수로 맵핑), 단어벡터(단어들에 고유 임베딩벡터 제작), 패딩/배치화(훈련샘플의 배치화). 데이터의 분리와 단어-벡터간 맵핑(룩업테이블)은 별도로 해주어야 함.
 - 데이터셋 생성 : 필드 정의(토크나이저, 데이터크기 등 전처리방법 정의) > 데이터셋 제작(필드에 따라 데이터 로드, 토큰화) > 단어집합 제작(데이터셋 이용, 정수화) > 데이터로더 제작(Iterator, 배치사이즈 정의)의 순서로 이뤄짐.
 
@@ -243,7 +243,20 @@ for i in range(epoch):
 - torchtext.vocap.Vectors(name=W2V파일명) : 사전훈련된 Word2Vec모델 사용.
 - torchtext.vocab.Glove(name, dim) : 토치텍스트 제공 사전훈련된 임베딩벡터(영어)사용. (6B, 50/100/200/300)등이 있음.필드.build_vocap()의 vectors 인자의 입력으로 사용.
 
-# Lightning/ignite
-- (?)
+# Lightning/Ignite
+- 텐서플로우의 keras와 같이, High-level인터페이스를 제공하는 오픈소스 라이브러리들. ML사용자들에세 좋음.
+## pytorch_lightning
+- LightningModule : 모델 내부의 구조를 설계하는 research/science클래스. 모델구조/데이터전처리/손실함수 설정 등 모델 초기화/정의. 모든 모듈이 따라야 하는 9가지 필수메서드의 표준 인터페이스를 가지고 있음.
+- LightningModule사용 : pl.LightningModule을 상속받는 클래스 생성 후 구조 정의. 다양한 코드가 추상화된 함수 형태로 LightningModule안에 포함되어있음. init과 forward, 손실함수, optimizer,
+  학습루프(training_step - validation_step - validation_epoch_end), 데이터준비(prepare_data(), train_dataloader, val_dataloader, test_dataloader)등이 포함.
+- Lifecycle : LightningModule클래스가 함수를 실행하는 순서. [__init\_\_ > prepare_data > configure_optimizers > train_dataloader > val_dataloader > test_dataloader(.test()호출시)]의 순서.
+  여기에 각 배치/epoch마다 루프메소드는 validation_step(배치마다 실행), validation_epoch_end(에폭마다 실행)를 실행함.
 
+- pytorch_lightning.Trainer() : 트레이너 객체 생성. 모델의 학습에 관여되는 engineering(학습epoch/batch/모델의 저장/로그생성까지 전반적으로)을 담당.
+- 트레이너.fit(LightningModule모델) : 모델 학습. sklearn의 fit메서드와 비슷함.
+- 트레이너.test() : fit한 LightningModule모델 테스트. 
+- LightningModule.load_from_checkpoint(모델경로) : 사전훈련된(저장된)모델 로드.
+
+## Ignite
+- Ignite : PyTorch지원 라이브러리. Lightning과 달리 표준 인터페이스를 가지고있지 않음.
 
