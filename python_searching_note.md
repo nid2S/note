@@ -657,11 +657,11 @@ for number , name in zip(number_l,name_l):
 - 패키지를 import 할때 from .모듈 import 변수, 함수, 클래스 를 사용하면 앞에 모듈을 붙일 필요 없이 변수만 사용할 수 있다. from .모듈 import * 을 사용해도 된다.
 - 모듈과 패키지(\_\_init__)의 첫줄에 '''모듈의 독스트링'''처럼 독스트링을 넣을 수 있고, 이걸 출력하려면 .__doc__를 출력하면 된다.
 
-# collection
+# collections
 ***
-- collections : 표와 인덱싱등 데이터를 다룰때 특히 유용한 라이브러리 모듈. 데이터처리를 위한 유용한 객체가 많이 있음. 
-- collections.Counter() : 카운터객체 생성. 딕셔너리와 동일하게 키/값 형식으로 되어있으나 최초 키 추가시 0으로 자동초기화됨.
-- collections.defaultdict(list) : defaultdict객체 생성. 하나의 키를 여러 값에 맵핑가능. 객체생성시 인자로 다수인 값의 표현방법을 줌.
+- collections : 표와 인덱싱등 데이터를 다룰때 특히 유용한 라이브러리 모듈. 데이터처리를 위한 유용한 객체가 많이 있음. dict()의 기본 API사용가능.
+- collections.Counter() : 카운터객체 생성. 딕셔너리와 동일하게 키/값 형식으로 되어있으나 최초 키 추가시 0으로 자동초기화됨. .mostcommon(n)으로 빈도수 순 정렬로 받을 수 있음(n생략가능).
+- collections.defaultdict(list) : defaultdict객체 생성. 하나의 키를 여러 값에 맵핑가능. 인자로 주어진 객체의 기본값을 초깃값으로 사용.
 - collections.deque(maxlen=n) : deque객체 생성. 마지막 n개의 객체만을 유지.   
 
 # appendix
@@ -728,3 +728,12 @@ for number , name in zip(number_l,name_l):
 - git log : 생성한 버전 보여줌
 - git push : 컴퓨터에 저장된 git파일을 깃허브에 등록.
 - git status : 상태(수정한 부분)보여줌
+
+- git lfs(LargeFileStorage) : git에서 100MB이상의 파일을 관리하기위한 프로그램. add/push이전에 사용해줘야 함.
+- git lfs install : 실행한 리포지토리를 lfs의 관리하에 넣음.
+- git lfs track "*.확장자" : 해당 확장자의 파일을 관리함.
+
+- BFG Repo-Cleaner : 원치 않는 데이터 제거 등을 지원하는 오픈소스 도구.
+- [java -jar (bfg파일경로+bfg파일명).jar --strip-blobs-bigger-than 100M (.git파일명).git] : 해당 깃 레포지토리 사용. 제거할 파일이 있는 레포지토리를 사용해야 함.
+- [java -jar (bfg파일경로+bfg파일명).jar --delete-files(-D) (삭제할파일)] : 삭제 파일 등록. 파일 삭제.
+- [git reflog expire --expire=now --all && git gc --prune=now --aggressive] : 파일 삭제 확정. 이 이후 push를 실행하면 됨. 
