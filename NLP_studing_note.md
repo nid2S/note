@@ -564,12 +564,22 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 
 # KoNLpy | 한글 분석(토큰화, 태깅)
 - konlpy : 한글 분석을 가능하게 함. 자바로 이뤄져 있어 JDK 1.7 이상과 JPype 가 설치되어 있어야 함. 각 분석기는 성능과 결과가 다르게 나와 용도에 따라 적절한 것을 선택해야 함.
-- 종류 : Okt(Open Korea Text, Twitter), 꼬꼬마(Kkma), **메캅(Mecab, 속도 중시)**, 코모란(Komoran), 한나눔(Hannanum) 등의 형태소 분석기 사용 가능.
-- 함수 : .morphs(text){토큰화}, .pos(text){토큰화 후 품사 태깅}, .nouns(text){명사만 추출}, .phrases(text){어절만 추출}, .sentences(text){문장을 추출, 일부만}등이 사용가능하다.
+- 형태소 분석기 종류 : 메캅(MeCab, 3.7이하, 인자로 mecab-ko-dic의 경로를 넣어줌), Okt(Open Korea Text(Twitter)), 코모란(Komoran), 한나눔(Hannanum), 꼬꼬마(Kkma)등의 형태소 분석기 사용 가능.
+- 함수 : konlpy.tag.분석기명()으로 분석기사용, .morphs(text){토큰화}, .pos(text){토큰화 후 품사 태깅(.tagset으로 종류확인)}, .nouns(text){명사만 추출}에 
+  Okt.phrases(text){구문별로 나눔}, Kkma.sentences(text){문장별로 나눔}, 한나눔.analyze(text){형태소후보 모두반환}등이 사용가능.
 - 매개변수 : .pos(), .morphs() 사용시 norm=bool(일정 수준의 정규화), stem=bool(표제어(원본글자)로 변형) 등의 매개변수를 사용할 수 있음.
   
-- konlpy.tag.Okt() :  Okt 형태소 분석기 객체 생성. 
-- konlpy.tag.Kkma() : 꼬꼬마 형태소 토크나이저 로드. Okt 보다 조금 더 세분화(한 > 하,ㄴ)해 분리하지만 매우 느리다.
+- MeCab : 띄어쓰기에서 속도/정확도 모두 뛰어남. 지능형 형태소 분석기(결과 수작업 수정가능), 단어 추가가능. 미등록어 처리/동음이의어 처리의 문제가 있음.  
+  C/C++로 개발, CRF채용. 사용자 사전 추가시, mecab디렉토리의 user-dict에서 단어를 추가 후, add-userdic-win.ps1을 powershell에서 실행.
+- Okt : 띄어쓰기에서 가장 좋은 성능, 정제되지 않은 데이터에 대해 강점. 분석 범주가 다소 적으나 이모티콘/해쉬태그 등 인터넷텍스트에 특화된 범주가 추가.
+  어근화(stemming, 유일하게 가능), 정규화, 토큰화등이 가능, 미등록어 처리/등음이의어처리/분석범주적음 등의 문제가 있음. 스칼라/java로 개발.    
+- Kkma : 띄어쓰기 오류에 덜 민감함. 분석시간이 꽤 길고, 정제된 언어가 사용되지 않는 문서에 대한 정확도가 낮음. 세종품사태그에 가장 가깝고, 분석범주 또한 다양.
+  java로 개발, 동적프로그래밍을 이용해 모든 형태소분석 후보를 생성 후 적합한 순서대로 정렬, 기분석 사전을 이용한 인접조건검사방식(속도)과 HMM에 기반한 확률모델(품질)이용 최적화.
+- Komoran : 빠른 속도와 보통의 분석품질. 여러 어절을 하나의 품사로 분석가능해, 공백이 포함된 고유명사를 더 정확히 분석가능. 개발자가 지속적으로 업데이트.
+  자소분리/오탈자 문장에 대해서도 괜찮음. 로딩시간이 기나 분석속도는 빠름. 띄어쓰기 없는 문장엔 취약. java로 개발, HMM알고리즘 사용.
+- Hannanum : 로딩시간이 빠른편. 전체시스템이 각 모듈들의 조합(입력필터/문장분리/형태소분석/미등록어처리/형태소분석후처리/태거)으로 구성됨. 
+  띄어쓰기 없는 문장과 정제된 언어가 사용되지 않는 문서에 대한 정확도가 낮음. 상위 6개 태그에 대해 20개의 태그를 세분화해 사용. java로 개발, HMM알고리즘 사용.
+
 
 ### ckonlpy
 - [pip install customized_konlpy] : 사용자사전 추가를 위한 패키지 설치. 
@@ -578,7 +588,7 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 
 # soynlp | 반복 제어, 품사태깅, 단어 토큰화
 - SOYNLP : 품사 태깅, 단어 토큰화 등을 지원. 비지도 학습으로 토큰화. 학습에 필요한 문서를 다운로드할 필요가 있음.
-- soynlp.DoublespaceLineCorpus("txt 파일.txt") : 데이터를 다수의 문서로 분리함.
+- soynlp.DoublespaceLineCorpus("txt파일.txt") : 데이터를 다수의 문서로 분리함.
 - soynlp.normalizer.emoticon_normalize(sent, num_repeats=i) : ㅋㅋ,ㅎㅎ 등의 이모티콘을 i개 까지만 반복되도록 변환.
 - soynlp.normalizer.repeat_normalize(sent, num_repeats=i) : 의미없이 반복되는 글자를 i개 까지만 반복되도록 변환.
 
