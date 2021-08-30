@@ -709,7 +709,7 @@ for number , name in zip(number_l,name_l):
 - python -m venv 가상환경이름 을 가상환경을 만들 폴더에서 사용하면 가상환경 폴더 생성
 - 그 폴더로 이동해 .\Scripts\Activate.bat 파일을 실행하면(혹은 activate 실행)가상 환경이 활성화됨. 이 명령을 실행한 파이썬의 버전이 가상환경의 버전이 됨.
 - 성공적으로 가상환경을 만들면 (가상환경이름)이 표시되는데, 그 상태에서 pip 로 패키지를 설치하면 \Lib\site-packages 안에 패키지가 저장되며 그 패키지에서만 사용할 수 있다.
-- 'pip freeze > requirements.txt' : requirements.txt 파일에 설치된 패키지 목록 저장. 그 목록대로 설치하려면 pip install -r requirements.txt , 삭제하려면 uninstall.
+- [pip freeze > requirements.txt] : requirements.txt 파일에 설치된 패키지 목록 저장. 그 목록대로 설치하려면 pip install -r requirements.txt , 삭제하려면 uninstall.
 - 가상환경 폴더를 옮겼다면 activate.bat, Activate.ps1, activate 파일 안의 VIRTUAL_ENV 부분을 이동시킨 폴더 경로로 수정.
 - PyCharm 에서 가상 환경을 사용하려면 File > Settings... > Project > Project Interpreter 에서 오른쪽의 톱니바퀴 버튼을 클릭하고, Add Local 을 클릭하고 가상 환경의 파이썬 인터프리터(python.exe)를 추가해주면 됨.
 
