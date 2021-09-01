@@ -575,7 +575,6 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
   [Mecab실행기](https://github.com/Pusnow/mecab-ko-msvc/releases/tag/release-0.9.2-msvc-3) 를 다운로드 받고,
   [Mecab python_wheel](https://github.com/Pusnow/mecab-python-msvc/releases/tag/mecab_python-0.996_ko_0.9.2_msvc-2) 에서 맞는 버전(3.7이 최신)을 설치 후
   [pip install whl파일] > [import MeCab] 혹은 [import konlpy.tag.Mecab > mecab = Mecab(mecab-ko-dic파일경로)]로 Mecab의 사용이 가능함.
-
 - Okt : 띄어쓰기에서 가장 좋은 성능, 정제되지 않은 데이터에 대해 강점. 분석 범주가 다소 적으나 이모티콘/해쉬태그 등 인터넷텍스트에 특화된 범주가 추가.
   어근화, 정규화, 토큰화등이 가능, 미등록어 처리/등음이의어처리/분석범주적음 등의 문제가 있음. 스칼라/java로 개발.    
 - Kkma : 띄어쓰기 오류에 덜 민감함. 분석시간이 꽤 길고, 정제된 언어가 사용되지 않는 문서에 대한 정확도가 낮음. 세종품사태그에 가장 가깝고, 분석범주 또한 다양.

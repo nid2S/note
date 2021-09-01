@@ -91,12 +91,11 @@
 - pd.concat(df1, df2) : 두 데이터프레임을(행으로)합침. ignore_index=True로 기존의 인덱스를 무시하고 이어넣을 수 있음. append와 동일한 기능을 함.
 - pd.concat([df1, df2\], axis=1) : 두 데이터프레임을 열로 함침. 인덱스가 동일한 항목들의 열을 합쳐 칼럼이 늘어나게 함. ignore_index를 사용하면 순서대로 합쳐짐. 딕셔너리로 넣어 열이름을 주고 합칠수도 있음({"label":label, "pred":pred"} 식).
 
-- df.columns : 칼럼이름 Index 객체로 반환. 여기에 값을 할당해 헤더를 지정해 줄 수도 있음.
+- df.columns : 칼럼 Index 객체로 반환. 여기에 값을 할당해 헤더를 지정해 줄 수도 있음.
 - df.values  : 값들 배열형태로 반환.
 - df.index   : 인덱스+타입 Index 객체로 반환.
-- df.columns : 칼럼+타입 Index 객체로 반환.
 - df.values  : 값만 리스트로 반환.
-- df.loc[인덱스\] : 데이터 로드. 평범하게 슬라이스 하면 키로 인식되어 사용.
+- df.loc[인덱스\] : 데이터 로드. 조건식을 넣어 줄 수도 있음.
 - df.iloc[인덱스\] : 인덱스와 함께 데이터 로드.
 
 - df["칼럼명"\] : 인덱스 지정, 시리즈로 반환. 차원이 여러개일 경우는 [5, 1:3\]처럼 차원별로 인덱스를 지정해 주어야 함.
@@ -111,6 +110,11 @@
 - df.reset_index() : 인덱스 리셋. 인덱스를 0부터 시작하게 함.
 - df.plot() : 데이터를 가지고 그래프를 그림. kind="bar" 등으로 종류를 지정해 줄 수 도 있고, stacked=True로 밑을 덮는 형태로도 가능함.
 - df.to_csv(filename) : 데이터 프레임을 csv파일로 저장. index=bool. header=bool 인수로 인덱스,헤더의 존재여부를, na_rep인수로 na를 어떻게 표시할지를 설정 가능.
+- df.to_dict/numpy() : 데이터프레임을 딕셔너리/ndarray로 변환. 이 외에도 index,values등에 to_list/tolist()등의 함수가 있기도 함.
+
+- df.items() : 열이름, 시리즈 형태의 제너레이터 반환. iteritems()도 비슷함.
+- df.iterrows() : (인덱스, 시리즈(열의 값들))형태의 튜플 반환. 
+- df.itertuples(): rows와 비슷하나 map으로 반환 후 pandas.core.frame.Pandas객체 반환. 사용은 튜플과 비슷.
   
 - df[열이름\].nunique() : 열에서 중복된 샘플을 제외한 샘플의 개수 출력. 중복된 값이 있다면 단 하나의 값만 남게 됨.
 - df[열이름\].value_counts() : 그 칼럼에 등장하는 값의 종류를 그 값이 나온 수와 함께 나타냄.
