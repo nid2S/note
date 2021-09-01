@@ -564,13 +564,18 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 
 # KoNLpy | 한글 분석(토큰화, 태깅)
 - konlpy : 한글 분석을 가능하게 함. 자바로 이뤄져 있어 JDK 1.7 이상과 JPype 가 설치되어 있어야 함. 각 분석기는 성능과 결과가 다르게 나와 용도에 따라 적절한 것을 선택해야 함.
-- 형태소 분석기 종류 : 메캅(MeCab, 3.7이하, 인자로 mecab-ko-dic의 경로를 넣어줌), Okt(Open Korea Text(Twitter)), 코모란(Komoran), 한나눔(Hannanum), 꼬꼬마(Kkma)등의 형태소 분석기 사용 가능.
+- 형태소 분석기 종류 : 메캅(MeCab), Okt(Open Korea Text(Twitter)), 코모란(Komoran), 한나눔(Hannanum), 꼬꼬마(Kkma)등의 형태소 분석기 사용 가능.
 - 함수 : konlpy.tag.분석기명()으로 분석기사용, .morphs(text){토큰화}, .pos(text){토큰화 후 품사 태깅(.tagset으로 종류확인)}, .nouns(text){명사만 추출}에 
   Okt.phrases(text){구문별로 나눔}, Kkma.sentences(text){문장별로 나눔}, 한나눔.analyze(text){형태소후보 모두반환}등이 사용가능.
 - 매개변수 : .pos(), .morphs() 사용시 norm=bool(일정 수준의 정규화), stem=bool(표제어(원본글자)로 변형)등의 매개변수를 사용할 수 있음.
   
 - MeCab : 띄어쓰기에서 속도/정확도 모두 뛰어남. 지능형 형태소 분석기(결과 수작업 수정가능), 단어 추가가능. 미등록어 처리/동음이의어 처리의 문제가 있음.  
   C/C++로 개발, CRF채용. 사용자 사전 추가시, mecab디렉토리의 user-dict에서 단어를 추가 후, add-userdic-win.ps1을 powershell에서 실행.
+  [기본사전](https://github.com/Pusnow/mecab-ko-dic-msvc/releases/tag/mecab-ko-dic-2.1.1-20180720-msvc) 과
+  [Mecab실행기](https://github.com/Pusnow/mecab-ko-msvc/releases/tag/release-0.9.2-msvc-3) 를 다운로드 받고,
+  [Mecab python_wheel](https://github.com/Pusnow/mecab-python-msvc/releases/tag/mecab_python-0.996_ko_0.9.2_msvc-2) 에서 맞는 버전(3.7이 최신)을 설치 후
+  [pip install whl파일] > [import MeCab] 혹은 [import konlpy.tag.Mecab > mecab = Mecab(mecab-ko-dic파일경로)]로 Mecab의 사용이 가능함.
+
 - Okt : 띄어쓰기에서 가장 좋은 성능, 정제되지 않은 데이터에 대해 강점. 분석 범주가 다소 적으나 이모티콘/해쉬태그 등 인터넷텍스트에 특화된 범주가 추가.
   어근화, 정규화, 토큰화등이 가능, 미등록어 처리/등음이의어처리/분석범주적음 등의 문제가 있음. 스칼라/java로 개발.    
 - Kkma : 띄어쓰기 오류에 덜 민감함. 분석시간이 꽤 길고, 정제된 언어가 사용되지 않는 문서에 대한 정확도가 낮음. 세종품사태그에 가장 가깝고, 분석범주 또한 다양.
