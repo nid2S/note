@@ -567,7 +567,7 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - 형태소 분석기 종류 : 메캅(MeCab, 3.7이하, 인자로 mecab-ko-dic의 경로를 넣어줌), Okt(Open Korea Text(Twitter)), 코모란(Komoran), 한나눔(Hannanum), 꼬꼬마(Kkma)등의 형태소 분석기 사용 가능.
 - 함수 : konlpy.tag.분석기명()으로 분석기사용, .morphs(text){토큰화}, .pos(text){토큰화 후 품사 태깅(.tagset으로 종류확인)}, .nouns(text){명사만 추출}에 
   Okt.phrases(text){구문별로 나눔}, Kkma.sentences(text){문장별로 나눔}, 한나눔.analyze(text){형태소후보 모두반환}등이 사용가능.
-- 매개변수 : .pos(), .morphs() 사용시 norm=bool(일정 수준의 정규화), stem=bool(표제어(원본글자)로 변형) 등의 매개변수를 사용할 수 있음.
+- 매개변수 : .pos(), .morphs() 사용시 norm=bool(일정 수준의 정규화), stem=bool(표제어(원본글자)로 변형)등의 매개변수를 사용할 수 있음.
   
 - MeCab : 띄어쓰기에서 속도/정확도 모두 뛰어남. 지능형 형태소 분석기(결과 수작업 수정가능), 단어 추가가능. 미등록어 처리/동음이의어 처리의 문제가 있음.  
   C/C++로 개발, CRF채용. 사용자 사전 추가시, mecab디렉토리의 user-dict에서 단어를 추가 후, add-userdic-win.ps1을 powershell에서 실행.

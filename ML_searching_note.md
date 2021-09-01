@@ -83,7 +83,7 @@
 - pd.DataFrame.from_items(리스트([열이름, 값리스트\]형태)) : 주어진 리스트대로 데이터프레임 생성.
 
 - pd.read_csv(파일경로) : 파일읽기. csv파일이 아니더라도 읽을 수 있고, sep/delimiter(구분이 될 문자 지정), header(헤더설정, None으로 해주면 첫번째 열이 해더가 되지 않음.),
-  name(각 열의 이름 설정), index_col=[열이름/정수\](인덱스가 될 칼럼 선택)등의 인수를 쓸 수 있음.
+  names(각 열의 이름 설정), index_col=[열이름/정수\](인덱스가 될 칼럼 선택)등의 인수를 쓸 수 있음.
 - pd.read_table/fwf/excel/hdf/sql/json/html/stata/clipboard/pickle/gbq() : 해당 포맷의 파일을 읽음. table(일반구분파일),fwf(고정너비형식 테이블),clipboard(클립보드에서 읽은 후 csv로), pickle(pickled object), gbq(Google BigQuery)
 
 - pd.get_dummies(범주형 데이터) : one hot encoding. 나오는 값들이 그 종류만큼 (이름)_(데이터이름)의 형태로 나뉨.
