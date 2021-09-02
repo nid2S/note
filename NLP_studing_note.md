@@ -458,6 +458,8 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 
 
 # gensim | word2vec, FastText
+- gensim : 통계적의미론에 초점이 맞춰져, 문서의 구조를 분석한 후 유사성을 기준으로 다른 문서에 점수를 주는
+  W2V, D2V, FastText, LDA등과 많이 사용하는 알고리즘에 최적화 되있는 모듈.  
 - gensim.models.Word2Vec(sentences, size, window, min_count, workers, sg) : 워드 투 벡터 사용. size(임베딩 벡터 차원), window(윈도우 크기), min_count(최소빈도수), workers(프로세스 수), sg(0-CBOW, 1-Skip_gram)등의 매개변수 사용가능.
 - gensim.models.FastText(corpus, size, window, min_count, workers, sg) : FastText 사용. 한국어에서 이걸 사용하려면 음절단위가 아닌 자모(ㄱ,ㅏ,ㄴ,ㅓ)단위로 사용함. 
 
