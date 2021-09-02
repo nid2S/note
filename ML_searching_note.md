@@ -95,7 +95,7 @@
 - df.values  : 값들 배열형태로 반환.
 - df.index   : 인덱스+타입 Index 객체로 반환.
 - df.values  : 값만 리스트로 반환.
-- df.loc[인덱스\] : 데이터 로드. 조건식을 넣어 줄 수도 있음.
+- df.loc[인덱스\] : 데이터 로드. 조건식(==, !=)을 넣어 줄 수도 있음.
 - df.iloc[인덱스\] : 인덱스와 함께 데이터 로드.
 
 - df["칼럼명"\] : 인덱스 지정, 시리즈로 반환. 차원이 여러개일 경우는 [5, 1:3\]처럼 차원별로 인덱스를 지정해 주어야 함.
@@ -114,7 +114,7 @@
 
 - df.items() : 열이름, 시리즈 형태의 제너레이터 반환. iteritems()도 비슷함.
 - df.iterrows() : (인덱스, 시리즈(열의 값들))형태의 튜플 반환. 
-- df.itertuples(): rows와 비슷하나 map으로 반환 후 pandas.core.frame.Pandas객체 반환. 사용은 튜플과 비슷.
+- df.itertuples(): rows와 비슷하나 map(이터레이터)으로 반환 후 pandas.core.frame.Pandas객체 반환. 사용은 튜플과 비슷.
   
 - df[열이름\].nunique() : 열에서 중복된 샘플을 제외한 샘플의 개수 출력. 중복된 값이 있다면 단 하나의 값만 남게 됨.
 - df[열이름\].value_counts() : 그 칼럼에 등장하는 값의 종류를 그 값이 나온 수와 함께 나타냄.
@@ -286,21 +286,7 @@
 - Pillow : PIL의 프로젝트 포크(Fork).
   
 - PIL.Image.fromarray(frame(cv2비디오캡쳐.read())) : cv2에서 읽은 이미지/비디오의 프레임을 Image객체로 변환.  
-- PIL.ImageTK.PhotoImage(Image객체) : Image객체를 ImageTk객체로 변환. tkinter에서 사용가능.
-```
-# 사용 예
-ret, frame = cap.read() # 프레임이 올바르게 읽히면 ret은 True
-if not ret:
-    cap.release() # 작업 완료 후 해제
-    break
-frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
-img = Image.fromarray(frame)          # Image 객체로 변환
-imgtk = ImageTk.PhotoImage(image=img) # ImageTk 객체로 변환
-# OpenCV 동영상
-lbl1.imgtk = imgtk
-lbl1.configure(image=imgtk)
-lbl1.after(10, video_play)
-```
+- PIL.ImageTK.PhotoImage(Image객체) : Image객체를 ImageTk객체로 변환. tkinter에서 사용가능(Label의 image인자에 넣을 수 있음).
 
 
 # tensorflow
