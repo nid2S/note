@@ -57,7 +57,8 @@
 
 - torch.save(모델.state_dict(), 경로) : 모델의 현재 가중치를 경로에 저장.
 - 모델.load_state_dict(torch.load(경로)) : 경로의 가중치를 로드해 모델의 가중치로 사용. 
-- 모델.embedding.weight.data.copy_(임베딩벡터들) : 사전훈련된 임베딩벡터값을 모델의 임베딩층에 연결. 임베딩벡터는[(필드에 저장)필드.vocab.vectors]로 확인. data까지만 쓰면 임베딩벡터 확인 가능. 
+- 모델.embedding.weight.data.copy_(임베딩벡터들) : 사전훈련된 임베딩벡터값을 모델의 임베딩층에 연결. 
+  임베딩벡터는[(필드에 저장)필드.vocab.vectors]로 확인. data까지만 쓰면 임베딩벡터 확인 가능. 
 
 - 모델.eval() : 모델을 추론모드로 전환. 모델 test시 사용.
 - torch.no_grad() : 미분을 하지 않음. 파라미터를 갱신하지 않는 test시 사용.  
@@ -169,7 +170,8 @@ for i in range(epoch):
 - torch.nn.Linear(input_dim, output_dim) : 선형회귀모델/전결합층 사용. 이대로 모델로 쓸 수도, 모델에 층으로 넣을수도 있음. bias=bool 로 편향 존재여부 지정가능.
 - torch.nn.Conv2d(input_dim, output_dim, kernel_size) : (2차원)CNN층 사용. i의 커널사이즈를 가짐. padding, stride등도 설정해줄 수 있음. 
 - torch.nn.MaxPool2d(kernel_size, stride) : (2차원)맥스풀링층 사용. 하나의 정수만 넣으면 커널사이즈와 스트라이드 둘 다 해당값으로 지정됨.
-- torch.nn.RNN(input_size, hidden_size) : RNN층 사용. batch_first(bool, 입력텐서의 첫번째 차원은 배치크기), num_layer(int, 은닉층개수(깊은RNN으로 만듦)), bidirectional(bool, 양방향순환신경망으로 만듦)인자 사용가능.  
+- torch.nn.RNN(input_size, hidden_size) : RNN층 사용. batch_first(bool, 입력텐서의 첫번째 차원은 배치크기), 
+  num_layer(int, 은닉층개수(깊은RNN으로 만듦)), bidirectional(bool, 양방향순환신경망으로 만듦)인자 사용가능.  
 - torch.nn.LSTM(input_size, hidden_size) : LSTM층 사용. RNN과 동일한 인자 사용가능. RNN계열은 사용시(x, h_0)를 입력으로 해야 하며, h_0는 처음에 초기화가 필요함. 
 - torch.nn.GRU(input_size, hidden_size) : GRU층 사용. RNN과 동일한 인자 사용 가능. 
 
@@ -213,31 +215,39 @@ for i in range(epoch):
       > [count += (targets == (output > 0.5).float()).float().sum()] : 예측값 1/0으로 변환 후, 정답과 일치한 경우 카운트 증가(이진분류).
       > [count/len(데이터로더.dataset)] : 정확도(accuracy)계산.
 
+
 # torchvision/text
 - torchvision : 비전분야의 유명 데이터셋, 모델, 전처리도구가 포함된 패키지.
 - torchtext : 자연어처리 분야의 유명 데이터셋, 모델, 전처리도구(텍스트에 대한 추상화기능)가 포함된 패키지.
 ## vision
-- torchvision.datasets.MNIST(경로, train=bool, transform=트랜스폼, download=bool) : MNIST 다운로드. train=false면 test데이터 다운로드, download는 경로에 데이터가 없으면 다운로드받음.
+- torchvision.datasets.MNIST(경로, train=bool, transform=트랜스폼, download=bool) : MNIST 다운로드. 
+  train=false면 test데이터 다운로드, download는 경로에 데이터가 없으면 다운로드받음.
 - torchvision.transforms.ToTensor() : 받은 데이터셋을 어떻게 변환할지 선택, 텐서로 변환. 다운로드중 transform매개변수에 넣어 사용.
 - 데이터.test_data : 테스트 데이터를 가져옴.
 - 데이터.test_labels : 테스트 레이블을 가져옴.
 ## text
-- 제공기능 : 파일로드(다양한 코퍼스 로드), 토큰화(단어단위), 단어집합, 정수인코딩(단어들을 고유한 정수로 맵핑), 단어벡터(단어들에 고유 임베딩벡터 제작), 패딩/배치화(훈련샘플의 배치화). 데이터의 분리와 단어-벡터간 맵핑(룩업테이블)은 별도로 해주어야 함.
-- 데이터셋 생성 : 필드 정의(토크나이저, 데이터크기 등 전처리방법 정의) > 데이터셋 제작(필드에 따라 데이터 로드, 토큰화) > 단어집합 제작(데이터셋 이용, 정수화) > 데이터로더 제작(Iterator, 배치사이즈 정의)의 순서로 이뤄짐.
+- 제공기능 : 파일로드(다양한 코퍼스 로드), 토큰화(단어단위), 단어집합, 정수인코딩(단어들을 고유한 정수로 맵핑), 단어벡터(단어들에 고유 임베딩벡터 제작), 
+  패딩/배치화(훈련샘플의 배치화). 데이터의 분리와 단어-벡터간 맵핑(룩업테이블)은 별도로 해주어야 함.
+- 데이터셋 생성 : 필드 정의(토크나이저, 데이터크기 등 전처리방법 정의) > 데이터셋 제작(필드에 따라 데이터 로드, 토큰화) > 단어집합 제작(데이터셋 이용, 정수화) > 
+  데이터로더 제작(Iterator, 배치사이즈 정의)의 순서로 이뤄짐.
 
 - torchtext.data.Field() : 필드(앞으로 할 전처리를 정의, 텍스트/레이블 등을 정의)지정. 
 - Field인자 : sequential(bool, 시퀀스데이터 여부), use_vocab(bool, 단어집합생성 여부), tokenize(함수, 사용할 토큰화함수), lower(bool. 소문자화 여부),
   batch_first(bool, 미니배치 크기(fix_lenX배치크기)->(배치크기Xfix_len)), is_target(bool, 레이블데이터 여부), fix_length(int, 최대허용길이/패딩길이) 인자를 사용할 수 있음.
-- 필드.build_vocab(데이터셋) : 단어집합 생성. vectors(사전훈련된 임베딩벡터 사용), min_freq(int, 단어의 최소등장빈도 조건 추가), max_size(int, (특별토큰제외)단어집합 최대크기)인자 사용가능. 
-  [필드.vocab]을 통해 단어집합에 접근할 수 있고, [필드.vocab.stoi]를 통해 생성된 단어집합 내의 단어를, [필드.vocab.vectors]로 벡터값을, [필드.vocab.freqs.most_common(i)]으로 상위빈도수의 단어를(i가 없으면 전부)확인가능.
+- 필드.build_vocab(데이터셋) : 단어집합 생성. vectors(사전훈련된 임베딩벡터 사용), min_freq(int, 단어의 최소등장빈도 조건 추가), 
+  max_size(int, (특별토큰제외)단어집합 최대크기)인자 사용가능. 
+  [필드.vocab]을 통해 단어집합에 접근할 수 있고, [필드.vocab.stoi]를 통해 생성된 단어집합 내의 단어를, [필드.vocab.vectors]로 벡터값을, 
+  [필드.vocab.freqs.most_common(i)]으로 상위빈도수의 단어를(i가 없으면 전부)확인가능.
 
 - torchtext.data.TabularDataset.splits() : 데이터셋을 만들며(데이터를 불러오며)필드에서 정의했던 토큰화방법으로 토큰화를 수행.
-- TabularDataset.splits인자 : path(파일 경로), train/test(train,test파일명), format(데이터 포맷(csv 등)), fields(위에서 정의한 필드. [("필드를 호칭할 이름", 필드)\]형식), skip_header(bool, 데이터 첫줄 무시 여부)인자 사용가능.
+- TabularDataset.splits인자 : path(파일 경로), train/test(train,test파일명), format(데이터 포맷(csv 등)), 
+  fields(위에서 정의한 필드. [("필드를 호칭할 이름", 필드)\]형식), skip_header(bool, 데이터 첫줄 무시 여부)인자 사용가능.
 - torchtext.datasets.데이터셋이름.splits(TEXT필드, LABEL필드) : 데이터 셋을 필드에 가져온 후 train/test 데이터를 나눔. vars(나눠진데이터셋[0\])등으로 데이터 확인 가능.
 - 데이터셋.split(split_ratio) : 데이터셋을 나눔. train데이터를 나눠 검증 데이터를 만드는 등에 사용. 지정한 비율이 첫번째 데이터셋의 데이터 비율.
 
 - torchtext.data.Iterator(데이터셋, batch_size=i) : 데이터셋을 이용해 i의 배치크기 만큼 데이터를 로드하게 하는 데이터로더 생성. 배치.필드명 으로 실제 데이터텐서에 접근가능.
-- torchtext.data.BucketIterator(데이터셋, batch_size, shuffle=bool, repeat=bool) : 모든 데이터를 배치처리 후 단어를 인덱스 번호로 대체하는 데이터로더 생성. (데이터셋1,데이터셋2)처럼 넣어 여러 데이터셋에도 적용 가능.
+- torchtext.data.BucketIterator(데이터셋, batch_size, shuffle=bool, repeat=bool) : 모든 데이터를 배치처리 후 단어를 인덱스 번호로 대체하는 데이터로더 생성. 
+  (데이터셋1,데이터셋2)처럼 넣어 여러 데이터셋에도 적용 가능.
 - 데이터로더에서 반복문으로 각 배치를 꺼낼 수 있으며, batch.text 로 해당 배치의 실제 데이터에 접근가능.
 
 - torchtext.vocap.Vectors(name=W2V파일명) : 사전훈련된 Word2Vec모델 사용.
@@ -246,10 +256,12 @@ for i in range(epoch):
 # Lightning/Ignite
 - 텐서플로우의 keras와 같이, High-level인터페이스를 제공하는 오픈소스 라이브러리들. ML사용자들에세 좋음.
 ## pytorch_lightning
-- LightningModule : 모델 내부의 구조를 설계하는 research/science클래스. 모델구조/데이터전처리/손실함수 설정 등 모델 초기화/정의. 모든 모듈이 따라야 하는 9가지 필수메서드의 표준 인터페이스를 가지고 있음.
-- LightningModule사용 : pl.LightningModule을 상속받는 클래스 생성 후 구조 정의. 다양한 코드가 추상화된 함수 형태로 LightningModule안에 포함되어있음. init과 forward, 손실함수, optimizer,
+- LightningModule : 모델 내부의 구조를 설계하는 research/science클래스. 모델구조/데이터전처리/손실함수 설정 등 모델 초기화/정의. 
+  모든 모듈이 따라야 하는 9가지 필수메서드의 표준 인터페이스를 가지고 있음.
+- LightningModule사용 : pl.LightningModule을 상속받는 클래스 생성 후 구조 정의. 많은 코드가 함수(추상화)형태로 LightningModule안에 포함되어있음. init/forward/손실함수/optimizer,
   학습루프(training_step - validation_step - validation_epoch_end), 데이터준비(prepare_data(), train_dataloader, val_dataloader, test_dataloader)등이 포함.
-- Lifecycle : LightningModule클래스가 함수를 실행하는 순서. [__init\_\_ > prepare_data > configure_optimizers > train_dataloader > val_dataloader > test_dataloader(.test()호출시)]의 순서.
+- Lifecycle : LightningModule클래스가 함수를 실행하는 순서. 
+  [__init\_\_ > prepare_data > configure_optimizers > train_dataloader > val_dataloader > test_dataloader(.test()호출시)]의 순서.
   여기에 각 배치/epoch마다 루프메소드는 validation_step(배치마다 실행), validation_epoch_end(에폭마다 실행)를 실행함.
 
 - pytorch_lightning.Trainer() : 트레이너 객체 생성. 모델의 학습에 관여되는 engineering(학습epoch/batch/모델의 저장/로그생성까지 전반적으로)을 담당.

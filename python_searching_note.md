@@ -16,7 +16,7 @@
 - °´Ã¼ : object. ¾î¶°ÇÑ ¼Ó¼º°ª°ú Çàµ¿À» °¡Áö°í ÀÖ´Â µ¥ÀÌÅÍ(==Å¬·¡½º()). ÆÄÀÌ½ãÀÇ ¸ðµç°Í.
   
 - ½ÃÄö½ºÀÚ·áÇü : ÅõÇÃ,¸®½ºÆ®,range,¹®ÀÚ¿­µî °ªÀÌ ¿¬¼ÓÀûÀ¸·Î ÀÌ¾îÁø ÀÚ·áÇü
-- ½ÃÄö½º °´Ã¼ : ½ÃÄö½º ÀÚ·áÇüÀ¸·Î ¸¸µç °´Ã¼. ¿ä¼Ò´Â ½ÃÄö½º °´Ã¼¼Ó °¢ °ª. a[0]½ÄÀ¸·Î ¿ä¼Ò¿¡ Á¢±Ù °¡´É
+- ½ÃÄö½º °´Ã¼ : ½ÃÄö½º ÀÚ·áÇüÀ¸·Î ¸¸µç °´Ã¼. ¿ä¼Ò´Â ½ÃÄö½º °´Ã¼¼Ó °¢ °ª. a[0\]½ÄÀ¸·Î ¿ä¼Ò¿¡ Á¢±Ù °¡´É
 - ¸®½ºÆ®, Æ©ÇÃ, µñ¼Å³Ê¸®, ¼¼Æ®¸¦ ÄÁÅ×ÀÌ³Ê¶ó°í ºÎ¸§.
   
 - id(°´Ã¼) : ÇØ´ç °´Ã¼ÀÇ ÁÖ¼Ò°ª ¹ÝÈ¯.
@@ -24,19 +24,19 @@
 ##list
 ***
 - s=list()/[]
-- ra=[15,25,35] # ¸®½ºÆ® ÆÐÅ·. ÅõÇÃÀÇ °æ¿ì ÅõÇÃ ÆÐÅ·
-- ¸®½ºÆ® = [°ª, °ª, °ª]         # ¸®½ºÆ® ¸¸µé±â
+- ra=[15,25,35\]               # ¸®½ºÆ® ÆÐÅ·. ÅõÇÃÀÇ °æ¿ì ÅõÇÃ ÆÐÅ·
+- ¸®½ºÆ® = [°ª, °ª, °ª\]         # ¸®½ºÆ® ¸¸µé±â
 - ¸®½ºÆ® = []                   # ºó ¸®½ºÆ® ¸¸µé±â
 - ¸®½ºÆ® = list()               # ºó ¸®½ºÆ® ¸¸µé±â
-- ¸®½ºÆ® = list(range(È½¼ö))    # range ·Î ¸®½ºÆ® ¸¸µé±â
+- ¸®½ºÆ® = list(range(È½¼ö))     # range ·Î ¸®½ºÆ® ¸¸µé±â
 
 ### list attribute
 ***
-- ¸®½ºÆ®.append(¿ä¼Ò) = ¸®½ºÆ® ³¡¿¡ ¿ä¼Ò ÇÏ³ª Ãß°¡. append([])·Î ¸®½ºÆ® ¾È¿¡ ¸®½ºÆ®¸¦ ³ÖÀ» ¼ö ÀÖÀ½. ÀÌ ¸®½ºÆ® ¾È¿¡ ¿ä¼Ò¸¦ ³ÖÀ¸·Á¸é ¸®½ºÆ®[0].append().
+- ¸®½ºÆ®.append(¿ä¼Ò) = ¸®½ºÆ® ³¡¿¡ ¿ä¼Ò ÇÏ³ª Ãß°¡. append([])·Î ¸®½ºÆ® ¾È¿¡ ¸®½ºÆ®¸¦ ³ÖÀ» ¼ö ÀÖÀ½. ÀÌ ¸®½ºÆ® ¾È¿¡ ¿ä¼Ò¸¦ ³ÖÀ¸·Á¸é ¸®½ºÆ®[0\].append().
 - ¸®½ºÆ®.extend(¸®½ºÆ®) = ¸®½ºÆ®¿¡ ¸®½ºÆ® ¿¬°á,È®Àå.
-- ¸®½ºÆ®.insert(ÀÎµ¦½º,¿ä¼Ò) = ÀÎµ¦½º¿¡ ¿ä¼Ò Ãß°¡. ¸®½ºÆ®[a:a] = [s:d]·Î Æ¯Á¤ ÀÎµ¦½º¿¡ ¸®½ºÆ® »ðÀÔ °¡´É
+- ¸®½ºÆ®.insert(ÀÎµ¦½º,¿ä¼Ò) = ÀÎµ¦½º¿¡ ¿ä¼Ò Ãß°¡. ¸®½ºÆ®[a:a\] = [s:d\]·Î Æ¯Á¤ ÀÎµ¦½º¿¡ ¸®½ºÆ® »ðÀÔ °¡´É
 
-- ¸®½ºÆ®.pop() = ¸®½ºÆ®¿¡¼­ ¸¶Áö¸· ¿ä¼Ò »èÁ¦ ÈÄ »èÁ¦µÈ ¿ä¼Ò ¹ÝÈ¯. pop(ÀÎµ¦½º)·Î ÀÎµ¦½ºÀÇ ¿ä¼Ò »èÁ¦. del(¸®½ºÆ®[ÀÎµ¦½º])·Î ÇØµµ ¹«¹æ.
+- ¸®½ºÆ®.pop() = ¸®½ºÆ®¿¡¼­ ¸¶Áö¸· ¿ä¼Ò »èÁ¦ ÈÄ »èÁ¦µÈ ¿ä¼Ò ¹ÝÈ¯. pop(ÀÎµ¦½º)·Î ÀÎµ¦½ºÀÇ ¿ä¼Ò »èÁ¦. del(¸®½ºÆ®[ÀÎµ¦½º\])·Î ÇØµµ ¹«¹æ.
 - ¸®½ºÆ®.remove(°ª) = ¸®½ºÆ®¿¡¼­ °ªÀ» Ã£¾Æ »èÁ¦. Áßº¹ÀÌ ÀÖÀ¸¸é Ã³À½ÀÇ ÇÏ³ª¸¸ »èÁ¦.
 
 - ¸®½ºÆ®.index(°ª) = ¸®½ºÆ®¿¡¼­ °ªÀÇ ÀÎµ¦½º¸¦ Ã£¾ÆÁÜ.
@@ -46,16 +46,16 @@
 - ¸®½ºÆ®.sort(reverse=False / reverse=True) = ¿À¸§/³»¸²Â÷¼ø Á¤·Ä. ÀÚ±âÀÚ½ÅÀÌ Á¤·ÄµÊ.
 - sorted(¸®½ºÆ®) = Á¤·ÄµÈ »õ ¸®½ºÆ® »ý¼º. key=lambda item:¼ö½Ä, reverse=bool µîÀ» ÀÎÀÚ·Î ÁÖ¾î Á¤·Ä ±âÁØ, ¹ÝÀü ¿©ºÎ µîÀ» ¼±ÅÃÇÒ ¼ö ÀÖÀ½.
 
-- ¸®½ºÆ®.clear() = del ¸®½ºÆ®[:] = ¸®½ºÆ® ¸ðµç ¿ä¼Ò »èÁ¦,
+- ¸®½ºÆ®.clear() = del ¸®½ºÆ®[:\] = ¸®½ºÆ® ¸ðµç ¿ä¼Ò »èÁ¦,
 - ¸®½ºÆ®2 = ¸®½ºÆ®1.copy() == ¸®½ºÆ® º¹Á¦. ¸®½ºÆ®2=¸®½ºÆ®1´Â ÇÒ´çÀ¸·Î, ¸®½ºÆ® 1°ú 2°¡ °¡¸®Å°´Â ¸®½ºÆ®´Â µ¿ÀÏÇÔ.
 - for b,a in enumerate(¸®½ºÆ®) = ¸®½ºÆ®ÀÇ ¿ä¼ÒµéÀ» a¿¡,ÀÎµ¦½º¸¦ b¿¡ ²¨³¿. (¸®½ºÆ®,|start=|1)·Î ÀÎµ¦½ºÀÇ ½ÃÀÛÀ» Á¤ÇÒ ¼ö ÀÖÀ½.
 - Å¥ = deque(¸®½ºÆ®) ÀÚ·áÇü Á¦°ø. popleft()/appendleft()·Î ¿ÞÂÊ¿¡ ¿ä¼Ò »èÁ¦/Ãß°¡.
-- È¸¹® ÆÇº°(µÚÁý±â) = s[::-1], list(reversed(s)), "".join(reversed(s))
+- È¸¹® ÆÇº°(µÚÁý±â) = s[::-1\], list(reversed(s)), "".join(reversed(s))
 
 ### list comprehension
 - ¸®½ºÆ® Ç¥Çö½Ä
-- [½Ä for º¯¼ö in ¸®½ºÆ®] ÀÇ Çü½ÄÀ¸·Î »ç¿ë. [i for i in range(10)] ·Î 0ºÎÅÍ 9±îÁöÀÇ ¸®½ºÆ®¸¦ »ý¼ºÇÒ ¼ö ÀÖ´Ù.
-- [½Ä for º¯¼ö in ¸®½ºÆ® if Á¶°Ç½Ä] ½ÄÀ¸·Î if ¹® µµ »ç¿ëÇÒ ¼ö ÀÖ´Ù.
+- [½Ä for º¯¼ö in ¸®½ºÆ®\] ÀÇ Çü½ÄÀ¸·Î »ç¿ë. [i for i in range(10)\] ·Î 0ºÎÅÍ 9±îÁöÀÇ ¸®½ºÆ®¸¦ »ý¼ºÇÒ ¼ö ÀÖ´Ù.
+- [½Ä for º¯¼ö in ¸®½ºÆ® if Á¶°Ç½Ä\] ½ÄÀ¸·Î if ¹® µµ »ç¿ëÇÒ ¼ö ÀÖ´Ù.
 - for ¸¦ ¿©·¯¹ø ¾²¸é µÚ¿¡¼­ ºÎÅÍ Àû¿ëµÈ´Ù. 
 
 ## map,split
@@ -92,15 +92,15 @@
 - Á¤¼ö * ½ÃÄö½º°´Ã¼            # ½ÃÄö½º °´Ã¼¸¦ Æ¯Á¤ È½¼ö¸¸Å­ ¹Ýº¹ÇÏ¿© »õ ½ÃÄö½º °´Ã¼¸¦ ¸¸µê
 
 - len(½ÃÄö½º°´Ã¼)              # ½ÃÄö½º °´Ã¼ÀÇ ¿ä¼Ò °³¼ö(±æÀÌ) ±¸ÇÏ±â
-- ½ÃÄö½º°´Ã¼[-À½¼ö]            # ÀÎµ¦½º¸¦ À½¼ö·Î ÁöÁ¤ÇÏ¸é µÚ¿¡¼­ºÎÅÍ ¿ä¼Ò¿¡ Á¢±Ù, -1Àº µÚ¿¡¼­ Ã¹ ¹øÂ°
-- del ½ÃÄö½º°´Ã¼[ÀÎµ¦½º]       # ½ÃÄö½º °´Ã¼ÀÇ ¿ä¼Ò¸¦ »èÁ¦
+- ½ÃÄö½º°´Ã¼[-À½¼ö\]            # ÀÎµ¦½º¸¦ À½¼ö·Î ÁöÁ¤ÇÏ¸é µÚ¿¡¼­ºÎÅÍ ¿ä¼Ò¿¡ Á¢±Ù, -1Àº µÚ¿¡¼­ Ã¹ ¹øÂ°
+- del ½ÃÄö½º°´Ã¼[ÀÎµ¦½º\]       # ½ÃÄö½º °´Ã¼ÀÇ ¿ä¼Ò¸¦ »èÁ¦
 
 ##slice
 ***
-- ½ÃÄö½º°´Ã¼[½ÃÀÛÀÎµ¦½º:³¡ÀÎµ¦½º]                 # ÁöÁ¤µÈ ¹üÀ§ÀÇ ¿ä¼Ò¸¦ Àß¶ó¼­ »õ ½ÃÄö½º °´Ã¼¸¦ ¸¸µê
-- ½ÃÄö½º°´Ã¼[½ÃÀÛÀÎµ¦½º:³¡ÀÎµ¦½º:ÀÎµ¦½ºÁõ°¡Æø]    # ÀÎµ¦½º Áõ°¡ÆøÀ» ÁöÁ¤ÇÏ¸é ÇØ´ç °ª¸¸Å­ ÀÎµ¦½º¸¦ Áõ°¡½ÃÅ°¸é¼­ ¿ä¼Ò¸¦ °¡Á®¿È
-- ½ÃÄö½º°´Ã¼[::Áõ°¡Æø]              # °´Ã¼ ÀüÃ¼¿¡¼­ Áõ°¡Æø¸¸Å­ ÀÎµ¦½º¸¦ Áõ°¡½ÃÅ°¸é¼­ ¿ä¼Ò¸¦ °¡Á®¿È
-- del ½ÃÄö½º°´Ã¼[½ÃÀÛÀÎµ¦½º:³¡ÀÎµ¦½º]    # Æ¯Á¤ ¹üÀ§ÀÇ ¿ä¼Ò¸¦ »èÁ¦(¿øº» °´Ã¼°¡ º¯°æµÊ)
+- ½ÃÄö½º°´Ã¼[½ÃÀÛÀÎµ¦½º:³¡ÀÎµ¦½º\]                 # ÁöÁ¤µÈ ¹üÀ§ÀÇ ¿ä¼Ò¸¦ Àß¶ó¼­ »õ ½ÃÄö½º °´Ã¼¸¦ ¸¸µê
+- ½ÃÄö½º°´Ã¼[½ÃÀÛÀÎµ¦½º:³¡ÀÎµ¦½º:ÀÎµ¦½ºÁõ°¡Æø\]      # ÀÎµ¦½º Áõ°¡ÆøÀ» ÁöÁ¤ÇÏ¸é ÇØ´ç °ª¸¸Å­ ÀÎµ¦½º¸¦ Áõ°¡½ÃÅ°¸é¼­ ¿ä¼Ò¸¦ °¡Á®¿È
+- ½ÃÄö½º°´Ã¼[::Áõ°¡Æø\]                         # °´Ã¼ ÀüÃ¼¿¡¼­ Áõ°¡Æø¸¸Å­ ÀÎµ¦½º¸¦ Áõ°¡½ÃÅ°¸é¼­ ¿ä¼Ò¸¦ °¡Á®¿È
+- del ½ÃÄö½º°´Ã¼[½ÃÀÛÀÎµ¦½º:³¡ÀÎµ¦½º\]            # Æ¯Á¤ ¹üÀ§ÀÇ ¿ä¼Ò¸¦ »èÁ¦(¿øº» °´Ã¼°¡ º¯°æµÊ)
 
 ### list,tuple
 ***
@@ -108,15 +108,16 @@
 - ¸®½ºÆ®¿Í ÅõÇÃ ¾È¿¡ ¹®ÀÚ¿­À» ¸¸µé¸é ÇÑ ¹®ÀÚ¾¿ µé¾î°¡ »ý¼º.
 - min(¹Ýº¹°¡´É °´Ã¼),max(¸®½ºÆ®µî),sum(½ÃÄö½º) = ÃÖ¼Ú°ª,ÃÖ´ñ°ª,ÇÕ°è
 - ¸®½ºÆ® »Ó ¾Æ´Ï¶ó ÅõÇÃ¿¡µµ È°¿ë°¡´É. ¾Æ·¡ÀÇ °æ¿ì tuple(½Ä).
-- [i for i in range(10)], [i+5 for i in range(5)], [i for i in range(10) if i%2==0], [i * j for j in range(2, 10) for i in range(1, 10)] µî ¸®½ºÆ® Ç¥Çö½Ä¿¡¼­ ¹Ýº¹,Á¶°Ç¹® »ç¿ë °¡´É. Ã³¸®¼ø¼­´Â µÚ¿¡¼­ºÎÅÍ.
+- [i for i in range(10)\], [i+5 for i in range(5)\], [i for i in range(10) if i%2==0\], [i * j for j in range(2, 10) for i in range(1, 10)\] µî 
+  ¸®½ºÆ® Ç¥Çö½Ä¿¡¼­ ¹Ýº¹,Á¶°Ç¹® »ç¿ë °¡´É. Ã³¸®¼ø¼­´Â µÚ¿¡¼­ºÎÅÍ.
 
 ## list unpacking
 ***
-- for x,y in [[10,20],[30,40]] µîÀ¸·Î for ¹® ÇÑ¹ø¸¸ »ç¿ëÀÌ °¡´É. for µÚÀÇ º¯¼ö¿Í ¾ÈÂÊ ¸®½ºÆ®ÀÇ ¿ä¼ö ¼ö°¡ ÀÏÄ¡ÇØ¾ßÇÔ.
-- for i in [[10,20,30],[40,50,60]]: for j in i: ·Î ÁßÃ¸ for ¹® »ç¿ë °¡´É.
-- [[0 for j in range(2)] for i in range(3)], [[0] * 2 for i in range(3)] ·Î 2Â÷¿ø ¸®½ºÆ® »ý¼º.
-- [[0] * i for i in [3, 1, 3, 2, 5]] ½ÄÀ¸·Î Åé´ÏÇü ¸®½ºÆ® »ý¼º.
-- Á¤·ÄÀº sorted(¸®½ºÆ®, key=lambda student: student[±âÁØÀÌ µÉ ÀÎµ¦½º], reverse=))·Î ¾ÈÂÊ ÀÎµ¦½º Á¤·Ä.
+- for x,y in [[10,20\],[30,40\]\] µîÀ¸·Î for ¹® ÇÑ¹ø¸¸ »ç¿ëÀÌ °¡´É. for µÚÀÇ º¯¼ö¿Í ¾ÈÂÊ ¸®½ºÆ®ÀÇ ¿ä¼ö ¼ö°¡ ÀÏÄ¡ÇØ¾ßÇÔ.
+- for i in [[10,20,30\],[40,50,60\]\]: for j in i: ·Î ÁßÃ¸ for ¹® »ç¿ë °¡´É.
+- [[0 for j in range(2)\] for i in range(3)\], [[0\] * 2 for i in range(3)\] ·Î 2Â÷¿ø ¸®½ºÆ® »ý¼º.
+- [[0\] * i for i in [3, 1, 3, 2, 5\]\] ½ÄÀ¸·Î Åé´ÏÇü ¸®½ºÆ® »ý¼º.
+- Á¤·ÄÀº sorted(¸®½ºÆ®, key=lambda student: student[±âÁØÀÌ µÉ ÀÎµ¦½º\], reverse=))·Î ¾ÈÂÊ ÀÎµ¦½º Á¤·Ä.
 
 ### list copy
 ***
@@ -128,8 +129,8 @@
 - µñ¼Å³Ê¸® = {}                      # ºó µñ¼Å³Ê¸® ¸¸µé±â
 - µñ¼Å³Ê¸® = dict()                  # ºó µñ¼Å³Ê¸® ¸¸µé±â
 
-- µñ¼Å³Ê¸®[Å°]                       # µñ¼Å³Ê¸®¿¡¼­ Å°·Î °ª¿¡ Á¢±Ù
-- µñ¼Å³Ê¸®[Å°] = °ª                  # µñ¼Å³Ê¸®¿¡¼­ Å°¿¡ °ª ÇÒ´ç
+- µñ¼Å³Ê¸®[Å°\]                       # µñ¼Å³Ê¸®¿¡¼­ Å°·Î °ª¿¡ Á¢±Ù
+- µñ¼Å³Ê¸®[Å°\] = °ª                  # µñ¼Å³Ê¸®¿¡¼­ Å°¿¡ °ª ÇÒ´ç
 
 - Å° in µñ¼Å³Ê¸®                     # µñ¼Å³Ê¸®¿¡ Æ¯Á¤ Å°°¡ ÀÖ´ÂÁö È®ÀÎ
 - Å° not in µñ¼Å³Ê¸®                 # µñ¼Å³Ê¸®¿¡ Æ¯Á¤ Å°°¡ ¾ø´ÂÁö È®ÀÎ
@@ -141,7 +142,7 @@
 ### zip
 ***
 - zip(a, b) > µ¿ÀÏÇÑ °³¼ö·Î ÀÌ·ç¾îÁø ÀÚ·áÇüÀ» ¹­¾îÁÜ.
-- [1,2,3,4]¿Í ['one','two','three','for']°¡ ÀÖ´Ù¸é [(1,'one'), ... ]
+- [1,2,3,4\]¿Í ['one','two','three','for'\]°¡ ÀÖ´Ù¸é [(1,'one'), ... \]
 ```python
 # º¸Åë ÀÌ·±½ÄÀ¸·Î »ç¿ëÇÑ´Ù.
 number_l=[1,2,3]
@@ -159,21 +160,21 @@ for number , name in zip(number_l,name_l):
 - Å°´Â Á¤¼ö,½Ç¼ö,¹®ÀÚ¿­,ºÒµî °¡´É/ °ª¿¡´Â ¸®½ºÆ®µî ¸ðµç ÀÚ·áÇü »ç¿ë °¡´É.
 
 - a=dict(a=97,b=98,c=99)(Å°=°ª)
-- dict([(a,97),(b,98)])(¸®½ºÆ® ¾È¿¡ (Å°,°ª))(Å°´Â ÀÚµ¿À¸·Î ¹®ÀÚ¿­·Î ¹Ù²ñ)
-- a=dict(zip([a,b],[97,98]))¸®½ºÆ® È¤Àº Æ©ÇÃ·Î Å°,°ª
+- dict([(a,97),(b,98)\])(¸®½ºÆ® ¾È¿¡ (Å°,°ª))(Å°´Â ÀÚµ¿À¸·Î ¹®ÀÚ¿­·Î ¹Ù²ñ)
+- a=dict(zip([a,b\],[97,98\]))¸®½ºÆ® È¤Àº Æ©ÇÃ·Î Å°,°ª
 - dict({a:97,b:98})
 
 - Å°ÀÇ °³¼ö=°ªÀÇ °³¼ö=len()À¸·Î ±¸ÇÒ ¼ö ÀÖÀ½.
-- µñ¼Å³Ê¸®´Â Å°·Î Á¢±Ù #a["a"]=65  # µñ¼Å³Ê¸®¿¡ ¾ø´Â Å° ÀÔ·Â ½Ã ÇÒ´ç ÈÄ Ãß°¡.
+- µñ¼Å³Ê¸®´Â Å°·Î Á¢±Ù #a["a"\]=65  # µñ¼Å³Ê¸®¿¡ ¾ø´Â Å° ÀÔ·Â ½Ã ÇÒ´ç ÈÄ Ãß°¡.
 
 ### dict calc
 ***
 - µñ¼Å³Ê¸®.setdefault("Å°",°ª) = µñ¼Å³Ê¸®¿¡ ½Ö Ãß°¡. °ªÀÌ ¾øÀ¸¸é Å°¿¡ none.
 - µñ¼Å³Ê¸®.update(Å°=°ª) = Å°ÀÇ °ª ¼öÁ¤. ¸¸¾à Å°°¡ ¾ø´Ù¸é »õ·Î Ãß°¡. Å°=°ª,Å°=°ªÀ¸·Î ¿©·¯°³ ÇÑ¹ø¿¡ ¼öÁ¤ °¡´É.
-- update ´Â Å°°¡ ¹®ÀÚ¿­ÀÏ¶§¸¸ »ç¿ë°¡´É. Å°°¡ ¼ýÀÚ¸é (µñ¼Å³Ê¸®(¹Ù²Ü Å° : °ª))·Î ¼öÁ¤°¡´É. ()¾È¿¡´Â ¸®½ºÆ®, Æ©ÇÃµî ¹Ýº¹°¡´É°´Ã¼ ¸ðµÎ °¡´É. [[Å°1,°ª1],[Å°2,°ª2]]ÇüÀ¸·Î ÀÌ·ïÁ®¾ßÇÔ.
+- update ´Â Å°°¡ ¹®ÀÚ¿­ÀÏ¶§¸¸ »ç¿ë°¡´É. Å°°¡ ¼ýÀÚ¸é (µñ¼Å³Ê¸®(¹Ù²Ü Å° : °ª))·Î ¼öÁ¤°¡´É. ()¾È¿¡´Â ¸®½ºÆ®, Æ©ÇÃµî ¹Ýº¹°¡´É°´Ã¼ ¸ðµÎ °¡´É. [[Å°1,°ª1\],[Å°2,°ª2\]\]ÇüÀ¸·Î ÀÌ·ïÁ®¾ßÇÔ.
 
 - µñ¼Å³Ê¸®.pop(Å°,±âº»°ª) = Å°°¡ ÀÖÀ¸¸é Å°-°ª »èÁ¦ ÈÄ °ª ¹ÝÈ¯, ¾øÀ¸¸é ±âº»°ª ¹ÝÈ¯
-- del µñ¼Å³Ê¸®["Å°"]·Î Å° »èÁ¦.
+- del µñ¼Å³Ê¸®["Å°"\]·Î Å° »èÁ¦.
 - µñ¼Å³Ê¸®.popitem() = µñ¼Å³Ê¸® ¸¶Áö¸· °ª »èÁ¦ ÈÄ Æ©ÇÃ·Î ¹ÝÈ¯.
 - µñ¼Å³Ê¸®.clear() = µñ¼Å³Ê¸® ¸ðµç °ª »èÁ¦.
 
@@ -182,7 +183,7 @@ for number , name in zip(number_l,name_l):
 
 - º¯¼ö = dict.fromkeys(Å°µé,°ª) = Å°µé¿¡ ¸ðµÎ °ªÀ» Ã¤¿ö µñ¼Å³Ê¸® Á¦ÀÛ. °ªÀÌ ¾øÀ¸¸é None Ã¤¿ò.
 
-- dict ³ª µñ¼Å³Ê¸®[Å°]¿¡¼­ ¾ø´Â Å°¸¦ ¼±ÅÃÇÏ¸é ¿À·ù.
+- dict ³ª µñ¼Å³Ê¸®[Å°\]¿¡¼­ ¾ø´Â Å°¸¦ ¼±ÅÃÇÏ¸é ¿À·ù.
 - ÀÌ ¿À·ù¸¦ ¾ø¾Ö±â À§ÇØ µñ¼Å³Ê¸® = defaultdict(ÀÚ·áÇü)À¸·Î ±âº»°ª »ý¼º.
 
 ### for dict
@@ -310,7 +311,8 @@ for number , name in zip(number_l,name_l):
 
 ## file import
 ***
-- ÆÄÀÏ»ý¼ºÈÄ import ÆÄÀÏ¸í, ÆÄÀÏ¸í.ÆÄÀÏ¼Ó ÇÔ¼öÀÌ¸§() À¸·Î ±× ÆÄÀÏ¼Ó ÇÔ¼ö¸¦ °¡Á®¿Ã ¼ö ÀÖ´Ù. .º¯¼ö¸íÀ¸·Î º¯¼öµµ °¡Á®¿Ã ¼ö ÀÖ°í, from ÇÔ¼ö¸í import ÆÄÀÏ¸íÀ¸·Î ±× ÇÔ¼ö¸¸ °¡Á®¿Ã ¼ö ÀÖÀ¸¸ç, ÀÌ·¸°Ô °¡Á®¿Â°Ç ÆÄÀÏ¸í¾øÀÌ ±×³É ÇÔ¼ö¸¸ ¾µ ¼ö ÀÖ´Ù.
+- ÆÄÀÏ»ý¼ºÈÄ import ÆÄÀÏ¸í, ÆÄÀÏ¸í.ÆÄÀÏ¼Ó ÇÔ¼öÀÌ¸§() À¸·Î ±× ÆÄÀÏ¼Ó ÇÔ¼ö¸¦ °¡Á®¿Ã ¼ö ÀÖ´Ù. .º¯¼ö¸íÀ¸·Î º¯¼öµµ °¡Á®¿Ã ¼ö ÀÖ°í, 
+  from ÇÔ¼ö¸í import ÆÄÀÏ¸íÀ¸·Î ±× ÇÔ¼ö¸¸ °¡Á®¿Ã ¼ö ÀÖÀ¸¸ç, ÀÌ·¸°Ô °¡Á®¿Â°Ç ÆÄÀÏ¸í¾øÀÌ ±×³É ÇÔ¼ö¸¸ ¾µ ¼ö ÀÖ´Ù.
 - import ÆÄÀÏ¸í as º°¸íÀ¸·Î ÆÄÀÏ¸í´ë½Å º¯¸í.ÇÔ¼ö()·Î »ç¿ëÇÒ ¼ö ÀÖ´Ù.
 
 ## file pickle, glob
@@ -330,22 +332,26 @@ for number , name in zip(number_l,name_l):
 -   ÄÚµå  >>> ·Î ÇÔ¼ö »ý¼º. (a,b)½ÄÀ¸·Î º¯¼ö ÁöÁ¤µµ °¡´ÉÇÏ°í, return µµ »ç¿ë°¡´É. return ¿¡¼­ , (Æ©ÇÃÃ³¸®)·Î ¿©·¯°³ ¹ÝÈ¯ °¡´É. È¤Àº ¸®½ºÆ®µîµµ ¹ÝÈ¯°¡´É.
 - def ¹Ù·Î ¹Ø¿¡ """ÀÌ·¸°Ô""" µ¶½ºÆ®¸µ(ÁÖ¼®)ÀÛ¼º°¡´É. ÇÔ¼ö¸í._doc_·Î µ¶½ºÆ®¸µ Ãâ·Â °¡´É.
 - __ÇÔ¼ö(º¯¼öµµ µ¿ÀÏ)\__, ÇÔ¼ö >> public | _ÇÔ¼ö >> protected | __ÇÔ¼ö >> private.
-- [¸Å°³º¯¼ö: ÀÚ·áÇü] : ¸Å°³º¯¼ö¿¡ ÀÚ·áÇü ÁöÁ¤ °¡´É. list[ÀÚ·áÇü\]½ÄÀ¸·Î, Sequence ³»ºÎÀÇ ÀÚ·áÇü±îÁö ÁöÁ¤ °¡´É.
-- [ÇÔ¼ö¸í() -> ÀÚ·áÇü] : ÇÔ¼ö ¹ÝÈ¯ÀÚ·áÇü ÁöÁ¤ °¡´É.
+- [¸Å°³º¯¼ö: ÀÚ·áÇü\] : ¸Å°³º¯¼ö¿¡ ÀÚ·áÇü ÁöÁ¤ °¡´É. list[ÀÚ·áÇü\]½ÄÀ¸·Î, Sequence ³»ºÎÀÇ ÀÚ·áÇü±îÁö ÁöÁ¤ °¡´É.
+- [ÇÔ¼ö¸í() -> ÀÚ·áÇü\] : ÇÔ¼ö ¹ÝÈ¯ÀÚ·áÇü ÁöÁ¤ °¡´É.
 
 ## element
 ***
-- À§Ä¡ÀÎ¼ö : ÇÔ¼ö¿¡ ÀÎ¼ö¸¦ ¼ø¼­´ë·Î ³Ö´Â ¹æ½Ä. ÀÎ¼ö¸¦ ¼ø¼­´ë·Î ³ÖÀ» ¶§´Â ¸®½ºÆ®³ª Æ©ÇÃÀ» »ç¿ëÇÒ ¼öµµ ÀÖÀ½. ¸®½ºÆ® ¶Ç´Â Æ©ÇÃ ¾Õ¿¡ *¸¦ ºÙ¿©¼­ ÇÔ¼ö¿¡ ³Ö¾îÁÖ¸é µÊ(¾ðÆÐÅ·). ´Ü °³¼ö°¡ ´Ù¸£¸é ¿À·ù ¹ß»ý.
-- °¡º¯ÀÎ¼ö : ÇÔ¼ö ¼±¾ð½Ã ÇÔ¼ö¸í(*º¯¼ö¸í) À¸·Î ¼±¾ð(args). ÀÎ¼ö¸¦ ¸¶À½´ë·Î ³ÖÀ» ¼ö ÀÖÀ½(¾È ³Ö´Â°Íµµ °¡´É). ³ÖÀº ÀÎ¼öµéÀº Æ©ÇÃ·Î µé¾î°¨. »ç¿ë½Ã¿£ for ¹® µîÀ¸·Î »ç¿ëÇÏ°í, ¸®½ºÆ®µîÀº ¾ðÆÐÅ· ÇÊ¿ä, °íÁ¤º¯¼ö¿Í °°ÀÌ ¾²¸é °íÁ¤ÀÌ Á¦ÀÏ ¾ÕÀ¸·Î ¿Í¾ß ÇÔ.
+- À§Ä¡ÀÎ¼ö : ÇÔ¼ö¿¡ ÀÎ¼ö¸¦ ¼ø¼­´ë·Î ³Ö´Â ¹æ½Ä. ÀÎ¼ö¸¦ ¼ø¼­´ë·Î ³ÖÀ» ¶§´Â ¸®½ºÆ®³ª Æ©ÇÃÀ» »ç¿ëÇÒ ¼öµµ ÀÖÀ½. ¸®½ºÆ® ¶Ç´Â Æ©ÇÃ ¾Õ¿¡ *¸¦ ºÙ¿©¼­ ÇÔ¼ö¿¡ ³Ö¾îÁÖ¸é µÊ(¾ðÆÐÅ·).
+ ´Ü °³¼ö°¡ ´Ù¸£¸é ¿À·ù ¹ß»ý.
+- °¡º¯ÀÎ¼ö : ÇÔ¼ö ¼±¾ð½Ã ÇÔ¼ö¸í(*º¯¼ö¸í) À¸·Î ¼±¾ð(args). ÀÎ¼ö¸¦ ¸¶À½´ë·Î ³ÖÀ» ¼ö ÀÖÀ½(¾È ³Ö´Â°Íµµ °¡´É). ³ÖÀº ÀÎ¼öµéÀº Æ©ÇÃ·Î µé¾î°¨. 
+  »ç¿ë½Ã¿£ for ¹® µîÀ¸·Î »ç¿ëÇÏ°í, ¸®½ºÆ®µîÀº ¾ðÆÐÅ· ÇÊ¿ä, °íÁ¤º¯¼ö¿Í °°ÀÌ ¾²¸é °íÁ¤ÀÌ Á¦ÀÏ ¾ÕÀ¸·Î ¿Í¾ß ÇÔ.
 - Å°¿öµåÀÎ¼ö : ÇÔ¼ö È£Ãâ½Ã Å°¿öµå=°ª À¸·Î »ç¿ë. ÇÔ¼öÂÊ º¯¼ö¸í¸¸ ±â¾ïÇÏ¸é ¼ø¼­¸¦ ¸ÂÃßÁö ¾Ê¾Æµµ µÊ. sep,end µîµµ Å°¿öµå ÀÎ¼ö.
 - µñ¼Å³Ê¸®ÀÇ Å°¸¦ Å°¿öµå¿Í °°°Ô ÇÑ ÈÄ (**µñ¼Å³Ê¸®)·Î µñ¼Å³Ê¸®ÀÇ °ªÀ» »ðÀÔ °¡´É. Å°´Â ¹«Á¶°Ç ¹®ÀÚ¿­ÀÌ¿©¾ßÇÏ¸ç ¸Å°³º¯¼öÀÇ ÀÌ¸§°ú Å° ÀÌ¸§, °ª½ÖÀÇ °³¼ö¿Í º¯¼öÀÇ °³¼ö°¡ °°¾Æ¾ß ÇÑ´Ù.
-- Å°¿öµå °¡º¯ÀÎ¼ö : ÇÔ¼ö ¼±¾ð½Ã (**º¯¼ö¸í)À¸·Î ¼±¾ð(kwargs). ÀÔ·ÂÀº Å°¿öµå=°ª È¤Àº µñ¼Å³Ê¸® ¾ðÆÐÅ·, °á°ú¹°Àº µñ¼Å³Ê¸®. for °ú .item()µîÀ¸·Î Å°¿Í °ªÀ» »Ì¾Æ, in À¸·Î °ªÀÌ ÀÖ´ÂÁö È®ÀÎ ÈÄ »ç¿ë. ´Ù¸¥ ÀÎ¼ö¿ÍÀÇ ¼ø¼­´Â °íÁ¤>°¡º¯>°¡º¯(Å°¿öµå).
+- Å°¿öµå °¡º¯ÀÎ¼ö : ÇÔ¼ö ¼±¾ð½Ã (**º¯¼ö¸í)À¸·Î ¼±¾ð(kwargs). ÀÔ·ÂÀº Å°¿öµå=°ª È¤Àº µñ¼Å³Ê¸® ¾ðÆÐÅ·, °á°ú¹°Àº µñ¼Å³Ê¸®. for °ú .item()µîÀ¸·Î Å°¿Í °ªÀ» »Ì¾Æ, 
+  in À¸·Î °ªÀÌ ÀÖ´ÂÁö È®ÀÎ ÈÄ »ç¿ë. ´Ù¸¥ ÀÎ¼ö¿ÍÀÇ ¼ø¼­´Â °íÁ¤>°¡º¯>°¡º¯(Å°¿öµå).
 - ÇÔ¼ö ¼±¾ð½Ã º¯¼ö¿¡ °ªÀ» ÇÒ´çÇÏ¸é ÃÊ±ê°ª. µû·Î ÁöÁ¤ÇÏÁö ¾ÊÀ¸¸é ÃÊ±ê°ªÀ¸·Î ³ª¿È. ÃÊ±ê°ªÀÌ ¾ø´Â º¯¼ö´Â Ç×»ó ÀÖ´Â º¯¼öº¸´Ù ¾Õ¿¡ ÀÖ¾î¾ß ÇÔ.
 
 ## lambda
 ***
-- ¶÷´Ù(lambda)Ç¥Çö½Ä :  (ÇÔ¼ö°¡ µÉ)º¯¼ö = lambda ¸Å°³º¯¼ö(µé) : ½Ä  À¸·Î »ç¿ë. ¶÷´Ù½Ä ÀÚÃ¼¿¡ ()¸¦ ¾º¿ö »ç¿ëÇÒ ¼öµµ ÀÖ°í, ¶÷´Ù½ÄÀÇ ½Ä¿¡¼­´Â º¯¼ö¸¦ ¸¸µé¼ö´Â ¾øÀ¸³ª ÀÌ¹Ì ÀÖ´Â º¯¼ö¸¦ »ç¿ëÇÒ ¼ö´Â ÀÖ´Ù.
-- ¸Å°³º¯¼ö°¡ ¾ø´Â ¶÷´Ù½ÄÀº ±×³É :¸¸ ºÙÀÌ¸é µÇ°í, ÀÌ°ÍÀº ÇÔ¼ö¸¦ ÀÎ¼ö·Î »ç¿ëÇÒ ¶§ ÁÖ·Î »ç¿ëÇÑ´Ù.(ex-map ÀÇ ÀÚ·áÇü ºÎºÐ¿¡ ÇÔ¼ö¸íÀ» ½áÁÙ¼öµµ ÀÖ´Âµ¥, ÀÌ¶§ ¶÷´Ù·Î ¾²¸é ÁÙ¼ö°¡ ÁÙ¾îµç´Ù.)
+- ¶÷´Ù(lambda)Ç¥Çö½Ä :  (ÇÔ¼ö°¡ µÉ)º¯¼ö = lambda ¸Å°³º¯¼ö(µé) : ½Ä  À¸·Î »ç¿ë. ¶÷´Ù½Ä ÀÚÃ¼¿¡ ()¸¦ ¾º¿ö »ç¿ëÇÒ ¼öµµ ÀÖ°í, ¶÷´Ù½ÄÀÇ ½Ä¿¡¼­´Â º¯¼ö¸¦ ¸¸µé¼ö´Â ¾øÀ¸³ª 
+  ÀÌ¹Ì ÀÖ´Â º¯¼ö¸¦ »ç¿ëÇÒ ¼ö´Â ÀÖ´Ù.
+- ¸Å°³º¯¼ö°¡ ¾ø´Â ¶÷´Ù½ÄÀº ±×³É :¸¸ ºÙÀÌ¸é µÇ°í, ÀÌ°ÍÀº ÇÔ¼ö¸¦ ÀÎ¼ö·Î »ç¿ëÇÒ ¶§ ÁÖ·Î »ç¿ëÇÑ´Ù(ex-map ÀÇ ÀÚ·áÇü ºÎºÐ¿¡ ÇÔ¼ö¸íÀ» ½áÁÙ¼öµµ ÀÖ´Âµ¥, ÀÌ¶§ ¶÷´Ù·Î ¾²¸é ÁÙ¼ö°¡ ÁÙ¾îµê).
 - ¶÷´Ù½Ä¿¡¼­ Á¶°ÇºÎ Ç¥Çö½Ä »ç¿ë : lambda ¸Å°³º¯¼öµé: ½Ä1 if Á¶°Ç½Ä else ½Ä2 ÀÇ Çü½Ä. Á¶°ÇÀÌ ¸ÂÀ¸¸é ½Ä1,¾Æ´Ï¸é ½Ä 2·Î ¹ÝÈ¯. ¿©±â¿¡¼± else °¡ ÇÊ¼öÀÌ¸ç, elif ¸¦ »ç¿ëÇÒ ¼ö ¾ø´Ù.
 - map(lambda x, y: x * y, a, b)Ã³·³ ¸ÊÀº ¹Ýº¹°¡´É º¯¼ö¸¦ ¿©·¯°³ ³ÖÀ» ¼ö ÀÖ°í, ÀÌ¶§´Â ¶÷´Ù½Ä¿¡ º¯¼ö¸¦ ¿©·¯°³ ³Ö¾îÁÖ¸é µÈ´Ù.
 - filter(ÇÔ¼ö, ¹Ýº¹°¡´ÉÇÑ°´Ã¼)·Î »ç¿ë. ÇÔ¼öÀÇ ¹ÝÈ¯°ªÀÌ  True ÀÎ°Í¸¸ °¡Á®¿È. map Ã³·³ µû·Î ¸®½ºÆ®·Î °¨½ÎÁÖ°Å³ª ÇØ¾ßÇÔ. ¿©±â¿¡µµ ¶÷´Ù·Î and µîÀ» »ç¿ëÇØ ½áÁÖ¸é ÆíÇÔ.
@@ -354,7 +360,8 @@ for number , name in zip(number_l,name_l):
 ***
 - ÇÔ¼ö ¾È¿¡¼­ Àü¿ªº¯¼ö¸¦ ¼±¾ð,º¯°æÇÏ·Á¸é global ·Î ¼±¾ðÇØÁÖ¸é µÇ°í, ¹Ù±ùÂÊ Áö¿ªº¯¼ö¸¦ ¾ÈÂÊ¿¡¼­ º¯°æÇÏ·Á¸é nonlocal Å°¿öµå¸¦ »ç¿ëÇÏ¸é µÈ´Ù.
 
-- ¾î¶² ÇÔ¼ö¿¡¼­ º¯¼ö¸¦ ¼±¾ðÇÏ°í, ±× ¾È¿¡¼­ ¶Ç ÇÔ¼ö¸¦ ¸¸µé¾î ±× ÀÚÃ¼¸¦ ¹ÝÈ¯ÇÏ°Å³ª ¶÷´Ù Ç¥Çö½ÄÀ» ¹ÝÈ¯ÇßÀ»¶§, ¹Ù±ù ÇÔ¼öÀÇ ¹ÝÈ¯°ªÀ» º¯¼ö¿¡ ÀúÀåÇÑ ÈÄ ±× º¯¼ö·Î ¾ÈÂÊ ÇÔ¼ö¸¦ »ç¿ëÇÏ¸é, ¹Ù±ùÂÊ ÇÔ¼ö ¾È¿¡ÀÖ´Â º¯¼ö¸¦ °è¼Ó ¾µ ¼ö ÀÖ´Ù.
+- ¾î¶² ÇÔ¼ö¿¡¼­ º¯¼ö¸¦ ¼±¾ðÇÏ°í, ±× ¾È¿¡¼­ ¶Ç ÇÔ¼ö¸¦ ¸¸µé¾î ±× ÀÚÃ¼¸¦ ¹ÝÈ¯ÇÏ°Å³ª ¶÷´Ù Ç¥Çö½ÄÀ» ¹ÝÈ¯ÇßÀ»¶§, ¹Ù±ù ÇÔ¼öÀÇ ¹ÝÈ¯°ªÀ» º¯¼ö¿¡ ÀúÀåÇÑ ÈÄ ±× º¯¼ö·Î ¾ÈÂÊ ÇÔ¼ö¸¦ »ç¿ëÇÏ¸é,
+  ¹Ù±ùÂÊ ÇÔ¼ö ¾È¿¡ÀÖ´Â º¯¼ö¸¦ °è¼Ó ¾µ ¼ö ÀÖ´Ù.
 - ÀÌ°Ô¹Ù·Î Å¬·ÎÀú. Å¬·ÎÀúÀÇ º¯¼ö¸¦ º¯°æÇÏ°í ½ÍÀ¸¸é nonlocal Å°¿öµå¸¦ »ç¿ë(¹Ù±ù°ú µ¿ÀÏÇÑ ÀÌ¸§¿¡´Ù nonlocal À» ºÙ¿© ¼±¾ð)ÇÏ¸é µÇ°í, º¸Åë ¶÷´ÙÇ¥Çö½Ä°ú °°ÀÌ ¾´´Ù.
 
 # class
@@ -370,16 +377,18 @@ for number , name in zip(number_l,name_l):
 ***
 - Å¬·¡½º¿¡¼­ ¼Ó¼ºÀ» ¸¸µé¶§´Â
 - def \_\_init__(self)://ÀÎ½ºÅÏ½º »ý¼º½Ã¸¶´Ù È£ÃâµÊ.
--   self.¼Ó¼º=°ª   À¸·Î ÇÒ´çÇÔ. º¯¼ö»ý¼º°°ÀÌ ±× Å¬·¡½º ¾È¿¡¼­ ¾²°Å³ª, È£ÃâÇÏ¿© °ªÀ» ¹Ù²Ù°Å³ª ÇÒ ¼ö ÀÖ´Ù.
+- self.¼Ó¼º=°ª   À¸·Î ÇÒ´çÇÔ. º¯¼ö»ý¼º°°ÀÌ ±× Å¬·¡½º ¾È¿¡¼­ ¾²°Å³ª, È£ÃâÇÏ¿© °ªÀ» ¹Ù²Ù°Å³ª ÇÒ ¼ö ÀÖ´Ù.
 
 - def \_\_init__(self, name, age, address):
--    self.name = name
--    self.age = age
--    self.address = address
-- Ã³·³ ¸Å°³º¯¼ö¸¦ ³Ö°í, ÃÊ±âÈ­ ÇØ ÀÎ½ºÅÏ½º¸¦ ¸¸µé¶§ °ªÀ» ¹ÞÀ» ¼ö ÀÖ´Ù. ÀÎ½ºÅÏ½º¸¦ ¸¸µé¶§ ¸Å°³º¯¼ö·Î health=health, mana=mana, ability_power=ability_power Ã³·³ º¯¼ö=init ¼Ó ¸Å°³º¯¼ö¸¦ »ç¿ëÇØ º¯¼ö¸¦ Æ¯Á¤ ¸Å°³º¯¼ö¿¡ ³ÖÀ» ¼ö ÀÖ´Ù.
+-     self.name = name
+-     self.age = age
+-     self.address = address
+- Ã³·³ ¸Å°³º¯¼ö¸¦ ³Ö°í, ÃÊ±âÈ­ ÇØ ÀÎ½ºÅÏ½º¸¦ ¸¸µé¶§ °ªÀ» ¹ÞÀ» ¼ö ÀÖ´Ù. ÀÎ½ºÅÏ½º¸¦ ¸¸µé¶§ ¸Å°³º¯¼ö·Î health=health, mana=mana, 
+  ability_power=ability_power Ã³·³ º¯¼ö=init ¼Ó ¸Å°³º¯¼ö¸¦ »ç¿ëÇØ º¯¼ö¸¦ Æ¯Á¤ ¸Å°³º¯¼ö¿¡ ³ÖÀ» ¼ö ÀÖ´Ù.
 - ÀÌ¶§´Â a=Å¬·¡½º¸í(¸Å°³º¯¼öµé)Ã³·³ ÀÎ½ºÅÏ½º¸¦ »ý¼ºÇÑ´Ù.
 
-- ¼Ó¼ºÁ¦ÀÛ½Ã¿¡ *args ·Î À§Ä¡ÀÎ¼ö(¸®½ºÆ®¸¦ ¾ðÆÐÅ·ÇØ¼­ ÀÎ½ºÅÏ½º »ý¼º½Ã ³ÖÀ½,self.name=args[0]Ã³·³ °ª ÀúÀå),**kwargs ·Î Å°¿öµåÀÎ¼ö(µñ¼Å³Ê¸® ¾ðÆÐÅ· ¶Ç´Â [Å°¿öµå:ÀÎ¼ö],self.name=kwargs["name"]Ã³·³ °ª ÀúÀå)¸¦ »ç¿ëÇÒ ¼ö ÀÖ´Ù.
+- ¼Ó¼ºÁ¦ÀÛ½Ã¿¡ *args ·Î À§Ä¡ÀÎ¼ö(¸®½ºÆ®¸¦ ¾ðÆÐÅ·ÇØ¼­ ÀÎ½ºÅÏ½º »ý¼º½Ã ³ÖÀ½,self.name=args[0\]Ã³·³ °ª ÀúÀå),**kwargs ·Î Å°¿öµåÀÎ¼ö(µñ¼Å³Ê¸® ¾ðÆÐÅ· ¶Ç´Â [Å°¿öµå:ÀÎ¼ö\],
+  self.name=kwargs["name"\]Ã³·³ °ª ÀúÀå)¸¦ »ç¿ëÇÒ ¼ö ÀÖ´Ù.
 
 - Å¬·¡½º¸¦ pass ·Î Ã¤¿ö ºó Å¬·¡½º·Î ¸¸µç µÚ, ÀÎ½ºÅÏ½º¸¦ ¸¸µé°í °Å±â¿¡ ¾ø´Â ¼Ó¼º¿¡ °ªÀ» ÇÒ´çÇÏ¸é °è¼ÓÇØ¼­ ¼Ó¼ºÃß°¡¸¦ ÇÒ ¼ö ÀÖÁö¸¸, ÀÌ´Â ±× ÀÎ½ºÅÏ½º¿¡¸¸ Àû¿ëµÈ´Ù.
 - __init__ÀÌ ¾Æ´Ñ ´Ù¸¥ ¸Þ¼­µå¿¡¼­ ¼Ó¼ºÀ» Ãß°¡ÇÏ¸é ±× ¸Þ¼­µå¸¦ È£ÃâÇØ¾ß¸¸ ¼Ó¼ºÀÌ »ý±ä´Ù.
@@ -390,7 +399,8 @@ for number , name in zip(number_l,name_l):
 ## class global
 ***
 - class Å¬·¡½ºÀÌ¸§:
--   ¼Ó¼º = °ª     Ã³·³ Å¬·¡½º ¹Ø¿¡ ¹Ù·Î ¼Ó¼ºÀ» ¸¸µé¾î Å¬·¡½º ¼Ó¼º(Å¬·¡½º¿¡ ¼ÓÇØÀÖÀ¸¸ç ¸ðµç ÀÎ½ºÅÏ½º¿¡¼­ °øÀ¯)À» ¸¸µé ¼ö ÀÖ´Ù. Å¬·¡½º ¼Ó¼ºÀ» ¸Þ¼­µåµî¿¡¼­ »ç¿ëÇÏ·Á¸é Å¬·¡½º¸í.¼Ó¼º À¸·Î »ç¿ëÇÑ´Ù.
+-     ¼Ó¼º = °ª     Ã³·³ Å¬·¡½º ¹Ø¿¡ ¹Ù·Î ¼Ó¼ºÀ» ¸¸µé¾î Å¬·¡½º ¼Ó¼º(Å¬·¡½º¿¡ ¼ÓÇØÀÖÀ¸¸ç ¸ðµç ÀÎ½ºÅÏ½º¿¡¼­ °øÀ¯)À» ¸¸µé ¼ö ÀÖ´Ù. 
+  Å¬·¡½º ¼Ó¼ºÀ» ¸Þ¼­µåµî¿¡¼­ »ç¿ëÇÏ·Á¸é Å¬·¡½º¸í.¼Ó¼º À¸·Î »ç¿ëÇÑ´Ù.
 - ÆÄÀÌ½ãÀº ÀÎ½ºÅÏ½º, Å¬·¡½º ¼øÀ¸·Î Ã£±â ¶§¹®¿¡ °°Àº ÀÌ¸§ÀÌ ¾ø´Ù¸é ÀÎ½ºÅÏ½º.¼Ó¼º À¸·Î ½áµµ µÇÁö¸¸, ÀÌ·¯¸é °øÀ¯µÇ±âµµ ÇÏ°í ÀÇµµ¿Í ´Þ¶óÁú ¼ö ÀÖÀ¸´Ï Å¬·¡½º¸í.¼Ó¼ºÀ¸·Î »ç¿ë.
 - Å¬·¡½º ¼Ó¼º: ¸ðµç ÀÎ½ºÅÏ½º°¡ °øÀ¯. ÀÎ½ºÅÏ½º ÀüÃ¼°¡ »ç¿ëÇØ¾ß ÇÏ´Â °ªÀ» ÀúÀåÇÒ ¶§ »ç¿ë
 - ÀÎ½ºÅÏ½º ¼Ó¼º: ÀÎ½ºÅÏ½ºº°·Î µ¶¸³µÇ¾î ÀÖÀ½. °¢ ÀÎ½ºÅÏ½º°¡ °ªÀ» µû·Î ÀúÀåÇØ¾ß ÇÒ ¶§ »ç¿ë
@@ -400,7 +410,8 @@ for number , name in zip(number_l,name_l):
 - Å¬·¡½º¿¡¼­ ¸Þ¼­µå¸¦ ¸¸µé ¶§ À§¿¡ @staticmethod ¸¦ ºÙ¿© Á¤Àû ¸Þ¼­µå·Î ¸¸µé¸é ¹Ù·Î Å¬·¡½º.¸Þ¼­µå()·Î È£ÃâÇÒ ¼ö ÀÖ´Ù. ÀÌ Á¤Àû¸Þ¼­µå´Â ÀÎ½ºÅÏ½º ¼Ó¼ºÀº »ç¿ë ºÒ°¡ÇÏ´Ù.
 - ÀÎ½ºÅÏ½ºÀÇ ³»¿ëÀ» º¯°æÇØ¾ß ÇÒ ¶§´Â ÀÎ½ºÅÏ½º ¸Þ¼­µå, ÀÎ½ºÅÏ½º¿¡´Â º¯È­ ¾øÀÌ °á°ú¸¸ ±¸ÇÏ¸é µÉ ¶§¿¡´Â Á¤Àû ¸Þ¼­µå·Î »ç¿ëÇÑ´Ù. Á¤Àû ¸Þ¼­µå¿¡¼­´Â self ¸¦ ¸Å°³º¯¼ö·Î ³Ö¾îÁÖÁö ¾Ê¾Æµµ µÈ´Ù.
 
-- ¸Þ¼­µå À§¿¡ @classmethod ¸¦ ºÙÀÌ¸é Å¬·¡½º ¸Þ¼­µå Á¦ÀÛ. Å¬·¡½º ¸Þ¼­µå´Â Ã¹¹øÂ° ¸Å°³º¯¼ö¿¡ cls ¸¦ ÁöÁ¤ÇØ¾ß ÇÔ. Å¬·¡½º ¸Þ¼­µå´Â ¸Þ¼­µå ¾È¿¡¼­ Å¬·¡½º ¼Ó¼º, Å¬·¡½º ¸Þ¼­µå¿¡ Á¢±ÙÇØ¾ß ÇÒ ¶§ »ç¿ëÇÏ°í, cls ´Â Å¬·¡½º ÀÌ¹Ç·Î ¸Þ¼­µå ¾È¿¡¼­ ÀÎ½ºÅÏ½º = cls()³ª return cls()Ã³·³ ÇØ¼­ ÀÎ½ºÅÏ½º¸¦ ¸¸µé ¼ö ÀÖÀ½.
+- ¸Þ¼­µå À§¿¡ @classmethod ¸¦ ºÙÀÌ¸é Å¬·¡½º ¸Þ¼­µå Á¦ÀÛ. Å¬·¡½º ¸Þ¼­µå´Â Ã¹¹øÂ° ¸Å°³º¯¼ö¿¡ cls ¸¦ ÁöÁ¤ÇØ¾ß ÇÔ. Å¬·¡½º ¸Þ¼­µå´Â ¸Þ¼­µå ¾È¿¡¼­ Å¬·¡½º ¼Ó¼º, 
+  Å¬·¡½º ¸Þ¼­µå¿¡ Á¢±ÙÇØ¾ß ÇÒ ¶§ »ç¿ëÇÏ°í, cls ´Â Å¬·¡½º ÀÌ¹Ç·Î ¸Þ¼­µå ¾È¿¡¼­ ÀÎ½ºÅÏ½º = cls()³ª return cls()Ã³·³ ÇØ¼­ ÀÎ½ºÅÏ½º¸¦ ¸¸µé ¼ö ÀÖÀ½.
 - @property ·Î getter, @ÇÔ¼ö(º¯¼ö)ÀÌ¸§.setter ·Î setter ¸¦ °£´ÜÈ÷ ±¸ÇöÇÒ ¼ö ÀÖ´Ù.
 
 ## class extends
@@ -426,8 +437,11 @@ for number , name in zip(number_l,name_l):
 ## multiple extends
 ***
 - class ÆÄ»ýÅ¬·¡½ºÀÌ¸§(±â¹ÝÅ¬·¡½ºÀÌ¸§1, ±â¹ÝÅ¬·¡½ºÀÌ¸§2): Çü½ÄÀ¸·Î ´ÙÁß»ó¼ÓÀ» ÇÒ ¼ö ÀÖ´Ù.
-- Å¬·¡½º A¸¦ »ó¼Ó¹Þ¾Æ¼­ B, C¸¦ ¸¸µé°í, Å¬·¡½º B¿Í C¸¦ »ó¼Ó¹Þ¾Æ¼­ D¸¦ ¸¸µå´Â Çü½ÄÀ» ´ÙÀÌ¾Æ¸óµå »ó¼ÓÀÌ¶ó°í ÇÏ´Âµ¥, ÀÌ °æ¿ì À§ÀÇ ¼Â ¸ðµÎ °°Àº ÀÌ¸§ÀÇ ¸Þ¼­µå¸¦ °¡Áö°í ÀÖ´Ù¸é ¾î¶² ¸Þ¼­µå¸¦ È£ÃâÇØ¾ß ÇÒÁö ¾Ö¸ÅÇØÁü.
-- ÀÌ °æ¿ì ÆÄÀÌ½ã¿¡¼­´Â ¸Þ¼­µå Å½»ö¼ø¼­¸¦ µû¸£´Â µ¥, ÀÌ°Ç Å¬·¡½º.mro()(Å¬·¡½º.\_\_mro__ Çü½Äµµ °°Àº ³»¿ë)·Î È®ÀÎÈú ¼ö ÀÖ´Ù. [<class '__main__.D'>, <class '__main__.B'>, <class '__main__.C'>, <class '__main__.A'>, <class 'object'>]Çü½ÄÀ¸·Î Ãâ·ÂµÊ.(object Å¬·¡½º´Â ¸ðµç Å¬·¡½ºÀÇ Á¶»ó. ¸ðµç Å¬·¡½º´Â ÀÌ Å¬·¡½º¸¦ »ó¼Ó¹ÞÀ½.)
+- Å¬·¡½º A¸¦ »ó¼Ó¹Þ¾Æ¼­ B, C¸¦ ¸¸µé°í, Å¬·¡½º B¿Í C¸¦ »ó¼Ó¹Þ¾Æ¼­ D¸¦ ¸¸µå´Â Çü½ÄÀ» ´ÙÀÌ¾Æ¸óµå »ó¼ÓÀÌ¶ó°í ÇÏ´Âµ¥, 
+  ÀÌ °æ¿ì À§ÀÇ ¼Â ¸ðµÎ °°Àº ÀÌ¸§ÀÇ ¸Þ¼­µå¸¦ °¡Áö°í ÀÖ´Ù¸é ¾î¶² ¸Þ¼­µå¸¦ È£ÃâÇØ¾ß ÇÒÁö ¾Ö¸ÅÇØÁü.
+- ÀÌ °æ¿ì ÆÄÀÌ½ã¿¡¼­´Â ¸Þ¼­µå Å½»ö¼ø¼­¸¦ µû¸£´Â µ¥, ÀÌ°Ç Å¬·¡½º.mro()(Å¬·¡½º.\_\_mro__ Çü½Äµµ °°Àº ³»¿ë)·Î È®ÀÎÈú ¼ö ÀÖ´Ù. 
+  \[<class '\_\_main__.D'>, <class '\_\_main__.B'>, <class '\_\_main__.C'>, <class '\_\_main__.A'>, <
+  class 'object'>]Çü½ÄÀ¸·Î Ãâ·ÂµÊ.(object Å¬·¡½º´Â ¸ðµç Å¬·¡½ºÀÇ Á¶»ó. ¸ðµç Å¬·¡½º´Â ÀÌ Å¬·¡½º¸¦ »ó¼Ó¹ÞÀ½.)
 - Áï, »ó¼Ó ´Ü°è°¡ °¡±î¿î °Í ºÎÅÍ, ¿ÞÂÊ¿¡¼­ ¿À¸¥ÂÊ ¼ø¼­·Î Å½»öÇÔ.
 
 ## abstract class
@@ -447,8 +461,9 @@ for number , name in zip(number_l,name_l):
 ### about class
 ***
 - Math ÆÐÅ°Áö(ÆÄÀÌ½ã ³»Àå) > sqrt(°ª):Á¦°ö±Ù | pow(°ª,Áö¼ö):°ªÀÇ Áö¼öÁ¦°ö ¹ÝÈ¯ | abs(°ª):Àý´ñ°ª ¹ÝÈ¯
-- (collections ¸ðµ¨ import)Å¬·¡½º¸í = collections.namedtuple('ÀÚ·áÇüÀÌ¸§', ['¿ä¼ÒÀÌ¸§1', '¿ä¼ÒÀÌ¸§2'])·Î °¢ ¿ä¼Ò¿¡ ÀÌ¸§À» ÁöÁ¤ÇØÁÖ´Â namedtuple »ý¼º.
-- ÀÎ½ºÅÏ½º = Å¬·¡½º(°ª1,°ª2)/Å¬·¡½º(¿ä¼Ò1=°ª1,¿ä¼Ò2=°ª2)·Î ÀÎ½ºÅÏ½º »ý¼º, ÀÎ½ºÅÏ½º.¿ä¼Ò1/ÀÎ½ºÅÏ½º[ÀÎµ¦½º]·Î ¿ä¼Ò Á¢±Ù. Å¬·¡½º¸¦ µû·Î ¸¸µé°í __init__À¸·Î ¿ä¼Ò¸¦ ¸¸µé±âº¸´Ù ¿ä¼Ò¸¸ ¾²´Âµ¥ À¯¿ëÇÑµí.
+- (collections ¸ðµ¨ import)Å¬·¡½º¸í = collections.namedtuple('ÀÚ·áÇüÀÌ¸§', ['¿ä¼ÒÀÌ¸§1', '¿ä¼ÒÀÌ¸§2'\])·Î °¢ ¿ä¼Ò¿¡ ÀÌ¸§À» ÁöÁ¤ÇØÁÖ´Â namedtuple »ý¼º.
+- ÀÎ½ºÅÏ½º = Å¬·¡½º(°ª1,°ª2)/Å¬·¡½º(¿ä¼Ò1=°ª1,¿ä¼Ò2=°ª2)·Î ÀÎ½ºÅÏ½º »ý¼º, ÀÎ½ºÅÏ½º.¿ä¼Ò1/ÀÎ½ºÅÏ½º[ÀÎµ¦½º\]·Î ¿ä¼Ò Á¢±Ù. Å¬·¡½º¸¦ µû·Î ¸¸µé°í 
+  __init__À¸·Î ¿ä¼Ò¸¦ ¸¸µé±âº¸´Ù ¿ä¼Ò¸¸ ¾²´Âµ¥ À¯¿ëÇÑµí.
 - ¹Í½ºÀÎ : ´Ù¸¥ Å¬·¡½º¿¡¼­ »ç¿ëÇÒ ¼ö ÀÖµµ·Ï °øÅëÀûÀÎ ¸Þ¼­µå¸¦ ¸ð¾Æ ³õÀº Å¬·¡½º. HelloMixIn °°Àº ¹æ½ÄÀ¸·Î »ç¿ë.
 
 # try
@@ -469,11 +484,12 @@ for number , name in zip(number_l,name_l):
 
 # raise
 ***
-- raise ¿¹¿ÜÀÌ¸§('¿¡·¯¸Þ½ÃÁö') ·Î ¿¹¿Ü¸¦ ¹ß»ý½ÃÅ³ ¼ö ÀÖ´Ù.(ifÀý ¾È¿¡ ³Ö¾î¼­ ¿¡·¯¸¦ ¹ß»ý½ÃÅ°´Â µî, ¿¡·¯¸íÀº ÀÌ¹Ì ÀÖ´Â ¿¡·¯¸íÀ¸·Î. ±× ¿¡·¯¸¦ ¿¡·¯¸Þ¼¼Áö¿Í ¹ß»ý»óÈ²¸¸ ´Ù¸£°Ô ÇØ ¹ß»ý½ÃÅ°´Â °Í.)
+- raise ¿¹¿ÜÀÌ¸§('¿¡·¯¸Þ½ÃÁö') ·Î ¿¹¿Ü¸¦ ¹ß»ý½ÃÅ³ ¼ö ÀÖ´Ù.
+  (ifÀý ¾È¿¡ ³Ö¾î¼­ ¿¡·¯¸¦ ¹ß»ý½ÃÅ°´Â µî, ¿¡·¯¸íÀº ÀÌ¹Ì ÀÖ´Â ¿¡·¯¸íÀ¸·Î. ±× ¿¡·¯¸¦ ¿¡·¯¸Þ¼¼Áö¿Í ¹ß»ý»óÈ²¸¸ ´Ù¸£°Ô ÇØ ¹ß»ý½ÃÅ°´Â °Í.)
 - raise ¸¦ try ¹Û¿¡¼­ »ç¿ëÇÏ¸é ±× ÄÚµåºí·Ï ¾È¿¡¼­ except ¸¦ Ã£¾Æ ½ÇÇàÇÏ°í, except °¡ ¾øÀ¸¸é ±×´ë·Î ±×³É ¿À·ù°¡ ¹ß»ýÇØ ½ÇÇàÀÌ Á¾·áµÈ´Ù.
 - except:
--   raise ·Î ÇöÀç ¿¹¿Ü¸¦ ´Ù½Ã ¹ß»ý½ÃÄÑ »óÀ§ ÄÚµåºí·Ï(ÇÔ¼ö¸é ÇÔ¼ö ¹ÛÀÇ expect ¿¡¼­ °°ÀÌ)ÀÇ except ¿¡¼­ ¿¹¿ÜÃ³¸®.
--   raise ¿¹¿ÜÀÌ¸§("¿¹¿Ü¸Þ¼¼Áö")·Î ´Ù¸¥ ¿¹¿Ü¸¦ ÁöÁ¤ÇÏ°í ¿¡·¯¸Þ¼¼Áö¸¦ ³ÖÀ» ¼öµµ ÀÖÀ½.
+- raise ·Î ÇöÀç ¿¹¿Ü¸¦ ´Ù½Ã ¹ß»ý½ÃÄÑ »óÀ§ ÄÚµåºí·Ï(ÇÔ¼ö¸é ÇÔ¼ö ¹ÛÀÇ expect ¿¡¼­ °°ÀÌ)ÀÇ except ¿¡¼­ ¿¹¿ÜÃ³¸®.
+- raise ¿¹¿ÜÀÌ¸§("¿¹¿Ü¸Þ¼¼Áö")·Î ´Ù¸¥ ¿¹¿Ü¸¦ ÁöÁ¤ÇÏ°í ¿¡·¯¸Þ¼¼Áö¸¦ ³ÖÀ» ¼öµµ ÀÖÀ½.
 
 ## assert
 ***
@@ -594,19 +610,24 @@ for number , name in zip(number_l,name_l):
 # regular expression
 ***
 - Á¤±Ô Ç¥Çö½Ä : ÀÏÁ¤ÇÑ ±ÔÄ¢À» °¡Áø ¹®ÀÚ¿­À» Ç¥ÇöÇÏ´Â ¹æ¹ý.
-- ¹®ÀÚ¿­ ÆÇ´Ü : re ¸ðµâÀÇ match ÇÔ¼ö(¹®ÀÚ¿­ Ã³À½ºÎÅÍ ¸ÅÄ¡µÇ´ÂÁö ÆÇ´Ü)¿¡ re.match('ÆÐÅÏ', 'ÆÇ´ÜÇÒ ¹®ÀÚ¿­')½ÄÀ¸·Î ³Ö¾î ÆÐÅÏ(ÀÖ´ÂÁö °Ë»çÇÒ ¹®ÀÚ)ÀÌ ÀÖÀ¸¸é ¸ÅÄ¡°´Ã¼°¡ ¹ÝÈ¯µÇ°í, ¾øÀ¸¸é ¾Æ¹«°Íµµ ¹ÝÈ¯ÇÏÁö ¾ÊÀ½. ¹®ÀÚ¿­.find("¹®ÀÚ¿­")°ú °°Àº ±â´É.
+- ¹®ÀÚ¿­ ÆÇ´Ü : re ¸ðµâÀÇ match ÇÔ¼ö(¹®ÀÚ¿­ Ã³À½ºÎÅÍ ¸ÅÄ¡µÇ´ÂÁö ÆÇ´Ü)¿¡ re.match('ÆÐÅÏ', 'ÆÇ´ÜÇÒ ¹®ÀÚ¿­')½ÄÀ¸·Î ³Ö¾î ÆÐÅÏ(ÀÖ´ÂÁö °Ë»çÇÒ ¹®ÀÚ)ÀÌ ÀÖÀ¸¸é ¸ÅÄ¡°´Ã¼°¡ ¹ÝÈ¯µÇ°í, 
+  ¾øÀ¸¸é ¾Æ¹«°Íµµ ¹ÝÈ¯ÇÏÁö ¾ÊÀ½. ¹®ÀÚ¿­.find("¹®ÀÚ¿­")°ú °°Àº ±â´É.
 - ¹®ÀÚ¿­ ÆÇ´Ü (ÇÏ³ª¶óµµ) : re.match('hello|world', 'hello') Ã³·³ ÁöÁ¤µÈ ¹®ÀÚ¿­ÀÌ ÇÏ³ª¶óµµ Æ÷ÇÔµÇ´ÂÁö ÆÇ´ÜÇÔ.
-- ¹®ÀÚ¿­ ÆÇ´Ü (À§Ä¡) :  re.search('ÆÐÅÏ', '¹®ÀÚ¿­')Ã³·³ search ÇÔ¼ö(¹®ÀÚ¿­ ÀÏºÎºÐ¿¡¼­ ¸ÅÄ¡µÇ´ÂÁö ÆÇ´Ü)¿¡ "^¹®ÀÚ¿­"·Î ¸Ç ¾Õ¿¡ ¿À´ÂÁö, "¹®ÀÚ¿­$"·Î ¸Ç µÚ¿¡ ¿À´ÂÁö ÆÇ´ÜÇÔ. ±× ¹üÀ§·Î ½ÃÀÛÇÏ´ÂÁö º¸´Â °Ç ^[¹üÀ§]*/+, ³¡³ª´ÂÁö º¸´Â°Ç [¹üÀ§]*/+$ÀÌ´Ù.
-- ¹®ÀÚ¿­ ÆÇ´Ü (¼ýÀÚ·Î?) : re.match('[0-9]*', '1234') Ã³·³ ¼ýÀÚÀÇ ¹üÀ§´Â []¿¡ 0-9½ÄÀ¸·Î Ç¥ÇöÇÏ¸ç, *´Â 0°³ÀÌ»ó. +´Â 1°³ÀÌ»óÀÎÁö ÆÇ´ÜÇÑ´Ù.
+- ¹®ÀÚ¿­ ÆÇ´Ü (À§Ä¡) :  re.search('ÆÐÅÏ', '¹®ÀÚ¿­')Ã³·³ search ÇÔ¼ö(¹®ÀÚ¿­ ÀÏºÎºÐ¿¡¼­ ¸ÅÄ¡µÇ´ÂÁö ÆÇ´Ü)¿¡ "^¹®ÀÚ¿­"·Î ¸Ç ¾Õ¿¡ ¿À´ÂÁö, 
+  "¹®ÀÚ¿­$"·Î ¸Ç µÚ¿¡ ¿À´ÂÁö ÆÇ´ÜÇÔ. ±× ¹üÀ§·Î ½ÃÀÛÇÏ´ÂÁö º¸´Â °Ç ^[¹üÀ§\]\*/+, ³¡³ª´ÂÁö º¸´Â°Ç [¹üÀ§\]*/+$ÀÌ´Ù.
+- ¹®ÀÚ¿­ ÆÇ´Ü (¼ýÀÚ·Î?) : re.match('\[0-9]*', '1234') Ã³·³ ¼ýÀÚÀÇ ¹üÀ§´Â []¿¡ 0-9½ÄÀ¸·Î Ç¥ÇöÇÏ¸ç, *´Â 0°³ÀÌ»ó. +´Â 1°³ÀÌ»óÀÎÁö ÆÇ´ÜÇÑ´Ù.
 - ¹®ÀÚ¿­ ÆÇ´Ü ±âÈ£(+,\*) : a+b ÀÏ¶§´Â aµµ bµµ ÇÏ³ª ÀÌ»ó ÀÖ¾î¾ß ÇÏ°í, a*bÀÏ ¶§´Â b¸¸ ÀÖ¾îµµ ¸ÅÄªµÈ´Ù.
 - ¹®ÀÚ¿­ ÆÇ´Ü ±âÈ£(ÇÏ³ª¸¸) : ¹®ÀÚ? ³ª ¹üÀ§? ´Â ±× ¹®ÀÚ³ª ¹üÀ§°¡ 0°³ ¶Ç´Â ÇÏ³ªÀÎÁö ÆÇ´ÜÇÏ°í('abc?d'½Ä), .Àº .ÀÇ À§Ä¡¿¡ ¾Æ¹« ¹®ÀÚ³ª ¼ýÀÚ°¡ 1°³ ÀÖ´ÂÁö ÆÇ´ÜÇÑ´Ù("ab.d"½Ä).
-- ¹®ÀÚ¿­ ÆÇ´Ü °³¼ö : ¹®ÀÚ{°³¼ö} ¿Í (¹®ÀÚ¿­){°³¼ö}, [¹üÀ§]{°³¼ö}·Î ±× ¹®ÀÚ(¿­)ÀÌ °³¼ö¸¸Å­ ÀÖ´ÂÁö ÆÇ´ÜÇÑ´Ù.
+- ¹®ÀÚ¿­ ÆÇ´Ü °³¼ö : ¹®ÀÚ{°³¼ö} ¿Í (¹®ÀÚ¿­){°³¼ö}, \[¹üÀ§]{°³¼ö}·Î ±× ¹®ÀÚ(¿­)ÀÌ °³¼ö¸¸Å­ ÀÖ´ÂÁö ÆÇ´ÜÇÑ´Ù.
 - ¹®ÀÚ¿­ ÆÇ´Ü °³¼ö(¹üÀ§) : ¹®ÀÚ{½ÃÀÛ °³¼ö,³¡ °³¼ö}·Î ±× °³¼ö ¹üÀ§ ¾È¿¡ ¹®ÀÚ°³¼ö°¡ µé¾î°¡´ÂÁö ÆÇ´ÜÇÔ.
-- ¹®ÀÚ¿­ ÆÇ´Ü (È¥ÇÕ ¹üÀ§) : [A-Z0-9] Ã³·³ ¹üÀ§ µÎ°³¸¦ ¼­·Î ºÙ¿©¼­ Ç¥Çö. ÀÌ °æ¿ì´Â ´ë¹®ÀÚ,¼ýÀÚ°¡ ¾øÀÌ ¼Ò¹®ÀÚ¸¸ ÀÖ´Ù¸é ¸ÅÄªµÇÁö ¾ÊÀ½. ÇÑ±ÛÀÇ °æ¿ìµµ °¡-ÆR Ã³·³ ³ª¿Ã ¼ö ÀÖ´Â ÇÑ±Û Á¶ÇÕÀ» Á¤ÇØÁÖ¸é µÈ´Ù.
-- ¹®ÀÚ¿­ ÆÇ´Ü (È¥ÇÕ ¹üÀ§ ¹þ¾î³²) : [^A-Z0-9] Ã³·³ ¹üÀ§ ¾Õ¿¡ ^¸¦ ºÙÀÌ¸é ÇØ´çÇÏ´Â ¹üÀ§¸¦ ¹þ¾î³ª´ÂÁö ÆÇ´ÜÇÔ. Æ÷ÇÔµÇÁö ¾Ê¾Æ¾ß ¸ÅÄª.
-- ¹®ÀÚ¿­ ÆÇ´Ü (Æ¯¼ö¹®ÀÚ) : \Æ¯¼ö¹®ÀÚ ·Î ±× Æ¯¼ö¹®ÀÚ°¡ ¹üÀ§¿¡ µé¾î°¡´ÂÁö ÆÇ´ÜÇÒ ¼ö ÀÖ´Ù. Æ¯¼ö¹®ÀÚ°¡ ¹üÀ§([])¿¡ µé¾î°¡ ÀÖÀ¸¸é ºÙÀÌÁö ¾Ê¾Æµµ µÇÁö¸¸, ¿À·ù°¡ ³­´Ù¸é ºÙÀÌ¸é µÈ´Ù. '[$()a-zA-Z0-9]+'°°Àº½Ä.
-- ¹®ÀÚ¿­ ÆÇ´Ü (´Ü¼ø ¼ýÀÚ,¹®ÀÚ) : \d > ¸ðµç ¼ýÀÚ, \D > ¼ýÀÚ Á¦¿Ü ¸ðµç ¹®ÀÚ, \w > ¿µ¹®´ë¼Ò¹®ÀÚ+¼ýÀÚ+¹ØÁÙ, \W > \wÁ¦¿Ü ¸ðµç ¹®ÀÚ(ÇÑ±ÛÀÌ³ª ´Ù¸¥ Æ¯¼ö¹®ÀÚµî). ÀÌ·±½ÄÀ¸·Î °£´ÜÇÏ°Ô Ç¥ÇöÇÒ ¼ö ÀÖ´Ù. '\d+'½ÄÀ¸·Î »ç¿ë.
-- ¹®ÀÚ¿­ ÆÇ´Ü (°ø¹é) : " "·Î Ã³¸®ÇØµµ µÇ°í, \s: [ \t\n\r\f\v], \S: [^ \t\n\r\f\v](°ø¹é Á¦¿Ü ´Ù¸¥ ¹®ÀÚ¸¸ Æ÷ÇÔ) À¸·Î °£´ÜÇÏ°Ô »ç¿ëÇÒ ¼ö ÀÖ´Ù.
+- ¹®ÀÚ¿­ ÆÇ´Ü (È¥ÇÕ ¹üÀ§) : \[A-Z0-9] Ã³·³ ¹üÀ§ µÎ°³¸¦ ¼­·Î ºÙ¿©¼­ Ç¥Çö. ÀÌ °æ¿ì´Â ´ë¹®ÀÚ,¼ýÀÚ°¡ ¾øÀÌ ¼Ò¹®ÀÚ¸¸ ÀÖ´Ù¸é ¸ÅÄªµÇÁö ¾ÊÀ½. 
+  ÇÑ±ÛÀÇ °æ¿ìµµ °¡-ÆR Ã³·³ ³ª¿Ã ¼ö ÀÖ´Â ÇÑ±Û Á¶ÇÕÀ» Á¤ÇØÁÖ¸é µÈ´Ù.
+- ¹®ÀÚ¿­ ÆÇ´Ü (È¥ÇÕ ¹üÀ§ ¹þ¾î³²) : \[^A-Z0-9] Ã³·³ ¹üÀ§ ¾Õ¿¡ ^¸¦ ºÙÀÌ¸é ÇØ´çÇÏ´Â ¹üÀ§¸¦ ¹þ¾î³ª´ÂÁö ÆÇ´ÜÇÔ. Æ÷ÇÔµÇÁö ¾Ê¾Æ¾ß ¸ÅÄª.
+- ¹®ÀÚ¿­ ÆÇ´Ü (Æ¯¼ö¹®ÀÚ) : \Æ¯¼ö¹®ÀÚ ·Î ±× Æ¯¼ö¹®ÀÚ°¡ ¹üÀ§¿¡ µé¾î°¡´ÂÁö ÆÇ´ÜÇÒ ¼ö ÀÖ´Ù. Æ¯¼ö¹®ÀÚ°¡ ¹üÀ§([])¿¡ µé¾î°¡ ÀÖÀ¸¸é ºÙÀÌÁö ¾Ê¾Æµµ µÇÁö¸¸, ¿À·ù°¡ ³­´Ù¸é ºÙÀÌ¸é µÈ´Ù. 
+  '[$()a-zA-Z0-9\]+'°°Àº½Ä.
+- ¹®ÀÚ¿­ ÆÇ´Ü (´Ü¼ø ¼ýÀÚ,¹®ÀÚ) : \d > ¸ðµç ¼ýÀÚ, \D > ¼ýÀÚ Á¦¿Ü ¸ðµç ¹®ÀÚ, \w > ¿µ¹®´ë¼Ò¹®ÀÚ+¼ýÀÚ+¹ØÁÙ, \W > \wÁ¦¿Ü ¸ðµç ¹®ÀÚ(ÇÑ±ÛÀÌ³ª ´Ù¸¥ Æ¯¼ö¹®ÀÚµî). 
+  ÀÌ·±½ÄÀ¸·Î °£´ÜÇÏ°Ô Ç¥ÇöÇÒ ¼ö ÀÖ´Ù. '\d+'½ÄÀ¸·Î »ç¿ë.
+- ¹®ÀÚ¿­ ÆÇ´Ü (°ø¹é) : " "·Î Ã³¸®ÇØµµ µÇ°í, \s: [ \t\n\r\f\v\], \S: [^ \t\n\r\f\v\](°ø¹é Á¦¿Ü ´Ù¸¥ ¹®ÀÚ¸¸ Æ÷ÇÔ) À¸·Î °£´ÜÇÏ°Ô »ç¿ëÇÒ ¼ö ÀÖ´Ù.
 - °°Àº Á¤±ÔÇ¥Çö½ÄÀ» ÀÚÁÖ »ç¿ëÇÑ´Ù¸é °´Ã¼ = re.compile('ÆÐÅÏ'), °´Ã¼.match/search('¹®ÀÚ¿­') ·Î ¸Þ¼­µå¸¦ È£ÃâÇÏ´Â°Ô ´õ È¿À²ÀûÀÌ´Ù.
 
 ## grob
@@ -615,7 +636,7 @@ for number , name in zip(number_l,name_l):
 - ¸ÅÄ¡°´Ã¼.group(±×·ì¼ýÀÚ) ·Î ÇØ´ç ±×·ì¿¡ ¸ÅÄªµÈ ¹®ÀÚ¿­À» °¡Á®¿Ã ¼ö ÀÖÀ½. ¼ýÀÚ¿¡ 0À» ³Ö°Å³ª ³ÖÁö ¾ÊÀ¸¸é ¸ðµç ¹®ÀÚ¿­À» ÇÑ²¨¹ø¿¡ ¹ÝÈ¯ÇÑ´Ù.
 - (?P<ÀÌ¸§>Á¤±ÔÇ¥Çö½Ä)À¸·Î ±×·ì¿¡ ÀÌ¸§À» ÁöÁ¤ÇÒ ¼ö ÀÖ°í, ¸ÅÄ¡°´Ã¼.group('±×·ìÀÌ¸§')À¸·Î »ç¿ëÇÒ ¼ö ÀÖ´Ù.
 - re.findall('ÆÐÅÏ', '¹®ÀÚ¿­')À¸·Î ÆÐÅÏ¿¡ ¸ÅÄªµÇ´Â ¸ðµç ¹®ÀÚ¿­À» ¸®½ºÆ®ÀÇ ÇüÅÂ·Î °¡Á®¿Ã ¼ö ÀÖ´Ù.
-- (.[a-z]+)*´Â Á¡°ú ¿µ¹® ¼Ò¹®ÀÚ°¡ 1°³ ÀÌ»ó ÀÖ´ÂÁö ÆÇ´ÜÇÏ°í, ÀÌ°Í ÀÚÃ¼°¡ 0°³ ÀÌ»óÀÎÁö ÆÇ´ÜÇÔ. Áï,  ¹Ýµå½Ã ÁöÄÑ¾ß ÇÏÁö¸¸ ÀÖ¾îµµ µÇ°í ¾ø¾îµµ µÇ´Â »óÈ²¿¡ »ç¿ë.
+- (.[a-z\]+)*´Â Á¡°ú ¿µ¹® ¼Ò¹®ÀÚ°¡ 1°³ ÀÌ»ó ÀÖ´ÂÁö ÆÇ´ÜÇÏ°í, ÀÌ°Í ÀÚÃ¼°¡ 0°³ ÀÌ»óÀÎÁö ÆÇ´ÜÇÔ. Áï,  ¹Ýµå½Ã ÁöÄÑ¾ß ÇÏÁö¸¸ ÀÖ¾îµµ µÇ°í ¾ø¾îµµ µÇ´Â »óÈ²¿¡ »ç¿ë.
 
 ## sub
 ***
@@ -627,7 +648,8 @@ for number , name in zip(number_l,name_l):
 
 # pip
 ***
-- pip > ¿øµµ¿ì¿ë ÆÄÀÌ½ã¿¡´Â ±âº» ³»Àå, ¸®´ª½º : ¸®´ª½º, macOS$ curl -O https://bootstrap.pypa.io/get-pip.py(curl ¼³Ä¡ ÇÊ¿ä), ¸ÆOS : $ sudo python3 get-pip.py ·Î ¼³Ä¡ÇÒ ¼ö ÀÖ´Ù.
+- pip > ¿øµµ¿ì¿ë ÆÄÀÌ½ã¿¡´Â ±âº» ³»Àå, ¸®´ª½º : ¸®´ª½º, macOS$ curl -O https://bootstrap.pypa.io/get-pip.py(curl ¼³Ä¡ ÇÊ¿ä), ¸ÆOS : 
+  $ sudo python3 get-pip.py ·Î ¼³Ä¡ÇÒ ¼ö ÀÖ´Ù.
 - (Window ±âÁØ) pip install ÆÐÅ°Áö¸í À¸·Î ÆÐÅ°Áö¸¦ ¼³Ä¡ÇÒ ¼ö ÀÖ°í, -m(¸ðµâ½ÇÇà ¿É¼Ç)À» python °ú pip »çÀÌ¿¡ ³Ö¾î ½ÇÇàÇÒ ¼öµµ ÀÖ´Ù.
 - pip search ÆÐÅ°Áö: ÆÐÅ°Áö °Ë»ö
 - pip install ÆÐÅ°Áö==¹öÀü: Æ¯Á¤ ¹öÀüÀÇ ÆÐÅ°Áö¸¦ ¼³Ä¡(¿¹: pip install requests==2.9.0)
@@ -640,29 +662,36 @@ for number , name in zip(number_l,name_l):
 # import
 ***
 - import ¸ðµâ as º°¸í > ¸ðµâ ÀÌ¸§´ë½Å º°¸íÀ¸·Îµµ ±¸µ¿ °¡´É.
-- from ¸ðµâ import º¯¼ö,ÇÔ¼ö,Å¬·¡½º > ¸ðµâ.º¯¼ö·Î ¾µ ÇÊ¿ä ¾øÀÌ ±×³É º¯¼ö¸¸ ¾µ ¼ö ÀÖ´Ù. ±× ÇÔ¼ö¸¸ »ç¿ëÇÒ ¶§ À¯¿ë. *·Î ¾²¸é ¸ðµç º¯¼ö,ÇÔ¼ö,Å¬·¡½º¸¦ °¡Á®¿Â´Ù. Å¬·¡½ºÀÇ °æ¿ì ¸ðµâ.Å¬·¡½º·Î »ç¿ëÇØ¾ß ÇÏ´Ï ÀÌ ±â´ÉÀ» ¾²¸é ÁÁ´Ù.
+- from ¸ðµâ import º¯¼ö,ÇÔ¼ö,Å¬·¡½º > ¸ðµâ.º¯¼ö·Î ¾µ ÇÊ¿ä ¾øÀÌ ±×³É º¯¼ö¸¸ ¾µ ¼ö ÀÖ´Ù. ±× ÇÔ¼ö¸¸ »ç¿ëÇÒ ¶§ À¯¿ë. *·Î ¾²¸é ¸ðµç º¯¼ö,ÇÔ¼ö,Å¬·¡½º¸¦ °¡Á®¿Â´Ù. 
+  Å¬·¡½ºÀÇ °æ¿ì ¸ðµâ.Å¬·¡½º·Î »ç¿ëÇØ¾ß ÇÏ´Ï ÀÌ ±â´ÉÀ» ¾²¸é ÁÁ´Ù.
 - from ¸ðµâ import º¯¼ö as º¯¸í > °¡Á®¿Â º¯¼ö,ÇÔ¼ö,Å¬·¡½º¿¡ º°¸íÀ» ºÙÀÎ´Ù.
 - from ¸ðµâ import º¯¼ö as ÀÌ¸§1, ÇÔ¼ö as ÀÌ¸§2, Å¬·¡½º as ÀÌ¸§3 > ¿©·¯°³¸¦ °¡Á®¿À¸ç °¢°¢¿¡ ÀÌ¸§À» ºÙÀÎ´Ù.
 - import ¸¦ ÇØÁ¦ÇÏ·Á¸é del ¸ðµâ ·Î ÇÒ ¼ö ÀÖ°í, ´Ù½Ã °¡Á®¿À·Á¸é importlib ¸ðµâÀÇ reload ¸¦ »ç¿ëÇÏ¸é µÈ´Ù.
-- import ÆÐÅ°Áö.¸ðµâ, import ÆÐÅ°Áö.¸ðµâ1, ÆÐÅ°Áö.¸ðµâ2 ·Î ÆÐÅ°Áö¿Í ¸ðµâÀ» °¡Á®¿Ã ¼ö ÀÖ°í ¿©±â¿¡ as¸¦ »ç¿ëÇÏ¸é ÆÐÅ°Áö.¸ðµâ ´ë½Å º°¸í¸¸ »ç¿ëÇÒ ¼ö ÀÖ°í from µµ from ÆÐÅ°Áö.¸ðµâ import º¯¼ö ½ÄÀ¸·Î »ç¿ëÇÑ´Ù..
+- import ÆÐÅ°Áö.¸ðµâ, import ÆÐÅ°Áö.¸ðµâ1, ÆÐÅ°Áö.¸ðµâ2 ·Î ÆÐÅ°Áö¿Í ¸ðµâÀ» °¡Á®¿Ã ¼ö ÀÖ°í ¿©±â¿¡ as¸¦ »ç¿ëÇÏ¸é ÆÐÅ°Áö.¸ðµâ ´ë½Å º°¸í¸¸ »ç¿ëÇÒ ¼ö ÀÖ°í 
+  from µµ from ÆÐÅ°Áö.¸ðµâ import º¯¼ö ½ÄÀ¸·Î »ç¿ëÇÑ´Ù..
 
 - °°Àº Æú´õ¿¡ ÀÖ´Â ÆÄÀÏ(¸ðµâ)Àº ±×³É import ¸ðµâ·Î »ç¿ëÇÒ ¼ö ÀÖ´Ù.
 - __name__Àº Á÷Á¢ ½ÇÇàÇÑ ÆÄÀÏÀÏ °æ¿ì __main__ÀÌ ¹ÝÈ¯µÇ°í, ¾Æ´Ï¸é ±× ÆÄÀÏ(¸ðµâ)ÀÇ ÀÌ¸§ÀÌ ¹ÝÈ¯µÈ´Ù. ÆÐÅ°ÁöÀÇ ¸ðµâÀÏ °æ¿ì ÆÐÅ°Áö.¸ðµâÀÌ¸§ ÀÌ ¹ÝÈ¯µÈ´Ù.
 
 ## about import
 ***
-- \_\_all__ = ["ÆÐÅ°Áö","ÀÇ ¿ä¼Òµé"] ·Î *À» ÅëÇØ ¸ðµç ¿ä¼Ò¸¦ ºÒ·¯¿Ã¶§ °ø°³ÇÒ °ÍµéÀÇ ¸ñ·ÏÀ» ÁöÁ¤ÇÒ ¼ö ÀÖ´Ù.
-- ÇöÀç Æú´õ¿¡ ¸ðµâ, ÆÐÅ°Áö°¡ ¾øÀ¸¸é path ¿¡¼­ Ã£´Âµ¥, ÀÌ°Ç sys ¸ðµâÀÇ path ÇÔ¼ö·Î º¼ ¼ö ÀÖ´Ù. ±× ¾ÈÀÇ site-packages ´Â pip ·Î ¼³Ä¡ÇÑ ÆÐÅ°Áö°¡ µé¾î°¡´Âµ¥, °¡»óÈ¯°æÀ» ¸¸µç´Ù¸é °¡»óÈ¯°æ/Lib/site-packages Æú´õ¿¡ µé¾î°£´Ù.
-- ÆÄÀÌ½ãÀº ÇÏÀ§ ÆÐÅ°Áö¸¦ ¸¸µé ¼ö ÀÖ°í, ÇÏÀ§ÆÐÅ°ÁöÀÇ ¸ðµâÀ» °¡Á® ¿Ã ‹š´Â °èÃþ¼ø¼­´ë·Î .À» ºÙ¿©(.operation.element)°¡Á®¿À¸é µÈ´Ù. ÇÏÀ§ÆÐÅ°Áö¿¡¼­ ¿·ÀÇ ÆÐÅ°Áö¸¦ °¡Á® ¿Ã ¶§´Â ..(»óÀ§Æú´õ¶õ ¶æ, À§·Î ¿Ã¶ó°¥¼ö·Ï .ÀÌ ´Ã¾î³²)ÆÐÅ°Áö ·Î ºÒ·¯¿Ã ¼ö ÀÖ´Ù.
-- ÆÄÀÌ½ã¿¡¼­ \_\_init__.py ÆÄÀÏÀº Æú´õ°¡ ÆÐÅ°Áö·Î ÀÎ½ÄµÇ°Ô ÇÏ±âµµ ÇÏ°í, ÆÐÅ°Áö¸¦ ÃÊ±âÈ­ÇÏ´Â ¿ªÇÒµµ ÇÑ´Ù. Áï import ½Ã¿¡ ÀÌ ÆÄÀÏÀÌ ½ÇÇàµÈ´Ù. __all__µµ ÀÌ ÆÄÀÏ¿¡¼­ ÇØ¾ß ÇÏ°í, ºñ¿öµÑ¼öµµ ÀÖÀ¸¸ç, 3.3ÀÌ»ó¿¡¼± ¾ø¾îµµ ÆÐÅ°Áö·Î ÀÎ½ÄµÈ´Ù. ±Ùµ¥ ÀÌ°Ô ºñ¾îÀÖÀ¸¸é from ÀÌ ¾ÈµÇ´Â µí.
-- ÀÌ¸¦ ÀÌ¿ëÇØ __init__ÆÄÀÏ¿¡ from .(ÇöÀçÆÐÅ°Áö) import ¸ðµâ  ½ÄÀ¸·Î ¸í·ÉÀ» ³Ö¾î ÆÐÅ°Áö¸¸ °¡Á®¿Íµµ ¸ðµâµµ °°ÀÌ °¡Á®¿Í calcpkg.operation.add(10, 20)½ÄÀ¸·Î »ç¿ëÇÒ ¼ö ÀÖ°Ô ¸¸µé ¼ö ÀÖ´Ù.
+- \_\_all__ = ["ÆÐÅ°Áö","ÀÇ ¿ä¼Òµé"\] ·Î *À» ÅëÇØ ¸ðµç ¿ä¼Ò¸¦ ºÒ·¯¿Ã¶§ °ø°³ÇÒ °ÍµéÀÇ ¸ñ·ÏÀ» ÁöÁ¤ÇÒ ¼ö ÀÖ´Ù.
+- ÇöÀç Æú´õ¿¡ ¸ðµâ, ÆÐÅ°Áö°¡ ¾øÀ¸¸é path ¿¡¼­ Ã£´Âµ¥, ÀÌ°Ç sys ¸ðµâÀÇ path ÇÔ¼ö·Î º¼ ¼ö ÀÖ´Ù. ±× ¾ÈÀÇ site-packages ´Â pip ·Î ¼³Ä¡ÇÑ ÆÐÅ°Áö°¡ µé¾î°¡´Âµ¥, 
+  °¡»óÈ¯°æÀ» ¸¸µç´Ù¸é °¡»óÈ¯°æ/Lib/site-packages Æú´õ¿¡ µé¾î°£´Ù.
+- ÆÄÀÌ½ãÀº ÇÏÀ§ ÆÐÅ°Áö¸¦ ¸¸µé ¼ö ÀÖ°í, ÇÏÀ§ÆÐÅ°ÁöÀÇ ¸ðµâÀ» °¡Á® ¿Ã ‹š´Â °èÃþ¼ø¼­´ë·Î .À» ºÙ¿©(.operation.element)°¡Á®¿À¸é µÈ´Ù. 
+  ÇÏÀ§ÆÐÅ°Áö¿¡¼­ ¿·ÀÇ ÆÐÅ°Áö¸¦ °¡Á® ¿Ã ¶§´Â ..(»óÀ§Æú´õ¶õ ¶æ, À§·Î ¿Ã¶ó°¥¼ö·Ï .ÀÌ ´Ã¾î³²)ÆÐÅ°Áö ·Î ºÒ·¯¿Ã ¼ö ÀÖ´Ù.
+- ÆÄÀÌ½ã¿¡¼­ \_\_init__.py ÆÄÀÏÀº Æú´õ°¡ ÆÐÅ°Áö·Î ÀÎ½ÄµÇ°Ô ÇÏ±âµµ ÇÏ°í, ÆÐÅ°Áö¸¦ ÃÊ±âÈ­ÇÏ´Â ¿ªÇÒµµ ÇÑ´Ù. Áï import ½Ã¿¡ ÀÌ ÆÄÀÏÀÌ ½ÇÇàµÈ´Ù. 
+  __all__µµ ÀÌ ÆÄÀÏ¿¡¼­ ÇØ¾ß ÇÏ°í, ºñ¿öµÑ¼öµµ ÀÖÀ¸¸ç, 3.3ÀÌ»ó¿¡¼± ¾ø¾îµµ ÆÐÅ°Áö·Î ÀÎ½ÄµÈ´Ù. ±Ùµ¥ ÀÌ°Ô ºñ¾îÀÖÀ¸¸é from ÀÌ ¾ÈµÇ´Â µí.
+- ÀÌ¸¦ ÀÌ¿ëÇØ __init__ÆÄÀÏ¿¡ from .(ÇöÀçÆÐÅ°Áö) import ¸ðµâ  ½ÄÀ¸·Î ¸í·ÉÀ» ³Ö¾î ÆÐÅ°Áö¸¸ °¡Á®¿Íµµ ¸ðµâµµ °°ÀÌ °¡Á®¿Í calcpkg.operation.add(10, 20)½ÄÀ¸·Î 
+  »ç¿ëÇÒ ¼ö ÀÖ°Ô ¸¸µé ¼ö ÀÖ´Ù.
 - ÆÐÅ°Áö¸¦ import ÇÒ¶§ from .¸ðµâ import º¯¼ö, ÇÔ¼ö, Å¬·¡½º ¸¦ »ç¿ëÇÏ¸é ¾Õ¿¡ ¸ðµâÀ» ºÙÀÏ ÇÊ¿ä ¾øÀÌ º¯¼ö¸¸ »ç¿ëÇÒ ¼ö ÀÖ´Ù. from .¸ðµâ import * À» »ç¿ëÇØµµ µÈ´Ù.
 - ¸ðµâ°ú ÆÐÅ°Áö(\_\_init__)ÀÇ Ã¹ÁÙ¿¡ '''¸ðµâÀÇ µ¶½ºÆ®¸µ'''Ã³·³ µ¶½ºÆ®¸µÀ» ³ÖÀ» ¼ö ÀÖ°í, ÀÌ°É Ãâ·ÂÇÏ·Á¸é .__doc__¸¦ Ãâ·ÂÇÏ¸é µÈ´Ù.
 
 # collections
 ***
 - collections : Ç¥¿Í ÀÎµ¦½Ìµî µ¥ÀÌÅÍ¸¦ ´Ù·ê¶§ Æ¯È÷ À¯¿ëÇÑ ¶óÀÌºê·¯¸® ¸ðµâ. µ¥ÀÌÅÍÃ³¸®¸¦ À§ÇÑ À¯¿ëÇÑ °´Ã¼°¡ ¸¹ÀÌ ÀÖÀ½. dict()ÀÇ ±âº» API»ç¿ë°¡´É.
-- collections.Counter() : Ä«¿îÅÍ°´Ã¼ »ý¼º. µñ¼Å³Ê¸®¿Í µ¿ÀÏÇÏ°Ô Å°/°ª Çü½ÄÀ¸·Î µÇ¾îÀÖÀ¸³ª ÃÖÃÊ Å° Ãß°¡½Ã 0À¸·Î ÀÚµ¿ÃÊ±âÈ­µÊ. .mostcommon(n)À¸·Î ºóµµ¼ö ¼ø Á¤·Ä·Î ¹ÞÀ» ¼ö ÀÖÀ½(n»ý·«°¡´É).
+- collections.Counter() : Ä«¿îÅÍ°´Ã¼ »ý¼º. µñ¼Å³Ê¸®¿Í µ¿ÀÏÇÏ°Ô Å°/°ª Çü½ÄÀ¸·Î µÇ¾îÀÖÀ¸³ª ÃÖÃÊ Å° Ãß°¡½Ã 0À¸·Î ÀÚµ¿ÃÊ±âÈ­µÊ. 
+  .mostcommon(n)À¸·Î ºóµµ¼ö ¼ø Á¤·Ä·Î ¹ÞÀ» ¼ö ÀÖÀ½(n»ý·«°¡´É).
 - collections.defaultdict(list) : defaultdict°´Ã¼ »ý¼º. ÇÏ³ªÀÇ Å°¸¦ ¿©·¯ °ª¿¡ ¸ÊÇÎ°¡´É. ÀÎÀÚ·Î ÁÖ¾îÁø °´Ã¼ÀÇ ±âº»°ªÀ» ÃÊ±ê°ªÀ¸·Î »ç¿ë.
 - collections.deque(maxlen=n) : deque°´Ã¼ »ý¼º. ¸¶Áö¸· n°³ÀÇ °´Ã¼¸¸À» À¯Áö.   
 
@@ -713,13 +742,16 @@ for number , name in zip(number_l,name_l):
 - ¼º°øÀûÀ¸·Î °¡»óÈ¯°æÀ» ¸¸µé¸é (°¡»óÈ¯°æÀÌ¸§)ÀÌ Ç¥½ÃµÇ´Âµ¥, ±× »óÅÂ¿¡¼­ pip ·Î ÆÐÅ°Áö¸¦ ¼³Ä¡ÇÏ¸é \Lib\site-packages ¾È¿¡ ÆÐÅ°Áö°¡ ÀúÀåµÇ¸ç ±× ÆÐÅ°Áö¿¡¼­¸¸ »ç¿ëÇÒ ¼ö ÀÖ´Ù.
 - [pip freeze > requirements.txt] : requirements.txt ÆÄÀÏ¿¡ ¼³Ä¡µÈ ÆÐÅ°Áö ¸ñ·Ï ÀúÀå. ±× ¸ñ·Ï´ë·Î ¼³Ä¡ÇÏ·Á¸é pip install -r requirements.txt , »èÁ¦ÇÏ·Á¸é uninstall.
 - °¡»óÈ¯°æ Æú´õ¸¦ ¿Å°å´Ù¸é activate.bat, Activate.ps1, activate ÆÄÀÏ ¾ÈÀÇ VIRTUAL_ENV ºÎºÐÀ» ÀÌµ¿½ÃÅ² Æú´õ °æ·Î·Î ¼öÁ¤.
-- PyCharm ¿¡¼­ °¡»ó È¯°æÀ» »ç¿ëÇÏ·Á¸é File > Settings... > Project > Project Interpreter ¿¡¼­ ¿À¸¥ÂÊÀÇ Åé´Ï¹ÙÄû ¹öÆ°À» Å¬¸¯ÇÏ°í, Add Local À» Å¬¸¯ÇÏ°í °¡»ó È¯°æÀÇ ÆÄÀÌ½ã ÀÎÅÍÇÁ¸®ÅÍ(python.exe)¸¦ Ãß°¡ÇØÁÖ¸é µÊ.
+- PyCharm ¿¡¼­ °¡»ó È¯°æÀ» »ç¿ëÇÏ·Á¸é File > Settings... > Project > Project Interpreter ¿¡¼­ ¿À¸¥ÂÊÀÇ Åé´Ï¹ÙÄû ¹öÆ°À» Å¬¸¯ÇÏ°í, 
+  Add Local À» Å¬¸¯ÇÏ°í °¡»ó È¯°æÀÇ ÆÄÀÌ½ã ÀÎÅÍÇÁ¸®ÅÍ(python.exe)¸¦ Ãß°¡ÇØÁÖ¸é µÊ.
 
 # json
 ***
 - json : json ¸ðµâ import ÈÄ .json Çü½ÄÀÇ ÆÄÀÏÀ» ¿­¾î json.load(ÆÄÀÏ°´Ã¼)·Î ÆÄÀÌ½ãÀÇ °´Ã¼¿¡ ÀúÀåÇÒ ¼ö ÀÖ´Ù.
-- ÆÄÀÌ½ã °´Ã¼¸¦ json ¹®ÀÚ¿­·Î º¯È¯ÇÏ·Á¸é json.dump(°´Ã¼-µñ¼Å³Ê¸®?)·Î Åë°ú½ÃÄÑÁà¾ß ÇÑ´Ù. °¡µ¶¼ºÀ» À§ÇØ (°´Ã¼, indent=µé¿©¾²±âÇÒ ¼ýÀÚ,sort_keys=True(Å° Áß½ÉÀ¸·Î Á¤·Ä))µîÀ» »ç¿ëÇÒ ¼ö ÀÖ´Ù.
-- API : API ÀÇ url À» ¹®ÀÚ¿­¿¡ ÀúÀåÇÑ ÈÄ request ¸ðµÑÀÇ get(url) ÇÔ¼ö·Î º¯È¯ÇÑ ÈÄ, ±×°É ´Ù½Ã ÀÐÀ» ¼ö ÀÖ°Ô get ÇÑ °´Ã¼.text ·Î º¯È¯ÇÏ°í, ±×°É json.load ·Î json ÆÄÀÏ·Î º¯È¯ÇÑ´Ù. ±× ÈÄ, API ÀÇ ÂüÁ¶ ÆÄÀÏÀ» Âü°íÇØ µ¥ÀÌÅÍÀÇ Á¾·ù¸¦ ÆÄ¾ÇÇÑ´Ù.
+- ÆÄÀÌ½ã °´Ã¼¸¦ json ¹®ÀÚ¿­·Î º¯È¯ÇÏ·Á¸é json.dump(°´Ã¼-µñ¼Å³Ê¸®?)·Î Åë°ú½ÃÄÑÁà¾ß ÇÑ´Ù. °¡µ¶¼ºÀ» À§ÇØ 
+  (°´Ã¼, indent=µé¿©¾²±âÇÒ ¼ýÀÚ,sort_keys=True(Å° Áß½ÉÀ¸·Î Á¤·Ä))µîÀ» »ç¿ëÇÒ ¼ö ÀÖ´Ù.
+- API : API ÀÇ url À» ¹®ÀÚ¿­¿¡ ÀúÀåÇÑ ÈÄ request ¸ðµÑÀÇ get(url) ÇÔ¼ö·Î º¯È¯ÇÑ ÈÄ, ±×°É ´Ù½Ã ÀÐÀ» ¼ö ÀÖ°Ô get ÇÑ °´Ã¼.text ·Î º¯È¯ÇÏ°í, 
+  ±×°É json.load ·Î json ÆÄÀÏ·Î º¯È¯ÇÑ´Ù. ±× ÈÄ, API ÀÇ ÂüÁ¶ ÆÄÀÏÀ» Âü°íÇØ µ¥ÀÌÅÍÀÇ Á¾·ù¸¦ ÆÄ¾ÇÇÑ´Ù.
 
 # argparse
 - argparse : ¸í·ÉÇà ÀÎÅÍÆäÀÌ½º¸¦ ½±°Ô ÀÛ¼ºÇÏµµ·ÏÇÔ. sys.argv¸¦ ¾î¶»°Ô ÆÄ½ÌÇÒÁö ÆÄ¾ÇÇÏ¸ç, µµ¿ò¸»°ú »ç¿ë¹ý¸Þ¼¼Áö¸¦ ÀÚµ¿ »ý¼ºÇÏ°í, Àß¸øµÈ ÀÎÀÚ¸¦ ÁÙ ¶§ ¿¡·¯¸¦ ¹ß»ý½ÃÅ´.
