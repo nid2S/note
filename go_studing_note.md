@@ -48,9 +48,9 @@ func main(){
 - range 배열 : 인덱스, 값 을 배열의 끝까지 반복하며 반환. 
 
 ## map
-- var 맵이름 map[key자료형]value자료형 : 맵 선언. make(map[key]value)로도 만들 수 있음.
-- map[key]value{키:값, 키:값, } : 값 할당.
-- 맵이름[새 키] = 값 : 맵에 새 키와 값 할당.
+- var 맵이름 map[key자료형\]value자료형 : 맵 선언. make(map[key\]value)로도 만들 수 있음.
+- map[key\]value{키:값, 키:값, } : 값 할당.
+- 맵이름[새 키\] = 값 : 맵에 새 키와 값 할당.
 - delete(map, key) : 키 삭제. 
 
 
