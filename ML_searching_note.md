@@ -591,15 +591,16 @@
 - sklearn.model_selection.cross_validate(모델, data, labels, cv=i, return_train_score=bool) : 위와 같지만 훈련과 테스트에 걸린 시간까지 담아 딕셔너리로 반환한다. 
   bool 이 T 면 테스트 스코어도 같이 포함해 반환된다. 모델을 그리드 서치로 사용하면 중첩 교차 검증의 구현이 가능하다. scoring="accuracy/rou_auc"등으로 모델, 
   최적 매개변수 선택을 위한 평가 방식을 바꿀 수 있다.
-- sklearn.model_selection.GridSearchCV(모델, 파라미터 딕셔너리({'변수명':[넣어볼 수들의 리스트]},딕셔너리의 리스트로 넣으면 조건부로 그리드 탐색), cv=i, return_train_score=bool): 
-  교차검증을 사용한 그리드 서치 매개변수 조정 방법 로드. .fit(data, label)로 설정된 매개변수 조합에 대해 교차검증을 수행하고, 
-  가장 성능이 좋은 배개변수로 데이터에 대한 새 모델을 자동으로 만듦. 모델엔 .score(test_data, test_label)과 .predict(data)로 접근 가능하다. 
-  {.best_params_ : 선택한 매개변수, .best_score_ :  이 설정으로 얻은 정확도 ,  .best_estimator_ :  최고의 모델, .cv_result_ : 각 결과}
+- sklearn.model_selection.GridSearchCV(모델, 파라미터 딕셔너리({'변수명':[넣어볼 수들의 리스트\]},딕셔너리의 리스트로 넣으면 조건부로 그리드 탐색), cv=i, return_train_score=bool): 
+  교차검증을 사용한 그리드 서치 매개변수 조정 방법 로드. .fit(data, label)로 설정된 매개변수 조합에 대해 교차검증을 수행하고, .cv_results_로 결과 확인 가능.
+  가장 성능이 좋은 매개변수로 데이터에 대한 새 모델을 자동으로 만들며(refit=True), 모델엔 .score(test_data, test_label)과 .predict(data)로 접근 가능.
+  [.best_params_ : 최고의 매개변수 | .best_score_ : 이 설정으로 얻은 정확도 | .best_estimator_ : 최고의 모델 | .cv_result_ : 각 결과]속성 사용 가능.
+
 - sklearn.model_selection.LeaveOneOut() :  LOOCV 로드. 위의 cv 매개변수로 넣어 사용할 수 있다. 큰 데이터 셋에선 시간이 오래 걸리지만, 작은 데이터 셋에선 종종 더 좋은 효과를 낸다.
 - sklearn.model_selection.ShuffleSplit(train_size=i/f, test_siz=i/f, n_split=n) :  i개의 데이터 포인트로/f의 데이터 포인트 비율로 n번 반복분할 하는 임의 분할 교차 검증 로드. 
   cv 매개변수에 넣어 사용할 수 있다.
-- sklearn.model_selection.RepeatedStratifiedKFold/RepeatedKFold(random_state = i) : 반복 교차 검증 로드. 분류/회귀 이며 model_selection.StratifiedKFold/KFold를 
-  기본으로 사용하기 때문에 import 를 해주어야 한다. cv에 매개변수.
+- sklearn.model_selection.RepeatedStratifiedKFold/RepeatedKFold(random_state = i) : 반복 교차 검증 로드. 
+  분류/회귀 이며 model_selection.StratifiedKFold/KFold를 기본으로 사용하기 때문에 import 를 해주어야 한다. cv에 매개변수.
 
 - sklearn.metrics.confusion_matrix(label, pred_logreg(예측결과)) : 오차 행렬 표시. [(음성데이터)[음성으로 예측한 수, 양성으로 예측한 수\] 
 - (양성데이터)[음성으로 예측한 수, 양성으로 예측한 수\]\] 식으로 반환된다.
