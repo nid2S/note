@@ -718,7 +718,7 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - soynlp.normalizer.repeat_normalize(sent, num_repeats=i) : 의미없이 반복되는 글자를 i개 까지만 반복되도록 변환.
 
 # hgtk | 한국어 자소단위로 쪼개기
-- hgtk.text.decompose(sent) : 문장을 자소단위로 쪼갬. 뒤에 jamo_sent.replace('ᴥ', '')를 쓰면 더 깔끔하게 볼 수 있음.
+- hgtk.text.decompose(sent, compose_code) : 문장을 자소단위로 쪼갬. 글자간 경계 문자는 생략시 기본값인 ᴥ가 사용됨.
 - hgtk.text.compose(sent, compose_code) : 자소단위의 문장을 다시 합침. compose_code에 넣은 문자는 글자간 경계 문자를 알려주는 역할.
 
 # 한국어 전처리 | 띄어쓰기, 맞춤법, 문장 토큰화
