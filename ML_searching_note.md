@@ -50,8 +50,9 @@
 - np.mean(배열) : 배열의 평균을 출력. (x == y)식으로 하면 두 배열의 동일도를 받아볼 수 있음.
 - np.expand_dims(np 배열,index) : np 배열의 index 위치에 데이터를 추가해 차원을 늘림.
 - np.reshape(배열, 차원) : 배열을 같은 크기의 다른 형태로 차원 변형. 요소의 총 개수는 같아야 함. 차원에 -1이 들어갔다면 개수에 맞게 알아서 지정된다는 뜻임.
+- np.allclose(nd1, nd2) : 두 행렬이 완전히 동일한지 반환.
 
-- np.linalg.svd(ndarray) : SVD 사용. SVD 대로 직교행렬 U, 대각 행렬의 특이값 리스트 S, 또 다른 직교행렬 VT 를 반환함.
+- np.linalg.svd(ndarray) : SVD 사용. SVD 대로 직교행렬 U, 대각 행렬(특이값의 리스트형태)S, 또 다른 직교행렬 VT 를 반환함.
 
 - ndarray.flags : 어레이의 메모리 레이아웃에 대한 정보.
 - ndarray.shape : 배열 차원의 튜플.
@@ -73,7 +74,6 @@
 - np.savetext() : 여러개의 배열을 텍스트 파일로 저장. header="", footer="" 로 파일 시작과 끝에 #으로 시작하는 주석을 달아 줄 수 있고, 
   fmt="%.1f" 식으로 들어가는 인수들에 대한 포맷을 지정할 수 있다.
 - np.loadtext() : 텍스트 파일을 배열로 불러옴. ndarray로 불려옴.
-
 
 # pandas
 ***
@@ -111,8 +111,9 @@
 - df["칼럼1","2","3"\] : 열(칼럼) 다중 선택. [칼럼1:칼럼3\]식으로 선택할 수 도 있음.
 - df[dataFrame.Age == 30\] : 데이터를 선택해서(조건을 줘서)표시 가능
 
-- df.head() : 위쪽 데이터 5개.
-- df.tail() : 끝쪽 데이터 5개. 안에 숫자를 넣으면 그 숫자큼 나옴.
+- df.head(n) : 위에서부터 n개의 데이터를 가져옴. 생략시 5개.
+- df.tail(n) : 끝(아래)에서부터 n개의 데이터를 가져옴. 생략시 5개.
+- df.sample(n) : n개의 데이터를 랜덤으로 추출.
 - df.info() : 데이터프레임의 정보 볼 수 있음.
 - df.mean() : 데이터들의 평균값을 얻을 수 있움.
 - df.reset_index() : 인덱스 리셋. 인덱스를 0부터 시작하게 함.
@@ -489,7 +490,6 @@
 ###### decision tree
 - sklearn.tree.DecisionTreeRegressor() > 결정트리 회귀 모델 로드. mex_depth, max_leaf_nodes, min_samples_leaf 중 하나만 지정해도 과대적합을 막을 수 있다.
 
-
 #### Classification
 .decision_function(test data) > 데이터를 분류하며 그 데이터가 분류한 클래스에 속한다고 생각하는 정도를 기록해 반환. 양수값은 양성 클래스를 의미한다.
 .predict_proba(test data) > 각 클래스에 대한 확률. (샘플 수, 클래스 개수) 의 형태를 갖음. 과대적합된 모델은 틀렸어도 확신이 강한 편이고, 복잡도가 낮으면 예측에 불획실성이 더 많다.
@@ -627,21 +627,6 @@
   훈련데이터의 통걔적 속성을 사용하므로 파이프 라인을 이용한 그리드 서치를 해 주어야 한다. .idf_ 에서 훈련세트의 idf 값을 볼 수 있다. 
   idf 값이 낮으면 자주 나타나 덜 중요하다 생각되는 것이다.
 
-###### spacy
-- 영어와 독일어를 지원하는 NLP 파이썬 패키지. 표제어 추출 방식이 구현되어 있음.
-- python -m spacy download en 으로 언어의 모델을 먼저 다운받아야 함.
-- spacy.load('en') : spacy 의 영어 모델 로드.
-- 모델(document) : 문서 토큰화. 찾은 표제어들 반환.
-
-###### nltk
-- 포터 어간 추출기가 구현되어 있는 파이썬 패키지.
-- nlty.stem.PorterStemmer() : PorterStemmer 객체 생성.
-- 객체.stem(토큰.norm_.lower()) > 토큰(어간) 찾기.
-
-###### KoNLpy
-- 한글 분석을 가능하게 하는 파이썬 패키지.
-- konlpy.tag.Okt() >  Okt 클래스 객체 생성. .morphs(text)로 형태소 분석이 가능하다.
-
 # tensorboard
 - 텐서보드 : 머신러닝 실험에 필요한 시각화 및 도구를 제공. 실시간으로 학습과정을 그래프로 확인가능하며, 기존에 학습했던 것과 동시 비교 분석이 가능.
 - 제공기능 : 측정항목(손실/정확도등)추적/시각화, 모델그래프(레이어)시각화, 가중치/편향/기타텐서의 경과에 따른 히스토그램,
@@ -736,9 +721,11 @@ urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 
 # urllib(3)/zipfile | url,zip
 - urllib : url 이용 라이브러리. urllib3 은 따로 install, import가 필요함. 
+
 - urllib3.PoolManager() : url poolManager 로드. url이용에 사용가능.
 - http(Pool).request('GET', url, preload_content=False) : url 오픈. with 등을 이용해 파일객체로 열 수 있고, 다운로드를 위해 shutil이 필요.
-  
+- shutil(shutil모듛).copyfileobj(request객체, 복사받을_파일객체(wb)) : 파일객체를 복사해옴.
+
 - urllib.request.urlretrieve(주소, filename) : 주소의 파일을 파일 이름으로 다운로드.
 - urllib.request.build_opener() : 오프너 생성. urllib.request의 함수들은 import urllib.request로 import해야 사용가능.
 - 오프너.addheaders=[넣을 헤더\] : 오프너에 브라우저 헤더추가.
