@@ -52,6 +52,14 @@
 - np.reshape(배열, 차원) : 배열을 같은 크기의 다른 형태로 차원 변형. 요소의 총 개수는 같아야 함. 차원에 -1이 들어갔다면 개수에 맞게 알아서 지정된다는 뜻임.
 - np.allclose(nd1, nd2) : 두 행렬이 완전히 동일한지 반환.
 
+- np.concatenate((a1, a2, ...), axis=i) : 넘파이 배열을 합침. 합치려는 배열들이 합칠 axis를 제외하고 일치하는 shape를 보유해야 함.
+- np.stack((a1, a2, ...), axis=i) : 넘파이 배열을 합침. 합치려는 배열의 모든 shape가 동일해야 함.
+- np.hstack((a1, a2, ...)) : 배열을 가로로 이어붙임. concatenate() axis=1과 동일한 결과.
+- np.vstack((a1, a2, ...)) : 배열을 세로로 이어붙임. concatenate() axis=0과 동일한 결과.
+- np.dstack((a1, a2, ...)) : 배열을 이어붙임. stack() axis=-1(ndim)과 동일함.
+- np.column_stack((a1, a2, ...)) : 행벡터가 주어지면 열방향으로 합침. axis=1로 합침.
+- np.split(ndarray, n, axis=i) : 배열을 n개로 나눔. n자리에 정수 배열을 넣으면 해당 인덱스를 끊어서 반환함.
+
 - np.linalg.svd(ndarray) : SVD 사용. SVD 대로 직교행렬 U, 대각 행렬(특이값의 리스트형태)S, 또 다른 직교행렬 VT 를 반환함.
 
 - ndarray.flags : 어레이의 메모리 레이아웃에 대한 정보.
@@ -102,7 +110,6 @@
 - df.columns : 칼럼 Index 객체로 반환. 여기에 값을 할당해 헤더를 지정해 줄 수도 있음.
 - df.values  : 값들 배열형태로 반환.
 - df.index   : 인덱스+타입 Index 객체로 반환.
-- df.values  : 값만 리스트로 반환.
 - df.loc[인덱스\] : 데이터 로드. 조건식(==, !=)을 넣어 줄 수도 있음.
 - df.iloc[인덱스\] : 인덱스와 함께 데이터 로드.
 
@@ -142,7 +149,7 @@
   딕셔너리는 {원래값:바뀔값}형식으로 넣어 데이터프레임(해당 행)의 값을 바꿀 수 있음(값이 없으면 nan).
 - df.applymap(함수) : 데이터프레임속 모든 값에 함수를 적용.
   
-- df.append(df2) : 데이터프레임에 데이터프레임을(행으로)추가. ignore_index=True로 본래의 인덱스를 무시하고 기존값에 인덱스를 이어 넣을 수 있음. 열을 추가하려면 
+- df.append(df2) : 데이터프레임에 데이터프레임을(행으로)추가. ignore_index=True로 본래의 인덱스를 무시하고 기존값에 인덱스를 이어 넣을 수 있음. 
 - df.groupby([열\]) : group by. 해당 열의 데이터가 같은걸 모음. .groups로 생성된 그룹과 인덱스/타입 확인가능. __next__시 그룹이름과 그룹요소 개수가 나옴.
 - df.query(조건) : 데이터프레임에서 조건에 맞는 값들을 가져옴. []에 조건을 넣는 것과 동일. 조건은 문자열.
 - df.filter(조건, axis=0) : 인덱스 조건에 맞게 데이터를 가져옴. item=[열이름\](해당 열), regex=패턴(정규표현식에 맞으면), like=str(문자열이 포함되면), 
@@ -420,7 +427,7 @@
 
 - model.fit(train_data , train_labels , epochs=1000(반복 횟수)) : 학습된 모델 제작. 이 과정에서 오류가 난다면 .astype으로 자료형을 지정해주면 된다.
   verbose=0 으로 떨어지는 모습을 보지 않을 수 있고, validation_data=(test_data,test_label) 로 테스트용 데이터로 계산한 손실과 정확도를 함꺠 출력시킬 수 있으며,
-  callback 매개변수에 callbacks의 함수를 넣어 사용할 수 있음. 여러개면 [one, two]식으로 입력.
+  callback 매개변수에 callbacks의 함수를 넣어 사용할 수 있음. 여러개면 [one, two\]식으로 입력.
 
 - model.save('파일명.h5') : 모델 저장. 모델 전체를 저장하는 게 아니라 가중치 등 일부만 저장한 뒤 재사용(transfer learning)히는 방법도 있음.
 - model = tf.keras.models.load_model(모델명) : 저장된 모델 로드.
