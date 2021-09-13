@@ -478,40 +478,6 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
   다른 과정은 첫번째층과 같음. 패딩마스크를 입력으로 받음.
 
 
-##### BERT
-- BERT(Bidirectional Encoder Representations from Transformers) : 구글이 공개한 사전 훈련 모델. 레이블 없는 텍스트 데이터를 트랜스포머로 훈련. 
-  마스크드 언어모델, 다음문장예측(NSP)을 통해 사전훈련을 함. 
-- BERT 구조 : 트랜스포머의 인코더를 쌓아 올림. 문맥을 반영한 임베딩 사용. d_model 크기의 임베딩 벡터를 입력으로 받아 내부 연산을 거쳐, 동일 크기의 벡터를 출력. 
-  총 워드피스 임베딩, 포지션 임베딩, 세그먼트 임베딩 3개의 임베딩층이 사용됨.
-- BERT 구조 : BERT의 연산을 거친 후의 출력임베딩은 문맥을 반영한 임베딩. 셀프어텐션을 이용해 하나의 단어가 모든 단어를 참고. 이를 모든 층에서 반복.
-- BERT 파인튜닝 : 사전학습된 BERT에 풀려하는 태스크의 데이터를 추가 학습시켜 테스트하는 단계. 실질적으로 태스크에 BERT를 사용하는 단계. 
-- BERT 사용분야 :  텍스트 분류(CLS위치 출력층에 Dense 추가), 태깅(입략 긱 토큰 위치에 Dense사용), 텍스트 쌍 분류/회귀
-  (자연어추론(두 문장간 관계)등, 텍스트사이 SEP, 두종류의 세그먼트 임베딩 사용), 질의응답(질문, 본문 두 쌍 입력, 본문의 일부를 추출해 답변) 등에 사용됨.
-
-- 파인튜닝 : 다른 작업에 대해 파라미터 재조정을 위한 추가 훈련 과정. 레이블 없는 데이터로 사전훈련된 모델에 주로 사용. 
-- 포지션 임베딩 : 단어의 위치정보를 사인,코사인이 아닌(포지셔녈인코딩)학습을 통해 얻음. 위치정보를 위한 임베딩층을 하나 더 사용, 위치에 맞는 포지션임베딩벡터를 더함. 
-
-- MLM(Masked Language Model) : 사전훈련을 위해 입력의 15%의 단어들을 랜덤으로 마스킹. 15%중 80%은 mask로, 10%는 핸덤으로 다른 단어로, 10%는 그대로 변경된다.  
-- NSP(Next Sentence Prediction) : 두 문장을 준 후 두 문장이 이어지는지 아닌지를 맞추는 방식으로 훈련. 
-  각 문장의 시작과 끝([SEP\]), 실제 이어지는 문장인지 표시([CLS\])하는 특별토큰을 사용한다.
-- 세그먼트 임베딩 : 문장구분을 위해 BERT가 사용하는 또 다른 임베딩층. 첫문장과 두번째 문장에 각 sent0, sent1 임베딩을 더해주며 임베딩 벡터는 두개만 사용됨.
-- 어텐션마스크 : BERT실습에 필요한 추가적 시퀀스 입력. 어텐션 시 패딩토큰에도 어텐션을 하지 않도록 실제와 패딩토큰을 구분하게 알려주는 입력. 0과 1(실제단어)두가지 값을 지님.  
-
-- 한국어용 BERT 패키지 KoBERT가 존재함.
-
-##### GPT
-- Generative Pre Training of a language model 의 약어. opne-AI 제작. google은 BERT.
-- language model : 현재 알고있는 단어를 기반으로 다음 단어를 예측하는데 많이 사용되는 모델. 레이블링이 불필요하다는 장점이 있음. GPT-1의 핵심. 
-  비지도, GPT-1은 다 분야의 엄청난 양의 데이터로 pre trained 됨.  
-- generative model : 머신러닝 모델의 학습 방법 중 하나. 데이터가 많을수록 학습이 잘 됨.
-- BPE(바이트 페어 인코딩) : 자주 함께 사용되는 char 를 하나의 묶음으로 사용(최소한의 단어). 워드 임베딩과 캐릭터 임베딩의 장점을 모두 가지고 있음. 
-  (word)단어간의 유사도와 (char)처음보는 문자의 예측 모두가 가능함. 
-- GPT-1 : 문장간 관계 유추, 질의 응답, 문장유사도, 분류등에 뛰어난 성능을 보임. 언어 모델로 학습, 
-  파인 튜닝(linear 와 softmax, 추가적인 레이어 없이 적은 양의 레이블 만으로도 가능)두 단계를 거침. 트랜스포머의 디코더기반 모델. 
-- GPT-2 : 1과 달리 파인튜닝을 없애고, 사이즈가 커짐. 입력된 값과 수행해야할 task(다음단어, 번역, 응답 등)를 함께 입력받아 다음 단어를 출력. 
-- GPT-3 : 파인튜닝 제거(가능하긴 하나 필요 X)를 핵심으로 하고 있음. 제로샷이나 원샷이 아닌 퓨샷러닝(몇장의 이미지만 사용)만을 이용. 
-  여러 분야에서 뛰어난 성능을 보이나 단방향으로 학습해 문맥 파악에 약하다는 단점을 가짐.     
-
 
 
 
@@ -566,6 +532,72 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
   idf 값이 낮으면 자주 나타나 덜 중요하다 생각되는 것이다.
 - sklearn.decomposition.LatentDirichletAllocation(n_components=n, learn_method="online", random_state=k, max_iter=i) : 
   LDA 수행. .fit_transform(X), .components_ 등을 사용할 수 있다.
+
+# HuggingFace | 트랜스포머기반 모델
+- transformer : 허깅페이스가 제작한, 트랜스포머 기반의 다양한 모델(transformer.models)과 학습 스크립트(transformer.Trainer)를 구현해 놓은 모듈.
+  다양한 트랜스포머 기반 모델구현체를 손쉽게 쓸 수 있으나 high-level로 구현되어있어 커스터마이징이 비교적 어려움(소스코드를 참고해 원하는 클래스를 상속받아 오버라이딩 해야함).
+- 기본 제공 task : 감정분석(긍정/부정), 텍스트 생성(영어, 다음문장생성), NER(각 단어를 나타내는 엔티티로 레이블지정), 
+  QA(컨텍스트+질문 -> 답변), 마스킹된 텍스트 채우기(공백([MASK\])이 있는 텍스트의 공백을 채움), 요약, 번역, 특징추출(텍스트의 텐서 표현 반환).
+
+### pipeline
+- pipeline : 주어진 task에서 사전훈련 모델을 사용하는 가장 쉬운 방법. 기본제공 task에 속한다면 사용가능.
+- transformers.pipeline(task명) : 사전훈련된 모델과 해당하는 토크나이저를 다운로드. 명령결과(sent)로 간단하게 사용가능.
+  model인자와 tokenizer인자를 사용해 직접 사용할 모델과 토크나이저를 전달해 줄 수 도 있음.
+- task명 : sentiment-analysis, question-answering, fill-mask, text-generation, ner, summarization, translation_(lang)_to\_(lang)
+
+### tokenizer
+- transfomers.AutoTokenizer.from_pretrained(모델명) : 사전훈련된(미리 다운로드 받은)모델과 관련된 토크나이저를 다운로드. 모델은 허깅페이스홈페이지에서 확인가능.
+- transfomers.BertTokenizer.from_pretrained(모델명) : BERT토크나이저(WordPiece토크나이저)사용. do_lower_case=bool인자 사용가능.
+- transformers.DistilBertTokenizer.from_pretrained(모델명) : 더 작고/빠르고/저렴하고/가벼운 BERT의 증류된버전 DistilBert 토크나이저 사용.
+
+##### 토크나이저 사용
+- tokenizer(sequence) : 문장을 기준에 맞춰 토큰화. input_ids키에 정수인코딩까지 완료된 문장(텐서)이 들어있고, token_type_ids(segment), attention_mask등을 같이 반환하기도 함.
+  [sent1, sent2\]처럼 넣어 여러 문장을 토큰화할 수 도 있고, 두개의 시퀀스를 두개의 인수로 넣으면 두 시퀀스를 인코딩과 동시에 합침(BERT에 맞게, 리스트로 넣었으면 같은 인덱스의 문장들끼리 이어짐). 
+- tokenizer.tokenize(sequence) : 토큰화. input_ids에 들어갈 내용을 리스트형태로 반환.
+- tokenizer 인자 : return_tensors=str(반환될 텐서 종류. pt/tf), padding=bool/str(True-최대길이로 패딩, 'max_length'-max_length인자의 길이/모델이 허용하는 최대길이로 패딩, 
+  False-패딩X(default)), truncation=bool/str(True-모델이 허용하는 최대길이로 자름, 'only_second/first'-앞과 동일하나 한쌍의 시퀀스(배치)가 주어지면 두번째/첫번째만 자름, False-자름X),
+  max_length=int(패딩/잘림 길이 제어. truncation의 경우 False가 아니라면 모두 여기서 지정한 길이로 자름), is_split_into_words=bool(단어가 이미 나뉘어있는지 여부, 리스트속 문자열==한 문장),
+  
+- tokenizer.encode(sent) : 주어진 시퀀스를 인코딩. 원시 텍스트 시퀀스도, 이미 토큰화된 시퀀스도 처리가능(is_pretokenized=True). 
+- tokenizer.encode_batch(sent) : 주어진 시퀀스배치를 인코딩. 각 배치(문장)는 리스트 형태롤 존재하며, 문장내에 리스트, 튜플 형태로 존재할 수 있음.
+- tokenizer.decode(encoded_sequence) : 디코딩. 인코딩된 시퀀스를 원래의 문장으로 되돌림. skip_special_tokens=False면 특별토큰은 그대로 유지됨.
+- tokenizer.decode_batch(encoded_sequence) : ID배치를 디코딩. 디코딩하려는 시퀀스배치를 입력으로 넣어줌. 
+- encode 인자 : add_special_tokens = bool(문장의 시작과 끝에 [cls\], [sep\]토큰 추가), max_length = i(문장의 최대 길이), 
+  pad_to_max_length = bool(패딩), return_attention_mask = bool(어텐션마스크 반환), return_tensors = str(반환될 텐서 종류. pt/tf).
+
+- tokenizer.add_tokens(토큰) : 토큰 추가. 이미 존재하지 않는 경우에만 추가됨.
+
+- tokenizer.save_pretrained(경로) : 토크나이저 저장. 저장한 토크나이저는 from_pretrained로 사용가능.
+
+### model
+- transfomers.models : 트랜스포머 기반의 다양한 모델을 파이토치/텐서플로우로 각각 구현해놓은 모듈. 각 모델에 맞는 토크나이저도 구현되어있음.
+
+- transformers.(TF)AutoModel.from_pretrained(모델명) : 사전훈련된 모델과 관련된 모델 사용. 
+- transformers.(TF)AutoModelForSequenceClassification.from_pretrained(모델명, from_pt=bool) : 사전훈련된 모델을 기반으로 시퀀스 분류기 로드.
+- transformers.(TF)DistilBertForSequenceClassification.from_pretrained(모델명, from_pt=bool) : 더 작고/빠르고/저렴하고/가벼운 BERT의 증류된버전 DistilBert 시퀀스분류기 사용.
+- from_pretrained로 모델을 가져올때, num_labels등의 인자를 이용해 간단한 모델변경이 가능하나, 이 경우 사전훈련헤드를 버리고 랜덤초기화인 분류헤드로 바꿔, 이전의 지식을 모델에 전달해야 함(전이학습).
+
+- transformers.DistilBertConfig(설정들) : 모델의 설정정의. 모델(config)로 구조는 동일한 채 파라미터만 약간 다른 사용자정의 모델을 사용할 수 있음.
+
+##### 모델 사용
+- model(encoded_input(인코딩된 문장들)) : 모델 사용. pytorch의 경우 사전압축을 풀어야(**)함. labels인자로 label을 전달해 줄 수 있으며, 이 경우 반환에 loss가 생성됨.
+  .logit으로 반환값을 볼 수 있으며, 예측을 위한 softmax는 물론, 다른 trainloop에서도 사용가능함.
+- model 인자 : output_hidden_states=bool(모든 은닉상태 반환), output_attentions=bool(모든 어텐션가중치 반환)
+
+- model.save_pretrained(경로) : 훈련된(미세조정된)모델(파라미터)저장. 저장한 모델은 from_pretrained로 사용가능히며, from_pt/tf로 어디서 생성된 모델인지 알려줘야 함.
+
+### Trainer
+- transformers.Trainer : 딥러닝 학습/평가에 필요한 optimizer, lr schedul, tensorboard, gpu병렬처리, 평가등을 수행하는 모듈. 모델이 텐서플로우 모델일 경우 .compile, .fit도 가능함.
+
+- transformers.TrainingArgments(체크포인트 저장경로) : Trainer의 정의를 위한 TrainingArgument객체를 생성. 조정가능한 모든 하이퍼파라미터, 지원하는 훈련옵션을 실행하기 위한 플래그가 속해있음.
+  트레이너에 compute_metrics를 넣은 뒤 evaluation_strategy="epoch"로 epoch마다 정확도를 보고하게 할 수 있으며, 이 외에도 다양한 옵션이 있음. 
+- metrics : 트레이너가 metrics를 계산하고 report를 하게 하기 위해서는 예측과 labels를 가지고 {metric명(str): metric(float)}을 반환하는 compute_metric함수를 주어야 함. 
+- trianer.evaluate() : 인자로 넣은 compute_metrics를 이용해 정확도 출력.
+
+- transformers.Trainer(model=model, args=traininig_args, trian_dataset=데이터셋, eval_dataset=데이터셋, compute_metrics=정확도 계산함수) : 트레이너 생성. 
+
+- trainer.train() : 파인튜닝. 학습/평가의 모든 과정이 사용자가 원하는 인자에 맞게 실행됨. pytorch lightning과 비슷하게 공통적으로 사용되는 학습스크립트가 모듈화 되어있음. GPU필요.
+
 
 
 # gensim | word2vec, FastText
