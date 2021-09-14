@@ -587,17 +587,16 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - model.save_pretrained(경로) : 훈련된(미세조정된)모델(파라미터)저장. 저장한 모델은 from_pretrained로 사용가능히며, from_pt/tf로 어디서 생성된 모델인지 알려줘야 함.
 
 ### Trainer
-- transformers.Trainer : 딥러닝 학습/평가에 필요한 optimizer, lr schedul, tensorboard, gpu병렬처리, 평가등을 수행하는 모듈. 모델이 텐서플로우 모델일 경우 .compile, .fit도 가능함.
+- transformers.Trainer : 딥러닝 학습/평가에 필요한 optimizer, lr schedul, tensorboard, 평가등을 수행하는 모듈. pytorch용이며 tf모델은 .compile(), .fit()을 사용해야 한다. 
 
-- transformers.TrainingArgments(체크포인트 저장경로) : Trainer의 정의를 위한 TrainingArgument객체를 생성. 조정가능한 모든 하이퍼파라미터, 지원하는 훈련옵션을 실행하기 위한 플래그가 속해있음.
-  트레이너에 compute_metrics를 넣은 뒤 evaluation_strategy="epoch"로 epoch마다 정확도를 보고하게 할 수 있으며, 이 외에도 다양한 옵션이 있음. 
-- metrics : 트레이너가 metrics를 계산하고 report를 하게 하기 위해서는 예측과 labels를 가지고 {metric명(str): metric(float)}을 반환하는 compute_metric함수를 주어야 함. 
+- transformers.TrainingArgments(output_dir) : Trainer의 정의를 위한 TrainingArgument객체를 생성. 조정가능한 모든 하이퍼파라미터, 지원하는 훈련옵션을 실행하기 위한 플래그가 속해있음.
+  트레이너에 compute_metrics를 넣은 뒤 evaluation_strategy="epoch"로 epoch마다 정확도를 보고하게 할 수 있으며, 이 외에도 learning_rate, num_trian_epochs등 다양한 옵션이 있음.
+- metrics : 트레이너가 metrics를 계산하고 report를 하게 하기 위해서는 예측과 labels를 가지고 {metric명(str): metric(float)}을 반환하는 compute_metric함수를 주어야 함.
 - trianer.evaluate() : 인자로 넣은 compute_metrics를 이용해 정확도 출력.
 
 - transformers.Trainer(model=model, args=traininig_args, trian_dataset=데이터셋, eval_dataset=데이터셋, compute_metrics=정확도 계산함수) : 트레이너 생성. 
 
 - trainer.train() : 파인튜닝. 학습/평가의 모든 과정이 사용자가 원하는 인자에 맞게 실행됨. pytorch lightning과 비슷하게 공통적으로 사용되는 학습스크립트가 모듈화 되어있음. GPU필요.
-
 
 
 # gensim | word2vec, FastText

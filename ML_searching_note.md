@@ -32,25 +32,26 @@
 - np.ones(shape) : 모든 값이 1인 배열 생성.
 - np.full(shape, num) : 모든 값이 num 인 배열 생성.
 - np.diag(1차원 배열) :  대각행렬 생성. k 매개변수에 음수를 넣으면 그 절댓값 만큼 아래 행에서 시작.
-- np.random.random(shape) : 임의의 값(0~1)으로 채워진 배열 생성.
 - np.eye(i) : 대각선이 1이고 나머지는 0인 i*i의 2차원 배열 생성
 - np.sin(x) : 사인 함수를 이용해 배열 x와 대응하는 배열 생성
+- np.random.random(shape) : 임의의 값(0~1)으로 채워진 배열 생성.
 - np.random.permutation(i) : i 까지 랜덤으로 섞인 배열 반환.
+- np.random.normal(avg, std, shape) : avg의 평균과 std의 표준편차를 가지고 있는 shape형태의 배열 생성.
 - np.random.seed(i) : random 유사난수화. 랜덤에서 난수 생성시 사용되는 시드를 고정시켜 유사난수로 만든다.
 - np.unique(배열) : 배열에 있는 값의 종류를 배열로 반환.
-- np.percentile(배열, [분위]) : 배열에서 분위에 해당하는 샘플을 추출해 반환. [0,25,50,75,100]식으로 지정하면 된다.
+- np.percentile(배열, [분위\]) : 배열에서 분위에 해당하는 샘플을 추출해 반환. [0,25,50,75,100\]식으로 지정하면 된다.
 
 - np.dot(배열1, 배열2) : 내적곱(점곱) 생성. 배열1의 열 개수와 배열 2의 행 개수가 동일해야 함. 1의 행과 2의 열 개수를 가짐. 
   행렬곱의(i,j)는 (1의 i행합 * 2의 j열합)의 요소값을 가짐. 2차원에서는 아래와 같으나 고차원에서는 다른 역할을 수행함.
 - np.matmul(배열1, 배열2) : 행렬곱 생성. 2차원 이상의 배열은 2차원 배열을 여러개 가지고 있다 보기에((1,2,3,4) > (3,4)를(1,2)개) 
   행렬 1의 마지막 차원 요소 개수와 행렬2의 뒤에서 두번째 차원 요소 개수가 같아야 한다.
+- np.argmax(배열) : 배열중 최대치의 인덱스 반환.
 - np.square(배열) : 배열의 제곱 반환.
-- np.float32(배열) : ndarray 의 데이터 타입을 변환. 다른타입도 가능, 부동소수점 데이터 유형으로 변환시 작업 중 오버플로우를 방지의 기능이 있음.
-- np.argmax(배열) : 배열중 최대치의 인덱스 반환
 - np.mean(배열) : 배열의 평균을 출력. (x == y)식으로 하면 두 배열의 동일도를 받아볼 수 있음.
 - np.expand_dims(np 배열,index) : np 배열의 index 위치에 데이터를 추가해 차원을 늘림.
-- np.reshape(배열, 차원) : 배열을 같은 크기의 다른 형태로 차원 변형. 요소의 총 개수는 같아야 함. 차원에 -1이 들어갔다면 개수에 맞게 알아서 지정된다는 뜻임.
 - np.allclose(nd1, nd2) : 두 행렬이 완전히 동일한지 반환.
+- np.reshape(배열, 차원) : 배열을 같은 크기의 다른 형태로 차원 변형. 요소의 총 개수는 같아야 함. 차원에 -1이 들어갔다면 개수에 맞게 알아서 지정된다는 뜻임.
+- np.float32(배열) : ndarray 의 데이터 타입을 변환. 다른타입도 가능, 부동소수점 데이터 유형으로 변환시 작업 중 오버플로우를 방지의 기능이 있음.
 
 - np.concatenate((a1, a2, ...), axis=i) : 넘파이 배열을 합침. 합치려는 배열들이 합칠 axis를 제외하고 일치하는 shape를 보유해야 함.
 - np.stack((a1, a2, ...), axis=i) : 넘파이 배열을 합침. 합치려는 배열의 모든 shape가 동일해야 함.
@@ -71,7 +72,11 @@
 - ndarray.data : 배열 데이터의 시작을 가리키는 파이썬 버퍼 객체.
 - ndarray.nbytes : 배열의 요소가 사용한 총 바이트.
 - ndarray.T : 배열의 행과 열의 크기 교체.
+
 - ndarray.round(i) : 배열의 소수의 소수점 이하 i까지 출력.
+- ndarray.astype(np.데이터타입) : 배열의 데이터타입 변환.
+- ndarray.transpose(변환된 axis) : 배열의 axis를 섞음. 0,1,2로 인덱스가 부여되있는 axis를 (1,0,2)식으로 섞을 수 있음.
+- ndarray.reshape(shape) : 배열의 shape를 바꿈.
 
 - np.save(이름,배열) : 1개의 배열을 NumPy format 의 바이너리 파일로 저장.
 - np.savez(경로,배열(x=x, y=y 식으로 이름 부여 가능)) : 여러개의 배열을 1개의 압축되지 않은 *.npz 포맷 파일로 저장. 
@@ -213,6 +218,7 @@
 - plt.fill_between(x, y, alpha) : 그래프에서 그 범위를 채움. (x,y1,y2)식으로 두 그래프 사이의 영역을 채울 수 도 있음. color 매개 변수로 색 지정 가능.
 - plt.fill(x,y,alpha) : x,y 점들로 정의되는 다각형의 영역을 자유롭게 채울 수 있음.
   
+- plt.imshow(image) : image를 표시함. cmap="gray"(흑백으로)등 이미지에 대한 조작을 할 수 있음. 
 - plt.bar(x, y) : 막대그래프를 그림. width(너비),align(눈금위치. 히스토그램처럼 눈금을 막대 끝으로 이동가능,'edge'),
   color,edgecolor,linewidth(테두리두께),tick_label,log(bool, y를 로그스케일로) 등의 매개변수 사용 가능.
 - plt.barh(x, y) : 수평 막대그래프를 그림. height 를 제외하면 매개변수 동일. width/height 를 음수로 지정하면 막대 위쪽에 눈금 표시.
@@ -333,15 +339,14 @@
 - tf.zeros/ones(shape) = shape대로 0/1으로 채워진 텐서 생성.
 - tf.random.uniform(shape, min, max) : shape형태의, min~max사이의 랜덤 값을 가진 텐서 생성.
 - tf.random.normal(shape, mean, stddev) : shape형태의, 평균이 mean이고 표준편차가 stddev인(기본은 0,1) 랜덤 값을 가진 정규분포 텐서 생성.
-- tf.rank(텐서) : 텐서의 랭크(차원), 모양, 데이터 타입 출력. tf.Tensor(rank, shape=(), dytpe=type).
+- tf.convert_to_tensor(array) : array를 텐서로 변환.
 
-- tf.add/subtract/multiply(텐서a, 텐서b) : 텐서에 대한 연산 지원. 이 세가지 말고도 다양한(넘파이에서 되는건 대부분)연산을 지원.
+- tf.rank(텐서) : 텐서의 랭크(차원), 모양, 데이터 타입 출력. tf.Tensor(rank, shape=(), dytpe=type).
 - tf.matmul(텐서a, 텐서b) : 두 텐서간 행렬곱. transpose_a/b = True 로 두 행렬중 하나를 전치 후 곱할 수 있음.
-- tf.transpose(텐서) : 텐서의 모양을 반전함. ().T
 - tf.cast(자료형) : 자료형 변환.
+- tf.transpose(텐서) : 텐서의 모양을 반전함. ().T
 - tf.convert_to_tensor(배열(ndarray)) : 배열 텐서로 변환
 - 텐서.numpy() : 텐서 넘파이 변환.
-- 텐서\[..., i, tf.newaxis] : 행은 자동으로, 열은 i로 형상변환. 평범한 슬라이스([i:j, i:j\])도 지원.
 
 - @tf.function : 데코레이터 아래의 함수를 텐서플로우 함수로 변환. 자동그래프(빠른 연산)생성, GPU연산가능 등의 특징이 있음.
   파이썬의 함수를 텐서플로우의 그래프(텐서로 자료형,연산 등)형태로 다루고 싶을때 사용. 원본 함수는 (tf.funciton).python_function()으로 받을 수 있음.
@@ -430,16 +435,15 @@
 -  metrics=['accuracy']  : 훈련단계와 테스트 단계를 모니터링하기 위한 방법.
 - ) : 모델 컴파일.
 
-- model.fit(train_data , train_labels , epochs=1000(반복 횟수)) : 학습된 모델 제작. 이 과정에서 오류가 난다면 .astype으로 자료형을 지정해주면 된다.
-  verbose=0 으로 떨어지는 모습을 보지 않을 수 있고, validation_data=(test_data,test_label) 로 테스트용 데이터로 계산한 손실과 정확도를 함꺠 출력시킬 수 있으며,
-  callback 매개변수에 callbacks의 함수를 넣어 사용할 수 있음. 여러개면 [one, two\]식으로 입력.
+- model.fit(train_data , train_labels , epochs=1000(반복 횟수)) : 학습된 모델 제작. validation_data=(test_data,test_label)로 검증용 데이터로 계산한 손실/정확도를 함께 출력가능하며,
+  callback 매개변수에 callbacks의 함수를 넣어 사용할 수 있음. 여러개면 [one, two\]식으로 입력. loss와 accuracy(metrics)가 담긴 딕셔너리를 반환함.
 
 - model.save('파일명.h5') : 모델 저장. 모델 전체를 저장하는 게 아니라 가중치 등 일부만 저장한 뒤 재사용(transfer learning)히는 방법도 있음.
 - model = tf.keras.models.load_model(모델명) : 저장된 모델 로드.
 - model.evaluate(test_images, test_labels) : 모델 성능 비교. loss, accuracy 순으로 반환. verbose = 0 > silent
 
 - model.predict(X) : 모델을 사용해 입력에 따른 예측 반환.
-- model.get_weights() : 각 독립변수에 대한 가중치 출력.
+- model.get_weights() : 각 독립변수에 대한 가중치 반환.
 - model.summary() 로 모델의 정보(이름/none,출력하는 개수/파라미터(가중치의 개수))를 확인 할 수 있다.
 
 # Pytorch ( torch )
