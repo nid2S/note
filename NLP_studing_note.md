@@ -548,20 +548,20 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 ### tokenizer
 - transfomers.AutoTokenizer.from_pretrained(모델명) : 사전훈련된(미리 다운로드 받은)모델과 관련된 토크나이저를 다운로드. 모델은 허깅페이스홈페이지에서 확인가능.
 - transfomers.BertTokenizer.from_pretrained(모델명) : BERT토크나이저(WordPiece토크나이저)사용. do_lower_case=bool인자 사용가능.
-- transformers.DistilBertTokenizer.from_pretrained(모델명) : 더 작고/빠르고/저렴하고/가벼운 BERT의 증류된버전 DistilBert 토크나이저 사용.
+- transformers.DistilBertTokenizer(Fast).from_pretrained(모델명) : 더 작고/빠르고/저렴하고/가벼운 BERT의 증류된버전 DistilBert 토크나이저 사용.
 
 ##### 토크나이저 사용
 - tokenizer(sequence) : 문장을 기준에 맞춰 토큰화. input_ids키에 정수인코딩까지 완료된 문장(텐서)이 들어있고, token_type_ids(segment), attention_mask등을 같이 반환하기도 함.
   [sent1, sent2\]처럼 넣어 여러 문장을 토큰화할 수 도 있고, 두개의 시퀀스를 두개의 인수로 넣으면 두 시퀀스를 인코딩과 동시에 합침(BERT에 맞게, 리스트로 넣었으면 같은 인덱스의 문장들끼리 이어짐). 
-- tokenizer.tokenize(sequence) : 토큰화. input_ids에 들어갈 내용을 리스트형태로 반환.
 - tokenizer 인자 : return_tensors=str(반환될 텐서 종류. pt/tf), padding=bool/str(True-최대길이로 패딩, 'max_length'-max_length인자의 길이/모델이 허용하는 최대길이로 패딩, 
   False-패딩X(default)), truncation=bool/str(True-모델이 허용하는 최대길이로 자름, 'only_second/first'-앞과 동일하나 한쌍의 시퀀스(배치)가 주어지면 두번째/첫번째만 자름, False-자름X),
   max_length=int(패딩/잘림 길이 제어. truncation의 경우 False가 아니라면 모두 여기서 지정한 길이로 자름), is_split_into_words=bool(단어가 이미 나뉘어있는지 여부, 리스트속 문자열==한 문장),
   
-- tokenizer.encode(sent) : 주어진 시퀀스를 인코딩. 원시 텍스트 시퀀스도, 이미 토큰화된 시퀀스도 처리가능(is_pretokenized=True). 
+- tokenizer.encode(sent) : 주어진 시퀀스를 인코딩. 원시 텍스트 시퀀스도, 이미 토큰화된 시퀀스도 처리가능(is_pretokenized=True). __call\_\_()의 ["input_ids"\]와 동일함.  
 - tokenizer.encode_batch(sent) : 주어진 시퀀스배치를 인코딩. 각 배치(문장)는 리스트 형태롤 존재하며, 문장내에 리스트, 튜플 형태로 존재할 수 있음.
 - tokenizer.decode(encoded_sequence) : 디코딩. 인코딩된 시퀀스를 원래의 문장으로 되돌림. skip_special_tokens=False면 특별토큰은 그대로 유지됨.
 - tokenizer.decode_batch(encoded_sequence) : ID배치를 디코딩. 디코딩하려는 시퀀스배치를 입력으로 넣어줌. 
+- tokenizer(FAST).(batch_)encode_plus(encoded_sequence) : 현재는 사용되지 않으며, tokenizer의 __call\_\_과 동일함. batch_는 한번에 여러 문장을 인코딩 할 수 있게 해줌.
 - encode 인자 : add_special_tokens = bool(문장의 시작과 끝에 [cls\], [sep\]토큰 추가), max_length = i(문장의 최대 길이), 
   pad_to_max_length = bool(패딩), return_attention_mask = bool(어텐션마스크 반환), return_tensors = str(반환될 텐서 종류. pt/tf).
 

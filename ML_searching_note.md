@@ -164,6 +164,11 @@
 - pandas_profiling : pip install -U pandas-profiling으로 설치가능. 명령어 한번으로 데이터 탐색을 시켜줌.
 - df.profile_report() : 프로파일 결과를 반환. .to_file('경로.html')로 html 으로도 확인할 수 있다.
 
+# Scipy
+***
+- scipy.sparse.csr_matrix(eye) > 주어진 배열 중 0이 아닌 요소만 위치와 값을 저장(희소행렬).
+- scipy.sparse.coo_matrix((ones, (arange, arange)) > 주어진 배열 중 0이 아닌 요소만 위치와 값을 저장(희소행렬).
+
 # matplotlib.pyplot
 ***
 - 구동방식 : PyplotAPI(matplotlib.pyplot 모듈에 함수로 정의되어있는 커맨드방식)/객체지향API(객체지향 라이브러리를 직접 활용하는 방식)두가지의 사용 방법이 있음.
@@ -656,20 +661,8 @@
 - summary = sess.run(merge) : 원하는 스텝마다 merge를 실행해 summary값을 구함. 스텝은 batch_num(epoch마다 나옴)보단 global step(반복x 0부터)으로 넣어주면 좋음.
 - writer.add_summary(summary, global_step) : 나온 summary를 FileWriter에 추가함. 넣을때마다 새로운 event가 저장됨. tf.train.global_step()으로 글로벌 스텝 획득가능.
 
-
-# wordcloud
-***
-- 워드클라우드 제작 예제 + 설명
-> wordcloud = wordcloud.WordCloud(  : 워드 클라우드 제작. plt imshow 로 출력.
->                        font_path = fontpath,
->                        stopwords = [문자열 리스트\],
->                        background_color = 색('white'),
->                         width = width, height = height).generate(data)
-
-# Scipy
-***
-- scipy.sparse.csr_matrix(eye) > 주어진 배열 중 0이 아닌 요소만 위치와 값을 저장(희소행렬).
-- scipy.sparse.coo_matrix((ones, (arange, arange)) > 주어진 배열 중 0이 아닌 요소만 위치와 값을 저장(희소행렬).
+# wandb
+- (?)
 
 
 # os | os(파일, 디렉토리)관련 명령
