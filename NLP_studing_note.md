@@ -572,7 +572,7 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 ### model
 - transfomers.models : 트랜스포머 기반의 다양한 모델을 파이토치/텐서플로우로 각각 구현해놓은 모듈. 각 모델에 맞는 토크나이저도 구현되어있음.
 
-- transformers.(TF)AutoModel.from_pretrained(모델명) : 사전훈련된 모델과 관련된 모델 사용. 
+- transformers.(TF)AutoModel.from_pretrained(모델명) : 사전훈련된 모델과 관련된 모델 사용. .vocab[key\]로 단어가 있는지, 어떤 정수인지 확인 가능.
 - transformers.(TF)AutoModelForSequenceClassification.from_pretrained(모델명, from_pt=bool) : 사전훈련된 모델을 기반으로 시퀀스 분류기 로드.
 - transformers.(TF)DistilBertForSequenceClassification.from_pretrained(모델명, from_pt=bool) : 더 작고/빠르고/저렴하고/가벼운 BERT의 증류된버전 DistilBert 시퀀스분류기 사용.
 - from_pretrained로 모델을 가져올때, num_labels등의 인자를 이용해 간단한 모델변경이 가능하나, 이 경우 사전훈련헤드를 버리고 랜덤초기화인 분류헤드로 바꿔, 이전의 지식을 모델에 전달해야 함(전이학습).
@@ -642,10 +642,6 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - 모델 메서드 : .encode_as_pieces(line)로 문장을 서브워드 시퀀스로, .encode_as_ids(line)로 문장을 정수 시퀀스로 변경할 수 있음.
 - 모델 메서드 : .GetPieceSize()(단어집합크기), .idToPiece(int)(정수 > 서브워드), .PieceToId(subword)(서브워드 > 정수)
 - 모델 메서드 : .DecodeIds(int list)(정수시퀀스>문장), .DecodePieces(서브워드 시퀀스)(서브워드시퀀스>문장), .encode(문장, output=str/int)(문장 > 서브워드/정수 시퀀스) 
-
-# transformers | Bert
-- transformers.BertTokenizer() : BERT토크나이저 로드. .from_pretrained(sent)로 사전훈련된 토크나이저(WordPiece와 비슷)사용. 
-  .vocab[key\]로 단어가 있는지, 어떤 정수인지 확인 가능.
 
 # replacers | 텍스트 대체, 반복 삭제
 - replacers.RegexpReplacer() : 텍스트 대체 클래스 로드. .replace(text)로 사용, 축약을 해제하고 단어 토큰화까지 진행해 리스트로 반환.
