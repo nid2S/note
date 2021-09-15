@@ -556,7 +556,8 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - tokenizer 인자 : return_tensors=str(반환될 텐서 종류. pt/tf), padding=bool/str(True-최대길이로 패딩, 'max_length'-max_length인자의 길이/모델이 허용하는 최대길이로 패딩, 
   False-패딩X(default)), truncation=bool/str(True-모델이 허용하는 최대길이로 자름, 'only_second/first'-앞과 동일하나 한쌍의 시퀀스(배치)가 주어지면 두번째/첫번째만 자름, False-자름X),
   max_length=int(패딩/잘림 길이 제어. truncation의 경우 False가 아니라면 모두 여기서 지정한 길이로 자름), is_split_into_words=bool(단어가 이미 나뉘어있는지 여부, 리스트속 문자열==한 문장),
-  
+  return_tensors를 생략하면 리스트로 반환됨.
+
 - tokenizer.encode(sent) : 주어진 시퀀스를 인코딩. 원시 텍스트 시퀀스도, 이미 토큰화된 시퀀스도 처리가능(is_pretokenized=True). __call\_\_()의 ["input_ids"\]와 동일함.  
 - tokenizer.encode_batch(sent) : 주어진 시퀀스배치를 인코딩. 각 배치(문장)는 리스트 형태롤 존재하며, 문장내에 리스트, 튜플 형태로 존재할 수 있음.
 - tokenizer.decode(encoded_sequence) : 디코딩. 인코딩된 시퀀스를 원래의 문장으로 되돌림. skip_special_tokens=False면 특별토큰은 그대로 유지됨.
