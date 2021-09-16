@@ -369,6 +369,21 @@
   이렇게 변환한 것은 안드로이드 스튜디오의 에셋에 복사 > app 모듈의 build.gradle 에 패키지 추가 > Main_Activity 에서 이미지 바이너리 변환 > Classifier 에서 모델 사용 >
   Main_Activity 에서 출력 순으로 사용된다.
 
+##### Dataset
+- 텐서플로우 데이터셋 : 텐서플로우의 데이터셋. 효율적인 입력파이프의 작성을 지원함(모델의 입력이 됨). 입력되는 요소는 named 튜플/딕셔너리의 중첩 구조.
+
+- tf.data.TextLineDataset(["file1.txt", "file2.txt"\]) : 파일의 라인처리(텍스트파일로 데이터 생성).
+- tf.data.Dataset.list_files(path패턴) : 패턴과 일치하는 모든 파일의 데이터세트 생성.
+
+- tf.data.Dataset.from_generator(generator) : 주어진 제네레이터를 기반으로 데이터셋 생성.
+- tf.data.Dataset.from_tensor_slices(tensors) : 주어진 텐서의 슬라이스로 데이터셋을 제작. {데이터명:텐서}형태. (x_train, Y_train)식으로 넣어 즐 수 있음.
+- tf.data.Dataset.from_tensors(tensors) : 주어진 텐서로 구성된 단일 요소로 데이터셋 제작.
+
+- 데이터셋.shuffle(buffer_size(len(데이터셋))) : 데이터셋을 섞음(ShuffleDataset으로 바꿈).
+- 데이터셋.batch(n) : 데이터셋의 배치를 n개로 나눔(BatchDataset으로 바꿈).
+- 데이터셋.repeat(n) : 데이터셋을 n번 반복함.
+- 데이터셋.as_numpy_iterator() : 넘파이 이터레이터로 데이터셋 확인.
+
 ##### layers
 - tf.keras.layers.Input(shape=(입력 차원)) : 입력차원 만큼 입력레이어 구성.
 - tf.keras.layers.Dense(노드수,activation="swish/relu")(X) : 전밀집층(모든 노드가 이전 혹은 다음 노드와 연결, 전결합층)제작. input_dim(입력차원)매개변수 사용가능. 
@@ -425,21 +440,23 @@
 
 - tensorflow.keras.callbacks.EarlyStopping(monitor="val_loss", mode="min", verbose, patience) : 과정합 방지를 위한 조기 종료 설정. 
   patience회 검증 데이터의 손실이 증가하면 학습을 조기종료함. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능.
-- tensorflow.keras.callbacks.ModelCheckpoint(모델명.h5, monitor="val_accuracy", mode="max", verbose=1, save_best_only=True) : 
-  검증 데이터의 정확도가 이전보다 좋아지면 모델 저장. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능.
+- tensorflow.keras.callbacks.ModelCheckpoint(모델명, monitor="val_accuracy", mode="max", verbose=1, save_best_only=True) : 
+  검증 데이터의 정확도가 이전보다 좋아지면 모델 저장. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능. 저장되는건 가중치 이기에, 같은 아키텍쳐를 공유하는 모델에 load_weight로 로드해야 함.
 
 ###### model train, use
 - model.compile(
--  optimizer='adam',  : 데이터와 손실함수를 바탕으로 모델 업데이트 방향 결정.
--  loss='sparse_categorical_crossentropy',  : 훈련중 모델 오차 측정.
--  metrics=['accuracy']  : 훈련단계와 테스트 단계를 모니터링하기 위한 방법.
+- optimizer='adam',  : 데이터와 손실함수를 바탕으로 모델 업데이트 방향 결정.
+- loss='sparse_categorical_crossentropy',  : 훈련중 모델 오차 측정.
+- metrics=['accuracy']  : 훈련단계와 테스트 단계를 모니터링하기 위한 방법.
 - ) : 모델 컴파일.
 
 - model.fit(train_data , train_labels , epochs=1000(반복 횟수)) : 학습된 모델 제작. validation_data=(test_data,test_label)로 검증용 데이터로 계산한 손실/정확도를 함께 출력가능하며,
   callback 매개변수에 callbacks의 함수를 넣어 사용할 수 있음. 여러개면 [one, two\]식으로 입력. loss와 accuracy(metrics)가 담긴 딕셔너리를 반환함.
 
-- model.save('파일명.h5') : 모델 저장. 모델 전체를 저장하는 게 아니라 가중치 등 일부만 저장한 뒤 재사용(transfer learning)히는 방법도 있음.
+- model.save(path) : 전체 모델 저장. 두가지의 다른 파일 형식(SaveModel, HDF5)으로 저장가능. 확장자없이 path만 넣으면 SaveModel, %.h5면 HDF5. 
 - model = tf.keras.models.load_model(모델명) : 저장된 모델 로드.
+- model.save_weights(path) : 모델의 가중치 저장.
+- model.load_weight(path) : 모델의 가중치 복원. 원본 모델과 같은 아키텍쳐를 공유해야 함.
 - model.evaluate(test_images, test_labels) : 모델 성능 비교. loss, accuracy 순으로 반환. verbose = 0 > silent
 
 - model.predict(X) : 모델을 사용해 입력에 따른 예측 반환.
