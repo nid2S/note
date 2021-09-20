@@ -216,9 +216,10 @@ for i in range(epoch):
       > [count/len(데이터로더.dataset)] : 정확도(accuracy)계산.
 
 
-# torchvision/text
+# torch_%
 - torchvision : 비전분야의 유명 데이터셋, 모델, 전처리도구가 포함된 패키지.
 - torchtext : 자연어처리 분야의 유명 데이터셋, 모델, 전처리도구(텍스트에 대한 추상화기능)가 포함된 패키지.
+  - torchaudio : 오디오 분야의 torch_%. 
 ## vision
 - torchvision.datasets.MNIST(경로, train=bool, transform=트랜스폼, download=bool) : MNIST 다운로드. 
   train=false면 test데이터 다운로드, download는 경로에 데이터가 없으면 다운로드받음.
@@ -252,6 +253,8 @@ for i in range(epoch):
 
 - torchtext.vocap.Vectors(name=W2V파일명) : 사전훈련된 Word2Vec모델 사용.
 - torchtext.vocab.Glove(name, dim) : 토치텍스트 제공 사전훈련된 임베딩벡터(영어)사용. (6B, 50/100/200/300)등이 있음.필드.build_vocap()의 vectors 인자의 입력으로 사용.
+## audio
+- (?)
 
 # Lightning/Ignite
 - 텐서플로우의 keras와 같이, High-level인터페이스를 제공하는 오픈소스 라이브러리들. ML사용자들에세 좋음.

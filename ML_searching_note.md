@@ -200,7 +200,7 @@
 - plt.title(title) : 그래프 제목 설정. loc-타이틀 위치('right','left'), pad-타이틀&그래프간격, 폰트 크기와 두께 설정 가능.
 - plt.x/ylabel(text) : x/y축에 레이블(축제목) 설정.
 - plt.x/yticks(number 리스트) : x/y축에 눈금 표시. 빈리스트를 넣으면 제거. label 매개변수에 리스트를 넣어 각 눈금의 이름을 지정해 줄 수 있음.
-- plt.x/ylim([min,max\]) : x/y축 범위 설정. 
+- plt.x/ylim([min,max\]) : x/y축 범위 설정. 축의 시작과 끝 지점을 지정할 수 있다.
 - plt.axis([x min, x max, y min, y max\]) : 축의 범위 지정.
 - plt.x/yaxis(rotation, fontsize) : x/y축의 폰트 회전 및 크기 설정.
 - plt.annotate(str, xy, xytext, arrowprops) : xy((x, y))부터 xytext((x, y))까지 설정에 따라({'color':'green'})화살표를 그린 후 문자열을 표시.
@@ -332,6 +332,10 @@
   과정을 거친 후 import org.tensorflow로 사용.
 
 
+##### divece
+- tf.test.is_gpu_available() : gpu가 사용가능한 상태인지 반환.
+- tf.test.gpu_device_name() : 사용가능한 gpu의 이름을 반환.
+
 ##### tensor
 - tf.Variable(수식, name="변수명") : 변수 선언 후 수식으로 정의. x+4 식으로 수식을 지정해 변수에 할당하는 방식.
 - tf.constant(상수, name="상수명") : 상수 선언 후 값 지정. y = tf.constant(20, name="y") 식으로 사용.
@@ -441,7 +445,7 @@
 - tensorflow.keras.callbacks.EarlyStopping(monitor="val_loss", mode="min", verbose, patience) : 과정합 방지를 위한 조기 종료 설정. 
   patience회 검증 데이터의 손실이 증가하면 학습을 조기종료함. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능.
 - tensorflow.keras.callbacks.ModelCheckpoint(모델명, monitor="val_accuracy", mode="max", verbose=1, save_best_only=True) : 
-  검증 데이터의 정확도가 이전보다 좋아지면 모델 저장. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능. 저장되는건 가중치 이기에, 같은 아키텍쳐를 공유하는 모델에 load_weight로 로드해야 함.
+  검증 데이터의 정확도가 이전보다 좋아지면 모델 저장. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능. 경로로 지정된 폴더에는 metadata/saved_model.pd파일이 생성됨.
 
 ###### model train, use
 - model.compile(
@@ -453,6 +457,7 @@
 - model.fit(train_data , train_labels , epochs=1000(반복 횟수)) : 학습된 모델 제작. validation_data=(test_data,test_label)로 검증용 데이터로 계산한 손실/정확도를 함께 출력가능하며,
   callback 매개변수에 callbacks의 함수를 넣어 사용할 수 있음. 여러개면 [one, two\]식으로 입력. loss와 accuracy(metrics)가 담긴 딕셔너리를 반환함.
 
+- 모델의 저장/로드는 모두 폴더명을 입력해 줘야 함.
 - model.save(path) : 전체 모델 저장. 두가지의 다른 파일 형식(SaveModel, HDF5)으로 저장가능. 확장자없이 path만 넣으면 SaveModel, %.h5면 HDF5. 
 - model = tf.keras.models.load_model(모델명) : 저장된 모델 로드.
 - model.save_weights(path) : 모델의 가중치 저장.
@@ -779,54 +784,3 @@ urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 - pygame.display.filp() : draw함수나 screen(set_mode())로 화면에 작성한 모든것을 업데이트. 
 
 - pygame.draw.rect/polygon/circle/eclipse/arc/line/lines/aaline/aalines() : 도형/선을 그림. 여러 매개변수를 주어 도형의 색/크기/위치/그 외 기타등등을 설정가능.
-
-# tkinter
-- tkinter : 파이썬 GUI프로그래밍 패키지. 파이썬에서 기본 제공.
-### 윈도우
-- win = tkinter.Tk() : tk인터 객체 생성. 창에 대한 조작이 이 객체를 통해 이뤄짐.
-- win.mainloop() : 창 실행. 창에 대한 모든 조작/설정이 이뤄진 후에 사용. 실행시 창의 종료시까지 더이상 코드가 진행되지 않음.
-- win.geometry("X(너비)xY(높이)") : 창 크기 조절. (너비x높이+x좌표+y좌표)식으로 사용.
-- win.title(str) : 창 제목 설정.
-- win.option_add("*Font", "맑은고딕(종류) 25(크기)") : 폰트의 종류/크기 설정. tk인터의 기본 폰트가 작아 사용해주어야 함. 
-- win.configure(bg="색") : 창 배경색 설정.
-- win.after(지연시간(ms), 실행함수, 함수전달인자1, 2) : 일정시간 후 함수 실행.
-- win.after_cancle(after변수) : after삭제. after를 이용한 재귀를 만든 후 재귀를 탈출/삭제시 유용.
-### 위젯
-- 위젯.config() : 위젯에 설정을 적용. 각 위젯의 생성시 넣을 수 있는 인자는 전부 넣을 수 있음. 각 위젯의 인자는 control+클릭으로 init을 열어보면 볼 수 있음.
-- 위젯.pack() : 설정한 위젯을 pack형식(쌓음)으로 적용(배치). side=top/left/right/bottom으로 위치를, padx/y=i로 패딩을 설정할 수 있음.
-- 위젯.grid() : 위젯을 grid형식(격자)으로 적용(배치). column=i, row=j로 위치를, row/columnspan=n으로 공간 병합을 사용할 수 있음. 위젯의 사이가 빌 수 없음.
-- 위젯.place() : 위젯을 place형식(자유)으로 적용(배치). x=x,y=y로 절대적 위치를, relx/y로 상대적 위치를 지정 가능.
-##### button
-- btn = tkinter.Button(win) : win에 버튼 생성. text="버튼"등의 인자를 주어 버튼에 대한 설정이 가능.
-- btn.config(command=함수) : 버튼 클릭시 함수를 적용.  
-##### entry
-- ent = tkinter.Entry(win) : win에 입력창 생성.
-- ent.get() : 입력창에서 입력된 문자열을 가져옴.
-- ent.config(show="*") : 입력 문자를 숨김(입력된 문자로 대체).  
-- ent.insert(i, 문자열) : i부터 문자열을 삽입.
-- ent.delete(i, j) : i~(j-1)까지의 문자열을 삭제. 
-- ent.bind(버튼명, 함수) : 입력창을 버튼으로 클릭했을 때 함수를 실행. 버튼은"<Button-1>"(우클릭)식이며, 함수는 event인자를 받아야 함.
-##### label
-- lab = tkinter.Label(win) : win에 라벨을 생성. text, image(PhotoImage객체)등의 인자를 사용 가능. 
-- img = tkinter.PhotoImage(file="경로", master=win) : 이미지객체 생성.
-- img.subsample(i) : i배로 이미지를 축소.
-##### listbox
-- lb = tkinter.Listbox(win) : 리스트박스 생성. 스택처럼 선택지가 박스형태로 펼쳐져 있음.
-- lb.insert(i, 문자열) : i에 문자열을 삽입.
-- lb.curselection() : 선택한 항목의 인덱스를 튜플형태로 받음.
-- lb.config(selectmode="multiple") : 여러개를 선택할 수 있도록 함.
-##### check/radio button
-- iv = tkinter.intVar() : 들어간 위젯의 상태에 따라 상태가 바뀌는 변수 생성. .get()으로 체크여부(0,1)를 받아볼 수 있음.
-- cb = tkinter.Checkbutton(win, variable=iv) : 체크박스 생성. 체크 상태에 따라 iv.get()의 값이 바뀌며, 선택지마다 위젯을 추가해야함.
-- rb = tkinter.Radiobutton(win, value=값, variable=iv) : 라디오버튼 생성. iv.get()사용시 체크된 라디오버튼의 value값이 반환됨. 
-##### combo box
-- cb = tkinter.ttk.Combobox(win, values=리스트) : 콤보박스 생성. 리스트 속 값을 콤보박스의 값들로 함. 
-- cb.get() : 선택된 값을 반환.
-##### spinbox
-- sb = tkinter.Spinbox(win, from_=min, to=max) : 스핀박스 생성. min에서 max까지 수치를 조절 가능.
-- sb.get() : 선택된 값을 반환.
-##### scale
-- sc = tkinter.Scale(win) : 스케일바(소리조절등에 사용되는 막대)생성. length인자로 길이 조절 가능.
-- sc.config(from_=min, to=max) : 스케일박스의 범위 설정.
-- sc.config(orient="horizontal") : 스케일박스의 방향을 가로로 변경.
-- sc.config(tickinterval=i) : 스케일박스에 표시되는 숫자의 간격을 i로 변경.
