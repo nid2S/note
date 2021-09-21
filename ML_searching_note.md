@@ -688,8 +688,20 @@
 - writer.add_summary(summary, global_step) : 나온 summary를 FileWriter에 추가함. 넣을때마다 새로운 event가 저장됨. tf.train.global_step()으로 글로벌 스텝 획득가능.
 
 # wandb
-- (?)
+- wandb(Weights & Biases, WandB) : ML을 위한 개발 툴. Tensorboard와 비슷한 기능(Dashboard/Sweeps/Artifacts)을 하나 tf, pytorch등 여러 모듈에서 사용가능함.
 
+- wandb.login() : wandb login. 먼저 wandb홈페이지에서 회원가입을 한 후 사용가능. 계정이 없다면 계정을 생성, 그 후 로그인을 진행.
+- wandb.init() : wandb 초기설정. project에 project명을, entity에 계정명을, name에 저장하는데 사용하는 이름을 인자로 줄 수 있음. 이 외에도 config등의 인자 사용가능.
+- wandb.run.name : 매 실행 이름. 여기에 값을 할당해 실행 이름을 지정할 수 있고, 생략시 임의로 지정됨.  wandb.run.id를 넣어 생성된 runID임을 명시할 수 도 있음.
+
+- wandb.config.updata(args) : wandb에서 갱신할 변수들을 설정. parser.parse_args()(argparse)를 넣거나 {변수명: 값}형태의 딕셔너리를 넣어 파라미터 일부/전체를 업데이트 가능. 
+- wandb.config.변수명 : 설정을 wandb에 넣어둠. 변수명은 epochs/batch_size등이며, init에서 config매개변수에 딕셔너리 형태로도 넣을 수 있음. 
+
+- wandb.log(dict) : 이미지, accuracy, test_loss등의 로그를 기록. {저장될 이름: 값}형태이며, 이미지(plt)/히스토그램(wandb.Histogram(numpy_array_or_sequence))등이 전부 가능함. 
+- wandb.watch(model) : 모델의 학습을 따라가며 진행과정을 보여줌. 
+
+# argparse
+- (?)
 
 # os | os(파일, 디렉토리)관련 명령
 - os.getcwd() : 현재 작업 폴더 반환.
