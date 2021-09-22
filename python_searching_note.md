@@ -1,3 +1,9 @@
+# python
+***
+- python : 귀도 반 로섬이 제작한 고급 프로그래밍 언어. 비영리의 파이썬 소프트웨어 재단이 관리하는 개방형/공동체 기반 개발모델을 가지고 있음. 
+- 특징 : 플랫폼 독립적, 인터프리터식, 객체지향적, 동적타이핑(실행시간에 자료형을 검사)대화형 언어. 들여쓰기와 콜론(:)으로 코드블록이 구분되는 문법을 가짐.
+- 변수의 자료형 : 동적타이핑. 기본적으로 변수들이 메모리를 공유하기 때문에, 자료형을 명시하지 않아도 자동으로 자료형이 맞춰진다.
+
 # print
 ***
 - print(a,b,c,sep=',') > 사이를 sep 로
@@ -736,7 +742,6 @@ for number , name in zip(number_l,name_l):
 - hex(정수) : 16진수 / oct(정수) > 8진수 (둘다 문자열로)
 - bin(정수) : 2진수 변환 / int('2진수문자열', 2) > 2진수 10진수 변환
 - math.isclose(0.1 + 0.2, 0.3) : 두 실수가 같은지 판단.
-- 파이썬의 제작자는 귀도 반 로섬.
 
 # Virtual environment
 ***
@@ -763,6 +768,7 @@ for number , name in zip(number_l,name_l):
 - add_argument인자 : action(인자발견시 수행할 액션의 기본형), nargs(소비되야하는 인자의 수), const(일부action및nargs선택시 필요상숫값), 
   default(인자가 명령행에도 namespace에도 없뇬으면 생성되는 값), type(명령행인자가 변환되야 할 형), choices(인자로 허용되는 값의 컨테이너),
   required(명령행 옵션 생략가능여부), help(인자기능에 대한 간단한 설명), metavar(사용메세지에 사용되는 인자명), dest(parse_args()의 반환객체에 추가될 속성이름).
+- add_argument예시 : [parser.add_argument('-b', '--batch-size', type=int, default=8, metavar='N', help='input batch size for training (default: 8)')]
 - args = parser.parse_args() : 인자를 파싱. 명령행 검사 -> 인자를 적절한 형으로 변환 -> 적절한 액션을 호출. sys.argv에서 자동으로 명령행인자 결정.
 - args.accumulate(args.인자명) : 해당 인자의 값을 가져옴.
 
@@ -793,7 +799,6 @@ for number , name in zip(number_l,name_l):
 - sys.exit() : 강제로 스크립트 종료. Ctrl+Z/D등과 같은 기능을 함.
 - sys.path : 파이썬 모듈들이 저장되어있는 위치들을 반환함. ''은 현재 디렉토리. .append()로 경로를 추가하면 해당 경로의 파이썬모듈을 사용할 수 있음.
 - sys.ps1 : 현재 프롬프트(코드 입력을 의미하는 >>>)를 반환. 이 변수에 값을 할당해 다른걸로 바꿀 수 있음.
-
 
 # tkinter
 - tkinter : 파이썬 GUI프로그래밍 패키지. 파이썬에서 기본 제공. 구글의 colab이나 서버컴퓨터를 이용한 실행 등, 서버를 따로 두고있는 환경에선 실행할 수 없다.
@@ -845,8 +850,6 @@ for number , name in zip(number_l,name_l):
 - sc.config(from_=min, to=max) : 스케일박스의 범위 설정.
 - sc.config(orient="horizontal") : 스케일박스의 방향을 가로로 변경.
 - sc.config(tickinterval=i) : 스케일박스에 표시되는 숫자의 간격을 i로 변경.
-
-
 
 
 
