@@ -276,6 +276,7 @@
 
 # OpenCv (cv2)
 ***
+- 설치 : `pip install opencv-python`로 설치해야 함.
 - cv2.imread('이미지 경로',읽는 방법) > 이미지 읽기. 이미지가 작업 디렉토리에 있거나 전체 경로를 주어야 함. data type 을 지정하지 않으면 상수형 int 타입으로 저장.
 - 1 = 컬러이미지(default) / 0 = 그레이스케일 이미지 / -1 = unchanged
 - cv2.cvtColor(BGR 이미지,cv2.COLOR_BGR2RGB) > OpenCv 로 읽어온 BGR 이미지를 RGB 이미지로 변환함
@@ -315,6 +316,7 @@
 
 # PIL(Pillow)
 - PIL : Python Imaging Library. 
+- 설치 : `pip install image`로 설치.
 - Pillow : PIL의 프로젝트 포크(Fork).
   
 - PIL.Image.fromarray(frame(cv2비디오캡쳐.read())) : cv2에서 읽은 이미지/비디오의 프레임을 Image객체로 변환.  

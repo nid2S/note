@@ -728,7 +728,7 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - 매개변수 : .pos(), .morphs() 사용시 norm=bool(일정 수준의 정규화), stem=bool(표제어(원본글자)로 변형)등의 매개변수를 사용할 수 있음.
   
 - MeCab : 띄어쓰기에서 속도/정확도 모두 뛰어남. 지능형 형태소 분석기(결과 수작업 수정가능), 단어 추가가능. 미등록어 처리/동음이의어 처리의 문제가 있음.  
-  C/C++로 개발, CRF채용. 사용자 사전 추가시, mecab디렉토리의 user-dict에서 단어를 추가 후, add-userdic-win.ps1을 powershell에서 실행.
+  C/C++로 개발, CRF채용. 사용자 사전 추가시 폴더가 C:\mecab에 있어야 하며, 그 후 폴더를 옮겨도 실행이 불가능하다. 
   [기본사전](https://github.com/Pusnow/mecab-ko-dic-msvc/releases/tag/mecab-ko-dic-2.1.1-20180720-msvc) 과
   [Mecab실행기](https://github.com/Pusnow/mecab-ko-msvc/releases/tag/release-0.9.2-msvc-3) 를 다운로드 받고,
   [Mecab python_wheel](https://github.com/Pusnow/mecab-python-msvc/releases/tag/mecab_python-0.996_ko_0.9.2_msvc-2) 에서 맞는 버전(3.7이 최신)을 설치 후
@@ -744,15 +744,20 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 
 
 ### ckonlpy
-- [pip install customized_konlpy] : 사용자사전 추가를 위한 패키지 설치. 
+- `pip install customized_konlpy` : 사용자사전 추가를 위한 패키지 설치. 
 - 클래스 : konlpy와 같은 .tag.Twitter()등을 사용해 형태소분석기 등을 사용할 수 있음.
 - 형태소분석기.add_dictionary(word, 품사) : 형태소분석기 사전에 단어 추가.
 
 # soynlp | 반복 제어, 품사태깅, 단어 토큰화
-- SOYNLP : 품사 태깅, 단어 토큰화 등을 지원. 비지도 학습으로 토큰화. 학습에 필요한 문서를 다운로드할 필요가 있음.
+- SOYNLP : 품사 태깅, 단어 토큰화 등을 지원. 비지도 학습으로 토큰화. 어느정도 규모가 있으면서 비슷한 문서집합에서 잘 작동.
+- 형태소 분석기 : 데이터의 통계량을 확인해 만든 단어점수표로 작동. 응집확률(문자열이 유기적으로 연결되 자주 등장)과 브랜칭 엔트로피(앞뒤로 다양한 단어 등장)를 사용함.
 - soynlp.DoublespaceLineCorpus("txt파일.txt") : 데이터를 다수의 문서로 분리함.
 - soynlp.normalizer.emoticon_normalize(sent, num_repeats=i) : ㅋㅋ,ㅎㅎ 등의 이모티콘을 i개 까지만 반복되도록 변환.
 - soynlp.normalizer.repeat_normalize(sent, num_repeats=i) : 의미없이 반복되는 글자를 i개 까지만 반복되도록 변환.
+
+# khaiii | Khaiii토크나이저 사용
+- tokenizer = khaiii.KhaiiiApi() : 카이 토크나이저 로드.
+- tokenizer.analyze(sent) : 문장분석. 반환값의 요소를 빼내어 word.morphs로 토큰/품사 형태의 결과를 볼 수 있다(str으로 변환 필요).
 
 # hgtk | 한국어 자소단위로 쪼개기
 - hgtk.text.decompose(sent, compose_code) : 문장을 자소단위로 쪼갬. 글자간 경계 문자는 생략시 기본값인 ᴥ가 사용됨.

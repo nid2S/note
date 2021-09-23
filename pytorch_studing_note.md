@@ -219,7 +219,7 @@ for i in range(epoch):
 # torch_%
 - torchvision : 비전분야의 유명 데이터셋, 모델, 전처리도구가 포함된 패키지.
 - torchtext : 자연어처리 분야의 유명 데이터셋, 모델, 전처리도구(텍스트에 대한 추상화기능)가 포함된 패키지.
-  - torchaudio : 오디오 분야의 torch_%. 
+- torchaudio : 오디오 분야의 torch_%. 
 ## vision
 - torchvision.datasets.MNIST(경로, train=bool, transform=트랜스폼, download=bool) : MNIST 다운로드. 
   train=false면 test데이터 다운로드, download는 경로에 데이터가 없으면 다운로드받음.
