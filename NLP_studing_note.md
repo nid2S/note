@@ -722,13 +722,14 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 
 # KoNLpy | 한글 분석(토큰화, 태깅)
 - konlpy : 한글 분석을 가능하게 함. 자바로 이뤄져 있어 JDK 1.7 이상과 JPype 가 설치되어 있어야 함. 각 분석기는 성능과 결과가 다르게 나와 용도에 따라 적절한 것을 선택해야 함.
+  python 3.9이상에선, JPype1-py3를 설치한 후 jvm.py에서 `convertStrings=True(line 64)`를 지워야 사용할 수 있다.
 - 형태소 분석기 종류 : 메캅(MeCab), Okt(Open Korea Text(Twitter)), 코모란(Komoran), 한나눔(Hannanum), 꼬꼬마(Kkma)등의 형태소 분석기 사용 가능.
 - 함수 : konlpy.tag.분석기명()으로 분석기사용, .morphs(text){토큰화}, .pos(text){토큰화 후 품사 태깅(.tagset으로 종류확인)}, .nouns(text){명사만 추출}에 
   Okt.phrases(text){구문별로 나눔}, Kkma.sentences(text){문장별로 나눔}, 한나눔.analyze(text){형태소후보 모두반환}등이 사용가능.
 - 매개변수 : .pos(), .morphs() 사용시 norm=bool(일정 수준의 정규화), stem=bool(표제어(원본글자)로 변형)등의 매개변수를 사용할 수 있음.
   
-- MeCab : 띄어쓰기에서 속도/정확도 모두 뛰어남. 지능형 형태소 분석기(결과 수작업 수정가능), 단어 추가가능. 미등록어 처리/동음이의어 처리의 문제가 있음.  
-  C/C++로 개발, CRF채용. 사용자 사전 추가시 폴더가 C:\mecab에 있어야 하며, 그 후 폴더를 옮겨도 실행이 불가능하다. 
+- MeCab : 띄어쓰기에서 속도/정확도 모두 뛰어남. 지능형 형태소 분석기(결과 수작업 수정가능), 단어 추가가능. 성능이 가장 뛰어나나 사용이 번거롭단 문제가 있음.
+  C/C++로 개발, CRF채용. mecab폴더는 무조건 C에 있어야(C:\mecab)에 있어야 함.
   [기본사전](https://github.com/Pusnow/mecab-ko-dic-msvc/releases/tag/mecab-ko-dic-2.1.1-20180720-msvc) 과
   [Mecab실행기](https://github.com/Pusnow/mecab-ko-msvc/releases/tag/release-0.9.2-msvc-3) 를 다운로드 받고,
   [Mecab python_wheel](https://github.com/Pusnow/mecab-python-msvc/releases/tag/mecab_python-0.996_ko_0.9.2_msvc-2) 에서 맞는 버전(3.7이 최신)을 설치 후
