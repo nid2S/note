@@ -37,6 +37,12 @@
 - RMSE : 평균제곱근오차(Root MSE). √(MSE). 회귀모델에 사용.
 - MAE : 평균절대오차(Mean Absolute error). 손실의 절댓값의 평균. 회귀모델에 사용. 
 
+- ROUGE : 요약(summarization)에서의 성능평가를 위한 지표. 생성한 서머리와 레퍼런스를 precision과 recall을 이용해 스코어링(f1 Measure)
+- ROUGE-1 : 레퍼런스와 모델 서머리간 겹치는 unigram 수를 봄.
+- ROUGE-2 : 레퍼런스와 모델 서머리간 겹치는 bigram 수를 봄.
+- ROUGE-S : window size가 주어졌을때, 사이즈 내에 위치하는 단어쌍을 묶어 중복되는 정도를 봄.
+- ROUGE-L : LCS(Longest common subsequence)를 사용해 최장길이로 매칭되는 문자열 측정.
+
 - macro 평균 : 클래스 크기에 상관 없이 모든 클래스를 같은 비중으로 다룬다.
 - weighted 평균 : 클래스별 샘플 수로 가중치를 둬 f1 점수의 평균을 계산.
 - micro 평균 : 모든 클래스의 거짓 양성(FP), 거짓 음성(FN), 진짜 양성(TP)의 수를 세어 정밀도, 재현율, f1점수를 이걸로 계산한다.
