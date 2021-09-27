@@ -607,19 +607,24 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
   size(임베딩 벡터 차원), window(윈도우 크기), min_count(최소빈도수), workers(프로세스 수), sg(0-CBOW, 1-Skip_gram)등의 매개변수 사용가능.
 - gensim.models.FastText(corpus, size, window, min_count, workers, sg) : FastText 사용. 한국어에서 이걸 사용하려면 음절단위가 아닌 자모(ㄱ,ㅏ,ㄴ,ㅓ)단위로 사용함. 
 
-- 모델(W2V).wv.most_similar(word) : 유사한 단어들과 유사도(확률)출력.
-- 모델(W2V).similarity(w1, w2) : 두 단어간 유사도 계산.
+- 모델.wv[토큰\] : 해당 토큰의 임베딩 벡터 반환(ndarray). 만약 사전에 없는 단어를 넣으면 KeyError발생. 
+- 모델.wv.most_similar(word) : 유사한 단어들과 유사도(확률)출력.
+- 모델.similarity(w1, w2) : 두 단어간 유사도 계산.
   
-- 모델(W2V).wv.save_word2vec_format(name) : 모델 저장.
-- gensim.models.KeyedVectors.load_word2vec_format(path) : 저장된 모델 로드.
+- 모델.save(모델명.bin) : 모델저장.
+- 모델.wv.save(모델명.wordvectors) : 모델에서 생성된 벡터 저장.
+- 모델.wv.save_word2vec_format(name) : 모델에서 생성된 벡터 저장.
+- gensim.models.Word2Vec.load(모델명) : 모델로드.
+- gensim.models.KeyedVectors.load(모델명.wordvectors) : 모델에서 생성된 벡터 로드.
+- gensim.models.KeyedVectors.load_word2vec_format(path) : 저장된 text/bin형식의 모델에서 모델벡터(wv)로드.
 
-- [google_W2V](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit) : 구글 제공 3백만개의 사전훈련된 W2V 단어 벡터 로드. 
-  load_word2vec_format으로 .bin 의 다운 파일 사용 가능.  
-- [ko_W2V](https://drive.google.com/file/d/0B0ZXk88koS2KbDhXdWg1Q2RydlU/view) : 박규병 님 제공 한국어 W2V 단어 벡터 로드. 
+- gensim.downloader.load(모델명) : 사전훈련된 모델 로드. 
+- gensim.downloader.info() : 다운로드 가능한 것들의 정보 확인. list(gensim.downloader.info()['models'\].keys())로 모델의 정보만 확인 가능.
 
-- [embedding_Projector](https://projector.tensorflow.org/) : 임베딩 벡터 시각화 사이트. 
-  [!python -m gensim.scripts.word2vec2tensor --input 모델이름 --output 모델이름] 명령어를 사용해 모델명_metadata.tsv파일과 
-  모델명_tensor.tsv 파일을 생성한 후 사용할 수 있음.
+- [google_W2V](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit) : 구글 제공 3백만개의 사전훈련된 W2V 단어 벡터 로드(model.bin). 
+
+- [embedding_Projector](https://projector.tensorflow.org/) : 임베딩 벡터 시각화 사이트. `!python -m gensim.scripts.word2vec2tensor --input 모델이름 --output 모델이름` 
+  명령어를 사용해 모델명_metadata.tsv파일과 모델명_tensor.tsv 파일을 생성한 후 사용할 수 있음.
 
 # glove | GloVe
 - glove : pip install glove_python 으로 다운로드 가능. 워드 임베딩의 방법 중 하나인 glove를 사용할 수 있음.
