@@ -134,7 +134,7 @@
 - df.to_dict/numpy() : 데이터프레임을 딕셔너리/ndarray로 변환. 이 외에도 index,values등에 to_list/tolist()등의 함수가 있기도 함.
 
 - df.items() : 열이름, 시리즈 형태의 제너레이터 반환. iteritems()도 비슷함.
-- df.iterrows() : (인덱스, 시리즈(열의 값들))형태의 튜플 반환. 
+- df.iterrows() : (인덱스, 시리즈(열의 값들))형태의 튜플 반환. df[열\]로 빼울때는 .item()을 써야 했던것과 달리 row[열\]만써도 바로 가져올 수 있음.
 - df.itertuples(): rows와 비슷하나 map(이터레이터)으로 반환 후 pandas.core.frame.Pandas객체 반환. 사용은 튜플과 비슷.
   
 - df[열이름\].nunique() : 열에서 중복된 샘플을 제외한 샘플의 개수 출력. 중복된 값이 있다면 단 하나의 값만 남게 됨.
