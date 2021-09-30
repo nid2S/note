@@ -536,6 +536,7 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 # HuggingFace | 트랜스포머기반 모델
 - transformer : 허깅페이스가 제작한, 트랜스포머 기반의 다양한 모델(transformer.models)과 학습 스크립트(transformer.Trainer)를 구현해 놓은 모듈.
   다양한 트랜스포머 기반 모델구현체를 손쉽게 쓸 수 있으나 high-level로 구현되어있어 커스터마이징이 비교적 어려움(소스코드를 참고해 원하는 클래스를 상속받아 오버라이딩 해야함).
+  각 모델마다(GPT, Bert, Bart) task별, 모델의 변형별 모델이 있어, 로드한 모델과 사용 task에 맞게 잘 선택해야 한다.
 - 기본 제공 task : 감정분석(긍정/부정), 텍스트 생성(영어, 다음문장생성), NER(각 단어를 나타내는 엔티티로 레이블지정), 
   QA(컨텍스트+질문 -> 답변), 마스킹된 텍스트 채우기(공백([MASK\])이 있는 텍스트의 공백을 채움), 요약, 번역, 특징추출(텍스트의 텐서 표현 반환).
 
@@ -580,6 +581,10 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 
 - transformers.DistilBertConfig(설정들) : 모델의 설정정의. 모델(config)로 구조는 동일한 채 파라미터만 약간 다른 사용자정의 모델을 사용할 수 있음.
 
+
+##### collator
+- collator : 허깅페이스의 토크나이저. 트레이너의 인자로 들어가 데이터셋을 가져오는 동시에 처리함. 반환값은 해당 모델의 {키워드: 값}형태의 딕셔너리. 
+
 ##### 모델 사용
 - model(encoded_input(인코딩된 문장들)) : 모델 사용. pytorch의 경우 사전압축을 풀어야(**)함. labels인자로 label을 전달해 줄 수 있으며, 이 경우 반환에 loss가 생성됨.
   .logit으로 반환값을 볼 수 있으며, 예측을 위한 softmax는 물론, 다른 trainloop에서도 사용가능함.
@@ -588,7 +593,7 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - model.save_pretrained(경로) : 훈련된(미세조정된)모델(파라미터)저장. 저장한 모델은 from_pretrained로 사용가능히며, from_pt/tf로 어디서 생성된 모델인지 알려줘야 함.
 
 ### Trainer
-- transformers.Trainer : 딥러닝 학습/평가에 필요한 optimizer, lr schedul, tensorboard, 평가등을 수행하는 모듈. pytorch용이며 tf모델은 .compile(), .fit()을 사용해야 한다. 
+- transformers.Trainer : 딥러닝 학습/평가에 필요한 optimizer, lr schedul, tensorboard, 평가등을 수행하는 모듈. 그냥 torch나 tf의 훈련방식대로 훈련할 수 도 있으나, 조금 더 편함. 
 
 - transformers.TrainingArgments(output_dir) : Trainer의 정의를 위한 TrainingArgument객체를 생성. 조정가능한 모든 하이퍼파라미터, 지원하는 훈련옵션을 실행하기 위한 플래그가 속해있음.
   트레이너에 compute_metrics를 넣은 뒤 evaluation_strategy="epoch"로 epoch마다 정확도를 보고하게 할 수 있으며, 이 외에도 learning_rate, num_trian_epochs등 다양한 옵션이 있음.
