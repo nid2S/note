@@ -858,9 +858,10 @@ for number , name in zip(number_l,name_l):
 - sc.config(tickinterval=i) : 스케일박스에 표시되는 숫자의 간격을 i로 변경.
 
 
+# else program
+***
 
 # git
-***
 - git clone (깃허브 디렉토리 주소) .(현재 디렉토리) : github 디렉토리의 파일을 전부 복사해옴
 - git diff : 마지막 수정 이후 추가한 내용을 알려줌
 - git add (더할 파일) : 필드(커밋시 git에 등록될 파일이 있는 공간)에 올림
@@ -881,3 +882,6 @@ for number , name in zip(number_l,name_l):
 - [java -jar (bfg파일경로+bfg파일명).jar --strip-blobs-bigger-than 100M (.git파일명).git] : 해당 깃 레포지토리 사용. 제거할 파일이 있는 레포지토리를 사용해야 함.
 - [java -jar (bfg파일경로+bfg파일명).jar --delete-files(-D) (삭제할파일)] : 삭제 파일 등록. 파일 삭제.
 - [git reflog expire --expire=now --all && git gc --prune=now --aggressive] : 파일 삭제 확정. 이 이후 push를 실행하면 됨. 
+
+# scp
+- (복사할 파일의 경로에서) scp file.txt(파일명) temp_1@10.120.72.239:/home/temp_1(파일을 복사해 넣을 경로) : 파일을 복사해 넣음.
