@@ -608,17 +608,20 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 # gensim | word2vec, FastText
 - gensim : 통계적의미론에 초점이 맞춰져, 문서의 구조를 분석한 후 유사성을 기준으로 다른 문서에 점수를 주는
   W2V, D2V, FastText, LDA등과 많이 사용하는 알고리즘에 최적화 되있는 모듈.  
-- gensim.models.Word2Vec(sentences, size, window, min_count, workers, sg) : 워드 투 벡터 사용. 
+- gensim.models.Word2Vec(sentences, size, window, min_count, workers, sg) : WordToVector학습. 
   size(임베딩 벡터 차원), window(윈도우 크기), min_count(최소빈도수), workers(프로세스 수), sg(0-CBOW, 1-Skip_gram)등의 매개변수 사용가능.
-- gensim.models.FastText(corpus, size, window, min_count, workers, sg) : FastText 사용. 한국어에서 이걸 사용하려면 음절단위가 아닌 자모(ㄱ,ㅏ,ㄴ,ㅓ)단위로 사용함. 
+- gensim.models.FastText(corpus, size, window, min_count, workers, sg) : FastText학습. 한국어에서 이걸 사용하려면 음절단위가 아닌 자모(ㄱ,ㅏ,ㄴ,ㅓ)단위로 사용함. 
 
-- 모델.wv[토큰\] : 해당 토큰의 임베딩 벡터 반환(ndarray). 만약 사전에 없는 단어를 넣으면 KeyError발생. 
-- 모델.wv.most_similar(word) : 유사한 단어들과 유사도(확률)출력.
-- 모델.similarity(w1, w2) : 두 단어간 유사도 계산.
-  
-- 모델.save(모델명.bin) : 모델저장.
-- 모델.wv.save(모델명.wordvectors) : 모델에서 생성된 벡터 저장.
-- 모델.wv.save_word2vec_format(name) : 모델에서 생성된 벡터 저장.
+- model.get_vector(token) : token의 wordVector반환. token이 vocab에 없다면 KeyError발생. word_vec()도 같은 역할을 함.
+- model.get_index(token) : token의 vocab내 인덱스를 반환. 
+- model.similarity(w1, w2) : 두 단어간 유사도 계산.
+- model.wv : 모델의 wordVector확인. {토큰: 벡터}형태의 딕셔너리로 되어있음. 
+- model.wv.most_similar(word) : word와 유사한 단어들, 유사도(확률)출력.
+
+- model.save(모델명.bin) : 모델저장.
+- model.wv.save(모델명.wordvectors) : 모델에서 생성된 벡터 저장.
+- model.wv.save_word2vec_format(name) : 모델에서 생성된 벡터 W2V형식으로 저장.
+
 - gensim.models.Word2Vec.load(모델명) : 모델로드.
 - gensim.models.KeyedVectors.load(모델명.wordvectors) : 모델에서 생성된 벡터 로드.
 - gensim.models.KeyedVectors.load_word2vec_format(path) : 저장된 text/bin형식의 모델에서 모델벡터(wv)로드.
