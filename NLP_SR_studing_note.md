@@ -77,6 +77,7 @@ plt.show()
 - SpeechRecognition : 파이썬 음성인식(STT) 라이브러리. WAV, AIFF, AIFF-C, FLAC 파일 형식을 지원.
 
 - speech_recognition.Recognizer() : Recognizer 객체 생성. 여러 기업에서 제공하는 음성인식 기술 사용 가능. 
+- speech_recognition.AudioData(byte객체) : byte객체를 오디오데이터로 만듦. sr에 사용가능.
 - speech_recognition.AudioFile(파일경로/파일객체) : 오디오파일(소스)오픈. 문자열(경로)이거나 io.ByteIO(소스, 이와 비슷한것도 가능)여야 함.
 
 - sr객체.record(오디오소스) : STT API를 사용할 수 있도록 sr객체에 오디오소스를 등록.   
@@ -140,6 +141,7 @@ frames = []   # 오디오가 저장될 배열 선언
 for i in range(int(RATE / CHUNK * RECORD_SECONDS)):   # 가져온 샘플의 개수를 한번에 읽을 양으로 나눈 뒤 초를 곱한(지정 초 동안 계산할 수)만큼 반복. 
     data = stream.read(CHUNK)                         # 청크 만큼 음성 데이터를 읽음
     frames.append(data)                               # 읽어온 음성 데이터를 저장
+frames = b''.join(frames)
 
 print("Recording is finished.")
 
