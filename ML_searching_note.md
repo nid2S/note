@@ -386,8 +386,11 @@
 - tf.data.Dataset.from_tensors(tensors) : 주어진 텐서로 구성된 단일 요소로 데이터셋 제작.
 
 - 데이터셋.shuffle(buffer_size(len(데이터셋))) : 데이터셋을 섞음(ShuffleDataset으로 바꿈).
-- 데이터셋.batch(n) : 데이터셋의 배치를 n개로 나눔(BatchDataset으로 바꿈).
+- 데이터셋.batch(n) : 데이터셋의 배치를 n개로1 나눔(BatchDataset으로 바꿈).
 - 데이터셋.repeat(n) : 데이터셋을 n번 반복함.
+- 데이터셋.prefetch(tf.data.experimental.AUTOTUNE(동적조정)) :  데이터셋에서 요소를 사전에 가져오는 데이터셋 생성. 메모리의 소모가 늘지만 대기시간이 짧아지고 처리량이 많아짐.
+
+- 데이터셋.cache(path) : 현 데이터셋의 요소를 캐시함. 첫 반복에 지정된 파일/메모리에 캐시되고, 그 뒤엔 캐시된 데이터셋을 사용함.
 - 데이터셋.as_numpy_iterator() : 넘파이 이터레이터로 데이터셋 확인.
 
 ##### layers
@@ -442,14 +445,8 @@
 
 - Subclassing API : Subclassing API 는 모델을 클래스 형태로 제작해 사용. tf.keras.Model을 상속시키고, init에서 입력과 사용할 층을 정의, call에서 층을 쌓아(연결해)반환.
 
-- model.summary() : 모델의 정보(layer(type), outputShape, param(파라미터(매개변수, 노드)수))를 확인할 수 있음
-
-- tensorflow.keras.callbacks.EarlyStopping(monitor="val_loss", mode="min", verbose, patience) : 과정합 방지를 위한 조기 종료 설정. 
-  patience회 검증 데이터의 손실이 증가하면 학습을 조기종료함. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능.
-- tensorflow.keras.callbacks.ModelCheckpoint(모델명, monitor="val_accuracy", mode="max", verbose=1, save_best_only=True) : 
-  검증 데이터의 정확도가 이전보다 좋아지면 모델 저장. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능. 경로로 지정된 폴더에는 metadata/saved_model.pd파일이 생성됨.
-
-###### model train, use
+##### model use
+###### train
 - model.compile(
 - optimizer='adam',  : 데이터와 손실함수를 바탕으로 모델 업데이트 방향 결정.
 - loss='sparse_categorical_crossentropy',  : 훈련중 모델 오차 측정.
@@ -459,16 +456,32 @@
 - model.fit(train_data , train_labels , epochs=1000(반복 횟수)) : 학습된 모델 제작. validation_data=(test_data,test_label)로 검증용 데이터로 계산한 손실/정확도를 함께 출력가능하며,
   callback 매개변수에 callbacks의 함수를 넣어 사용할 수 있음. 여러개면 [one, two\]식으로 입력. loss와 accuracy(metrics)가 담긴 딕셔너리를 반환함.
 
+- tensorflow.keras.callbacks.EarlyStopping(monitor="val_loss", mode="min", verbose, patience) : 과정합 방지를 위한 조기 종료 설정. 
+  patience회 검증 데이터의 손실이 증가하면 학습을 조기종료함. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능.
+- tensorflow.keras.callbacks.ModelCheckpoint(모델명, monitor="val_accuracy", mode="max", verbose=1, save_best_only=True) : 
+  검증 데이터의 정확도가 이전보다 좋아지면 모델 저장. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능. 모델의 체크포인트를 저장.
+- tensorflow.keras.callbacks.LearningRateScheduler(schedule) : 매 epoch가 시작될 때 업데이트된 학습률 값을 가져와 적용. 
+  스케줄러 함수(epoch와 lr을 인수로 받음)를 정의해 인수로 넣고, 이를 callback에 넣어 사용.
+
+###### save
 - 모델의 저장/로드는 모두 폴더명을 입력해 줘야 함.
 - model.save(path) : 전체 모델 저장. 두가지의 다른 파일 형식(SaveModel, HDF5)으로 저장가능. 확장자없이 path만 넣으면 SaveModel, %.h5면 HDF5. 
 - model = tf.keras.models.load_model(모델명) : 저장된 모델 로드.
+
+- model.get_weights() : 각 독립변수에 대한 가중치 반환.
 - model.save_weights(path) : 모델의 가중치 저장.
 - model.load_weight(path) : 모델의 가중치 복원. 원본 모델과 같은 아키텍쳐를 공유해야 함.
-- model.evaluate(test_images, test_labels) : 모델 성능 비교. loss, accuracy 순으로 반환. verbose = 0 > silent
 
-- model.predict(X) : 모델을 사용해 입력에 따른 예측 반환.
-- model.get_weights() : 각 독립변수에 대한 가중치 반환.
+- 체크포인트 : 가중치, 모듈 및 하위 모듈 내부의 변수 세트 값. 데이터자체(변수값과 해당속성 조회경로)와 메타데이터용 인덱스파일(실제 저장된 항목과 체크포인트 번호 추적)로 구성.
+- tf.train.Checkpoint(model) : 체크포인트 생성.
+- 체크포인트.write(path) : 체크포인트 저장. 전체 변수 모음이 포함된 python객체별로 정렬되어 있음.
+- 체크포인트.restore(path) : 체크포인트(python객체 값)를 덮어씀.
+- tf.train.list_variables(patj) : 체크포인트 확인.
+
+###### use
 - model.summary() 로 모델의 정보(이름/none,출력하는 개수/파라미터(가중치의 개수))를 확인 할 수 있다.
+- model.predict(X) : 모델을 사용해 입력에 따른 예측 반환.
+- model.evaluate(test_images, test_labels) : 모델 성능 비교. loss, accuracy 순으로 반환. verbose = 0 > silent
 
 # Pytorch ( torch )
 ***
