@@ -728,9 +728,14 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 ### translate
 - nltk.translate.bleu_score(candidate.split(), refrences.split()) : BLEU score 측정. 
 
-# spaCy | 토큰화(영어)
+# SpaCy | 토큰화(영어)
+- SpaCy : 산업에 강한 NLP. 속도와 모델크기, 정확성 측면에서 다른 라이브러리를 앞선다고 주장. 여러 언어용 모델이 포함 되어 있으나 완전한 건 16개.
 - spacy.load(언어) : 해당 언어의 처리를 위한 sapcy로드. 언어는 'en'등으로 사용.
 - 로드된spacy.tokenizer(sent) : 문장을 단어단위로 토큰화. 각 토큰들은 .text 로 문자열 형태로 받을 수 있음.
+
+# TextBlob | NLTK, Pattern
+- TextBlob : Pattern과 NLTK라이브러리의 친화적 프론트엔드. 고수준의, 사용하기 쉬운 인터페이스로 포장함.
+- Pattern : 인기 웹서비스와 소스를 스크래핑 할 수 있는 도구 탑재. 직접 NLP함수, n-gram검색, 벡터, 그래프등도 사용할 수 있으며, DB를 다룰 수 있는 헬퍼라이브러리도 내장됨.
 
 
 # KoNLpy | 한글 분석(토큰화, 태깅)
