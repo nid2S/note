@@ -774,7 +774,8 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - soynlp.normalizer.emoticon_normalize(sent, num_repeats=i) : ㅋㅋ,ㅎㅎ 등의 이모티콘을 i개 까지만 반복되도록 변환.
 - soynlp.normalizer.repeat_normalize(sent, num_repeats=i) : 의미없이 반복되는 글자를 i개 까지만 반복되도록 변환.
 
-# khaiii | Khaiii토크나이저 사용
+# khaiii | Khaiii 한글 분석기 사용
+- khaiii : 카카오가 제작한 한글 분석기. [자세한 내용](https://github.com/kakao/khaiii)
 - tokenizer = khaiii.KhaiiiApi() : 카이 토크나이저 로드.
 - tokenizer.analyze(sent) : 문장분석. 반환값의 요소를 빼내어 word.morphs로 토큰/품사 형태의 결과를 볼 수 있다(str으로 변환 필요).
 
