@@ -509,7 +509,7 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 ##### pooling
 - tf.keras.layers.GlobalMaxPooling1D() : 1차원 풀링 실행. Conv1D 뒤에 위치.
 ##### normalization
-- tf.keras.layers.LayerNormalization/(layers) : 층정규화.
+- tf.keras.layers.LayerNormalization/(layers) : 층 정규화. 텐서의 마지막 차원에 대해 평균과 분산을 구하고, 이를 이용해 값을 정규화 함.
 ### model
 ##### RNN
 - tf.keras.layers.SimpleRNN(hidden_size) : RNN 사용. hidden_size는 출력(은닉층, 다음 시점에 보내질 값)의 크기. 
