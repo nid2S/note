@@ -254,7 +254,22 @@ for i in range(epoch):
 - torchtext.vocap.Vectors(name=W2V파일명) : 사전훈련된 Word2Vec모델 사용.
 - torchtext.vocab.Glove(name, dim) : 토치텍스트 제공 사전훈련된 임베딩벡터(영어)사용. (6B, 50/100/200/300)등이 있음.필드.build_vocap()의 vectors 인자의 입력으로 사용.
 ## audio
-- (?)
+- audioform, sample_rate = torchaudio.load(path) : 오디오파일 로드. 다양한 파일 형식을 지원함. 
+- torchaudio.transforms.Resample(sample_rate, new_sample_rate)(audioform) : 리샘플링.
+
+- torchaudio.transforms.Spectrogram()(audioform) : 스펙토그램 확인.
+- torchaudio.transforms.MelSpectrogram()(audioform) : Mel스펙토그햄 확인.
+
+- torchaudio.transforms.MFCC()(audioform) : 파형을 MFCC(스피커 식별, 사운드 분류/수정/분석 등에 적합)로 바꿈.
+- torchaudio.transforms.MuLawEncoding(audioform) : MuLaw인코딩 적용. 이전에 정규화(-1 ~ 1로)를 거쳐야 함.
+- torchaudio.transforms.Fade(fade_in_len= 30000,fade_out_len=30000)(audioform) : 사운드에 페이딩효과를 일으킴. 음파의 시작/끝에서 적용.
+- torchaudio.transforms.SlidingWindowCmn()(audioform) : 이퀄라이즈(고음-고주파/저음-저주파 조절).
+
+- torchaudio.functional.gain(audioform, gain_db=5.0) : 오디오 증폭. 파동 전체의 볼륨을 증가시키는 효과도 있음.
+- torchaudio.functional.dither(audioform) : 오디오 디더링(Dithering, 높은 bit 해상도 > 낮은 bit 해상도).
+- torchaudio.functional.lowpass_biquad(audioform, sample_rate, cutoff_freq=3000) : 특정 주파수 미만의 오디오만 허용. 한계를 벗어나면 감쇠.
+- torchaudio.functional.highpass_biquad(audioform, sample_rate, cutoff_freq=2000) : 특정 주파수 초과의 오디오만 허용. 한계를 벗어나면 감쇠.
+
 
 # Lightning/Ignite
 - 텐서플로우의 keras와 같이, High-level인터페이스를 제공하는 오픈소스 라이브러리들. ML사용자들에세 좋음.
