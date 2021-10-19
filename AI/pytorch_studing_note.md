@@ -68,7 +68,7 @@
 - torch.cuda.manual_seed_all(i) : GPU 사용시 랜덤시드 고정.
 ### class
 - 파이토치의 대부분의 구현체(모델)는 모델 생성시 클래스를 사용.
-- torch.nn.Model상속 클래스 구현 > __init__에서 super().__init__을 호출, 사용할 모델(층)정의 > forward(self,x)(자동실행, 모델 사용 후 값 반환).
+- torch.nn.Module상속 클래스 구현 > __init__에서 super().__init__을 호출, 사용할 모델(층)정의 > forward(self,x)(자동실행, 모델 사용 후 값 반환).
 - self.레이어명 = 층 : 사용할 모델의 층을 정의. 층의 경우 torch.nn의 모델도, 시퀀셜 모델이 될 수 도 있음.
 ```python
 # 파이토치 모델 클래스 구현.
