@@ -463,6 +463,19 @@
 - Embedding()(input_layer) 와 Embedding_layer = Embedding() > Embedding_layer(input_layer) 는 둘다 모델의 층을 연결(functional API)함.
 
 - Subclassing API : Subclassing API 는 모델을 클래스 형태로 제작해 사용. tf.keras.Model을 상속시키고, init에서 입력과 사용할 층을 정의, call에서 층을 쌓아(연결해)반환.
+###### custom
+- 모델 커스텀 : 텐서플로우의 subclassing API를 활용하면 모델의 커스텀이 가능함.
+
+- 사용자 정의 레이어 : tf.keras.layers.Layer상속 후 init과 call을 구현함. 각 파라미터를 trainable = False로 지정해 훈련불가 가중치를 추가할 수 있음.
+- init : 층에서 사용될 하이퍼파라미터를 받고, super의 init을 실행한 뒤, 가중치, 편향등의 파라미터를 정의함. 모든 파라미터는 self.add_weight(shape, initializer, trainable)형식으로 선언가능함.
+- 가중치 정의 : tf.random_normal_initializer()등의 초기화객체를 생성한 뒤 tf.Variable(initial_value=w_init(shape, dtype), trainable)등의 형식으로 생성함.
+- 편향 정의 : tf.zeros_initializer()등의 초기화객체를 생성한 뒤 tf.Variable(initial_value = b_init(shape, dtype), trainable)등의 형식으로 생성됨.
+- build : 입력의 크기를 알때까지 가중치의 생성을 유보함. 입력으로 input_shape를 받고, 그걸 이용해 shape=(input_shape[-1], self.units)식으로 가중치를 생성함.
+- call : input을 받아 연산(가설, tf.matmul(inputs, w) + b)수행 뒤 값을 반환함.
+
+- 사용자 정의 모델 : .fit(), .evaluate(), .save()등의 메서드가 필요하면(모델이 필요하면) tf.keras.Model에서 상속함. 변수 추적 외에 내부레이어도 추적해 검사를 쉽게 만들어줌. 
+- 기본 구조 : init에서 super(모델명, self).__init\__()과 하이퍼 파라미터 받기, 사용할 층/변수 선언을 진행한 후 call에서 데이터(x)를 받아 모든 층을 거친 결과를 반환함.
+- 
 
 ##### model use
 ###### train
@@ -501,6 +514,10 @@
 - model.summary() 로 모델의 정보(이름/none,출력하는 개수/파라미터(가중치의 개수))를 확인 할 수 있다.
 - model.predict(X) : 모델을 사용해 입력에 따른 예측 반환.
 - model.evaluate(test_images, test_labels) : 모델 성능 비교. loss, accuracy 순으로 반환. verbose = 0 > silent
+
+##### other_API
+###### tenserflowLite
+- (?)
 
 # Pytorch ( torch )
 ***
