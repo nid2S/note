@@ -418,7 +418,8 @@
   ((입력의 마지막차원+1(bias))*노드수)개의 파라미터가 생성, (None, 최초입력의 마지막 제외 차원, 노드수) 형태의 반환값을 반환.
 
 - tf.keras.layers.Embedding(총 단어 개수, 결과 벡터의 크기, 입력 시퀀스 길이) : 단어를 밀집벡터로 만듦(임베딩 층 제작, 단어를 랜덤한 값을 가지는 밀집 벡터로 변환 후 학습과정을 거침). 
-  (샘플개수, 입력길이)형태의 정수 인코딩이 된 2차원 정수 배열을 입력받아 워드 임베딩 후 3차원 배열을 반환.
+  (샘플개수, 입력길이)형태의 정수 인코딩이 된 2차원 정수 배열을 입력받아 워드 임베딩 후 3차원 배열을 반환. mask_zero=True인자로 패딩된 토큰을 마스킹 할 수 있음. 
+- tf.keras.layers.Masking() : 패딩 토큰을 학습에 영향이 가지 않도록 배제(마스킹)함. layer._keras_mask로 결과를 확인 할 수 있음(마스킹=False).
 - tf.keras.layers.Dropout(rate) : Overfitting 을 방지하기 위해 DropOut(나온(중간) 값의 일부를 누락시킴). rate 는 1 = 100%.
 - tf.keras.layers.Bidirectional(layer) : 입력한 층을 양방향으로 만들어 줌. SimpleRNN, LSTM 등이 들어감.
 - tf.keras.layers.TimeDistributed(layers) : RNN에서 각 스텝마다 오류를 계산해 하위스텝(앞쪽)으로 전파하게 시킴. 
@@ -466,16 +467,19 @@
 ###### custom
 - 모델 커스텀 : 텐서플로우의 subclassing API를 활용하면 모델의 커스텀이 가능함.
 
-- 사용자 정의 레이어 : tf.keras.layers.Layer상속 후 init과 call을 구현함. 각 파라미터를 trainable = False로 지정해 훈련불가 가중치를 추가할 수 있음.
-- init : 층에서 사용될 하이퍼파라미터를 받고, super의 init을 실행한 뒤, 가중치, 편향등의 파라미터를 정의함. 모든 파라미터는 self.add_weight(shape, initializer, trainable)형식으로 선언가능함.
+- 사용자 정의 레이어 : tf.keras.layers.Layer상속 후 init과 call을 구현함. 각 파라미터를 trainable = False로 지정해 훈련불가 가중치를 추가할 수 있음. 특정 층의 기능만 정의하고 싶을 때 적합.
+- init : 층에서 사용될 하이퍼파라미터를 받고, super의 init을 실행한 뒤, 가중치/편향등의 파라미터를 정의함. 모든 파라미터는 self.add_weight(shape, initializer, trainable)형식으로 선언가능함.
 - 가중치 정의 : tf.random_normal_initializer()등의 초기화객체를 생성한 뒤 tf.Variable(initial_value=w_init(shape, dtype), trainable)등의 형식으로 생성함.
 - 편향 정의 : tf.zeros_initializer()등의 초기화객체를 생성한 뒤 tf.Variable(initial_value = b_init(shape, dtype), trainable)등의 형식으로 생성됨.
 - build : 입력의 크기를 알때까지 가중치의 생성을 유보함. 입력으로 input_shape를 받고, 그걸 이용해 shape=(input_shape[-1], self.units)식으로 가중치를 생성함.
 - call : input을 받아 연산(가설, tf.matmul(inputs, w) + b)수행 뒤 값을 반환함.
+- 기타 변수 : layer.weight(층의 가중치들), layer.losses(층의 손실들), layer.metrics(정확도들)등을 사용할 수 있음.
 
-- 사용자 정의 모델 : .fit(), .evaluate(), .save()등의 메서드가 필요하면(모델이 필요하면) tf.keras.Model에서 상속함. 변수 추적 외에 내부레이어도 추적해 검사를 쉽게 만들어줌. 
+- 사용자 정의 모델 : .fit()/evaluate()/save()등의 메서드가 필요하면(모델이 필요하면) tf.keras.Model에서 상속함. 변수 추적 외에 내부레이어도 추적해 검사를 쉽게 만들어줌. model.layer사용가능.
 - 기본 구조 : init에서 super(모델명, self).__init\__()과 하이퍼 파라미터 받기, 사용할 층/변수 선언을 진행한 후 call에서 데이터(x)를 받아 모든 층을 거친 결과를 반환함.
-- 
+- call : training인자로 훈련과 추론시의 동작 변동이 가능하며, mask=None으로 인자를 받거나 self.임베딩층.compute_mask(inputs)로 mask를 뽑아서 뒤의 층에 mask=mask로 마스킹이 가능하고,
+  self.add_loss(손실함수)로 손실텐서를, self.add_metric(정확도함수, name)으로 정확도 스칼라 작성이 가능함.
+- get_config : 사용자 정의 레이어 직렬화에 이용됨. 모델의 설정등을 {"units": self.units}의 형태로 반환함.
 
 ##### model use
 ###### train
