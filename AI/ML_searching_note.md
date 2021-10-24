@@ -480,6 +480,14 @@
 - call : training인자로 훈련과 추론시의 동작 변동이 가능하며, mask=None으로 인자를 받거나 self.임베딩층.compute_mask(inputs)로 mask를 뽑아서 뒤의 층에 mask=mask로 마스킹이 가능하고,
   self.add_loss(손실함수)로 손실텐서를, self.add_metric(정확도함수, name)으로 정확도 스칼라 작성이 가능함.
 - get_config : 사용자 정의 레이어 직렬화에 이용됨. 모델의 설정등을 {"units": self.units}의 형태로 반환함.
+- 훈련루프 : GradientTape를 사용해 모든 세부사항 제어 가능. train_step메서드를 재정의해 커스텀 가능. 
+- train_step : x와 y가 묶여있는 형태의 data를 입력으로 받음. `self.compiled_metrics.update_state(y, y_pred)`로 정확도계산, `with tf.GradientTape() as tape`로 모델의 훈련부분을 시작,  
+  내부에서 self(x, training)으로 예측 후 `self.compiled_loss(y, y_pred, regularization_losses=self.losses) or keras.losses의 손실함수(y, y_pred)`로 손실을 계산함. 
+  이후 `tape.gradient(loss, self.trainable_variables) > self.optimizer.apply_gradients(zip(gradients, self.trainable_variables))`로 가중치 계산 후 적용. 
+  반환은 `{m.name: m.result() for m in self.metrics}`형태로 반환됨. 혹시 입력에 sample_weight가 있다면 길이 검사 후 3개로 언팩하고, loss계산과 compiled_metrics.update_state에 넣어줌.
+- 손실/정확도 수동계산 : 먼저 keras.metrics의 loss_tracker(Mean등)와 매트릭 인스턴스를 정의 후 loss_tracker와 매트릭의 상태를 업데이트, 둘의 결과를 반환해 구현할 수 있음.
+  `loss_tracker.update_state(loss) > 매트릭.update_state(y, y_pred) > return {"loss": loss_tracker.result(), "매트릭 명": 매트릭.result()}`의 형태로 구현가능.
+  이 후 @property의 `def metrics(self): return [loss_tracker, 매트릭]`형태의 메서드를 정의해줌.
 
 ##### model use
 ###### train
