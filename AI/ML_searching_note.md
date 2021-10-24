@@ -480,7 +480,7 @@
 - call : training인자로 훈련과 추론시의 동작 변동이 가능하며, mask=None으로 인자를 받거나 self.임베딩층.compute_mask(inputs)로 mask를 뽑아서 뒤의 층에 mask=mask로 마스킹이 가능하고,
   self.add_loss(손실함수)로 손실텐서를, self.add_metric(정확도함수, name)으로 정확도 스칼라 작성이 가능함.
 - get_config : 사용자 정의 레이어 직렬화에 이용됨. 모델의 설정등을 {"units": self.units}의 형태로 반환함.
-- 훈련루프 : GradientTape를 사용해 모든 세부사항 제어 가능. train_step메서드를 재정의해 커스텀 가능. 
+- 훈련루프(fit) : GradientTape(train_step메서드 재정의)로 훈련 커스텀 가능. 모델.evaluate()호출도 커스텀하려면 test_step을 같은 방식으로 재정의함. 둘다 @tf.function를 앞에붙여 속도향상가능. 
 - train_step : x와 y가 묶여있는 형태의 data를 입력으로 받음. `self.compiled_metrics.update_state(y, y_pred)`로 정확도계산, `with tf.GradientTape() as tape`로 모델의 훈련부분을 시작,  
   내부에서 self(x, training)으로 예측 후 `self.compiled_loss(y, y_pred, regularization_losses=self.losses) or keras.losses의 손실함수(y, y_pred)`로 손실을 계산함. 
   이후 `tape.gradient(loss, self.trainable_variables) > self.optimizer.apply_gradients(zip(gradients, self.trainable_variables))`로 가중치 계산 후 적용. 
@@ -488,6 +488,14 @@
 - 손실/정확도 수동계산 : 먼저 keras.metrics의 loss_tracker(Mean등)와 매트릭 인스턴스를 정의 후 loss_tracker와 매트릭의 상태를 업데이트, 둘의 결과를 반환해 구현할 수 있음.
   `loss_tracker.update_state(loss) > 매트릭.update_state(y, y_pred) > return {"loss": loss_tracker.result(), "매트릭 명": 매트릭.result()}`의 형태로 구현가능.
   이 후 @property의 `def metrics(self): return [loss_tracker, 매트릭]`형태의 메서드를 정의해줌.
+- test_step : x와 y가 묶인 data를 입력으로 받아 GradientTape를 제외한 train_step과 같은 작업(compiled_loss, compiled_metrics.update_state등)을 수행함. evaluate수행시 호출됨.
+
+- 사용자 정의 훈련루프 : 자체 교육/평가 루프를 처음부터 작성함. epochs만큼 반복할 for문 내에, 각 epoch당 batch를 반복처리하는 for문을 열고, 각 배치마다 GradientTape를 열어, 모델,손실,갱신을 함.
+- 루프 구조(코드) : `for epoch in range(epochs):`내에 `for step, (x_batch_train, y_batch_train) in enumerate(train_dataset):`로 배치별로 나눈 뒤, 
+  `with tf.GradientTape() as tape:`로 GradientTape를 열어, `logits = model(x_batch_train, training=True) > loss_fn(y_batch_train, logits)`로 손실을 계산,
+  `grads = tape.gradient(loss, model.trainable_weights) > optimizer.apply_gradients(zip(grads, model.trainable_weights))`로 가중치를 갱신, 적용함. 매 배치/스텝마다 손실등을 출력.
+- 매트릭 추가 : 각 스텝의 끝에서 metric.update_state()호출, 매트릭의 현재 값을 표시해야 할 때 metric.result()를 호출, 상태를 지울때(epoch끝) metric.reset.states()호출. 
+  train과 val의 매트릭 인스턴스는 나눠놔야 함. updata_state에는 (y, y_pred)가 들어감. 모델 정의시 call에 add_loss를 사용했다면 loss += sum(model.losses)로 사용가능(train_step정의시도 동일).
 
 ##### model use
 ###### train
