@@ -536,8 +536,10 @@
 - model.evaluate(test_images, test_labels) : 모델 성능 비교. loss, accuracy 순으로 반환. verbose = 0 > silent
 
 ##### other_API
-###### tenserflowLite
-- (?)
+###### TenserflowLite
+- tfLite : 모바일(안드로이드/iOS), 내장형기기(내장형 리눅스, 마이크로 컨트롤러), IoT기기에서 모델을 실행할 수 있도록 지원함. 자바, Swift, Object-C, C++, Python등 지원.
+- 특징 : 지연시간(서버왕복X), 개인정보 보호(기기에 정보를 남기지 않음), 연결성(인터넷X), 크기(모델, 바이너리 크기축소), 전력소비(효율적 추론, 네트워크X)의 제약사항 해결.
+- 모델 표현방식 : FlatBuffers(.tflite 확장자)라는 효율적 이동이 가능한 특수형식으로 표현됨. 
 
 # Pytorch ( torch )
 ***
