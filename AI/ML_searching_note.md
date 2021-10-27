@@ -559,7 +559,7 @@
 - iOS(Object-C, C) : `@import TensorFlowLite;` 혹은 `#include "tensorflow/lite/c/c_api.h`, 이후 다양한 과정을 거쳐 사용(예제는 tf홈페이지에서).
 - Linux(Python) : `interpreter = tf.lite.Interpreter(TFLITE_FILE_PATH)`로 인터프리터 객체 생성 후 `interpreter.get_signature_runner() > my_signature(x)`혹은
   `allocate_tensors > get_input/output_details[입/출력 정보 획득] > set_tensor > invoke > get_tensor`로 이뤄짐.
-- Linux/iOS/안드로이드(C++) : FlatBufferModel를 통해 인터프리터 사용가능. `모델로드 > 인터프리터 빌드 > 인풋 > Invoke(); > 아웃풋`의 순서로 진행. 예제는 tf홈페이지.
+- 마이크로컨트롤러/Linux/iOS/안드로이드(C++) : FlatBufferModel를 통해 인터프리터 사용가능. `모델로드 > 인터프리터 빌드 > 인풋 > Invoke(); > 아웃풋`의 순서로 진행. 예제는 tf홈페이지.
 
 # Pytorch ( torch )
 ***
