@@ -544,6 +544,23 @@
 - 생성방법 : 기존 tflite모델 사용, tflite모델 생성, tf모델을 tflite모델로 변환 의 세가지 방법으로 모델의 생성이 가능함.
 - 추론실행 : 모델 유형에 따라 메타데이터가 없으면 tflite인터프리터 API를 사용(다양한 플랫폼/언어 지원)하고, 있으면 즉시사용가능한 API를 활용하거나 맞춤 추론 파이프라인을 빌드할 수 있음.
 
+- 기존 tf모델 선택 : 텐서플로우 사이트, tflite예제 페이지에서 몇가지 태스크에 쓸 수 있는 tflite모델을 다운로드하거나, 깃허브에서 사용 예를 볼 수 있음.
+- TensorflowLiteModelMaker : `pip install tflite-model-maker`로 다운할 수 있는 이미지/텍스트분류, 질문답변 task에 대한 ML작업을 지원하는 라이브러리. 예제는 tf홈페이지에서 확인가능.
+- TensorflowLite 변환기 : `tf.lite.TFLiteConverter.from_saved_model(path) > converter.convert()`등을 이용해 tf모델을 tflite모델로 변환가능. 모델은 파일오픈 > write로 저장함.
+  
+- tfliteInterpreter : 메타데이터가 없는 모델 실행. 다양한 플랫폼과 언어(안드로이드, iOS, 리눅스등)에서 지원됨. `모델로드 > 데이터변환 > 추론실행 > 출력해석`의 단계를 거침.
+- 모델 실행 : `모델 메모리에 로드 > 기존모델 기반 인터프리터 구축 > 입력텐서값 설정 > 추론호출 > 출력텐서값 읽기`의 단계를 거쳐야 함. 
+
+- 안드로이드(자바) : `dependencies {implementation 'org.tensorflow:tensorflow-lite-task-text:0.1.0'}`로 tflite사용 후, 
+  인터프리터 객체를 생성한 뒤 Map<String, Object>객체로 데이터를 받아, 인터프리터.run(input, output)으로 사용됨.
+  이 외에도 runSignature[서명이 있을때\], runForMultipleInputsOutputs[다중 입/출력일 때\]등을 사용할 수 있음. 
+  getInput/OutputIndex(opName)메서드를 사용할 수 있으며(유효하지 않으면 예외), 인터프리터.close()로 리소스 해제를 해 주어야 함.
+- iOS(Swift) : `import TensorFlowLite`, 인터프리터 객체 생성 후 `allocateTensors > copy > invoke > output`의 과정을 거쳐 사용.
+- iOS(Object-C, C) : `@import TensorFlowLite;` 혹은 `#include "tensorflow/lite/c/c_api.h`, 이후 다양한 과정을 거쳐 사용(예제는 tf홈페이지에서).
+- Linux(Python) : `interpreter = tf.lite.Interpreter(TFLITE_FILE_PATH)`로 인터프리터 객체 생성 후 `interpreter.get_signature_runner() > my_signature(x)`혹은
+  `allocate_tensors > get_input/output_details[입/출력 정보 획득] > set_tensor > invoke > get_tensor`로 이뤄짐.
+- Linux/iOS/안드로이드(C++) : FlatBufferModel를 통해 인터프리터 사용가능. `모델로드 > 인터프리터 빌드 > 인풋 > Invoke(); > 아웃풋`의 순서로 진행. 예제는 tf홈페이지.
+
 # Pytorch ( torch )
 ***
 - [pytorch_studing_note](pytorch_studing_note.md)
