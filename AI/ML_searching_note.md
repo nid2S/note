@@ -576,6 +576,11 @@
   `allocate_tensors > get_input/output_details[입/출력 정보 획득] > set_tensor > invoke > get_tensor`로 이뤄짐.
 - 마이크로컨트롤러/Linux/iOS/안드로이드(C++) : FlatBufferModel를 통해 인터프리터 사용가능. `모델로드 > 인터프리터 빌드 > 인풋 > Invoke(); > 아웃풋`의 순서로 진행. 예제는 tf홈페이지.
 
+- 안드로이드 : 모델을 안드로이드 모듈의 assets디렉토리에 복사 후, build.gradle에 tflite라이브러리를 추가함. 이후 tflite서포트 라이브러리의 프로세서를 이용해 전처리를 하고, 
+  결과를 저장할 TensorBuffer객체를 만든 후, 모델을 로드하고, 그걸 기반으로 인터프리터를 생성 후 실행(x.getBuffer(), 출력텐서.동일()). 출력텐서.getFloatArray()를 통해 출력 획득가능.
+  레이블을 결과와 매핑하려면, txt파일을 assets에 복사 후 FileUtil.loadLabels()로 생성, `TensorLabel(레이블, 출력텐서(후처리)) > .getMapWithFloatValue()`로 가능. 예제 확인 추천.
+
+
 # Pytorch ( torch )
 ***
 - [pytorch_studing_note](pytorch_studing_note.md)
