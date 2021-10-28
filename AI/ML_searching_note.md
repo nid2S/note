@@ -547,6 +547,22 @@
 - 기존 tf모델 선택 : 텐서플로우 사이트, tflite예제 페이지에서 몇가지 태스크에 쓸 수 있는 tflite모델을 다운로드하거나, 깃허브에서 사용 예를 볼 수 있음.
 - TensorflowLiteModelMaker : `pip install tflite-model-maker`로 다운할 수 있는 이미지/텍스트분류, 질문답변 task에 대한 ML작업을 지원하는 라이브러리. 예제는 tf홈페이지에서 확인가능.
 - TensorflowLite 변환기 : `tf.lite.TFLiteConverter.from_saved_model(path) > converter.convert()`등을 이용해 tf모델을 tflite모델로 변환가능. 모델은 파일오픈 > write로 저장함.
+
+- 메타데이터 : 모델 설명에 대한 표준 제공. 모델정보와 입출력 정보에 대한 중요한 지식소스. 모델스키마 아래 TFLITE_METADATA필드(파일)에 저장됨. 일부는 분류라벨/어휘 파일도 같이 제공가능.
+- tflite-support : 메타데이터 도구. pip로 설치가능. 모델정보, 입/출력 정보등에 대한 정보객체를 각각 생성해야 함. `tflite_support.metadata_schema_py_generated as _metadata_fb`.
+- _metadata_fb.ModelMetadataT() : 모델 정보 객체 생성. .name/description[튜플 할당\]/version/author/license등의 속성에 값 할당가능.
+- 모델정보객체.content = _metadata_fb.ContentT() : 입/출력 정보를 위한 객체의 content생성. 
+- 입력정보객체.content.contentProperties = _metadata_fb.ImagePropertiesT() : contentProperties객체 생성. .colorSpace, .contentPropertiesType등의 지정이 가능함.
+- 입력정보객체.processUnit/stats : 모델의 정규화/stat(max,min등)의 정보 할당. `_metadata_fb.NormalizationOptionsT/StatsT()`로 객체생성, 값 할당, 객체 할당의 과정이 필요함.
+- 라벨 : 출력정보객체에 .content.content_properties/contentPropertiesType와 .stats설정 후 .associatedFiles를 설정해 주어야 하는데, 여기 넣을 값은 객체의 리스트로, 각 객체는
+  _metadata_fb.AssociatedFileT()객체를 만들어 name(path)와 description 설정 후, `.type = _metadata_fb.AssociatedFileType.TENSOR_AXIS_LABELS`설정을 해 주어야 한다.
+- 모델 정보 결합 : _metadata_fb.SubGraphMetadataT()객체 생성 후 `input/outputTensorMetadata = [입/출력 정보 객체]`할당, `모델정보객체.subgraphMetadata = [subgraph]`.
+  tflite_support.flatbuffers.Builder(0)객체 생성 후 `b.Finish(모델정보객체.Pack(b), tflite_support.metadata.MetadataPopulator.METADATA_FILE_IDENTIFIER)`,
+  `metadata_buf = b.Output()`으로 플랫버퍼를 생성함.
+- 모델로 압축 : _metadata.MetadataPopulator.with_model_file(model_file)객체 생성 후 `.load_metadata_buffer(플랫버퍼) > .load_associated_files([레이블파일path])`,
+  `populator.populate()`으로 메타데이터/관련파일을 모델로 압축할 수 있음. 
+- 메타데이터 읽기 : PYTHON에서 JSON형식으로 읽거나, JAVA에서 메타데이터 추출기 라이브러리를 사용하거나, 일반적 zip파일로 압축을 풀고 볼 수 있음. 예제는 홈페이지에 있음.
+
   
 - tfliteInterpreter : 메타데이터가 없는 모델 실행. 다양한 플랫폼과 언어(안드로이드, iOS, 리눅스등)에서 지원됨. `모델로드 > 데이터변환 > 추론실행 > 출력해석`의 단계를 거침.
 - 모델 실행 : `모델 메모리에 로드 > 기존모델 기반 인터프리터 구축 > 입력텐서값 설정 > 추론호출 > 출력텐서값 읽기`의 단계를 거쳐야 함. 
