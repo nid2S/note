@@ -579,7 +579,13 @@
 - 안드로이드 : 모델을 안드로이드 모듈의 assets디렉토리에 복사 후, build.gradle에 tflite라이브러리를 추가함. 이후 tflite서포트 라이브러리의 프로세서를 이용해 전처리를 하고, 
   결과를 저장할 TensorBuffer객체를 만든 후, 모델을 로드하고, 그걸 기반으로 인터프리터를 생성 후 실행(x.getBuffer(), 출력텐서.동일()). 출력텐서.getFloatArray()를 통해 출력 획득가능.
   레이블을 결과와 매핑하려면, txt파일을 assets에 복사 후 FileUtil.loadLabels()로 생성, `TensorLabel(레이블, 출력텐서(후처리)) > .getMapWithFloatValue()`로 가능. 예제 확인 추천.
-
+- 안드로이드 래퍼코드 : 메타데이터로 강화된 tflite모델은 안드로이드스튜디오 ML 모델바인딩을 사용해 프로젝트를 위한 설정을 자동으로 구성하고, 모델 메타데이터에 기초한 래퍼클래스를 생성가능.
+  ByteBuffer와 직접 상호작용할 필요 없이 Bitmap, Rect등의 형식화된 객체로 모델과 상호작용할 수 있음. 코틀린/자바를 위한 샘플코드 섹션도 제공함.
+  `New > Other > Tensorflow Lite Model`를 생성하면, 자동으로 필요한 파일이 build.gradle에 삽입되며 선택적으로 GPU옵션도 선택할 수 있음.
+  스레드 수를 이용한 코드가속방법도 제공(실행과 생성의 스레드가 같아야함, 모델 생성시 param으로 설정)하며, gpu dependency를 이용해 가능하다면 GPU를 사용하는 코드도 tf홈페이지에서 제공함.
+- 코드생성기를 이용한 모델인터페이스 생성 : tflite-support설치 후 `flite_codegen --model=모델path --package_name=org.tensorflow.lite.classify \
+  --model_class_name=모델클래스명 --destination=저장될 폴더`로 생성. 이 후 destination을 압축, 다운로드해 안드로이드 스튜디오에서 import Module, 
+  `implementation project(":classify_wrapper")`를 종속성 세션에 추가해 사용. 이 후 부턴 평범하게 사용하면 됨. 예제는 마찬가지로 홈페이지에 존재함.
 
 # Pytorch ( torch )
 ***
