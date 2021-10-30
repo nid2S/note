@@ -587,6 +587,18 @@
 - 코드생성기를 이용한 모델인터페이스 생성 : tflite-support설치 후 `flite_codegen --model=모델path --package_name=org.tensorflow.lite.classify \
   --model_class_name=모델클래스명 --destination=저장될 폴더`로 생성. 이 후 destination을 압축, 다운로드해 안드로이드 스튜디오에서 import Module, 
   `implementation project(":classify_wrapper")`를 종속성 세션에 추가해 사용. 이 후 부턴 평범하게 사용하면 됨. 예제는 마찬가지로 홈페이지에 존재함.
+###### other_languages
+- 지원하는 언어들 : C, JS, C++, Java, C#, Haskell, Julia, MATLAB, R, Ruby, Rust, Scala, Go, Swift. 지원기능이 조금씩 달라, 사용전 해당 언어의 공식문서를 살펴봐야 함.
+  C는 타언어와의 바인딩을 빌드, JS, C++, Java는 Python과 비슷한 수준의 API, Go와 Swift는 보관/지원되지 않는 언어바인딩을, 나머지는 바인딩을 지원함. 개발중인 API존재.
+- C : 편리함보다 단순성과 통일성을 위해 설계되었으며, tf홈페이지의 url을 이용해 다운로드할 수 있고, CPU와 GPU전용이 구분되어있음. `#include <tensorflow/c/c_api.h>`로 사용.
+  Go/Rust등의 요구사항. 자체적으로도 C와 C++에서 사용할 수 있음. `auto* session = TF_LoadSessionFromSavedModel()`로 저장된 모델을 사용가능하며, 다양한 인자를 필요로함.
+- JS : 자체적으로 텐서나 시퀀셜/함수형 API를 사용해 모델을 만들 수 도 있고, Graph모델과 LayersModel(평소 쓰는 모델)을 나눠 로드, 브라우저에서 다운하거나 
+  모델을 http서버에 보내는 등 다양한 기능을 지원함. 또한 사용시 predict/OnBatch(), fit/Dataset()등 데이터셋/배치의 함수를 따로 지정함.
+- Java : 모든 JVM(Java/Scala/Kotlin)에서 실행해 머신러닝 빌드/학습/배포에 사용할 수 있음. Maven이나 Gradle, 소스로 설치할 수 있음. 사용은 tflite와 비슷하게 사용가능.
+- C# : nuget으로 설치할 수 있고, 세션과 그래프를 사용하는 형식. `var graph = new TFGraph() > graph.Import(File.ReadAllBytes("MySavedModel"));`로 모델로드.
+- Go : tf-1처럼 세션과 그래프를 사용. LoadSavedModel()함수로 다른 언어로 빌드된 모델의 로드가 가능하며, 그래프와 디스크의 체크포인트에서 초기화된 변수로 세션을 초기화하는 형식.
+- Rust : 텐서플로우 C API에 의존함. Cargo.toml에 `[dependencies] tensorflow = "0.17.0"`를 추가해 사용시작. 세션과 그래프를 사용하는 방식.
+  `SavedModelBundle::load(&SessionOptions::new(), &["serve"], &mut graph, export_dir)?;`로 모델의 로드가 가능함.
 
 # Pytorch ( torch )
 ***
