@@ -599,7 +599,7 @@
 - Rust : 텐서플로우 C API에 의존함. Cargo.toml에 `[dependencies] tensorflow = "0.17.0"`를 추가해 사용시작. 세션과 그래프를 사용하는 방식.
   `SavedModelBundle::load(&SessionOptions::new(), &["serve"], &mut graph, export_dir)?;`로 모델의 로드가 가능함.
 
-# Pytorch ( torch )
+# Pytorch(torch)
 ***
 - [pytorch_studing_note](pytorch_studing_note.md)
 - Tensor > Numpy 의 ndarray 와 유사. GPU 연산가속도 가능. 튜플타입을 가져, 모든 튜플 연산을 지원(+ 등 가능). 인덱싱도 가능.
