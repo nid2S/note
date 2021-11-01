@@ -547,9 +547,9 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - task명 : sentiment-analysis, question-answering, fill-mask, text-generation, ner, summarization, translation_(lang)_to\_(lang)
 
 ### tokenizer
-- transfomers.AutoTokenizer.from_pretrained(모델명) : 사전훈련된(미리 다운로드 받은)모델과 관련된 토크나이저를 다운로드. 모델은 허깅페이스홈페이지에서 확인가능.
-- transfomers.BertTokenizer.from_pretrained(모델명) : BERT토크나이저(WordPiece토크나이저)사용. do_lower_case=bool인자 사용가능.
-- transformers.DistilBertTokenizer(Fast).from_pretrained(모델명) : 더 작고/빠르고/저렴하고/가벼운 BERT의 증류된버전 DistilBert 토크나이저 사용.
+- TokenizerFast : Rust라이브러리를 기반으로 함. 일괄 토큰화시 상당한 속도 향상이 있고, vocab과 토큰간 매핑방법이 다름(일반 dict > 인덱스를 얻음). 일부 토크나이저는 미지원.
+  T5, ALBERT, CamemBERT, XLMRoBERTa, XLNet을 제외한 토크나이저는 Fast를 사용할 수 있음.
+- transfomers.AutoTokenizer.from_pretrained(모델명) : 사전훈련된(미리 다운로드 받은)모델과 관련된 토크나이저를 자동선택해 다운로드. 모델은 허깅페이스 홈페이지에서 확인가능.
 
 ##### 토크나이저 사용
 - tokenizer(sequence) : 문장을 기준에 맞춰 토큰화. input_ids키에 정수인코딩까지 완료된 문장(텐서)이 들어있고, token_type_ids(segment), attention_mask등을 같이 반환하기도 함.
@@ -563,13 +563,22 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - tokenizer.encode_batch(sent) : 주어진 시퀀스배치를 인코딩. 각 배치(문장)는 리스트 형태롤 존재하며, 문장내에 리스트, 튜플 형태로 존재할 수 있음.
 - tokenizer.decode(encoded_sequence) : 디코딩. 인코딩된 시퀀스를 원래의 문장으로 되돌림. skip_special_tokens=False면 특별토큰은 그대로 유지됨.
 - tokenizer.decode_batch(encoded_sequence) : ID배치를 디코딩. 디코딩하려는 시퀀스배치를 입력으로 넣어줌. 
-- tokenizer(FAST).(batch_)encode_plus(encoded_sequence) : 현재는 사용되지 않으며, tokenizer의 __call\_\_과 동일함. batch_는 한번에 여러 문장을 인코딩 할 수 있게 해줌.
 - encode 인자 : add_special_tokens = bool(문장의 시작과 끝에 [cls\], [sep\]토큰 추가), max_length = i(문장의 최대 길이), 
   pad_to_max_length = bool(패딩), return_attention_mask = bool(어텐션마스크 반환), return_tensors = str(반환될 텐서 종류. pt/tf).
 
-- tokenizer.add_tokens(토큰) : 토큰 추가. 이미 존재하지 않는 경우에만 추가됨.
+- tokenizer.prepare_for_tokenization(text, is_split_into_words=bool, **kwargs) : 토큰화 전에 필요한 변환을 수행함.
+- tokenizer.tokenize(text) : 토크나이저를 사용해 토큰시퀀스의 문자열을 반환함.
 
-- tokenizer.save_pretrained(경로) : 토크나이저 저장. 저장한 토크나이저는 from_pretrained로 사용가능.
+- tokenizer.add_tokens(토큰) : 토큰 추가. 이미 존재하지 않는 경우에만 추가됨.
+- tokenizer.get_[added_\]vocab() : 인덱싱할 토큰사전(vocab)반환.
+
+- tokenizer.convert_ids_to_tokens(ids, skip_sepcial_tokens = bool) : 정수/정수배열을 토큰으로 변환함. 특별토큰을 생략할 수 있음. 
+- tokenizer.convert_tokens_to_ids(token) : 토큰(들)을 정수로 변환함. 
+
+- tokenizerFast.backend_tokenizer : 백엔드로 사용되는 Rust 토크나이저 반환.
+- tokenzierFast.set_truncation_and_padding(padding_strategy, truncation_strategy, max_length, stride) : Fast토크나이저에서 사용할 자르기/패딩을 정의. 
+
+- tokenizer.save_pretrained(path) : 토크나이저 저장. 저장한 토크나이저는 from_pretrained로 사용가능.
 
 ### model
 - transfomers.models : 트랜스포머 기반의 다양한 모델을 파이토치/텐서플로우로 각각 구현해놓은 모듈. 각 모델에 맞는 토크나이저도 구현되어있음.
