@@ -502,6 +502,9 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - tokenizer.texts_to_sequences(단어집합) : 각 단어를 이미 정해진 인덱스로 변환. 만약 토크나이저 로드시 인수로 i+1을 넣었다면 i 까지의 인덱스를 가진 단어만을 사용하고 나머지는 버린다.
 - tf.keras.preprocessing.sequence.pad_sequences(인코딩된 단어 집합) : 가장 긴 문장의 길이에 맞게 문장의 앞에 0을 삽이비해 ndarray 로 반환. 
   padding='post' 로 문장 뒤에 0을 삽입할 수 있고, maxlen 매개변수로 길이를 지정할 수 있다.
+- tf.keras.layers.experimental.preprocessing.TextVectorization() : 
+- tf.keras.layers.experimental.preprocessing.PreprocessingLayer() : 
+
 ##### embedding
 - tf.keras.layers.Embedding(총 단어 개수, 결과 벡터의 크기, 입력 시퀀스 길이) : 단어를 밀집벡터로 만듦(임베딩 층(Dense 같은)제작). 
   모델 내에서 (num of sample, input_length)형태의 정수 인코딩이 완료된 2차원 정수 배열을 입력받아 워드 임베딩 후 3차원 배열을 반환. 

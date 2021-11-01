@@ -10,6 +10,7 @@
 
 - 머신러닝 과정은 크게 데이터 수집 > 데이터 점검,탐색(분석) > 전처리,정제 > 모델링,훈련 > 평가 > 배포 총 6단계로 나뉜다.
 - 머신러닝에 이용되는 라이브러리 중에서는 lasagna 라는 theano 기반 라이브러리도 있다.
+- 파이프라인이란 한 데이터 처리 단계의 출력이 다음단계의 입력으로 이어지는 구조로, 인공지능 모델의 구조를 가리킬 때 주로 사용됨.
 
 
 # numpy
@@ -443,7 +444,9 @@
 - tf.keras.layers.GRU(hidden_size, input_shape=(time_steps, input_dim)) : LSTM 을 개량한 GRU 사용. LSTM 에 비해 구조가 간단하고, 
   데이터 양이 적을떄 LSTM 보다 낫다고 알려져 있음.
 
-- tensorflow.keras.preprocessing.sequence.pad_sequences(data, maxlen) : 데이터(리스트)의 요소 개수를 maxlen으로 고정. 적으면 0을 채우고 많으면 버림.
+- tf.keras.layers.experimental.preprocessing.TextVectorization() : 텍스트 데이터를 전처리함. 텍스트 전체를 shape(1)로 받아 처리. 모델로드시 커스텀오브젝트를 사용해야함.
+- tf.keras.layers.experimental.preprocessing.PreprocessingLayer() : 프리프로세스 층을 위한 base층. abstract층이기 때문에 직접적으로 사용할 수 없음.
+- tf.keras.preprocessing.sequence.pad_sequences(data, maxlen) : 데이터(리스트)의 요소 개수를 maxlen으로 고정. 적으면 0을 채우고 많으면 버림.
 
 
 ##### model make
