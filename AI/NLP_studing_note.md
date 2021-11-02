@@ -543,8 +543,8 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - sklearn.decomposition.LatentDirichletAllocation(n_components=n, learn_method="online", random_state=k, max_iter=i) : 
   LDA 수행. .fit_transform(X), .components_ 등을 사용할 수 있다.
 
-# HuggingFace | 트랜스포머기반 모델
-- transformer : 허깅페이스가 제작한, 트랜스포머 기반의 다양한 모델(transformer.models)과 학습 스크립트(transformer.Trainer)를 구현해 놓은 모듈.
+# transformers | 트랜스포머기반 모델
+- transformers : 허깅페이스(HuggingFace)가 제작한, 트랜스포머 기반의 다양한 모델(transformer.models)과 학습 스크립트(transformer.Trainer)를 구현해 놓은 모듈.
   다양한 트랜스포머 기반 모델구현체를 손쉽게 쓸 수 있으나 high-level로 구현되어있어 커스터마이징이 비교적 어려움(소스코드를 참고해 원하는 클래스를 상속받아 오버라이딩 해야함).
   각 모델마다(GPT, Bert, Bart) task별, 모델의 변형별 모델이 있어, 로드한 모델과 사용 task에 맞게 잘 선택해야 한다.
 - 기본 제공 task : 감정분석(긍정/부정), 텍스트 생성(영어, 다음문장생성), NER(각 단어를 나타내는 엔티티로 레이블지정), 
