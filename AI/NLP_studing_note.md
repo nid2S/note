@@ -502,8 +502,15 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - tokenizer.texts_to_sequences(단어집합) : 각 단어를 이미 정해진 인덱스로 변환. 만약 토크나이저 로드시 인수로 i+1을 넣었다면 i 까지의 인덱스를 가진 단어만을 사용하고 나머지는 버린다.
 - tf.keras.preprocessing.sequence.pad_sequences(인코딩된 단어 집합) : 가장 긴 문장의 길이에 맞게 문장의 앞에 0을 삽이비해 ndarray 로 반환. 
   padding='post' 로 문장 뒤에 0을 삽입할 수 있고, maxlen 매개변수로 길이를 지정할 수 있다.
-- tf.keras.layers.experimental.preprocessing.TextVectorization() : 
-- tf.keras.layers.experimental.preprocessing.PreprocessingLayer() : 
+- tf.keras.layers.experimental.preprocessing.PreprocessingLayer() : 전처리 층을 위한 base층. 커스텀 층을 만들어 상속, 정의하는 방식으로 사용됨. lambda나 타 서브 층을 써도됨. 
+- tf.keras.layers.experimental.preprocessing.TextVectorization() : 전처리(소문자, 공백분할, 구두점제거, 정수화) 층을 생성. 층.adapt(문자데이터)로 vocab을 추가해 줘야 하며, 
+  혹은 배치를 직접 넣어줄 수 있음(패딩토큰('')과 OOV토큰('[UNK]')이 같이 들어감). 바로 앞층은 shape 1, dtype=tf.string인 인풋이여야 함. .get_vocabulary()로 vocab확인가능.
+  레이어를 여러번 조정할 경우, model.compile/내부데이터셋.map(layer)/직접tf.function을 쓰는 경우 모두 layer.adapt()이후에 해야 함. 간단한 전처리에 좋을 듯. 
+- TextVectorization로드 : 로드한 모델의 layer는 train당시의 vocab을 가지고 있지 않아 전부 OOV로 변환하게 됨. 커스텀오브젝트로 TextVectorization을 지정해 문제를 해결할 수 있음. 
+  `load_model(path, custom_objects={"TextVectorization":TextVectorization})`로 커스텀 오브젝트 지정.
+- TextVectirization인자 : max_tokens(vocab size), standardize(입력에 적용될 정규화. None이면 동작X, Callable이면 해당 작용 수행. 기본은 'lower_and_strip_punctuation'),
+  split(None/whitespace(기본)/Callable), output_mode("int(seqVec)/tf-idf/binary/count"), ngrams(n그램 벡터화의 n, None), output_sequence_length(max_len), 
+  pad_to_max_tokens(bool, max_tokens에 맞춰 패딩. binary/count/tf-idf에서만 작동), vocabulary(vocab(토큰의 배열)).
 
 ##### embedding
 - tf.keras.layers.Embedding(총 단어 개수, 결과 벡터의 크기, 입력 시퀀스 길이) : 단어를 밀집벡터로 만듦(임베딩 층(Dense 같은)제작). 
