@@ -607,6 +607,7 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 ##### 모델 사용
 - model(encoded_input(인코딩된 문장들)) : 모델 사용. pytorch의 경우 사전압축을 풀어야(**)함. labels인자로 label을 전달해 줄 수 있으며, 이 경우 반환에 loss가 생성됨.
   .logit으로 반환값을 볼 수 있으며, 예측을 위한 softmax는 물론, 다른 trainloop에서도 사용가능함.
+- model.generate(input_ids) : 모델사용. 파인튜닝 이전의 모델만 사용하려 하거나 테스트에 유용함. 
 - model 인자 : output_hidden_states=bool(모든 은닉상태 반환), output_attentions=bool(모든 어텐션가중치 반환)
 
 - model.save_pretrained(경로) : 훈련된(미세조정된)모델(파라미터)저장. 저장한 모델은 from_pretrained로 사용가능히며, from_pt/tf로 어디서 생성된 모델인지 알려줘야 함.
