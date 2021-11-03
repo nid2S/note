@@ -551,10 +551,18 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
   QA(컨텍스트+질문 -> 답변), 마스킹된 텍스트 채우기(공백([MASK\])이 있는 텍스트의 공백을 채움), 요약, 번역, 특징추출(텍스트의 텐서 표현 반환).
 
 ### pipeline
-- pipeline : 주어진 task에서 사전훈련 모델을 사용하는 가장 쉬운 방법. 기본제공 task에 속한다면 사용가능.
+- pipeline : 주어진 task에서 사전훈련 모델을 사용하는 가장 쉬운 방법. 기본제공 task에 속한다면 사용가능. pipline()이외에 작업별 파이프라인이 task당 하나씩/task에 없는것도 존재함.
 - transformers.pipeline(task명) : 사전훈련된 모델과 해당하는 토크나이저를 다운로드. 명령결과(sent)로 간단하게 사용가능.
   model인자와 tokenizer인자를 사용해 직접 사용할 모델과 토크나이저를 전달해 줄 수 도 있음.
-- task명 : sentiment-analysis, question-answering, fill-mask, text-generation, ner, summarization, translation_(lang)_to\_(lang)
+- pipline task종류 : sentiment-analysis, question-answering, fill-mask, text-generation, text2text-generation, ner, summarization, translation(_xx_to_yy or 모델 필요),
+  conversational, zero-shot-classification, audio-classification, image-classification, image-segmentation, object-detection, table-question-answering(torch).
+
+- 파이프라인 커스텀 : Pipeline을 상속하는 클래스를 제작 후 preprocess, _forward, postprocess, _sanitize_parameters를 정의함.
+- preprocess : inputs를 입력으로 받아 전처리(입력을 모델에 제공할 수 있는걸로 변환) 후 {"model_input" : model_input}형태로 반환함.
+- _forward : 구현 세부정보. model_inputs(preprocess의 반환값)를 입력으로 받아  `oututs = self.model(**model_inputs)`형태로 출력을 받아 반환함.
+- postprocess : _forward의 출력을 받아 후처리(최종출력으로 변경)함. 분류모델기준 `best_class = model_outputs["logits"].softmax(-1)`의 형태.
+- _sanitize_parameters : 원하는 시간(생성, 초기화, 호출등)에 매개변수를 전달. **kwargs를 입력으로 받아, 각 메서드들에 들어갈 매개변수를 dict형식으로 반환. 따로 매개변수 설정이 없다면 {}반환.
+  `if "args" in kwargs: preprocess_kwargs["args"] = kwargs["args"] > return preprocess_kwargs, {}, {}`의 형식. 만약 postprecess등에도 매개변수가 있다면 따로 dict를 반환. 
 
 ### tokenizer
 - TokenizerFast : Rust라이브러리를 기반으로 함. 일괄 토큰화시 상당한 속도 향상이 있고, vocab과 토큰간 매핑방법이 다름(일반 dict > 인덱스를 얻음). 일부 토크나이저는 미지원.
