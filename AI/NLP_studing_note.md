@@ -352,7 +352,7 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
         encoded = t.texts_to_sequences([current_word])[0] # 현재 단어에 대한 정수 인코딩
         encoded = pad_sequences([encoded], maxlen=5, padding='pre') # 데이터에 대한 패딩
         result = model.predict_classes(encoded, verbose=0)
-    # 입력한 X(현재 단어)에 대해서 Y를 예측하고 Y(예측한 단어)를 result에 저장.
+        # 입력한 X(현재 단어)에 대해서 Y를 예측하고 Y(예측한 단어)를 result에 저장.
         for word, index in t.word_index.items(): 
             if index == result: # 만약 예측한 단어와 인덱스와 동일한 단어가 있다면
                 break # 해당 단어가 예측 단어이므로 break
