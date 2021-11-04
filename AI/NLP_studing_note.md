@@ -632,6 +632,40 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 
 - trainer.train() : 파인튜닝. 학습/평가의 모든 과정이 사용자가 원하는 인자에 맞게 실행됨. pytorch lightning과 비슷하게 공통적으로 사용되는 학습스크립트가 모듈화 되어있음. GPU필요.
 
+# Tokenizers | 토크나이저들
+- Tokenizers : 허깅페이스가 제작한 토크나이저 라이브러리. Rust로 구현되어있어 매우 빠름. 
+
+### 토크나이저 빌드
+- tokenizers.Tokenizer(모델) : 토크나이저 생성.
+- tokenziers.Tokenizer.from_file(path) : 토크나이저 로드.
+##### 토크나이저 설정
+- tokenizer.pre_tokenzier = pre토크나이저 : 토크나이저의 토큰화 기준(pre토크나이저)지정.
+- tokenizer.train(path, trainer) : 토크나이저 훈련. path는 리스트형태로, 여러 파일을 훈련하고 싶다면 파일들의 경로를 넣으면 됨.
+- tokenizer.save(path) : 토크나이저 저장. json파일로 저장해야 함.
+- tokenizer.token_to_id(토큰) : 토큰의 id를 반환.
+- tokenizer.enable_padding(pad_id, pad_token) : 여러 문장 인코딩시 가장 긴 문장에 맞게 패딩가능. id는 token_to_id를 사용하는게 좋고, direction(기본 우측)/length등의 인자 사용가능.
+- tokenizer.post_processor = tokenizers.processors.TemplateProcessing(single, pair, special_tokens) : 자동 특별 토큰 추가를 위한 후처리 사용. 토큰화 후 자동으로 해당형식이 됨.
+  하나의 문장과 여러 문장을 위한 템플릿을 지정해 줘야 함. single의 형식은 "[CLS] $A [SEP]", pair은 "[CLS] $A [SEP] $B [SEP]"식이며, $A와 $B는 각각 문장을 나타냄. 
+  각 토큰이나 문장표현에 :1 등을 붙여 typeID를 지정해 줄 수 있음. special_tokens는 [(토큰, id)\]형태로, tokenizer.token_to_id(토큰)를 사용해 더욱 확실히 할 수 있음.
+##### 토크나이저 모델
+- tokenizers.models.BPE() : BPE(바이트 페이 인코딩)모델 생성. unk_token="[UNK\]"등으로 특별토큰의 지정이 가능함.
+##### 트레이너
+- tokenizers.BpeTrainer() : BPE토크나이저를 위한 트레이너 생성. special_tokens=[토큰리스트\]로 특별토큰들의 지정이 기능.
+##### pre_tokenizer
+- tokenizers.pre_tokenizers.Whitespace() : whiteSpace를 기준으로 토큰화 하는 pre토크나이저를 로드.  
+
+### 토크나이저 사용
+- output = tokenizer.encode(sent) : sent를 토큰화. 문장쌍을 토큰화 하고 싶다면 sent, sent형식으로 넣으면 됨.
+- output = tokenizer.encode_batch(sents) : 문장들을 토큰화. sents는 리스트 형식이며, 문장 쌍의 경우는 [[sent, sent\]\]형식으로 넣으면 됨. 라이브러리의 최대속도를 얻을 수 있음.
+- output.tokens : 토큰들을 확인.
+- output.ids : 정수화된 토큰들을 확인.
+- output.type_ids : type_ids를 확인.
+- output.attention_mask : attention_mask를 확인.
+- output.offsets[id(토큰)인덱스\] : 원래 문장에서 해당 토큰(id)의 위치를 반환. (시작, 끝)형태의 튜플로 반환함.
+
+### 사전훈련 토크나이저 사용
+- tokenizers.BertWordPieceTokenizer(vocab파일(txt)) : 파일을 기반으로 사전훈련된 Bert토크나이저 로드. encode등의 함수를 전부 사용가능. 
+
 
 # gensim | word2vec, FastText
 - gensim : 통계적의미론에 초점이 맞춰져, 문서의 구조를 분석한 후 유사성을 기준으로 다른 문서에 점수를 주는
