@@ -635,25 +635,6 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 # Tokenizers | 토크나이저들
 - Tokenizers : 허깅페이스가 제작한 토크나이저 라이브러리. Rust로 구현되어있어 매우 빠름. 
 
-### 토크나이저 빌드
-- tokenizers.Tokenizer(모델) : 토크나이저 생성.
-- tokenziers.Tokenizer.from_file(path) : 토크나이저 로드.
-##### 토크나이저 설정
-- tokenizer.pre_tokenzier = pre토크나이저 : 토크나이저의 토큰화 기준(pre토크나이저)지정.
-- tokenizer.train(path, trainer) : 토크나이저 훈련. path는 리스트형태로, 여러 파일을 훈련하고 싶다면 파일들의 경로를 넣으면 됨.
-- tokenizer.save(path) : 토크나이저 저장. json파일로 저장해야 함.
-- tokenizer.token_to_id(토큰) : 토큰의 id를 반환.
-- tokenizer.enable_padding(pad_id, pad_token) : 여러 문장 인코딩시 가장 긴 문장에 맞게 패딩가능. id는 token_to_id를 사용하는게 좋고, direction(기본 우측)/length등의 인자 사용가능.
-- tokenizer.post_processor = tokenizers.processors.TemplateProcessing(single, pair, special_tokens) : 자동 특별 토큰 추가를 위한 후처리 사용. 토큰화 후 자동으로 해당형식이 됨.
-  하나의 문장과 여러 문장을 위한 템플릿을 지정해 줘야 함. single의 형식은 "[CLS] $A [SEP]", pair은 "[CLS] $A [SEP] $B [SEP]"식이며, $A와 $B는 각각 문장을 나타냄. 
-  각 토큰이나 문장표현에 :1 등을 붙여 typeID를 지정해 줄 수 있음. special_tokens는 [(토큰, id)\]형태로, tokenizer.token_to_id(토큰)를 사용해 더욱 확실히 할 수 있음.
-##### 토크나이저 모델
-- tokenizers.models.BPE() : BPE(바이트 페이 인코딩)모델 생성. unk_token="[UNK\]"등으로 특별토큰의 지정이 가능함.
-##### 트레이너
-- tokenizers.BpeTrainer() : BPE토크나이저를 위한 트레이너 생성. special_tokens=[토큰리스트\]로 특별토큰들의 지정이 기능.
-##### pre_tokenizer
-- tokenizers.pre_tokenizers.Whitespace() : whiteSpace를 기준으로 토큰화 하는 pre토크나이저를 로드.  
-
 ### 토크나이저 사용
 - output = tokenizer.encode(sent) : sent를 토큰화. 문장쌍을 토큰화 하고 싶다면 sent, sent형식으로 넣으면 됨.
 - output = tokenizer.encode_batch(sents) : 문장들을 토큰화. sents는 리스트 형식이며, 문장 쌍의 경우는 [[sent, sent\]\]형식으로 넣으면 됨. 라이브러리의 최대속도를 얻을 수 있음.
@@ -663,8 +644,72 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - output.attention_mask : attention_mask를 확인.
 - output.offsets[id(토큰)인덱스\] : 원래 문장에서 해당 토큰(id)의 위치를 반환. (시작, 끝)형태의 튜플로 반환함.
 
+### 토크나이저 빌드
+- tokenizers.Tokenizer(모델) : 토크나이저 생성.
+- tokenziers.Tokenizer.from_file(path) : 토크나이저 로드.
+##### 토크나이저 설정
+- tokenizer.pre_tokenzier = 사전토크나이저 : 토크나이저의 토큰화 기준(pre토크나이저)지정.
+- tokenizer.normalizer = 노멀라이저 : 토크나이저의 노멀라이저 사용자정의.
+- tokenizer.post_processor = 사후토크나이저 : 자동 특별 토큰 추가를 위한 후처리 사용. 토큰화 후 자동으로 지정한 형식이 됨.
+- tokenizer.train(path, trainer) : 토크나이저 훈련. path는 리스트형태로, 여러 파일을 훈련하고 싶다면 파일들의 경로를 넣으면 됨.
+- tokenizer.save(path) : 토크나이저 저장. json파일로 저장해야 함.
+- tokenizer.token_to_id(토큰) : 토큰의 id를 반환.
+- tokenizer.enable_padding(pad_id, pad_token) : 여러 문장 인코딩시 가장 긴것에 맞게 패딩. direction(기본 우측)/length등의 인자 사용가능.
+##### 트레이너
+- tokenizers.BpeTrainer() : BPE토크나이저를 위한 트레이너 생성. special_tokens=[토큰리스트\]로 특별토큰들의 지정이 기능.
+- (?)
 ### 사전훈련 토크나이저 사용
 - tokenizers.BertWordPieceTokenizer(vocab파일(txt)) : 파일을 기반으로 사전훈련된 Bert토크나이저 로드. encode등의 함수를 전부 사용가능. 
+- (?)
+
+### 토큰화 파이프라인
+- 파이프라인 : 정규화 -> 사전토큰화 -> 모델 -> 후처리 의 단계를 거침.
+#### 정규화
+- 정규화 : 원시 문자열을 보다 덜 무작위로 만들거나, 더 깔끔하게 일련의 작업. 공백제거/악센트가 있는 문자제거/소문자화 등이 포함됨. 유니코드 정규화 또한 매우 일반적인 정규화 작업임.
+- normailzer = tokenizers.normalizers.Sequence([Normalizer 리스트\]) : 여러 정규화 작업을 결합한 노멀라이저 생성. 순차적으로 실행되며, 인스턴스(NFD()형식)으로 넣어야 함.
+- normalizer.normalize_str(str) : 문자열 정규화. 
+##### 노멀라이저
+- tokenizers.normalizers.NFD() : NFD유니코드 정규화.
+- tokenizers.normalizers.NFKD() : NFKD유니코드 정규화.
+- tokenizers.normalizers.NFC() : NFC유니코드 정규화.
+- tokenizers.normalizers.NFKC() : NFKC유니코드 정규화.
+- tokenizers.normalizers.Lowercase() : 모든 대문자 소문자화.
+- tokenizers.normalizers.Strip() : 입력의 지정된 측면(좌/우/둘다)의 모든 공백 제거.
+- tokenizers.normalizers.StripAccents() : 악센트제거 정규화(일관성을 위해 NFD와 함께 사용).
+- tokenizers.normalizers.Replace() : 문자열/정규표현식을 지정된 문자로 대체(Replace("a", "E")식으로 사용).
+- tokenizers.normalizers.BertNormalizer() : 원래 BERT에서 사용된 정규화. clean_text/handle_chinese_chars/strip_accents/lowercase 옵션 설정가능.
+
+#### 사전토큰화
+- 사전토큰화 : 텍스트를 토큰(교육종료시 토큰이 무엇인지에 대한 상한선 제공)으로 분할하는 작업. 토큰으로 나눌 규칙(기준)을 정의함.
+- preTokenizer = tokenizers.pre_tokenizers.Sequence([사전토크나이저 리스트\]) : 사전토크나이저를 여러개로 결합한 사전토크나이저 생성. 주어진 순서대로 실행.
+- preTokenizer.pre_tokenize_str(str) : 문자열 전처리. 반환값은 [(토큰, (위치)), (토큰, (위치))\]의 형태로 되어있음.
+##### preTokenizer
+- tokenizers.pre_tokenizers.ByteLevel() : 모든 바이트를 보이는 문자집합으로 다시 매핑하는 동안 공백으로 분할. 바이트에 매핑되어 초기 알파벳으로 256자만 필요하고,
+  256개의 토큰으로 무엇이든 나타낼 수 있어 OOV가 없음. 비 ASCII문자의 경우는 완전히 읽을 수 없지만, 그래도 작동함. 첫 단어를 제외하면 앞에 Ġ 가 붙게 됨.
+- tokenizers.pre_tokenizers.Whitespace() : whiteSpace를 기준(구두점도 따로 분리됨)으로 토큰화. 단어경계에서 분할. `\w+|[^\w\s]+`의 정규식 사용.
+- tokenizers.pre_tokenizers.WhitespaceSplit() : 모든 whiteSpace에서 분할(구두점은 그대로 유지).
+- tokenizers.pre_tokenizers.Punctuation() : 모든 구두점을 분리함. 
+- tokenizers.pre_tokenizers.Metaspace() : 공백으로 분할 후 특수문자로 바꿈("$A $B" -> "$A", "_$B"식).
+- tokenizers.pre_tokenizers.CharDelimiterSplit() : 주어진 문자로 분할함.
+- tokenizers.pre_tokenizers.Digits() : 다른 문자에서 숫자를 나눔("call 911!" -> "call", "911", "!"식).
+- tokenizers.pre_tokenizers.Split() : 제공된 패턴과 동작에 따라 분할됨. pattern=(나눠질)문자열/정규표현식, invert=bool(True시 삭제될것과 존재할것이 반전됨(removed)),
+  behavior=removed(구분문자 제거)/isolated(구분문자 독립토큰화)/merged_with_previous(앞쪽토큰에 병합)/merged_with_next(뒤쪽토큰에 병합)/contiguous(isolated)의 형식.
+
+#### 모델
+- 모델 : 입력이 정규화/사전토큰화 되면 모델적용. 학습한 규칙을 사용해 단어를 토큰으로 나누며, 해당 토큰을 vocab의 ID에 매핑함. unk_token="[UNK\]"등으로 특별토큰의 지정이 가능함.
+##### models
+- tokenizers.models.BPE() : BPE(바이트 페어 인코딩)모델 생성. 글자에서 시작해 가장 흔한 글자들을 병합해 새 토큰을 생성, 이를 반복. OOV의 가능성이 적고 vocab이 덜 필요.
+- tokenizers.models.WordPiece() : 긴 단어에서 시작해 어휘에 없으면 분할. ##접두사를 사용해 단어의 일부인 토큰을 식별. BERT등에서 Google등이 사용하는 BPE와 유사한 알고리즘. 
+- tokenizers.models.Unigram() : Unigram 모델. 하위단어 토큰화 알고리즘. 문장에 대한 확률을 최대화 하기 위해 최상의 하위 단어 토큰 세트를 식별하려 노력함.  
+- tokenizers.models.WordLevel() : 고전적인 토큰화 알고리즘. 단순히 단어를 ID에 매핑. 사용과 이해가 간단하나 매우 큰 vocab이 필요하단 단점이 있음.
+
+#### 후처리
+- 후처리 : 반환 전 추가 변환을 수행하기 위한 토큰화 파이프라인의 마지막 단계. 후처리기는 변경 후 토크나이저를 재 훈련할 필요 없음.
+##### post_processors
+- tokenizers.processors.TemplateProcessing(single, pair, special_tokens) : 탬플릿에 따른 후처리 사용. 하나의 문장과 여러 문장을 위한 템플릿을 지정해 줘야 함. 
+- single : "[CLS] $A(문장1) [SEP]" | pair : "[CLS] $A [SEP] $B(문장2) [SEP]" 형태로, 각 토큰이 쓰이는 형식. 각 토큰/문장표현에 :1 등을 붙여 typeID를 지정해 줄 수 있음. 
+- special_tokens : [(토큰, id)\]형태로, 각 토큰과 해당 토큰의 id. tokenizer.token_to_id(토큰)를 사용해 더욱 확실히 할 수 있음.
+
 
 
 # gensim | word2vec, FastText
