@@ -643,6 +643,14 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - output.type_ids : type_ids를 확인.
 - output.attention_mask : attention_mask를 확인.
 - output.offsets[id(토큰)인덱스\] : 원래 문장에서 해당 토큰(id)의 위치를 반환. (시작, 끝)형태의 튜플로 반환함.
+##### decode
+- tokenizer.decode(ids) : id들을 다시 텍스트로 변환.
+- tokenizer.decode_batch(ids) : id batch를 다시 텍스트로 변환.
+
+- WordPiece/metaspace등 단어의 하위토큰을 나타내기 위해 특수문자를 추가한 모델의 경우는 티코더를 사용자정의해야 함. 
+- tokenizers.decoders.WordPiece() : WordPiece모델을 디코딩. WordPiece모델은 단어의 하위토큰을 식별하는 ##를 사용해, 해당 하위단어를 디코딩하는데 도움.
+- tokenizers.decoders.Metaspace() : Metaspace PreTokenizer를 디코딩. 특수 식별자 _를 사용 하여 공백을 식별해, 공백을 디코딩하는데 도움.
+- tokenizers.decoders.ByteLevel() : ByteLevel PreTokenizer를 디코딩. 각 바이트를 나타내는 보이는 유니코드 문자를 사용해 바이트 수준에서 인코딩해, 되돌리는데 도움.
 
 ### 토크나이저 빌드
 - tokenizers.Tokenizer(모델) : 토크나이저 생성.
