@@ -659,16 +659,20 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - tokenizer.pre_tokenzier = 사전토크나이저 : 토크나이저의 토큰화 기준(pre토크나이저)지정.
 - tokenizer.normalizer = 노멀라이저 : 토크나이저의 노멀라이저 사용자정의.
 - tokenizer.post_processor = 사후토크나이저 : 자동 특별 토큰 추가를 위한 후처리 사용. 토큰화 후 자동으로 지정한 형식이 됨.
-- tokenizer.train(path, trainer) : 토크나이저 훈련. path는 리스트형태로, 여러 파일을 훈련하고 싶다면 파일들의 경로를 넣으면 됨.
 - tokenizer.save(path) : 토크나이저 저장. json파일로 저장해야 함.
 - tokenizer.token_to_id(토큰) : 토큰의 id를 반환.
 - tokenizer.enable_padding(pad_id, pad_token) : 여러 문장 인코딩시 가장 긴것에 맞게 패딩. direction(기본 우측)/length등의 인자 사용가능.
-##### 트레이너
-- tokenizers.BpeTrainer() : BPE토크나이저를 위한 트레이너 생성. special_tokens=[토큰리스트\]로 특별토큰들의 지정이 기능.
-- (?)
+##### 토크나이저 훈련
+- tokenizer.train_from_iterator(data, trainer) : 이터레이터의 데이터를 기반으로 토크나이저 훈련. length 매개변수에 길이를 넣어 표시줄의 모양을 개선할 수 있음.
+- tokenizer.train(path, trainer) : txt 파일을 기반으로 토크나이저 훈련. path는 리스트형태로, 여러 파일을 훈련하고 싶다면 파일들의 경로를 넣으면 됨.
+###### 트레이너
+- 토크나이저 인자 : special_tokens=[토큰리스트\](특별토큰들의 지정), vocab_size(vocab size)등의 사용이 가능함.
+- tokenizers.BpeTrainer() : BPE토크나이저를 위한 트레이너 생성. 
+- tokenizers.WordPieceTrainer() : WordPiece토크나이저를 위한 트레이너 생성. 
+- tokenizers.UnigramTrainer() : Unigram토크나이저를 위한 트레이너 생성. 
+- tokenizers.WordLevelTrainer() : WordLevel토크나이저를 위한 트레이너 생성. 
 ### 사전훈련 토크나이저 사용
 - tokenizers.BertWordPieceTokenizer(vocab파일(txt)) : 파일을 기반으로 사전훈련된 Bert토크나이저 로드. encode등의 함수를 전부 사용가능. 
-- (?)
 
 ### 토큰화 파이프라인
 - 파이프라인 : 정규화 -> 사전토큰화 -> 모델 -> 후처리 의 단계를 거침.
