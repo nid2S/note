@@ -632,6 +632,7 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 
 - trainer.train() : 파인튜닝. 학습/평가의 모든 과정이 사용자가 원하는 인자에 맞게 실행됨. pytorch lightning과 비슷하게 공통적으로 사용되는 학습스크립트가 모듈화 되어있음. GPU필요.
 
+
 # Tokenizers | 토크나이저들
 - Tokenizers : 허깅페이스가 제작한 토크나이저 라이브러리. Rust로 구현되어있어 매우 빠름. 
 
@@ -722,8 +723,6 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - single : "[CLS] $A(문장1) [SEP]" | pair : "[CLS] $A [SEP] $B(문장2) [SEP]" 형태로, 각 토큰이 쓰이는 형식. 각 토큰/문장표현에 :1 등을 붙여 typeID를 지정해 줄 수 있음. 
 - special_tokens : [(토큰, id)\]형태로, 각 토큰과 해당 토큰의 id. tokenizer.token_to_id(토큰)를 사용해 더욱 확실히 할 수 있음.
 
-
-
 # gensim | word2vec, FastText
 - gensim : 통계적의미론에 초점이 맞춰져, 문서의 구조를 분석한 후 유사성을 기준으로 다른 문서에 점수를 주는
   W2V, D2V, FastText, LDA등과 많이 사용하는 알고리즘에 최적화 되있는 모듈.  
@@ -753,12 +752,6 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - [embedding_Projector](https://projector.tensorflow.org/) : 임베딩 벡터 시각화 사이트. `!python -m gensim.scripts.word2vec2tensor --input 모델이름 --output 모델이름` 
   명령어를 사용해 모델명_metadata.tsv파일과 모델명_tensor.tsv 파일을 생성한 후 사용할 수 있음.
 
-# glove | GloVe
-- glove : pip install glove_python 으로 다운로드 가능. 워드 임베딩의 방법 중 하나인 glove를 사용할 수 있음.
-- glove.Corpus() : 글로브 동시 등장 행렬 생성기 로드. .fit(corpus, window)로 사용가능. 
-- glove.Glove(no_components, learning_rate) : GloVe를 수행 클래스 로드. .fit(등시등장행렬.matrix, epochs, no_threads, verbose)로 사용가능.
-- glove 메서드 : .add_dictionary(동시등장행렬.dictionary) > 사전 추가 | .most_similar(word) > 비슷한 단어들과 유사도 반환. 
-
 # SentencePiece | subword
 - sentencepiece : BPE를 포함한 기타 서브워트 토크나이징(내부단어분리)알고리즘 내장 패키지. 사전 토큰화 작업 없이 단어분리 토큰화를 수행해 언어무관 사용가능.
   
@@ -775,12 +768,11 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 - 모델 메서드 : .GetPieceSize()(단어집합크기), .idToPiece(int)(정수 > 서브워드), .PieceToId(subword)(서브워드 > 정수)
 - 모델 메서드 : .DecodeIds(int list)(정수시퀀스>문장), .DecodePieces(서브워드 시퀀스)(서브워드시퀀스>문장), .encode(문장, output=str/int)(문장 > 서브워드/정수 시퀀스) 
 
-# replacers | 텍스트 대체, 반복 삭제
-- replacers.RegexpReplacer() : 텍스트 대체 클래스 로드. .replace(text)로 사용, 축약을 해제하고 단어 토큰화까지 진행해 리스트로 반환.
-- replacers.RepeatReplacer() : 반복 문자 삭제 클래스 로드. 위와 동일하게 사용할 수 있으며, 반복된 단어를 일반 단어로 바꿔 반환한다. 
-  nltk 의 wordnet.synsets(word)에 이미 있다면 처리하지 않도록 하면 일반 단어는 반복을 삭제하지 않는다.
-- replacers.WordReplacer({'바꿀단어':'바뀔단어'}) : 단어를 동의어로 변환하는 클래스 로드. 마찬가지로 사용, 목록에 있는 단어는 바꿔서, 아니면 그대로 반환한다.
-
+# glove | GloVe
+- glove : pip install glove_python 으로 다운로드 가능. 워드 임베딩의 방법 중 하나인 glove를 사용할 수 있음.
+- glove.Corpus() : 글로브 동시 등장 행렬 생성기 로드. .fit(corpus, window)로 사용가능. 
+- glove.Glove(no_components, learning_rate) : GloVe를 수행 클래스 로드. .fit(등시등장행렬.matrix, epochs, no_threads, verbose)로 사용가능.
+- glove 메서드 : .add_dictionary(동시등장행렬.dictionary) > 사전 추가 | .most_similar(word) > 비슷한 단어들과 유사도 반환. 
 
 # NLTK | NLP(영어토큰화, 전처리 도구들)
 - nltk.download() : NLTK 세트 다운로드. 특정 세트의 이름을 넣으면 그것만 다운로드한다.
@@ -855,6 +847,12 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
 # TextBlob | NLTK, Pattern
 - TextBlob : Pattern과 NLTK라이브러리의 친화적 프론트엔드. 고수준의, 사용하기 쉬운 인터페이스로 포장함.
 - Pattern : 인기 웹서비스와 소스를 스크래핑 할 수 있는 도구 탑재. 직접 NLP함수, n-gram검색, 벡터, 그래프등도 사용할 수 있으며, DB를 다룰 수 있는 헬퍼라이브러리도 내장됨.
+
+# replacers | 텍스트 대체, 반복 삭제
+- replacers.RegexpReplacer() : 텍스트 대체 클래스 로드. .replace(text)로 사용, 축약을 해제하고 단어 토큰화까지 진행해 리스트로 반환.
+- replacers.RepeatReplacer() : 반복 문자 삭제 클래스 로드. 위와 동일하게 사용할 수 있으며, 반복된 단어를 일반 단어로 바꿔 반환한다. 
+  nltk 의 wordnet.synsets(word)에 이미 있다면 처리하지 않도록 하면 일반 단어는 반복을 삭제하지 않는다.
+- replacers.WordReplacer({'바꿀단어':'바뀔단어'}) : 단어를 동의어로 변환하는 클래스 로드. 마찬가지로 사용, 목록에 있는 단어는 바꿔서, 아니면 그대로 반환한다.
 
 
 # KoNLpy | 한글 분석(토큰화, 태깅)
