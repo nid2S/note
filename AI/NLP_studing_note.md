@@ -342,26 +342,6 @@
 - 교사강요 : RNN, RNNLM의 훈련방법. 훈련 시 t시점에서 예측한 값을 다음 시점의 입력으로 사용하는게 아닌 t시점의 레이블(정답)을 다음 시점의 입력으로 사용한다.
 
 - Char RNNLM : 글자단위 RNN언어모델. 글자단위를 입출력으로 하여 임베딩 층을 사용하지 않음. 
-  
-```python clone
-# 단어 예측 코드
-def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, 현재 단어, 반복할 횟수
-    init_word = current_word # 처음 들어온 단어도 마지막에 같이 출력하기위해 저장
-    sentence = ''
-    for _ in range(n): # n번 반복
-        encoded = t.texts_to_sequences([current_word])[0] # 현재 단어에 대한 정수 인코딩
-        encoded = pad_sequences([encoded], maxlen=5, padding='pre') # 데이터에 대한 패딩
-        result = model.predict_classes(encoded, verbose=0)
-        # 입력한 X(현재 단어)에 대해서 Y를 예측하고 Y(예측한 단어)를 result에 저장.
-        for word, index in t.word_index.items(): 
-            if index == result: # 만약 예측한 단어와 인덱스와 동일한 단어가 있다면
-                break # 해당 단어가 예측 단어이므로 break
-        current_word = current_word + ' '  + word # 현재 단어 + ' ' + 예측 단어를 현재 단어로 변경
-        sentence = sentence + ' ' + word # 예측 단어를 문장에 저장
-    # for문이므로 이 행동을 다시 반복
-    sentence = init_word + sentence
-    return sentence
-```
 
 ###### LSTM
 - LSTM : 장단기 메모리(Long Short-Term Memory). 장기 의존성 문제를 해결하기 위해, 메모리 셀에 입력게이트, 망각 게이트, 출력게이트를 추가해 불필요한 기억을 지움. 
