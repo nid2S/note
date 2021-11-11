@@ -11,7 +11,8 @@
   
 - 머신러닝은 최적화와 일반화를 잘 조절해야 함. 100%에 가까운 모델을 만들고, 그 후 일반화를 진행. 데이터 사이즈가 같을때 정확도를 높이려면 층을 추가하고, 크기를 키우고, epoch 를 높이면 됨. 
 
-- 모델을 학습할 때에는 데이터 형태확인(data Engineering 으로 데이터를 다듬거나 새 특성을 찾아내기도 함) > 전처리(normalization, one-hot-encoding) > 모델 생성 및 학습으로 이뤄진다.
+- 모델을 학습할 때에는 데이터 형태확인(data Engineering 으로 데이터를 다듬거나 새 특성을 찾아내기도 함) > 전처리(normalization, one-hot-encoding) > 모델 생성 및 학습으로 이뤄짐.
+- ML시 필요한 폴더의 종류는 rawdata, prep_data, model, lastest_acc(최신 모델의 정확도를 저장해 이후 모델과 비교), train(학습프로그램 패키징), stage(학습시 staging)등이 있을 수 있음. 
 
 ##용어
 ***
@@ -606,8 +607,9 @@ print('최적화 완료')
 
 ## GCP
 - GCP : 구글 클라우드 플랫폼. 관리형 JupyterNoteBook인 AI PlatformNotebook, Kubeflow Pipelines인 AI Platform Pipeline, AI Platform이 속해있어, AI의 학습, 실험, 배포가 가능함.
-- (?)
-
+- 사용방법(주피터) : 먼저 프로젝트를 생성한 뒤 API(ComputeEngineAPI)를 활성화시킴 -> 인스턴스 생성(타입은 변경,추가가 가능) -> OpenJupyterLab 에서 AI PlatformNotebook 사용가능. 
+- 시용방법(파이프라인) : AI Platform > Pipelines에서 인스턴스 생성(노트북과 동일한 프로젝트) -> 클러스터 생성 ->  설치 후 설정, 배포(컴포넌츠 설치)로 Kubeflow Pipelines 사용가능.
+- 사용방법(Cloud Stroage) : AI Platform Pipelines 설치시 생성된 버킷(Storage > Browser에서 확인가능)에 필요 폴더를 생성한 뒤 데이터를 업로드, 모델을 생성/학습함으로 사용가능.
 
 # Questions
 ## numpy
