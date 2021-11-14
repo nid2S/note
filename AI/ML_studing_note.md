@@ -607,6 +607,7 @@ print('최적화 완료')
 
 ## GCP
 - GCP : 구글 클라우드 플랫폼. 관리형 JupyterNoteBook인 AI PlatformNotebook, Kubeflow Pipelines인 AI Platform Pipeline, AI Platform이 속해있어, AI의 학습, 실험, 배포가 가능함.
+  현재는 Vertex AI(통합 API, 클라이언트 라이브러리, 사용자 인터페이스, AutoML, AI Platform)를 통해 지원되고 있음.
 - 사용방법(주피터) : 먼저 프로젝트를 생성한 뒤 API(ComputeEngineAPI)를 활성화시킴 -> 인스턴스 생성(타입은 변경,추가가 가능) -> OpenJupyterLab 에서 AI PlatformNotebook 사용가능. 
 - 시용방법(파이프라인) : AI Platform > Pipelines에서 인스턴스 생성(노트북과 동일한 프로젝트) -> 클러스터 생성 ->  설치 후 설정, 배포(컴포넌츠 설치)로 Kubeflow Pipelines 사용가능.
 - 사용방법(Cloud Stroage) : AI Platform Pipelines 설치시 생성된 버킷(Storage > Browser에서 확인가능)에 필요 폴더를 생성한 뒤 사용가능. 데이터/모델등의 저장/로드에 사용가능.
@@ -615,6 +616,14 @@ print('최적화 완료')
   remote로 학습수행을 위해 데이터의 입/출력은 별개의 클라우드스토리지를 활용하도록 해야 함. 각 스텝의 모듈이 독립적으로 외부저장소에서 데이터를 주고받도록 하면 의존성을 줄일 수 있음.
 - 수행방법 : Dockerize를 위한 Dockerfile을 비롯한 필요 파일들을 가지고, 
 - 파일 역할 : Dockerfile-Dockerize, setup.py-원격학습시의 의존성정의, __init\_\_.py-패키지구조를 나타냄/AI Platform Job Submit이용을 위해 필요, runjob.sh-독립적 원격학습(쉘로 작성). 
+
+- ML PipeLine생성 : (SDK기준)TFX를 사용하거나, KFP(큐브플로우 파이프라인)SDK를 사용하는 것으로 나눌 수 있음.
+- kfp : Kubeflow Pipeline. `pip install kfp`로 설치가능. 이후 클라우드에서 학습/갱신을 하거나 AI플랫폼 Job에서 학습 진행 후 AI플랫폼 모델환경에 버전을 생성해 배포할 수 있음.
+
+- !gcloud ai-platform models create 이름 옴션 : ai플랫폼에 업로드.
+- !gcloud beta ai-platform versions create 옴션 : 모델 버전을 생성.
+- !gcloud ai-platform prediction 옵션 : ai플랫폼에 업로드했던 모델 로드 후 예측.
+
 
 # Questions
 ## numpy

@@ -834,6 +834,17 @@
 - wandb.log(dict) : 이미지, accuracy, test_loss등의 로그를 기록. {저장될 이름: 값}형태이며, 이미지(plt)/히스토그램(wandb.Histogram(numpy_array_or_sequence))등이 전부 가능함. 
 - wandb.watch(model) : 모델의 학습을 따라가며 진행과정을 보여줌. 
 
+# kfp
+- kfp : 큐브플로우 파이프라인 SDK(소프트웨어 개발 키트, 다른 프로그램에 추가/연결할 수 있는 커스텀 앱 제작 도구모음)라이브러리.
+
+- kfp.dsl.Condition() : 큐브플로우 설정 관련 정의 객체 생성. .after(preprocesser)로 관련 설정 재정의 가능. with를 이용해 열어서 사용됨.
+- kfp.dsl.ContainerOp() : 컨테이너의 설정 정의 객체 생성.
+- kfp.components.load_component_from_url() : 컴포넌트를 url기반으로 가져옴.
+
+- client = kfp.Client(host) : 기본적으로, 최초생성했던 AI플랫폼 파이프라인의 대쉬보드에서 .com으로 끝나는 주소값을 넘겨주면 연동됨.
+- client.upload_pipeline(path, name) : 파이프라인 업로드.
+- client.create_run_from_pipeline_func() : run을 파이프라인 함수를 기반으로 생성.
+- kfp.compiler.Compiler().compile(pipeline, name(path)) : .after(processer)을 통해 수동으로 Experiment나 등록을 위한 파이프라인 업로드가 가능(로컬폴더에 생성->업로드).
 
 # os | os(파일, 디렉토리)관련 명령
 - os.getcwd() : 현재 작업 폴더 반환.
