@@ -365,6 +365,7 @@
 - tf.random.uniform(shape, min, max) : shape형태의, min~max사이의 랜덤 값을 가진 텐서 생성.
 - tf.random.normal(shape, mean, stddev) : shape형태의, 평균이 mean이고 표준편차가 stddev인(기본은 0,1) 랜덤 값을 가진 정규분포 텐서 생성.
 - tf.convert_to_tensor(array) : array를 텐서로 변환.
+- tf.make_tensor_proto(텐서) : 텐서를 Protobuf(.pb)텐서로 바꿈. 
 
 - tf.rank(텐서) : 텐서의 랭크(차원), 모양, 데이터 타입 출력. tf.Tensor(rank, shape=(), dytpe=type).
 - tf.matmul(텐서a, 텐서b) : 두 텐서간 행렬곱. transpose_a/b = True 로 두 행렬중 하나를 전치 후 곱할 수 있음.
@@ -845,6 +846,23 @@
 - client.upload_pipeline(path, name) : 파이프라인 업로드.
 - client.create_run_from_pipeline_func() : run을 파이프라인 함수를 기반으로 생성.
 - kfp.compiler.Compiler().compile(pipeline, name(path)) : .after(processer)을 통해 수동으로 Experiment나 등록을 위한 파이프라인 업로드가 가능(로컬폴더에 생성->업로드).
+
+# tensorflow_serving
+- Tensorflow Serving : 허깅페이스의 TF모델배포/성능개선을 돕는 도구. HTTP를 사용하는 API와 서버에서 추론실행을 위해 gRPC를 사용하는 API를 제공. 도커나 pip로 설치. 
+- 모델 배포/사용 : saveModel생성 -> (도커의 경우)모델을 넣을 도커 컨테이너를 생성 후 실행 -> REST API를 통해 모델쿼리(JSON("instances":sent)으로 만들어 post).
+
+- request = tensorflow_serving.apis.predict_pb2.PredictRequest() : 예측생성을 위한 gRPC요청 생성. 
+- request.model_spec.name = 모델명 : 모델명 설정.
+- request.model_spec.signature_name = 서명 : gRPC쿼리의 포맷으로 사용되는 서명. 기본은 "serving_default".
+- request.inputs["input_ids"\].CopyFrom(tf.make_tensor_proto(토큰 텐서)) : input_ids input을 주어진 텐서(encoded_input["input_ids"\])로 설정.  
+- request.inputs["attention_mask"\].CopyFrom(tf.make_tensor_proto(토큰 텐서)) : attention_mask 설정.
+- request.inputs["token_type_ids"\].CopyFrom(tf.make_tensor_proto(토큰 텐서)) : token_type_ids 설정.
+
+- import grpc -> grcp.insecure_channel("localhost:"+port) : 컨테이너의 GRPC(google Remote Procedure Call)포트와 연결될 채널 생성.
+- tensorflow_serving.apis.predict_service_pb2_grpc.PredictionServiceStub(채널) : 예측 생성을 위한 stub생성. 이 stub은 GRPC요청을 TF서버에 보내는데 사용됨.
+- result = stub.Predict(request) : gPRC요청을 TF서버로 전송해 결과를 얻음. 출력은 protobuf이며, 키 logits에 할당된 확률목록 뿐임.
+- result.outputs["logits"\].float_val : 확률이 float라면, 리스트를 float형 ndarray로 변환함.
+
 
 # os | os(파일, 디렉토리)관련 명령
 - os.getcwd() : 현재 작업 폴더 반환.
