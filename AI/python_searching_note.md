@@ -775,7 +775,7 @@ for number , name in zip(number_l,name_l):
 - parser = argparse.ArgumentParser() : ArgumentParser객체 생성. description(도움말 전에 표시될 텍스트)등의 인자 사용가능. 
 - parser.add_argument(옵션명) : 프로그램 인자에 대한 정보를 추가. 명령행의 문자열을 객체로 변환하는 방법을 알려줌. 옵션명은 리스트로 여러개를 지정해 줄 수도 있음.
 - add_argument인자 : action(인자발견시 수행할 액션의 기본형), nargs(소비되야하는 인자의 수), const(일부action및nargs선택시 필요상숫값), 
-  default(인자가 명령행에도 namespace에도 없뇬으면 생성되는 값), type(명령행인자가 변환되야 할 형), choices(인자로 허용되는 값의 컨테이너),
+  default(인자가 명령행에도 namespace에도 없으면 생성되는 값), type(명령행인자가 변환되야 할 형), choices(인자로 허용되는 값의 컨테이너),
   required(명령행 옵션 생략가능여부), help(인자기능에 대한 간단한 설명), metavar(사용메세지에 사용되는 인자명), dest(parse_args()의 반환객체에 추가될 속성이름).
 - add_argument예시 : [parser.add_argument('-b', '--batch-size', type=int, default=8, metavar='N', help='input batch size for training (default: 8)')]
 - args = parser.parse_args() : 인자를 파싱. 명령행 검사 -> 인자를 적절한 형으로 변환 -> 적절한 액션을 호출. sys.argv에서 자동으로 명령행인자 결정.
