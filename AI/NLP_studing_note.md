@@ -617,6 +617,10 @@
 - tokenizers.decoders.WordPiece() : WordPiece모델을 디코딩. WordPiece모델은 단어의 하위토큰을 식별하는 ##를 사용해, 해당 하위단어를 디코딩하는데 도움.
 - tokenizers.decoders.Metaspace() : Metaspace PreTokenizer를 디코딩. 특수 식별자 _를 사용 하여 공백을 식별해, 공백을 디코딩하는데 도움.
 - tokenizers.decoders.ByteLevel() : ByteLevel PreTokenizer를 디코딩. 각 바이트를 나타내는 보이는 유니코드 문자를 사용해 바이트 수준에서 인코딩해, 되돌리는데 도움.
+##### custom
+- 토크나이저 사전훈련시 추 후 사용을 위해 훈련된 <unused\>토큰을 바꿔준 뒤 저장하는 방식으로 커스텀 토큰 사용 가능. 간단하게는 add_special_tokens()사용가능.
+  따로 디렉토리를 만들어 vocab.txt, tokenizer_config.json, special_tokens_map.json를 관리, vocab.txt에서 unused를 원하는 토큰으로 바꾸고 특별토큰이면 special에 넣어줌.
+- tokenizer.save_pretrained('토크나이저이름', legacy_format=False) : 불러온 토크나이저를 저장. legacy_format=True로 저장하면 버전이 0.10.1 전 형식으로 저장돼 오류발생가능.
 
 ### 토크나이저 빌드
 - tokenizers.Tokenizer(모델) : 토크나이저 생성.
