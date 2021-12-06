@@ -391,9 +391,8 @@
 - sess.close() : 세션 종료.
 
 - tf.keras.utils.to_categorical(정수 리스트) : 정수 리스트에 따라서 원핫 인코딩. \[1,3]을 넣으면 \[\[0,1,0,0],\[0,0,0,1]]을 반환하는 식.
-- tf.lite.TFLiteConverter.from_keras_model(model).converter() | open('파일명.tflite', 'wb') > tf 모델 tflite 바이너리로 변환. 
-  이렇게 변환한 것은 안드로이드 스튜디오의 에셋에 복사 > app 모듈의 build.gradle 에 패키지 추가 > Main_Activity 에서 이미지 바이너리 변환 > Classifier 에서 모델 사용 >
-  Main_Activity 에서 출력 순으로 사용된다.
+- tf.lite.TFLiteConverter.from_keras_model(model).convert() | open('파일명.tflite', 'wb') > tf 모델 tflite 바이너리로 변환. 
+  이렇게 변환한 것은 안드로이드 스튜디오의 에셋에 복사 > app 모듈의 build.gradle 에 패키지 추가 > Main_Activity 에서 전처리 > 모델사용 > Main_Activity 으로 사용됨.
 
 ##### Dataset
 - 텐서플로우 데이터셋 : 텐서플로우의 데이터셋. 효율적인 입력파이프의 작성을 지원함(모델의 입력이 됨). 입력되는 요소는 named 튜플/딕셔너리의 중첩 구조.
@@ -520,8 +519,9 @@
 
 ###### save
 - 모델의 저장/로드는 모두 폴더명을 입력해 줘야 함.
-- model.save(path) : 전체 모델 저장. 두가지의 다른 파일 형식(SaveModel, HDF5)으로 저장가능. 확장자없이 path만 넣으면 SaveModel, %.h5면 HDF5. 
-- model = tf.keras.models.load_model(모델명) : 저장된 모델 로드.
+- model.save(path) : 전체 모델 저장. 두가지의 다른 파일 형식(SaveModel, HDF5(keras))으로 저장가능. 확장자없이 path만 넣으면 SaveModel(.pb), %.h5면 HDF5. 
+- model = tf.keras.models.load_model(path.h5) : 케라스 형식(.h5)으로 저장된 모델 로드.
+- model = tf.saved_model.load(path) : 텐서플로우 기본 형식(saved_model.pb 파일이 들어있는 폴더)으로 저장된 모델 로드.
 
 - model.get_weights() : 각 독립변수에 대한 가중치 반환.
 - model.save_weights(path) : 모델의 가중치 저장.
