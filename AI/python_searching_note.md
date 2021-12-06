@@ -901,5 +901,5 @@ for number , name in zip(number_l,name_l):
 - cd 경로 : 경로로 이동.
 - pwd : 현재 경로 확인.
 - vi 파일명 : 파일명이 존재한다면 해당 파일을, 아니면 새 파일을 vi 편집기로 오픈. 다양한 명령어가 존재함.
-- Ctrl + Insert / Ctrl + shift + C : 복사
-- Shift + Insert / Ctrl + shift + V : 붙여넣기
+- Ctrl + Insert / Ctrl + shift + C : 복사 -> Ctrl + C로 클립보드에 복사
+- Shift + Insert / Ctrl + shift + V : 붙여넣기 -> 우클릭으로 붙여넣기
