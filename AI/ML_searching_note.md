@@ -414,11 +414,11 @@
 
 ##### layers
 - tf.keras.layers.Input(shape=(입력 차원)) : 입력차원 만큼 입력레이어 구성.
-- tf.keras.layers.Dense(노드수,activation="swish/relu")(X) : 전밀집층(모든 노드가 이전 혹은 다음 노드와 연결, 전결합층)제작. input_dim(입력차원)매개변수 사용가능. 
+- tf.keras.layers.Dense(노드수,activation=활성화함수) : 전밀집층(모든 노드가 이전 혹은 다음 노드와 연결, 전결합층)제작. input_dim(입력차원)매개변수 사용가능. 
   ((입력의 마지막차원+1(bias))*노드수)개의 파라미터가 생성, (None, 최초입력의 마지막 제외 차원, 노드수) 형태의 반환값을 반환.
 
 - tf.keras.layers.Embedding(총 단어 개수, 결과 벡터의 크기, 입력 시퀀스 길이) : 단어를 밀집벡터로 만듦(임베딩 층 제작, 단어를 랜덤한 값을 가지는 밀집 벡터로 변환 후 학습과정을 거침). 
-  (샘플개수, 입력길이)형태의 정수 인코딩이 된 2차원 정수 배열을 입력받아 워드 임베딩 후 3차원 배열을 반환. mask_zero=True인자로 패딩된 토큰을 마스킹 할 수 있음. 
+  (샘플개수, 입력길이)형태의 정수 인코딩이 된 2차원 정수 배열을 입력받아 워드 임베딩 후 3차원 배열을 반환. mask_zero=True인자로 패딩된 토큰을 마스킹 할 수 있음. input_dim인자(vocab)사용가능.
 - tf.keras.layers.Masking() : 패딩 토큰을 학습에 영향이 가지 않도록 배제(마스킹)함. layer._keras_mask로 결과를 확인 할 수 있음(마스킹=False).
 - tf.keras.layers.Dropout(rate) : Overfitting 을 방지하기 위해 DropOut(나온(중간) 값의 일부를 누락시킴). rate 는 1 = 100%.
 - tf.keras.layers.Bidirectional(layer) : 입력한 층을 양방향으로 만들어 줌. SimpleRNN, LSTM 등이 들어감.
