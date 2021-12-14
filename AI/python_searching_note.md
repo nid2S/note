@@ -220,6 +220,7 @@ for number , name in zip(number_l,name_l):
 -    코드     로 반복문 사용.  시퀀스 객체의 자료들을 하나씩 꺼내 변수에 대입 후 문장실행.
 
 - 삼항연산 : 참일 경우 if 조건식 else 거짓일 경우  의 형식으로 삼항연산자 사용가능. 
+- any : any(Sequence)로 사용하며, 시퀀스 안에 True가 하나라도 있다면 True가 된다. any(5 < q for q in queue)식으로 사용할 수 있음.
 
 # while
 ***
