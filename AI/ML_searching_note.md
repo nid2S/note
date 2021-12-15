@@ -508,16 +508,28 @@
 - ) : 모델 컴파일.
 
 - model.fit(train_data , train_labels , epochs=1000(반복 횟수)) : 학습된 모델 제작. validation_data=(test_data,test_label)로 검증용 데이터로 계산한 손실/정확도를 함께 출력가능하며,
-  callback 매개변수에 callbacks의 함수를 넣어 사용할 수 있음. 여러개면 [one, two\]식으로 입력. loss와 accuracy(metrics)가 담긴 딕셔너리를 반환함.
+  callbacks 매개변수에 callbacks의 함수를 넣어 사용할 수 있음. 여러개면 [one, two\]식으로 입력. loss와 accuracy(metrics)가 담긴 딕셔너리를 반환함.
 
 ###### callback
+- keras.Model.fit/evaluate/predict() 의 메서드에 callbacks 매개변수로(리스트 형태로)전달할 수 있음.
+
 - tensorflow.keras.callbacks.EarlyStopping(monitor="val_loss", mode="min", verbose, patience) : 과적합 방지를 위한 조기 종료 설정. 
   patience회 검증 데이터의 손실이 증가하면 학습을 조기종료함. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능.
 - tensorflow.keras.callbacks.ModelCheckpoint(모델명, monitor="val_accuracy", mode="max", save_best_only=True) : 
   검증 데이터의 정확도가 이전보다 좋아지면 모델 저장. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능. 모델의 체크포인트를 저장.
 - tensorflow.keras.callbacks.LearningRateScheduler(scheduler) : 매 epoch가 시작될 때 업데이트된 학습률 값을 가져와 적용. 
   스케줄러 함수(epoch와 lr을 인수로 받음)를 정의해 인수로 넣고, 이를 callback에 넣어 사용.
-- tensorflow.keras.callbacks.TensorBoard(log_dir, write_graph, write_images, histogram_freq) : log가 저장될 경로와 가중치등의 시각화 여부를 지정해 텐서보드를 사용할 수 있게 함.
+- tensorflow.keras.callbacks.TensorBoard(log_dir, write_graph, write_images, histogram_freq) : log가 저장될 경로와 가중치등의 시각화 여부를 지정해 
+  텐서보드로 훈련 진행 상황과 결과를 시각화 할 수 있게 함.
+
+- tf.keras.callbacks.Callback을 상속하는 클래스를 만들어 훈련, 테스트, 예측에서 호출되는 메서드 세트를 재정의 할 수 있음. 각 단계마다 호출되는 함수가 정의되어 있음. 
+  각 logs는 dict로, 손실값과 배치/에포크 끝의 모든 메트릭이 포함됨.
+- def on_(train|test|predict)_begin(self, logs=None) : 메서드 시작시 호출. 
+- def on_(train|test|predict)_end(self, logs=None) : 메서드 종료시 호출. 
+- def on_(train|test|predict)_batch_begin(self, logs=None) : 메서드 연산증 배치 처리 직전에 호출. 
+- def on_(train|test|predict)_batch_end(self, logs=None) : 메서드 연산중 각 배치(연산)이 끝날때 호출. 이때 logs는 메트릭 결과를 포함하는 dict.
+- def on_epoch_begin(self, epoch, logs=None) : 훈련중 epoch가 시작될 때 호출. 훈련만 해당. 
+- def on_epoch_end(self, epoch, logs=None) : 훈련중 epoch가 끝날 때 호출. 훈련만 해당.
 
 ###### save
 - 모델의 저장/로드는 모두 폴더명을 입력해 줘야 함.
