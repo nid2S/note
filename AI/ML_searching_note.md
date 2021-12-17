@@ -521,6 +521,7 @@
   스케줄러 함수(epoch와 lr을 인수로 받음)를 정의해 인수로 넣고, 이를 callback에 넣어 사용.
 - tensorflow.keras.callbacks.TensorBoard(log_dir, write_graph, write_images, histogram_freq) : log가 저장될 경로와 가중치등의 시각화 여부를 지정해 
   텐서보드로 훈련 진행 상황과 결과를 시각화 할 수 있게 함.
+- tensorflow.keras.callbacks.LambdaCallback(메서드명=함수) : 특정 상황에 특정 함수를 실행하는 콜백. 메서드 명의 종류는 하단, 커스텀 콜백에서 오버로딩 가능한 함수의 종류와 동일.
 
 - tf.keras.callbacks.Callback을 상속하는 클래스를 만들어 훈련, 테스트, 예측에서 호출되는 메서드 세트를 재정의 할 수 있음. 각 단계마다 호출되는 함수가 정의되어 있음. 
   각 logs는 dict로, 손실값과 배치/에포크 끝의 모든 메트릭이 포함됨.
@@ -530,6 +531,11 @@
 - def on_(train|test|predict)_batch_end(self, logs=None) : 메서드 연산중 각 배치(연산)이 끝날때 호출. 이때 logs는 메트릭 결과를 포함하는 dict.
 - def on_epoch_begin(self, epoch, logs=None) : 훈련중 epoch가 시작될 때 호출. 훈련만 해당. 
 - def on_epoch_end(self, epoch, logs=None) : 훈련중 epoch가 끝날 때 호출. 훈련만 해당.
+
+##### TensorBoard
+- 이전의 로그데이터를 모두 지운 뒤, logdir을 설정하고(주로 datatime라이브러리의 datatime.now().strftime()이용), 
+  `tf.summary.create_file_writer(logdir)` -> `with file_writer.as_default():` -> tf.summary.xxx(), 
+  이후 `%tensorboard --logdir logs/train_data`식으로 텐서보드의 사용, 확인이 가능.
 
 ###### save
 - 모델의 저장/로드는 모두 폴더명을 입력해 줘야 함.
