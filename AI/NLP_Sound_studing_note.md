@@ -67,11 +67,14 @@ plt.show()
 - 입력의 크기(길이)가 어떻든 커버할 수 있고, 모델의 크기가 증가하지 않기에 사용됨.
 - 과거의 정보(Historical Infomation)를 잘 활용하고, 시간축에 따름 가중치 공유가 진행됨.
 
+# 음성합성(TTS)
+- 음성 합성(speech synthesis) : 인위적으로 사람의 소리를 합성하여 만들어 내는 것. 텍스트를 음성으로 변환한다는 데서 TTS(text-to-speech)하고도 함.
+- Tacotron : (?). 음성 합성에 쓰이는 모델. 
+
 
 
 #
 ***
-
 
 # SpeechRecognition | STT
 - SpeechRecognition : 파이썬 음성인식(STT) 라이브러리. WAV, AIFF, AIFF-C, FLAC 파일 형식을 지원.
@@ -92,7 +95,6 @@ with sr.AudioFile(파일명) as source:
 txt = recognizer객체.recognize_google(audio_data=audio, language='en-US')  # 구글 웹 API제외 키 등 필요. 언어는 '언어-국가'('ko-KR':한국어).
 ```
 
-
 # pyttsx3 | 음성합성(TTS)
 - 이 외에도 gtts, speech, sound등의 TTS 패키지가 있음.
 ```python  
@@ -102,7 +104,6 @@ engine = pyttsx3.init()
 engine.say(str('Good morning.'))
 engine.runAndWait()
 ```
-
 
 # pyaudio | 음성녹음
 - portaudio library를 python을 이용하여 사용할 수 있도록 함.
@@ -149,7 +150,6 @@ stream.stop_stream()  # 녹음 종료(시작은 open/read)
 stream.close()
 ```
 
-
 # wave
 - .wav 파일의 처리를 위한 패키지
   
@@ -168,17 +168,14 @@ wf.writeframes(b''.join(frames))
 wf.close()
 ```
 
-
 # PyDub | 오디오데이터 전처리
 - pydub.AudioSegment.from_파일형식(오디오파일명) : 오디오 파일을 불러옴.
 - 오디오파일 속성 : .channels(채널 수), .sample_width(샘플길이), .frame_rate(프레임율), .frame_width(프레임폭)
 - 오디오파일.export(out_f=파일경로.파일형식, format=파일형식(wav)) : 불러온 다른 형식으로 변경.
 - 오디오파일.split_to_채널(mono)() : 음성을 해당 채널로 쪼개 리스트로 반환. 원 채널은 오디오파일.channels로 볼 수 있음.
 
-
 # winsound | 오디오 재생(윈도우)
 - winsound.PlaySound(파일명, winsound.SND_FILENAME) : 소리재생
-
 
 # librosa | 음성파일분석 
 - librosa : 파이썬 음성파일분석 라이브러리. 사용시 ffmpeg의 설치가 필요함(음성파일로드).
