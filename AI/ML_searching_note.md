@@ -533,9 +533,9 @@
 - def on_epoch_end(self, epoch, logs=None) : 훈련중 epoch가 끝날 때 호출. 훈련만 해당.
 
 ##### TensorBoard
-- 이전의 로그데이터를 모두 지운 뒤, logdir을 설정하고(주로 datatime라이브러리의 datatime.now().strftime()이용), 
-  `tf.summary.create_file_writer(logdir)` -> `with file_writer.as_default():` -> tf.summary.xxx(), 
-  이후 `%tensorboard --logdir logs/train_data`식으로 텐서보드의 사용, 확인이 가능.
+- 이전의 로그데이터를 모두 지운 뒤, logdir을 설정하고(주로 `os.path.join('./logs', datetime.datetime.now().strftime('%Y%m%d-%H%M%S'))`식), 
+  `tf.summary.create_file_writer(logdir)` -> `with file_writer.as_default():` -> tf.summary.xxx() or callback, 
+  이후 `%tensorboard --logdir ./logs`식으로 텐서보드의 사용, 확인이 가능.
 
 ###### save
 - 모델의 저장/로드는 모두 폴더명을 입력해 줘야 함.
