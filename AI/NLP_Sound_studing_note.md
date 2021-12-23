@@ -69,8 +69,8 @@ plt.show()
 
 # 음성합성(TTS)
 - 음성 합성(speech synthesis) : 인위적으로 사람의 소리를 합성하여 만들어 내는 것. 텍스트를 음성으로 변환한다는 데서 TTS(text-to-speech)하고도 함.
-- Tacotron : (?). 음성 합성에 쓰이는 모델. 
 
+- 라이브러리 : gtts(Google Text to Speech API), speech, sound, pyttsx3등의 라이브러리가 있음.
 
 
 #
@@ -95,15 +95,17 @@ with sr.AudioFile(파일명) as source:
 txt = recognizer객체.recognize_google(audio_data=audio, language='en-US')  # 구글 웹 API제외 키 등 필요. 언어는 '언어-국가'('ko-KR':한국어).
 ```
 
-# pyttsx3 | 음성합성(TTS)
-- 이 외에도 gtts, speech, sound등의 TTS 패키지가 있음.
-```python  
-# TTS 패키지 pyttsx3 사용 예
-import pyttsx3
-engine = pyttsx3.init()
-engine.say(str('Good morning.'))
-engine.runAndWait()
-```
+# 음성합성(TTS) | pyttsx3, gtts 
+- pyttsx3 : TTS패키지. 기계적인 여성 목소리가 출력됨. 한국어 전용(영어는 발음이 이상함)이나 숫자와 고유명사는 읽을 수 있음. 
+- engine = pyttsx3.init() : tts 엔진 생성.
+- engine.say('좋은아침.') : 말 할 대사 지정.  
+- engine.runAndWait() : 지정한 대사를 말함.
+
+- gtts : 구글에서 제공하는 tts서비스. `pip install gTTS`로 설치 가능.
+- tts = gtts.gTTS(text, lang=lang) : gTTS객체 생성 후 변환할 문자열과 언어를 지정함. 언어는 'en', 'ko'등임.
+  en으로 지정시 한글이 포함되어 있으면 무시하고, ko로 지정하면 읽기는 하지만 꽤나 이상하다고 함. 영어는 여자 성우, 한글은 남자 성우.
+- tts.save(path) : 변환된 음성을 파일로 저장함.
+- tts.write_to_fp(f) : binary 파일객체에 오디오소스를 저장함.
 
 # pyaudio | 음성녹음
 - portaudio library를 python을 이용하여 사용할 수 있도록 함.
@@ -174,8 +176,9 @@ wf.close()
 - 오디오파일.export(out_f=파일경로.파일형식, format=파일형식(wav)) : 불러온 다른 형식으로 변경.
 - 오디오파일.split_to_채널(mono)() : 음성을 해당 채널로 쪼개 리스트로 반환. 원 채널은 오디오파일.channels로 볼 수 있음.
 
-# winsound | 오디오 재생(윈도우)
-- winsound.PlaySound(파일명, winsound.SND_FILENAME) : 소리재생
+# 오디오 재생 | winsound, playsound
+- winsound.PlaySound(파일명, winsound.SND_FILENAME) : 소리재생.
+- playsound.playsound(path) : 오디오 파일 재생.
 
 # librosa | 음성파일분석 
 - librosa : 파이썬 음성파일분석 라이브러리. 사용시 ffmpeg의 설치가 필요함(음성파일로드).
