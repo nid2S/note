@@ -660,6 +660,8 @@ print('최적화 완료')
 - !gcloud beta ai-platform versions create 옴션 : 모델 버전을 생성.
 - !gcloud ai-platform prediction 옵션 : ai플랫폼에 업로드했던 모델 로드 후 예측.
 
+## Docker
+- (?)
 
 # Questions
 ## numpy
