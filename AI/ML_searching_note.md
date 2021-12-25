@@ -555,6 +555,7 @@
 - tf.train.list_variables(patj) : 체크포인트 확인.
 
 ###### use
+- 커스텀 모델은 model()으로 call함수를 사용할 수 있음(predict 사용불가).
 - model.summary() 로 모델의 정보(이름/none,출력하는 개수/파라미터(가중치의 개수))를 확인 할 수 있다.
 - model.predict(X) : 모델을 사용해 입력에 따른 예측 반환.
 - model.evaluate(test_images, test_labels) : 모델 성능 비교. loss, accuracy 순으로 반환. verbose = 0 > silent
