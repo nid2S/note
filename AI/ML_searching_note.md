@@ -519,7 +519,7 @@
   검증 데이터의 정확도가 이전보다 좋아지면 모델 저장. 모델 fit 과정에서 callback 매개변수에 넣어 사용가능. 모델의 체크포인트를 저장.
 - tensorflow.keras.callbacks.LearningRateScheduler(scheduler) : 매 epoch가 시작될 때 업데이트된 학습률 값을 가져와 적용. 
   스케줄러 함수(epoch와 lr을 인수로 받음)를 정의해 인수로 넣고, 이를 callback에 넣어 사용.
-- tensorflow.keras.callbacks.TensorBoard(log_dir, write_graph, write_images, histogram_freq) : log가 저장될 경로와 가중치등의 시각화 여부를 지정해 
+- tensorflow.keras.callbacks.TensorBoard(log_dir, write_graph=True, write_images=True, histogram_freq=1) : log가 저장될 경로와 가중치등의 시각화 여부를 지정해 
   텐서보드로 훈련 진행 상황과 결과를 시각화 할 수 있게 함.
 - tensorflow.keras.callbacks.LambdaCallback(메서드명=함수) : 특정 상황에 특정 함수를 실행하는 콜백. 메서드 명의 종류는 하단, 커스텀 콜백에서 오버로딩 가능한 함수의 종류와 동일.
 
@@ -533,9 +533,10 @@
 - def on_epoch_end(self, epoch, logs=None) : 훈련중 epoch가 끝날 때 호출. 훈련만 해당.
 
 ##### TensorBoard
-- 이전의 로그데이터를 모두 지운 뒤, logdir을 설정하고(주로 `os.path.join('./logs', datetime.datetime.now().strftime('%Y%m%d-%H%M%S'))`식), 
-  `tf.summary.create_file_writer(logdir)` -> `with file_writer.as_default():` -> tf.summary.xxx() or callback, 
-  이후 `%tensorboard --logdir ./logs`식으로 텐서보드의 사용, 확인이 가능.
+- 로그생성 : 이전의 로그데이터를 모두 지운 뒤, logdir을 설정하고(주로 `os.path.join('./logs', datetime.datetime.now().strftime('%Y%m%d-%H%M%S'))`식), 
+  `tf.summary.create_file_writer(logdir)` -> `with file_writer.as_default():` -> tf.summary.xxx() or callback, 로 로그파일을 생성할 수 있음.
+- 텐서보드 사용 : `%tensorboard --logdir ./logs`로 확인할 수 있음.
+- 주의사항 : colab만의 문제점인지는 모르겠으나, 허깅페이스(kodialoGPT사용)를 사용했을 때 Tensorboard callback을 사용하면 특정 메모리에 너무 많이 할당되었다고 학습이 중단됨. 
 
 ###### save
 - 모델의 저장/로드는 모두 폴더명을 입력해 줘야 함.
