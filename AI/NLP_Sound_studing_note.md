@@ -70,7 +70,34 @@ plt.show()
 # 음성합성(TTS)
 - 음성 합성(speech synthesis) : 인위적으로 사람의 소리를 합성하여 만들어 내는 것. 텍스트를 음성으로 변환한다는 데서 TTS(text-to-speech)하고도 함.
 - 라이브러리 : gtts(Google Text to Speech API), speech, sound, pyttsx3등의 라이브러리가 있음.
-- tacotron : 오디오 멜 스펙토그램을 학습해 유사한 음파를 합성해 마치 말하는 것과 같은 음성을 보여 주는 것.
+- 스펙트로그램 : (?)
+- 멜스펙트로그램 : (?)
+
+## 모델
+### Tacotron
+- tacotron1 : 딥러닝 기반 음성합성의 대표적 모델. attention + S2S 기반. 인코더, 디코더, 어텐션, 보코더(오디오생성)으로 나눌 수 있음. 이 후 오디오로 복원하기 위해 그리핀-림 알고리즘을 사용함.
+  오디오 멜 스펙토그램을 학습해 유사한 음파를 합성해 마치 말하는 것과 같은 음성을 보여 줌. loss는 디코더 출력 멜스펙트로그램에 대한 loss와 postCBHG의 출력 스펙트로그램의 loss를 더한 것이 됨.
+- 전처리 : 문자단위로 입력데이터를 나눠 정제(공백제외 비문자 제거)와 정수인코딩 과정을 거친 뒤 문자임베딩 층을 거쳐 임베딩 됨. 
+- 인코더 : 1DCNN을 을 거친 데이터와 원래 데이터를 Residual연결해 Highway Layer를 통과시켜 BiRNN으로 특정을 추출. CBHG구조를 거친다고 함(문자단위 표현에 효과적인 구조라고 함).
+  CBHG참고 : Character Embedding -> SingleLayer Convolution + Relu -> MaxPooling(Stride 5) -> Segment Embedding -> 4Layer Highway Network -> SingleLayer BiGRU
+- 디코더 : 멜스펙토그램을 출력. reduction factor(하이퍼 파라미터)에 따라 몇개의 프레임을 출력할 지 결정. 출력은 다음 시퀀스의 입력이 되며, 초깃값은 <GO>(=0).
+- 어텐션 : 디코더는 pre-net을 거쳐 어텐션의 키로 사용됨. 쿼리(인코더 출력)와 키를 구했으니 스코어 계산, value concat의 과정을 거침.
+- 보코더 : concat한 벡터를 multi GRU에 입력해 멜-스펙트로그램을 출력하고, 이후 하나 더 있는 CBHG에 멜스펙트로그램을 입력해 스펙트로그램을 출력함. 이를 그리핀-림 알고리즘을 이용해 오디오신호로 복원. 
+
+- tacotron2 : 타코트론1과 가장 큰 차이점은 wavenet보코더의 유무(없어졌음).
+- 차이점 : 인코더에서 FC-CBHG 구조가 아닌 1Dconv - Bi_zeroShot_LSTM 구조가 되었고, 어텐션에 location aware를 적용했으며, 디코더의 attentionRNN이 GRU에서 GRU에서 zoneout LSTM으로 변경되었고,
+  어텐션 출력이 residual BIGRU -> 멜스펙트로그램 에서 단순히 linear net을 거쳐 멜스펙토그램과 stop토큰(audio가 있는 프레임이면 0, 없으면(패딩)1)을 만드는 것으로 바뀜. 
+  멜스펙토그램은 다시 5개의 conv층을 가지고, residual처럼 linear 출력과 conv 출력을 더해서 최종 멜스펙트로그램을 만듦
+- zoneout : 타코트론의 모든 LSTM에 적용. 현재 state에 이전 state를 뺌 -> 드롭아웃 -> 이전 state에 더해 새 state(cell/hidden 둘다 적용)제작. RNN에선 드롭아웃보다 효과적/큰 차이 없는데 느림 등의 말이 있음.
+- zoneout 식 : (1-W) * dropout({h^t} - {h^t-1}, keep_prob=1-W) + {h^t-1}
+- Location Sensitive Attention : 기존 어텐션과 달리 score계산에 이전 state가 들어가고, 일반적으로 softmax를 이용했던 것에 반해 smoothing을 사용. 이 과정에서 교사강요도 사용함. 
+- smoothing : sigmoid(e_ij)/^LΣ_(j=1)sigmoid(e_ij). softmax의 지수(exponential)을 sigmoid로 바꾼 것.
+- 디코더 : 층 구조만 바뀐 인코더와 달리, DecoderRNN부분이  linear projection(FC 1층)으로 바뀜. 어텐션과 어텐션LSTM을 연결한 벡터를 입력해 하나는 멜스펙트로그램을(activation 없음), 하나는 stop토큰을(sigmoid)만듦.
+  stop토큰은 오디오가 있으면 0, 패딩이면 1이 되고(loss에 포함), 멜-스펙은 다시 5개의 conv층을 거치고, (residual처럼)출력과 층에 들어오기 전의 원본을 더해 최종 멜스펙토그램 출력을 만듦. 이후 보코더로 음성을 복원.
+
+### WaveNet
+- WaveNet : 딥마인드에서 공개한 오디오 시그널 모델. TTS를 위한 종전의 방법(parametric TTS, concatenative TTS)들과는 달리 오디오의 waveforms자체를 모델링해 음성생성.
+- 장점 : 한번 만든 모델에서 목소리를 바꾸어 오디오를 생성하거나, 음악등 사람의 목소리와는 다른 분야에도 활용 가능.
 
 ## 모델 학습
 - 데이터셋 : 일반적으로 공개되어 있는 음성데이터들의 품질은 좋지 않음(대본과 틀리다던가). 학습해 합성은 가능하나 굉장히 음질이 떨어짐. 틀린문장은 없는지 확인과 대본에 대한 검토가 충분히 필요하며,
