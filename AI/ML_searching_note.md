@@ -352,12 +352,12 @@
 - tensorflow in java : tf에서 libtensorflow.jar 다운로드 > 압축 해제후 jar파일 src에 복사 > properties 에서 add jar > 다운한 파일선택 > apply 
   과정을 거친 후 import org.tensorflow로 사용.
 
-
 ##### divece
 - tf.test.is_gpu_available() : gpu가 사용가능한 상태인지 반환.
 - tf.test.gpu_device_name() : 사용가능한 gpu의 이름을 반환.
 
 ##### tensor
+- 모든 텐서는 값이 변경과 추가가 블가능하고, 오직 새로 만드는 것만 가능함. 따라서 연산(값 추가)은 `tf.convert_to_tensor(tensor.numpy(), ndarray)`식으로 해야 함.
 - tf.Variable(수식, name="변수명") : 변수 선언 후 수식으로 정의. x+4 식으로 수식을 지정해 변수에 할당하는 방식.
 - tf.constant(상수, name="상수명") : 상수 선언 후 값 지정. y = tf.constant(20, name="y") 식으로 사용.
 
