@@ -539,8 +539,7 @@
 - 주의사항 : colab만의 문제점인지는 모르겠으나, 허깅페이스(kodialoGPT사용)를 사용했을 때 Tensorboard callback을 사용하면 특정 메모리에 너무 많이 할당되었다고 학습이 중단됨. 
 
 ###### save
-- 모델의 저장/로드는 모두 폴더명을 입력해 줘야 함.
-- model.save(path) : 전체 모델 저장. 두가지의 다른 파일 형식(SaveModel, HDF5(keras))으로 저장가능. 확장자없이 path만 넣으면 SaveModel(.pb), %.h5면 HDF5. 
+- model.save(path) : 전체 모델 저장. 두가지의 다른 파일 형식(SaveModel, HDF5(keras))으로 저장가능. 확장자없이 path만 넣으면 SaveModel(.pb), %.h5면 HDF5. subclassing API로 작성된 모델은 hdf5로 저장할 수 없음. 
 - model = tf.keras.models.load_model(path.h5) : 케라스 형식(.h5)으로 저장된 모델 로드.
 - model = tf.saved_model.load(path) : 텐서플로우 기본 형식(saved_model.pb 파일이 들어있는 폴더)으로 저장된 모델 로드.
 
