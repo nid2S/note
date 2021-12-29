@@ -113,11 +113,7 @@ class CustomDataset(Dataset):
     y = torch.FloatTensor(self.y_data[idx])
     return x, y
 ```
-```python 
-# 원-핫 인코딩
-y_one_hot = torch.zeros_like(hypothesis) 
-y_one_hot.scatter_(1, y.unsqueeze(1), 1)
-```
+
 
 ### activation function
 - torch.nn.functional.relu(텐서) : 렐루(ReLU)사용. F.relu(층) 처럼 사용. 모델 제작시 활성화 함수를 꼭 사용해 주어야 함.
@@ -185,6 +181,7 @@ for i in range(epoch):
   
 - torch.nn.CrossEntropyLoss() : cross-entropy 손실함수 층 사용. softmax함수가 포함되어있음. 
   ignore_index인자에 무시할 토큰의 인덱스를 전달해(pad 등)손실함수가 연산에 포함시키지 않게 할 수 있음.
+  CrossentropyLoss는 input(pred)는 float, target(y)는 long이여야 하며, loss_.backward(gradient=loss_)로 backward를 써야 한다.
 - torch.nn.BCELoss() : Binary-cross-entropy 손실함수 층 사용.
 
 ### model
