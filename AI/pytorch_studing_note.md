@@ -181,7 +181,7 @@ for i in range(epoch):
   
 - torch.nn.CrossEntropyLoss() : cross-entropy 손실함수 층 사용. softmax함수가 포함되어있음. 
   ignore_index인자에 무시할 토큰의 인덱스를 전달해(pad 등)손실함수가 연산에 포함시키지 않게 할 수 있음.
-  CrossentropyLoss는 input(pred)는 float, target(y)는 long이여야 하며, loss_.backward(gradient=loss_)로 backward를 써야 한다.
+  CrossentropyLoss는 input(pred)는 float, target(y)는 long이여야 하며, loss가 스칼라가 아니라면 loss_.backward(gradient=loss_)로 backward를 써야 한다.
 - torch.nn.BCELoss() : Binary-cross-entropy 손실함수 층 사용.
 
 ### model
