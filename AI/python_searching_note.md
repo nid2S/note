@@ -60,6 +60,7 @@
 
 - 리스트.sort(reverse=False / reverse=True) = 오름/내림차순 정렬. 자기자신이 정렬됨.
 - sorted(리스트) = 정렬된 새 리스트 생성. key=lambda item:수식, reverse=bool 등을 인자로 주어 정렬 기준, 반전 여부 등을 선택할 수 있음.
+  `sorted(dict.items(), key=operator.itemgetter(0))`처럼 operator라이브러리의 itemgetter를 사용해 [(), ()\]형태의 리스트를 특정 인덱스의 값을 기준으로 정렬할 수 있음.
 
 - 리스트.clear() = del 리스트[:\] = 리스트 모든 요소 삭제,
 - 리스트2 = 리스트1.copy() == 리스트 복제. 리스트2=리스트1는 할당으로, 리스트 1과 2가 가리키는 리스트는 동일함.
