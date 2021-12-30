@@ -74,11 +74,11 @@
 - [식 for 변수 in 리스트 if 조건식\] 식으로 if 문 도 사용할 수 있다.
 - for 를 여러번 쓰면 뒤에서 부터 적용된다. 
 
-## map,split
+## map
 ***
-- a,b,c=map(int,input("정수 셋 입력 : ").split())  # 리스트 반환. 리스트로 변수 여러개 생성.
-- map 은 리스트등 시퀀스 변환시만 사용. L-value 여러개. split()도 여러 자료를 입력할때만 사용. 하나의 자료를 입력받을땐 input().
-- a,b=input().split()
+- map(func, Sequence) 형태로 사용. 시퀀스의 각 개체에 함수를 적용함.
+- 이터레이터 객체로, 한번 값을 반환하면 더 이상 값을 반환하지 않음(list(map)은 한번만 사용할 수 있음).
+- 입력시엔 주로 map(int, input().split())식으로 쓰임.
 
 ## range
 ***
