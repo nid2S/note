@@ -130,20 +130,10 @@ class CustomDataset(Dataset):
 - 옵티마이저.zero_grad() : gradient 0으로 초기화.
 - 옵티마이저.step() : 주어진 학습대상들을 업데이트.
 - 옵티마이저 매개변수 : 학습시킬 매개변수들, lr(learning rate), weight_decay(가중치감쇠(L2규제)의 강도)등의 매개변수 사용가능.
-```python
+- optimizer.param_groups : 파라미터 그룹 확인 가능.
+```python 
 # 사용 예
-import torch
-x1 = torch.FloatTensor([[73], [93], [89], [96], [73]])
-x2 = torch.FloatTensor([[80], [88], [91], [98], [66]])
-x3 = torch.FloatTensor([[75], [93], [90], [100], [70]])
-y = torch.FloatTensor([[152], [185], [180], [196], [142]])
-
-w1 = torch.zeros(1, requires_grad=True)
-w2 = torch.zeros(1, requires_grad=True)
-w3 = torch.zeros(1, requires_grad=True)
-b = torch.zeros(1, requires_grad=True)
-
-optimizer = torch.optim.SGD([w1, w2, w3, b], lr=1e-5)
+optimizer = torch.optim.SGD(model.parameters(), lr=1e-5)
 epoch = 1000
 for i in range(epoch):
     # 선형회귀 H(x) 계산
@@ -159,6 +149,23 @@ for i in range(epoch):
 ```
 - torch.optim.SGD(\[가중치(학습대상1), 편향(학습대상2)], lr = learning_rate) : SGD(확률적 경사하강법)사용. 모델.parameters()를 넣을 수 있음.
 - torch.optim.Adam(모델 파라미터, lr) : 아담 옵티마이저 사용.
+
+
+### LearningRate Scheduler
+- 사용방법 : optimizer와 schduler를 먼저 정의한 뒤 학습 시 batch마다 optimizer.step(), epoch마다 scheduler.step()을 해주면 됨.
+- 파라미터 : 공통적으로 optimizer를 넣어주고, last_epoch로 모델 저장 후 시작시 설정을, verbose=bool로 lr갱신 시 마다 메세지를 출력하게 할 수 있음.
+
+- torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=func(lambda)) : lambda표현식으로 작성한 함수를 통해 lr을 조절함. 초기 lr에 lambda(epoch)를 곱해 lr을 계산함.
+- torch.optim.lr_scheduler.MultiplicativeLR(optimizer, lr_lambda=func(lambda)) : lambda표현식으로 작성한 함수를 통해 lr을 조절. lr에 lambda(epoch)를 누적곱해 lr을 계산함.
+- torch.optim.lr_scheduler.StepLR(optimizer, step_size=s, gamma=g) : step사이즈마다 gamma비율로 lr을 감소시킴(일정 step마다 gamma를 곱함). 
+- torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[m1,m2\], gamma=g) : 지정 epoch마다 gamma비율로 lr을 감소시킴(지정 epoch마다 gamma를 곱함). 
+- torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=g) : learing rate decay가 exponential함수를 따름(매 epoch마다 gamma를 곱함). 
+- torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=t, eta_min=min) : lr이 cos함수를 따라 eta_min까지 떨어졌다가 다시 초기 lr로 돌아오기를 반복함(최대 T_max번).
+- torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode) : 입력한 성능평가지표가 patience만큼 향상되지 않으면 lr을 줄임. optim에 momentum을 설정해야 하고, scheduler.step(평가지표)로 사용함.
+- torch.optim.lr_scheduler.CyclicLR(optimizer, step_size_up, base_lr, max_lr, gamma, mode) : base_lr부터 max_lr까지 step_size_up동안 증가하고 감소하기를 반복함. step_size_down, scale_fn등 사용가능.
+- torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr, steps_per_epoch, epochs, pct_start, anneal_strategy) : 초기 lr에서 1cycle annealing함(초기 lr에서 max_lr까지 anneal_strategy(linear/cos)에 따라 증가 후 감소).
+- torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, T_0, T_mult, eta_min) : 초기 lr에서 cosine annealing 함수에 따라 eta_min까지 떨어졌다가(T_0에 걸쳐) T_mult에 걸쳐 다시 되돌아옴. 이 후 증감을 반복. 
+  
 
 ### module(layers)
 - 모델.parameters() : 모델의 파라미터 출력. w와 b가 순서대로 출력됨. 
