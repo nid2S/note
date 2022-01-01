@@ -142,6 +142,22 @@ txt = recognizer객체.recognize_google(audio_data=audio, language='en-US')  # �
 - tts.save(path) : 변환된 음성을 파일로 저장함.
 - tts.write_to_fp(f) : binary 파일객체에 오디오소스를 저장함.
 
+# ClovaSpeechSynthesis API
+- API : 입력된 텍스트를 RESTful API 방식으로 전달하면 서버에서 인식해 mp3 포맷의 스트리밍 데이터나 파일로 리턴해주는 API. 서비스 이용량 한도를 직접 조정할 수 있고, 1000글자당 4원의 비용이 청구됨. 사이트에서 신청 후 이용가능.
+- 신청 사이트 : [네이버 클라우드 클랫폼 - CLOVA Speech Synthesis(CSS)](https://www.ncloud.com/product/aiService/css)
+- 라이브러리 : urllib.request 라이브러리를 이용해 요청을 한 뒤 데이터를 받아와야 함.
+
+- urllib.parse.quote(text) : sppech로 바꿀 text지정. 원 문자열은 UTF-8로 인코딩 되어있어야 하며, 반환값은 URL 인코딩으로 변환된 값임.
+- data = "speaker=화자&speed=속도&text=" + encText : 화자와 속도, 텍스트 정의. 한국은 영문을 읽을 수 있지만(발음 안 좋음) 영어는 한글 입력시 오류가 나거나 읽지 못함. ','는 조금 쉬었다 말하고, '.\n'은 구분된 문장으로 합성됨.
+  화자종류 - 한국 남여(jinho/mijin)|영어 남녀(matt/clara)|일본어 남여(shinji/yuri)|중국어 남여(liangliang/meimei)|스페인어 남여(jose/carmen). 속도는 -5~5로, -5면 1.5배, 5면 0.5배속으로 읽음.
+
+- request = urllib.request.Request(url) : 요청을 전송할 request객체 생성. url은 "https://openapi.naver.com/v1/voice/tts.bin".
+- request.add_header("X-Naver-Client-Id",client_id) : 클라이언트 id를 header에 추가함. 네이버 OpenAPI 신청시 주어지는 값으로 대체해야 함.
+- request.add_header("X-Naver-Client-Secret",client_secret) : 클라이언트 Secret을 header에 추가함. 네이버 OpenAPI 신청시 주어지는 값으로 대체해야 함.
+- response = urllib.request.urlopen(request, data=data.encode('utf-8')) : 요청을 보내고 반환값을 받아옴. 
+- response.getcode() : 반환값의 코드를 실행. 이 결과값이 200이면 아래의 코드를 실행하고, 아니면 print("Error Code:" + rescode)식으로 예외코드를 작성하는 게 좋음.
+- response.read() : 변환된 음성 데이터를 받아옴. 이것의 반환값은 open('*.mp3', 'wb').write(response_body) 로 음성파일로 저장해 쓰거나, 그대로 사용해도 됨. 
+
 # pyaudio | 음성녹음
 - portaudio library를 python을 이용하여 사용할 수 있도록 함.
   
