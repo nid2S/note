@@ -346,8 +346,9 @@
 # tensorflow
 ***
 ##### info
-- 구글이 주도적으로 개발한, 가장 널리 쓰이는 딥러닝 프레임워크중 하나. C++로 작성됨. keras중심 고수준 API 통합 지원. 다양한 프로그래밍언어의 API를 지원.
-- TPU지원, 일반적으로 32bit의 곱셈연산을 16bit로 줄임 등의 특성이 있음.
+- Tensorflow : 구글이 주도적으로 개발한, 가장 널리 쓰이는 딥러닝 프레임워크중 하나. C++로 작성됨. keras중심 고수준 API 통합 지원. 다양한 프로그래밍언어의 API를 지원.
+  시냅스 웨이트(텐서) 네트워크 모델을 따라 흐른다는데서 이름이 유래, TPU지원, 일반적으로 32bit의 곱셈연산을 16bit로 줄임 등의 특성이 있음.
+- 각 단계에서 즉석으로 그래프를 재생성할 수 있는 pytorch와 달리 텐서플로우는 기본적으로 단일 데이터흐름 그래프를 만들고, 그래프코드를 성능에 맞게 최적화한 뒤 모델을 학습시킴. 
 - Estimators(객체지향 레벨) > layers,losses,metrics > Python/C++ Tensorflow > CPU/GPU/TPU 순으로 아키텍쳐(API)가 구성되어 있음.
 - tensorflow in java : tf에서 libtensorflow.jar 다운로드 > 압축 해제후 jar파일 src에 복사 > properties 에서 add jar > 다운한 파일선택 > apply 
   과정을 거친 후 import org.tensorflow로 사용.

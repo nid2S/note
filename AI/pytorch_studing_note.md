@@ -1,4 +1,11 @@
 # pytorch
+- pytorch : 과거 Torch 및 카페2 프레임워크를 기반으로, 파이썬을 스크립팅 언어로 사용하며 진화된 토치 C/CUDA백엔드를 사용하는 딥러닝 프레임워크. 
+  강력한 GPU가속과 파이썬으로 된 텐서, 동적 신경망을 지원함. 각 반복단계에서 즉석으로 그래프를 재 생성할 수 있음.
+- 동적신경망 : 반복할때마다 변경가능한 신경망. 학습 중 숨은 계층을 추가하거나 제거해 정확성과 일반성의 개선이 가능. 
+- 구성요소 : torch - main namespace, Tensor등 다양한 수학 함수가 포함 | .autograd - 자동미분을 위한 함수가 포함. 자동미분여부를 제어하고, 자체 미분가능함수를 정의할 때 쓰는 기반클래스(Function)가 포함
+  | .nn - 신경망 구축을 위한 데이터구조나 레이어 정의(모델 층, 활성화함수, 손실함수 등이 정의) | .optim - 파라미터 최적화 알고리즘(옵티마이저)구현. 
+  | .utils.data - GD계열의 반복연산시 사용하는 미니배치용 유틸리티함수 포함. | .onnx - ONNX(Open Neural Network eXchange, 서로다른 딥러닝 프레임워크간 모델공유시 사용하는 새 포맷)포맷으로 모델을 export할때 사용함.
+  
 
 ## device
 - torch.cuda.is_available() : 현 환경에서 GPU 사용가능 여부를 반환.
@@ -15,6 +22,8 @@
 - torch.자료형Tensor(array) : array로 지정된 자료형의 텐서 생성(ex-Float:32bit 부동소수점). 
 - torch.zeros(shape) : 0으로 초기화된 shape의 텐서 생성.
 - torch.ones(shape) : 1으로 초기화된 shape의 텐서 생성.
+- torch.eye(n, m) : 희소행렬(대각만 1, 나머진 0인 행렬)생성. (n, m)의 텐서가 생성되며, n만 지정시 m은 자동으로 n이 됨.
+- torch.full(size, fill_value) : 특정 값(fill_value)로 채워진 size의 텐서 생성.
 - torch.range(start, end, step) : start~end까지 step의 간격으로 채워진 텐서 생성. python내장함수 range와 동일하게 작동.  
 - torch.rand(shape) : shape의 랜덤으로 값이 할당된 텐서 생성.
 - torch.randn(shape) : shape의, 표준정규분포(평균0, 분산1)내의 범위에서 랜덤으로 값이 할당된 텐서 생성.
@@ -22,20 +31,7 @@
 - torch.텐서생성함수_likes(텐서) : 텐서와 동일한 shape의, 텐서 생성함수로 생성할 수 있는 텐서 생성.
 
 - required_grade = bool : 텐서.grad에 텐서에 대한 기울기를 저장. 텐서 생성시 매개변수로 줄 수 있음. 
-- 텐서.backword() : 역전파. 해당 수식의 텐서(w)에 대한 기울기를 계산. w가 속한 수식을 w로 미분.
-
-- 텐서에 식 적용 : 텐서 + a , 텐서 > 0.5 등 텐서를 식에 사용하면 텐서내의 모든 데이터에 적용됨(applymap).
-- 텐서.shape/dim()/sum()/argmax()/max(-dim=i-)/mean(-dim=i-)/matmul(텐서)/mul(텐서) : 텐서에 대해 사용할 수 있는 연산들. dim 인자는 해당 차원을 제거(해당 차원을 1로 만듦)함.
-- 텐서.size(index) : index차원의 차원 수 반환.
-- 텐서.view(shape) : 텐서의 크기(차원)변경. numpy의 reshape와 같이 전체 원소수는 동일해야 하고, -1 인자를 사용할 수 있음((out.size(0), -1)(첫 차원 제외 펼침)식).
-- 텐서.view_as(텐서) : 텐서의 크기를 입력한 텐서와 동일하게 변경. 마찬가지로 데이터의 개수는 동일해야 함.  
-- 텐서.squeeze() : 차원의 크기가 1인 경우 해당차원 제거.
-- 텐서.unsqueeze(i) : i 위치(shape의 위치)에 크기가 1인 차원을 추가.
-- 텐서.scatter(dim, 텐서, 넣을 인자) : dim차원에서, 텐서의 데이터(내부 데이터를 인덱스로)대로 넣을 인자를 삽입(할당).
-- 텐서.detach() : 현재 그래프에서 분리된 새 텐서 반환. 원본과 같은 스토리지를 공유.
-- 텐서.numpy() : 텐서를 넘파이배열(ndarray)로 변경.
-- 텐서.자료형() : 텐서의 자료형을 변환(TypeCasting).
-- 텐서.연산_() : 기존의 값을 저장하며 연산. x.mul(2.)의 경우 x에 다시 저장하지 않으면 x엔 영향이 없으나, x.mul_()은 연산과 동시에 덮어씀.
+- 텐서.backword() : 역전파. 해당 수식의 텐서(w)에 대한 기울기를 계산. w가 속한 수식을 w로 미분(주로 loss에 수행).
 
 - 텐서.cpu() : cpu 메모리에 올려진 텐서 반환.
 
@@ -47,6 +43,25 @@
 - torch.argmax(텐서) : 텐서 내부의 요소중 최댓값의 인덱스를 반환. dim=i 매개변수를 사용해 특정 차원을 기준으로 볼 수 있음(없으면 전체 요소).
 - torch.cat(\[텐서1, 텐서2], dim=i) : i 번째 차원을 늘리며 두 텐서를 연결. 기존 차원을 유지한채 지정 차원의 크기만 커짐.
 - torch.stack(\[텐서1, 텐서2, 텐서3], -dim=i-) : 텐서(벡터)들을 순차적으로 쌓음. 차원이 하나 늘어남. i번 차원이 늘어나게 함.
+- torch.where(condition, x, y) : 조건에 따라 x 또는 y에서 선택한 요소의 텐서 반환.
+
+- 텐서에 식 적용 : 텐서 + a , 텐서 > 0.5 등 텐서를 식에 사용하면 텐서내의 모든 데이터에 적용됨(applymap).
+- 텐서.shape/dim()/sum()/argmax()/max()/mean()/matmul(텐서)/mul(텐서) : 텐서에 대해 사용할 수 있는 연산들. dim 인자는 해당 차원을 제거(해당 차원을 1로 만듦)함.
+- 텐서.size(index) : index차원의 차원 수 반환.
+- 텐서.view(shape) : 텐서의 크기(차원)변경. numpy의 reshape와 같이 전체 원소수는 동일해야 하고, -1 인자를 사용할 수 있음((out.size(0), -1)(첫 차원 제외 펼침)식).
+- 텐서.view_as(텐서) : 텐서의 크기를 입력한 텐서와 동일하게 변경. 마찬가지로 데이터의 개수는 동일해야 함.  
+- 텐서.unbind() : 다차원의 텐서를 1차원의 텐서로 분리(unbind)함.
+- 텐서.squeeze() : 차원의 크기가 1인 경우 해당차원 제거.
+- 텐서.unsqueeze(i) : i 위치(shape의 위치)에 크기가 1인 차원을 추가.
+- 텐서.scatter(dim, 텐서, 넣을 인자) : dim차원에서, 텐서의 데이터(내부 데이터를 인덱스로)대로 넣을 인자를 삽입(할당).
+- 텐서.detach() : 현재 그래프에서 분리된 새 텐서 반환. 원본과 같은 스토리지를 공유.
+- 텐서.numpy() : 텐서를 넘파이배열(ndarray)로 변경.
+- 텐서.자료형() : 텐서의 자료형을 변환(TypeCasting).
+- 텐서.연산_() : 기존의 값을 저장하며 연산. x.mul(2.)의 경우 x에 다시 저장하지 않으면 x엔 영향이 없으나, x.mul_()은 연산과 동시에 덮어씀.
+
+- torch.save(model(.state_dict()), path) : 모델 저장. .state_dict()를 붙이면 가중치만 저장하는 것으로, 모델이 코드상으로 구현되어 있어야 함. 기본적으로 .pt확장자.
+- model = torch.load(path) : 모델 로드.
+- model.load_state_dict(torch.load(path)) : 모델 가중치 로드.
 ###### tensor expression
 - 2D Tensor : (batch size, dim)
 - 3D Tensor : (batch size, length(time step), dim)
@@ -294,3 +309,13 @@ for i in range(epoch):
 ## Ignite
 - Ignite : PyTorch지원 라이브러리. Lightning과 달리 표준 인터페이스를 가지고있지 않음.
 
+
+
+
+
+
+
+
+
+# REFERENCE
+- [1](https://koreapy.tistory.com/788)

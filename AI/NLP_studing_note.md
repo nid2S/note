@@ -568,7 +568,8 @@
 
 
 ##### collator
-- collator : 허깅페이스의 토크나이저. 트레이너의 인자로 들어가 데이터셋을 가져오는 동시에 처리함. 반환값은 해당 모델의 {키워드: 값}형태의 딕셔너리. 
+- collator : 허깅페이스의 토크나이저. 트레이너의 인자로 들어가 데이터셋을 가져오는 동시에 처리함. 처리 전 토크나이즈를 해줘도 됨. 배치 내 가장 긴 길이로 패딩(동적패딩)할 수 있음.
+- DataCollatorWithPadding(tokenizer=tokenizer) : 동적 패딩을 하는 데이터 collator를 생성.
 
 ##### 모델 사용
 - model(encoded_input(인코딩된 문장들)) : 모델 사용. pytorch의 경우 사전압축을 풀어야(**)함. labels인자로 label을 전달해 줄 수 있으며, 이 경우 반환에 loss가 생성됨.
