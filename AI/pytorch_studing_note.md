@@ -1,6 +1,6 @@
 # pytorch
 - pytorch : 과거 Torch 및 카페2 프레임워크를 기반으로, 파이썬을 스크립팅 언어로 사용하며 진화된 토치 C/CUDA백엔드를 사용하는 딥러닝 프레임워크. 
-  강력한 GPU가속과 파이썬으로 된 텐서, 동적 신경망을 지원함. 각 반복단계에서 즉석으로 그래프를 재 생성할 수 있음.
+  GPU사용에 큰 장점을 가짐. 강력한 GPU가속과 파이썬으로 된 텐서, 동적 신경망을 지원함. 각 반복단계에서 즉석으로 그래프를 재 생성할 수 있음.
 - 동적신경망 : 반복할때마다 변경가능한 신경망. 학습 중 숨은 계층을 추가하거나 제거해 정확성과 일반성의 개선이 가능. 
 - 구성요소 : torch - main namespace, Tensor등 다양한 수학 함수가 포함 | .autograd - 자동미분을 위한 함수가 포함. 자동미분여부를 제어하고, 자체 미분가능함수를 정의할 때 쓰는 기반클래스(Function)가 포함
   | .nn - 신경망 구축을 위한 데이터구조나 레이어 정의(모델 층, 활성화함수, 손실함수 등이 정의) | .optim - 파라미터 최적화 알고리즘(옵티마이저)구현. 
@@ -292,6 +292,8 @@ for i in range(epoch):
 
 # Lightning/Ignite
 - 텐서플로우의 keras와 같이, High-level인터페이스를 제공하는 오픈소스 라이브러리들. ML사용자들에세 좋음.
+
+
 ## pytorch_lightning
 - LightningModule : 모델 내부의 구조를 설계하는 research/science클래스. 모델구조/데이터전처리/손실함수 설정 등 모델 초기화/정의. 
   모든 모듈이 따라야 하는 9가지 필수메서드의 표준 인터페이스를 가지고 있음.
@@ -305,6 +307,7 @@ for i in range(epoch):
 - 트레이너.fit(LightningModule모델) : 모델 학습. sklearn의 fit메서드와 비슷함.
 - 트레이너.test() : fit한 LightningModule모델 테스트. 
 - LightningModule.load_from_checkpoint(모델경로) : 사전훈련된(저장된)모델 로드.
+
 
 ## Ignite
 - Ignite : PyTorch지원 라이브러리. Lightning과 달리 표준 인터페이스를 가지고있지 않음.
