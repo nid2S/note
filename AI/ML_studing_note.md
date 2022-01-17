@@ -35,6 +35,7 @@
 - hand-crefted feature : 수제 특징. 머신러닝에서 전문가에 의해 고안된 아이디어를 바탕으로 직접 설계, 추출해 학습에 사용하는 특징(feature). 머신러닝의 학습진행이 이에따라 천차만별함. 
 - end-to-end : 종단간. 끝과 끝만 보고 중간은 기계가 알아서 학습(hand-crafted 특징 없음). 입력에서 출력까지 파이프라인 네트워크(전체 네트워크를 이루는 부분적 네트워크)없이 한번에 처리함. 
   신경망에 너무 많은 계층의 노드가 있거나 메모리 부족시 사용할 수 없고, 문제가 복잡하면(데이터가 나눠진 파이프라인에 더 적합하게 쓰일 수 있어서) 파이프라인 네트워크로 나눠 해결하는게 더 효율적일 때도 있음.
+- 동기/비동기 : 동시에 일어남/동시에 일어나지 않음. 
 
 ##### 텐서
 - 텐서의 종류 : 기본적으로 행렬. scalar - 요소 하나만 가지고 있는 0차원(랭크 0)의 텐서. Vector - 1차원(벡터도 요소 수에 따라 차원이 있음, 이건 텐서의 차원), 
@@ -660,8 +661,11 @@ print('최적화 완료')
 - !gcloud beta ai-platform versions create 옴션 : 모델 버전을 생성.
 - !gcloud ai-platform prediction 옵션 : ai플랫폼에 업로드했던 모델 로드 후 예측.
 
-## Docker
-- (?)
+## ONNX
+- ONNX(Open Neural Network Exchange) : Tensorflow, Pytorch등 서로 다른 DNN프레임워크 환경에서 만들어진 모델들을 서로 호환되게 사용할 수 있도록 만들어진 공유 플랫폼.
+  TF에서 어떤 모델을 만들고 해당 모델을 ONNX그래프로 export하면 Pytorch에서도 그 모델을 import해 사용할 수 있음.
+- 장점 : Framework Interoperability(상호운용성)(특정 환경에서 생성된 모델을 다른 환경으로 import해 자유롭게 사용가능)과
+  SharedOptimization(공유된 최적화)(가속기등 HW제조업체 입장에서 공유포맷이 존재하면 설계시 이를 기준으로 최적화를 하면 되니 효율적)의 장점을 뽑을 수 있음.
 
 # Questions
 ## numpy
