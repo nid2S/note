@@ -63,6 +63,8 @@
 - 내부평가 : 모델 내에서 자신의 성능을 수치화해 결과를 내놓음. 조금 더 부정확할 수는 있어도 빠르게 식으로 계산되는 더 간단한 평가방법.
 - Perplexity(PPL) : 언어모델평가를 위한 내부 평가 지표. 헷갈리는 정도. 단어의 수로 정규화된 테스트데이터에 대한 확률의 역수. `^N√(1/P(w1, w2, ..., wN))`. n그램 적용시 w개수가 달라짐. 
   분기계수(선택가능한 경우의 수)임. PPL의 낮음은 데이터 상에서 높은 정확도를 보인다는 말이지 직접 느끼기에 좋은 모델을 뜻하지 않음. 비교시엔 양이 많고 도메인에 맞는 동일 데이터를 사용해야 신뢰적.
+- BLUE : (?)
+- MEREOR : (?)
 
 - macro 평균 : 클래스 크기에 상관 없이 모든 클래스를 같은 비중으로 다룬다.
 - weighted 평균 : 클래스별 샘플 수로 가중치를 둬 f1 점수의 평균을 계산.
@@ -410,7 +412,7 @@ class MyModel(Model):  # 모델을 상속하는 모델클래스 생성
 - PReLU(Parametric leaky ReLU) : a가 훈련하는 동안 학습되는(일반 파라미터인) 리키렐루. 대규모 데이터셋에선 렐루보다 고성능을 보이나, 소규모에선 과대적합의 위험이 있음.
 - ELU(Exponential Linear Unit) : x가 음수면 특정한 수(α, 보통 1)로 수렴하여 기울기 소실 문제와 deadReLU를 해결함. 타 변종보다 고성능. | ((X >= 0)? X : α(exp(x)-1))
 - SELU(Scaled ELU) : 타 활성화 함수보다 뛰어난 성능을 보이나 입력이 반드시 표준화(평 0, 표준편차 1)되야하고, 모든 은닉층의 가중치가 르쿤(lecun_normal)으로 초기화 되야 하고, 
-  일렬로 쌓은 층으로 구성되어야 자기정규화 됨. 훈련중 각 층의 출력이 평균0, 표준편차 1을 유지하는 경향이 있어, 기울기소실/폭주를 막아줌. | ((X >= 0)? X : α(e^x - 1))
+  일렬로 쌓은 층으로 구성되어야 자기정규화 됨. 훈련중 각 층의 출력이 평균0, 표준편차 1을 유지하는 경향이 있어, 기울기소실/폭주를 막아줌. | ((X >= 0)? X : l(e^x - α))
 - GELU(Gaussian Error Linear Unit) : 조금 더 유연한 ReLU. 깊으면 잘작동. 빠른 수렴과 음수에도 아주 적은 기울기를 반환할 수 있음. | 0.5x(1 + tanh(√(2/π)*(x + 0.044715(x^3))))  
 - Swish : ReLU의 대체를 위해 구글이 고안한 함수. 매우 깊은 신경망에서/모든 배치크기에서 렐루를 능가함. CNN아키텍쳐중 모바일 넷의 학습에 사용됨. |  f(x) = x * 1/1+e^-x
 - Sigmoid : 입력을 전부 0~1의 미분가능한 수로 변환. 이진 분류의 출력층에서 주로 사용. |  1/(1+np.exp(-x)) | 원점중심이 아니라 평균이 0.5이며, 
@@ -418,7 +420,7 @@ class MyModel(Model):  # 모델을 상속하는 모델클래스 생성
   시그모이드에서 기울기가 0에 가까운 양 극은 출력또한 0에 가까운 값이 나오게 되는데, 역전파 과정에서 이를 곱하면 기울기 소실 문제(앞쪽엔 기울기 잘 전달X, 학습X)가 발생.    
 - tanh(Hyperbolic Tangent) : 입력을 -1~1의 미분 가능한 수로 변환. 시그모이드의 대체제. 
   시그모이드와 함께 Vanishing gradient problem(기울기 소실 문제)을 가지고 있으나 조금 더 나은 편. | (2/1+e^-2x) - 1
-- softmax : 입력을 전부 0~1사이로 정규화. 출력의 총합이 1. 다중 분류의 출력층에서 주로 사용. |  np.exp(x) / np.sum(np.exp(x))
+- softmax : 입력을 전부 0~1사이로 정규화. 출력의 총합이 1. 다중 분류의 출력층에서 주로 사용. 0중심 함수이며, 입력이 0에서 멀어질수록 포화되는 경향이 있다고 함. |  np.exp(x) / np.sum(np.exp(x))
 - hierarchical softmax(계층적) : 완전이진트리, root에서 단어 w까지 가는 길에 놓여있는 노드에 딸려 있는 벡터와, 단어leaf w_i와 연관된 벡터인 v_{wi}를 내적하고, 
   sigmoid를 적용해 확률로 만들고, 그 확률들을 곱하면서 leaf까지 내려감. 전체 합이 1이됨. [자세히](https://dalpo0814.tistory.com/7)
 
@@ -457,7 +459,7 @@ class MyModel(Model):  # 모델을 상속하는 모델클래스 생성
 ***
 - 텐서 계산 > y값 산출 > 손실함수에 이용 > 손실 산출    의 구조로 이어짐.
 - MSE(평균제곱오차) : 개별 예의 모든 제곱 손실을 합한 뒤 예의 수로 나눔. 선형 회귀 모델.
-- binary_crossentropy : 이진 분류의 손실 함수. 
+- binary_crossentropy : 이진 분류의 손실 함수. (?)
 - categorical_crossentropy : 다중 분류 모델의 손실 함수. one-hot-encoding 된 결과로 입력을 해 주어야 하며, 3개의 클래스 별로 확률값이 나오게 된다. 
 - sparse_categorical_crossentropy : 다중 분류 모델의 손실 함수. one-hot-encoding 을 할 필요 없이 정수형태(클래스 번호)로 결과값을 입력해주면 된다. 
   이런게 아닌 일반 모델에서 평범한 정수 인코딩(1,2,3 식)은 레이블 간 유사도를 전달하기에 회귀로 출 수 있는 분류 문제가 아닌 한 문제가 발생한다.
@@ -494,7 +496,7 @@ class MyModel(Model):  # 모델을 상속하는 모델클래스 생성
 - RNN(Recurrent Neural Networks, 순환신경망) : 반복적이고 순차적인 데이터 학습에 특화. 내부의 순환구조가 있음. 
   시계열 데이터에 과거의 학습 구조를 저장해 현재 학습에 이용해 예측률을 높임. LSTM 과 GRU 가 있음. 음성, 텍스트 성분파악등 에 이용.
 - GAN(Generative Adversarial Network,생성적 적대 신경망) : 비지도 학습, 제로섬 게임 틀 안에서 서로 경쟁하는 두개의 신경 네트워크 시스템에 의해 구현. 
-  fake 신경암을 추가해 서로 경쟁하여 더 좋은 성능을 내개 함. 
+  fake 신경암을 추가해 서로 경쟁하여 더 좋은 성능을 내게 함. 
 
 #### CNN
 - CNN(Convolution Neural Network) : 합성곱 신경망. 이미지 처리에 탁월한 성능을 보임. 크게 합성곱층(합성곱연산 수행)과 풀링층 으로 구성. 
@@ -663,9 +665,22 @@ print('최적화 완료')
 
 ## ONNX
 - ONNX(Open Neural Network Exchange) : Tensorflow, Pytorch등 서로 다른 DNN프레임워크 환경에서 만들어진 모델들을 서로 호환되게 사용할 수 있도록 만들어진 공유 플랫폼.
-  TF에서 어떤 모델을 만들고 해당 모델을 ONNX그래프로 export하면 Pytorch에서도 그 모델을 import해 사용할 수 있음.
+  TF에서 어떤 모델을 만들고 해당 모델을 ONNX그래프로 export하면 Pytorch에서도 그 모델을 import해 사용할 수 있음. 순전파시의 함수/호출들에 최적화된 그래프인 trace/script를 생성해 변환함.
 - 장점 : Framework Interoperability(상호운용성)(특정 환경에서 생성된 모델을 다른 환경으로 import해 자유롭게 사용가능)과
   SharedOptimization(공유된 최적화)(가속기등 HW제조업체 입장에서 공유포맷이 존재하면 설계시 이를 기준으로 최적화를 하면 되니 효율적)의 장점을 뽑을 수 있음.
+
+- ONNX exporter : ONNX exporter는 trace-base와 script-base로 나뉘는데, 둘 모두 IR(Intermediate Representation)graph를 만들지만 정보를 기록하는 방식에서 차이가 있음.
+- trace : 모델(input)처럼 input을 넘겨주면, 해당 모델클래스의 forward함수가 실행되며 순전파가 한번 수행됨. 이때 함수 내부에서 다양한 텐서연산이나 유저정의함수, 기본 python코드등이 실행될 수 있는데,
+  이렇게 forward를 한번 수행하는 동안 execution path에 존재했던 모든 연산을 IR로 기록함. Script에 비해 type추정으로 인한 문제/Python primitive와의 호환성 문제가 적은 편.
+- trace 단점 : forward함수 내부에 dynamic control flow가 존재한다면, trace생성을 위한 forward호출시 거쳐가지 않은 control path는 추적되지 않고, 
+  만약 모델에 if나 loop등의 contorl flow가 존재한다면 loop unrolling을 통해서 branch가 static하게 고정된다는 단점이 있음.
+  또 trace시 함수호출을 위한 example input이 필요한데, 이 input의 shape에 따라 그래프가 정적으로 고정되어 이후 추적된 모델을 통해 훈련/추론을 진행한다면 동일한 shape의 input을 넣어야만 함.
+- script : C등의 언어에서 전체 코드를 컴파일해 사용하듯 scripting시에는 순전파시 실행될 코드 전체에 대해 컴파일을 하고, TorchScript 코드인 ScriptModule인스턴스를 생성함. 
+  전체 코드를 보고 컴파일하기에 당연히 dynamic control flow를 살릴 수 있고, Trace의 경우처럼 example input이 필요하지도 않음. Trace의 단점인 Python의 dynamic feature를 살리지 못하는 문제의 해결이 가능.
+- script 단점 : 지원하지 않는 파이썬코드들이 상당히 많고, type추정/중간에 attribute가 변하는 경우등의 문제가 생김. 
+
+- PyTorch에서 export과정 : torch.onnx.export 함수 호출시 Pytorch의 JIT컴파일러인 TorchScript를 통해 모델의 forward함수에서 실행되는 코드들에 대한 IR을 담고있는 trace/script를 생성.
+  생성된 trace/script는 ONNX exporter를 통해 ONNX IR(중간표현)로 변환되고, 여기에서 한번 더 graph optimization이 이뤄져 최종 생성된 ONNX그래프는 .onnx포맷으로 저장됨.
 
 # Questions
 ## numpy
