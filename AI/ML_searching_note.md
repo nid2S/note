@@ -89,6 +89,8 @@
   fmt="%.1f" 식으로 들어가는 인수들에 대한 포맷을 지정할 수 있다.
 - np.loadtext() : 텍스트 파일을 배열로 불러옴. ndarray로 불려옴.
 
+- np.testing.assert_allclose(arr1, arr2, rtol) : 두 배열이 동일(비슷)한지 검사.
+
 # pandas
 ***
 - 판다스는 시리즈, 데이터프레임, 패널 총 세개의 데이터 구조를 사용함.
@@ -352,6 +354,9 @@
 - Estimators(객체지향 레벨) > layers,losses,metrics > Python/C++ Tensorflow > CPU/GPU/TPU 순으로 아키텍쳐(API)가 구성되어 있음.
 - tensorflow in java : tf에서 libtensorflow.jar 다운로드 > 압축 해제후 jar파일 src에 복사 > properties 에서 add jar > 다운한 파일선택 > apply 
   과정을 거친 후 import org.tensorflow로 사용.
+- XLA(Accelerated Linear Algebra) : 2구글이 개발한 TF용 컴파일러. 2017/03에 공개됐음. CPU/GPU 및 TPU등과 같은 기기에 대해 JIT컴파일 기법을 사용해, 사용자가 생성한 TF그래프를 분석하고 
+  실제 런타임 차원과 유형에 맞게 최적화하며 여러 연산을 합성해 이에 대한 효율적인 네이티브 기계어 코드를 내보냄. softmax등 원시 연산들의 조합을 자동으로 최적화하는데 도움을 줌.
+  이외에도 AOT(Ahead-Of-Time) 컴파일에 XLA를 활용해 실행파일의 크기를 줄여 휴대기기등의 환경에서 도움을 줌(전체 그래프가 XLA로 컴파일된 다음 연산을 구현하는 세밀한 기계어 코드를 내보내는 방식, 상당한 크기감소효과를 냄).
 
 ##### divece
 - tf.test.is_gpu_available() : gpu가 사용가능한 상태인지 반환.
@@ -969,13 +974,22 @@ urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 - timeit.timeit(함수) : 함수의 시작부터 끝까지 걸린 시간을 측정.
 
 
-# pygame
-- pygame : python을 통해 게임을 만들 수 있도록 지원해주는 모듈. [import->init(초기화)->전역변수선언->이벤트/화면/사용자 행위 설정(반복문)]의 구조로 이뤄짐.
-- pygame.init() : 모듈 초기화. pygame모듈 사용시 필수로 해줘야 함. 
-- pygame.display.set_caption() : 창이 켜질때 창의 이름을 설정.
-- pygame.display.set_mode([x, y\]) : pygame으로 생성할 GUI창의 크기를 설정 후 화면을 설정하기 위한 객체 생성. .fill((r,g,b))으로 배경색을 설정하는 등의 조작이 가능.
-- pygame.time.Clock() : 화면을 초당 몇번 출력하는지(FPS)설정하기위한 Clock객체 생성. .tick(i)로 FPS설정 가능.
-- pygame.event.get() : 게임중간에 발생한 이벤트를 캐치. [event.type == pygame.QUIT]으로 창에서 x버튼이 눌렸는지 등의 이벤트를 검사할 수 있음.
-- pygame.display.filp() : draw함수나 screen(set_mode())로 화면에 작성한 모든것을 업데이트. 
+# ONNX
+- onnx : ONNX모델을 import해 사용할 수 있게 해주는 라이브러리.
+- model = onnx.load(path.onnx) : ONNX모델을 load.
 
-- pygame.draw.rect/polygon/circle/eclipse/arc/line/lines/aaline/aalines() : 도형/선을 그림. 여러 매개변수를 주어 도형의 색/크기/위치/그 외 기타등등을 설정가능.
+- onnx.checker.check_model(model) : IR이 제대로 구성되었는지 체크.
+- onnx.helper.printable_graph(model.graph) : 읽어서 알아볼 수 있는 형태의 그래프포맷으로 그래프 출력.
+
+## using ONNX model
+- model = onnxruntime.InferenceSession(output_path, providers=providers) : 모델 로드.
+- model.run(output_names, input) : 모델 실행(예측 반환).
+
+## ONNX model export
+### PyTorch
+- torch.onnx.export(model, dummy_input, path) : PyTorch 모델을 onnx 포맷으로 export. 기본적으로는 tracing이기에 예시 입력이 필요함.
+  만약 모델이 dynamic control flow를 포함하고 있고, 이를 살리고 싶다면 해당 모듈의 해당 함수에 @torch.jit.script 데코레이터를 추가해 해당 부분만 scripting 해 줄 수 있음. 
+  이와 같이 trace와 script를 섞어서 사용하는 방식은 TorchScript에서도 동일하게 적용 가능함.
+### other
+- 이외의 프레임워크(sklearn, TF, Keras등)는 tf2onnx등의 라이브러리를 import해 할 수 있음(공식 홈페이지/튜토리얼 참고).
+

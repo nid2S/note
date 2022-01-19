@@ -5,7 +5,8 @@
 - 구성요소 : torch - main namespace, Tensor등 다양한 수학 함수가 포함 | .autograd - 자동미분을 위한 함수가 포함. 자동미분여부를 제어하고, 자체 미분가능함수를 정의할 때 쓰는 기반클래스(Function)가 포함
   | .nn - 신경망 구축을 위한 데이터구조나 레이어 정의(모델 층, 활성화함수, 손실함수 등이 정의) | .optim - 파라미터 최적화 알고리즘(옵티마이저)구현. 
   | .utils.data - GD계열의 반복연산시 사용하는 미니배치용 유틸리티함수 포함. | .onnx - ONNX(Open Neural Network eXchange, 서로다른 딥러닝 프레임워크간 모델공유시 사용하는 새 포맷)포맷으로 모델을 export할때 사용함.
-  
+- TorchScript : Pytorch의 JIT(Just-In-Time)컴파일러. 기존의 명령적인 실행방식 대신, 모델이나 함수의 소스코드를 TorchScript컴파일러를 통해 TorchScript로 컴파일하는 기능을 제곰함.
+  이를 통해 TF의 symbolic graph execution방식과 같이 여러 optimization을 적용할 수 있고, serialized된 모델을 PythonDependency가 없는 다른환경에서도 활용할 수 있는 이점이 있음.
 
 ## device
 - torch.cuda.is_available() : 현 환경에서 GPU 사용가능 여부를 반환.

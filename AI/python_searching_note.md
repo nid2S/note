@@ -867,6 +867,17 @@ for number , name in zip(number_l,name_l):
 - sc.config(orient="horizontal") : 스케일박스의 방향을 가로로 변경.
 - sc.config(tickinterval=i) : 스케일박스에 표시되는 숫자의 간격을 i로 변경.
 
+# pygame
+- pygame : python을 통해 게임을 만들 수 있도록 지원해주는 모듈. [import->init(초기화)->전역변수선언->이벤트/화면/사용자 행위 설정(반복문)]의 구조로 이뤄짐.
+- pygame.init() : 모듈 초기화. pygame모듈 사용시 필수로 해줘야 함. 
+- pygame.display.set_caption() : 창이 켜질때 창의 이름을 설정.
+- pygame.display.set_mode([x, y\]) : pygame으로 생성할 GUI창의 크기를 설정 후 화면을 설정하기 위한 객체 생성. .fill((r,g,b))으로 배경색을 설정하는 등의 조작이 가능.
+- pygame.time.Clock() : 화면을 초당 몇번 출력하는지(FPS)설정하기위한 Clock객체 생성. .tick(i)로 FPS설정 가능.
+- pygame.event.get() : 게임중간에 발생한 이벤트를 캐치. [event.type == pygame.QUIT]으로 창에서 x버튼이 눌렸는지 등의 이벤트를 검사할 수 있음.
+- pygame.display.filp() : draw함수나 screen(set_mode())로 화면에 작성한 모든것을 업데이트. 
+
+- pygame.draw.rect/polygon/circle/eclipse/arc/line/lines/aaline/aalines() : 도형/선을 그림. 여러 매개변수를 주어 도형의 색/크기/위치/그 외 기타등등을 설정가능.
+
 
 # other program
 ***
