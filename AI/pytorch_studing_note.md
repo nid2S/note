@@ -1,64 +1,93 @@
 # pytorch
 - pytorch : 과거 Torch 및 카페2 프레임워크를 기반으로, 파이썬을 스크립팅 언어로 사용하며 진화된 토치 C/CUDA백엔드를 사용하는 딥러닝 프레임워크. 
   GPU사용에 큰 장점을 가짐. 강력한 GPU가속과 파이썬으로 된 텐서, 동적 신경망을 지원함. 각 반복단계에서 즉석으로 그래프를 재 생성할 수 있음.
+  torch와 numpy가 상호 호환되기 때문에, ndarray와 같이 인덱스를 조작할 수 있으며 생성된 텐서는 torch 내부적으로도, numpy와 호황되는 라이브러리에도 사용할 수 있음.
 - 동적신경망 : 반복할때마다 변경가능한 신경망. 학습 중 숨은 계층을 추가하거나 제거해 정확성과 일반성의 개선이 가능. 
+- 브로드 캐스팅 : 크기가 다른 행렬(텐서)들의 크기를 자동으로 맞춰 연산을 가능하게 해주는 기능. 연산시 더 큰 차원에 맞춰짐(요소 복제).
+- TorchScript : Pytorch의 JIT(Just-In-Time)컴파일러. 기존의 명령적인 실행방식 대신, 모델이나 함수의 소스코드를 TorchScript컴파일러를 통해 TorchScript로 컴파일하는 기능을 제곰함.
+  이를 통해 TF의 symbolic graph execution방식과 같이 여러 optimization을 적용할 수 있고, serialized된 모델을 PythonDependency가 없는 다른환경에서도 활용할 수 있는 이점이 있음.
+
+
 - 구성요소 : torch - main namespace, Tensor등 다양한 수학 함수가 포함 | .autograd - 자동미분을 위한 함수가 포함. 자동미분여부를 제어하고, 자체 미분가능함수를 정의할 때 쓰는 기반클래스(Function)가 포함
   | .nn - 신경망 구축을 위한 데이터구조나 레이어 정의(모델 층, 활성화함수, 손실함수 등이 정의) | .optim - 파라미터 최적화 알고리즘(옵티마이저)구현. 
   | .utils.data - GD계열의 반복연산시 사용하는 미니배치용 유틸리티함수 포함. | .onnx - ONNX(Open Neural Network eXchange, 서로다른 딥러닝 프레임워크간 모델공유시 사용하는 새 포맷)포맷으로 모델을 export할때 사용함.
-- TorchScript : Pytorch의 JIT(Just-In-Time)컴파일러. 기존의 명령적인 실행방식 대신, 모델이나 함수의 소스코드를 TorchScript컴파일러를 통해 TorchScript로 컴파일하는 기능을 제곰함.
-  이를 통해 TF의 symbolic graph execution방식과 같이 여러 optimization을 적용할 수 있고, serialized된 모델을 PythonDependency가 없는 다른환경에서도 활용할 수 있는 이점이 있음.
 
 ## device
 - torch.cuda.is_available() : 현 환경에서 GPU 사용가능 여부를 반환.
 - torch.device("cuda") : GPU연산 사용. ("cuda" if USE_CUDA(위의 결과) else "cpu")식으로, GPU 사용이 가능할 때만 사용하게 사용. 
-- 모델(함수).to(device(위의 결과)) : 연산을 수행할 위치를 지정.  
-
+- 모델(텐서).to(device) : 연산을 수행할 위치를 지정.
 - 텐서.cpu() : cpu 메모리에 올려진 텐서 반환.
+- 텐서.cuda() : gpu 메모리에 올려진 텐서 반환. 
 
 ## tensor
-- 텐서 : pytorch의 행렬(데이터)를 저장하는 자료형. numpy의 ndarray와 비슷함. 인덱스접근, 슬라이싱 등이 전부 가능함.
-- 브로드 캐스팅 : 크기가 다른 행렬(텐서)들의 크기를 자동으로 맞춰 연산을 가능하게 해주는 기능. 연산시 더 큰 차원에 맞춰짐(요소 복제).
+- 텐서 : pytorch의 행렬(데이터)를 저장하는/다차원 배열을 처리하기 위한 자료형/데이터구조. numpy의 ndarray와 비슷함. 인덱스접근, 슬라이싱 등이 전부 가능함.
+  GPU를 사용하는 계산도 지원하며, 이때는 torch.cuda.FloatTensor를 사용함. GPU텐서 간에만 연산이 가능하며, GPU텐서에서 ndarray로의 변환은 CPU로 이동한 후에 변환가능함.
+  텐서 생성시 required_grade = bool 매개변수로 텐서.grad에 텐서에 대한 기울기를 저장할 수 있음.
+- 텐서[0, 0\] : 인덱스로 텐서 내 요소에 접근.
+- 텐서[:, :2\] : 슬라이스로 텐서 내 요소에 접근.
+- 텐서 > 2 : 마스크 배열을 이용해 True값인 요소만 추출.
 
 - torch.tensor(i) : 텐서 생성. .item()으로 값을 받아올 수 있음. 
 - torch.자료형Tensor(array) : array로 지정된 자료형의 텐서 생성(ex-Float:32bit 부동소수점). 
+- torch.텐서생성함수_likes(텐서) : 텐서와 동일한 shape의, 텐서 생성함수로 생성할 수 있는 텐서 생성.
 - torch.zeros(shape) : 0으로 초기화된 shape의 텐서 생성.
 - torch.ones(shape) : 1으로 초기화된 shape의 텐서 생성.
-- torch.eye(n, m) : 희소행렬(대각만 1, 나머진 0인 행렬)생성. (n, m)의 텐서가 생성되며, n만 지정시 m은 자동으로 n이 됨.
 - torch.full(size, fill_value) : 특정 값(fill_value)로 채워진 size의 텐서 생성.
 - torch.range(start, end, step) : start~end까지 step의 간격으로 채워진 텐서 생성. python내장함수 range와 동일하게 작동.  
+- torch.arange(start, end, step) : start~end까지 step의 간격으로 채워진 텐서 생성.  
 - torch.rand(shape) : shape의 랜덤으로 값이 할당된 텐서 생성.
 - torch.randn(shape) : shape의, 표준정규분포(평균0, 분산1)내의 범위에서 랜덤으로 값이 할당된 텐서 생성.
 - torch.randint(low, high, shape) : shape의, low~high의 범위에서 랜덤으로 값이 할당된 텐서 생성. low는 포함, high는 미포함.
-- torch.텐서생성함수_likes(텐서) : 텐서와 동일한 shape의, 텐서 생성함수로 생성할 수 있는 텐서 생성.
+- torch.eye(n, m) : 희소행렬(대각만 1, 나머진 0인 행렬)생성. (n, m)의 텐서가 생성되며, n만 지정시 m은 자동으로 n이 됨.
+- torch.linespace(start, end, step) : 시작과 끝을 포함하고 step의 갯수만큼 원소를 가진 등차수열을 만듦.
+- torch.squeeze(텐서) : 텐서의 차원중 차원이 1인 차원을 압축(삭제)함. dim 인자를 입력하면 지정한 차원만 압축할 수 있음.
+- torch.unsqeeze(텐서, dim) : 지정한 차원을 추가함(차원은 1).
+- torch.transpose(텐서, dim1, dim2) : 주어진 텐서에서 dim1과 dim2를 바꿈.
 
-- required_grade = bool : 텐서.grad에 텐서에 대한 기울기를 저장. 텐서 생성시 매개변수로 줄 수 있음. 
-- 텐서.backword() : 역전파. 해당 수식의 텐서(w)에 대한 기울기를 계산. w가 속한 수식을 w로 미분(주로 loss에 수행).
-
-- 텐서.cpu() : cpu 메모리에 올려진 텐서 반환.
+- torch.nn.init.uniform(텐서, a, b) : 주어진 텐서를 uniform분포로 초기화함.
+- torch.nn.init.normal(텐서, a, b) : 주어진 텐서를 normal분포로 초기화함.
+- torch.nn.init.constant(텐서, a, b) : 주어진 텐서를 상수로 만듦.
 
 - 텐서.eq(텐서) : 텐서와 입력된 텐서의 데이터가 동일한지 반환.
 - 텐서.data.sub_(1) : 값을 0과 1로 변환.  
-- torch.log(텐서) : 텐서의 모든 요소에 로그를 적용.
-- torch.exp(텐서) : 텐서의 모든 요소에 ln(log_e)를 적용.
+- torch.add/mul/div(텐서1, 텐서2) : 두 텐서간의 연산을 함. 텐서1 +|*|/ 텐서2 로도 가능함. 연산은 같은 타입의 텐서간/텐서-스칼라 간 에서만 가능함.
 - torch.max(텐서) : 텐서 내부의 요소중 최댓값을 텐서로 반환. 이 외에도 텐서.연산()으로 사용가능한 모든 연산은 torch.연산(텐서)으로 사용가능.  
+- torch.pow(텐서, 지수) : 텐서를 주어진 지수만큼 제곱.
+- torch.log(텐서) : 텐서의 모든 요소에 log(log_10, natural logarithm)를 적용.
+- torch.exp(텐서) : 텐서의 모든 요소에 exponential 연산을 적용.
 - torch.argmax(텐서) : 텐서 내부의 요소중 최댓값의 인덱스를 반환. dim=i 매개변수를 사용해 특정 차원을 기준으로 볼 수 있음(없으면 전체 요소).
-- torch.cat(\[텐서1, 텐서2], dim=i) : i 번째 차원을 늘리며 두 텐서를 연결. 기존 차원을 유지한채 지정 차원의 크기만 커짐.
-- torch.stack(\[텐서1, 텐서2, 텐서3], -dim=i-) : 텐서(벡터)들을 순차적으로 쌓음. 차원이 하나 늘어남. i번 차원이 늘어나게 함.
+- torch.bmm(batch1, batch2) : 두 행렬간의 곱을 배치단위로 처리. 단일 행렬로 계산하는 mm보다 좀 더 효율적(배치단위로 한번에 처리하니)임. 
+- torch.matmul(텐서1, 텐서2) : 두 텐서의 종류에 따라 dot(백터 내적), mv(행렬과 벡터의 곱), mm(행렬과 행렬의 곱)중 하나를 선택해 연산함.
 - torch.where(condition, x, y) : 조건에 따라 x 또는 y에서 선택한 요소의 텐서 반환.
 
+- torch.cat(\[텐서1, 텐서2], dim=i) : i 번째 차원을 늘리며 두 텐서를 연결. 기존 차원을 유지한채 지정 차원의 크기만 커짐.
+- torch.stack(\[텐서1, 텐서2, 텐서3], -dim=i-) : 텐서(벡터)들을 순차적으로 쌓음. 차원이 하나 늘어남. i번 차원이 늘어나게 함.
+- torch.split(텐서, split_size, dim) : 텐서를 몇개의 부분으로 나눔.
+- torch.chunk(텐서, chunks, dim) : 텐서를 몇개의 부분으로 나눔.
+- torch.eig(텐서) : 텐서의 고유값 반환. eigenvectors=True매개변수로 고유벡터를 반환하게 할 수 있음.
+
 - 텐서에 식 적용 : 텐서 + a , 텐서 > 0.5 등 텐서를 식에 사용하면 텐서내의 모든 데이터에 적용됨(applymap).
-- 텐서.shape/dim()/sum()/argmax()/max()/mean()/matmul(텐서)/mul(텐서) : 텐서에 대해 사용할 수 있는 연산들. dim 인자는 해당 차원을 제거(해당 차원을 1로 만듦)함.
+- 텐서.shape : 텐서의 shape를 출력.
+- 텐서.dim() : 텐서의 차원 출력
+- 텐서.sum() : 텐서의 요소합 출력.
+- 텐서.max() : 탠서의 요소중 가장 큰 요소 반환.
+- 텐서.mean() : 텐서의 요소들의 평균 반환
+- 텐서.argmax() : 텐서에서 가장 큰 요소의 인덱스를 반환.
+- 텐서.matmul(텐서) : 두 텐서의 행렬곱 반환.
+
 - 텐서.size(index) : index차원의 차원 수 반환.
+- 텐서.reshape(shape) : 텐서의 크기 변경.
+- 텐서.reshape_as(텐서) : 텐서의 크기를 주어진 텐서의 크기와 동일하게 변경. 
 - 텐서.view(shape) : 텐서의 크기(차원)변경. numpy의 reshape와 같이 전체 원소수는 동일해야 하고, -1 인자를 사용할 수 있음((out.size(0), -1)(첫 차원 제외 펼침)식).
 - 텐서.view_as(텐서) : 텐서의 크기를 입력한 텐서와 동일하게 변경. 마찬가지로 데이터의 개수는 동일해야 함.  
-- 텐서.unbind() : 다차원의 텐서를 1차원의 텐서로 분리(unbind)함.
 - 텐서.squeeze() : 차원의 크기가 1인 경우 해당차원 제거.
 - 텐서.unsqueeze(i) : i 위치(shape의 위치)에 크기가 1인 차원을 추가.
-- 텐서.scatter(dim, 텐서, 넣을 인자) : dim차원에서, 텐서의 데이터(내부 데이터를 인덱스로)대로 넣을 인자를 삽입(할당).
+- 텐서.unbind() : 다차원의 텐서를 1차원의 텐서로 분리(unbind)함.
 - 텐서.detach() : 현재 그래프에서 분리된 새 텐서 반환. 원본과 같은 스토리지를 공유.
-- 텐서.numpy() : 텐서를 넘파이배열(ndarray)로 변경.
+- 텐서.scatter(dim, 텐서, 넣을 인자) : dim차원에서, 텐서의 데이터(내부 데이터를 인덱스로)대로 넣을 인자를 삽입(할당).
 - 텐서.자료형() : 텐서의 자료형을 변환(TypeCasting).
 - 텐서.연산_() : 기존의 값을 저장하며 연산. x.mul(2.)의 경우 x에 다시 저장하지 않으면 x엔 영향이 없으나, x.mul_()은 연산과 동시에 덮어씀.
+- 텐서.numpy() : 텐서를 넘파이배열(ndarray)로 변경.
 
 - torch.save(model(.state_dict()), path) : 모델 저장. .state_dict()를 붙이면 가중치만 저장하는 것으로, 모델이 코드상으로 구현되어 있어야 함. 기본적으로 .pt확장자.
 - model = torch.load(path) : 모델 로드.
@@ -76,6 +105,7 @@
 - 모델.embedding.weight.data.copy_(임베딩벡터들) : 사전훈련된 임베딩벡터값을 모델의 임베딩층에 연결. 
   임베딩벡터는[(필드에 저장)필드.vocab.vectors]로 확인. data까지만 쓰면 임베딩벡터 확인 가능. 
 
+- 텐서.backword() : 역전파. 해당 수식의 텐서(w)에 대한 기울기를 계산. w가 속한 수식을 w로 미분(주로 loss에 수행).
 - 모델.eval() : 모델을 추론모드로 전환. 모델 test시 사용.
 - torch.no_grad() : 미분을 하지 않음. 파라미터를 갱신하지 않는 test시 사용.  
 - torch.nn.init.xavier_uniform_(self.층.weight) : 특정 층 한정으로 가중치 초기화. 형태 변경을 위한 전결합층 등 파라미터 갱신을 원하지 않는 층에 사용.
