@@ -441,49 +441,6 @@
 ******
 
 
-# tensorflow | 토큰,벡터화,임베딩,RNN등
-### preprocessing
-##### tokenize
-- tf.keras.preprocessing.text.text_to_word_sequence(sentence) : 모든 알파벳을 소문자로 변환, 구두점 제거, 죽약형은 분리하지 않는 단어 토큰화 함수. 
-  정제와 단어 토큰화를 동시에 적용.
-- tf.keras.preprocessing.text.Tokenizer() : 정수 인코딩을 위한 토크나이저 로드. 단어집합 생성과 토큰화를 병행. .fit_on_texts(단어집합)으로 단어 빈도수가 
-  높은 순으로 낮은 정수 인덱스를 부여, texts_to_sequences로 변환. .word_index 로 단어와 인덱스를 확인할 수 있고, .word_counts 로 단어의 개수를 확인 할 수 있다. 
-- Tokenizer() 매서드 : .texts_to_matrix(문장배열,mode='count')로 DTM(인덱스 0부터 시작)을 생성할 수 있다. 모드가 'binary' 면 단어의 존재여부만 보여주는 행렬을, 
-  tfidf 는 tfidf 행렬을, freq 는 (단어 등장 횟수/문서 단어 총합)의 행렬을 보여준다.
-- Tokenizer() 메개변수 : num_words(단어 빈도순으로 num_words개 보존), filters(걸러낼 문자모음. 디폴트 - !"#$%&()*+,-./:;<=>?@[\]^_`{|}~\t\n),
-  lower(입력 문자열 소문자 변환여부. bool), split(단어분리기준. str), char_level(문자를 토큰으로 취급. bool),
-  oov_token(값이 지정된 경우, text_to_sequence 호출 과정에서 word_index에 추가되어 out-of-vocabulary words를 대채) 매개변수 사용가능.
-##### vectorize
-- tf.keras.utils.to_categorical(벡터) : 원 핫 인코딩을 해줌. (요소 개수, 요소 종류)의 형태를 가짐.
-- tokenizer.texts_to_sequences(단어집합) : 각 단어를 이미 정해진 인덱스로 변환. 만약 토크나이저 로드시 인수로 i+1을 넣었다면 i 까지의 인덱스를 가진 단어만을 사용하고 나머지는 버린다.
-- tf.keras.preprocessing.sequence.pad_sequences(인코딩된 단어 집합) : 가장 긴 문장의 길이에 맞게 문장의 앞에 0을 삽이비해 ndarray 로 반환. 
-  padding='post' 로 문장 뒤에 0을 삽입할 수 있고, maxlen 매개변수로 길이를 지정할 수 있다.
-- tf.keras.layers.experimental.preprocessing.PreprocessingLayer() : 전처리 층을 위한 base층. 커스텀 층을 만들어 상속, 정의하는 방식으로 사용됨. lambda나 타 서브 층을 써도됨. 
-- tf.keras.layers.experimental.preprocessing.TextVectorization() : 전처리(소문자, 공백분할, 구두점제거, 정수화) 층을 생성. 층.adapt(문자데이터)로 vocab을 추가해 줘야 하며, 
-  혹은 배치를 직접 넣어줄 수 있음(패딩토큰('')과 OOV토큰('[UNK]')이 같이 들어감). 바로 앞층은 shape 1, dtype=tf.string인 인풋이여야 함. .get_vocabulary()로 vocab확인가능.
-  레이어를 여러번 조정할 경우, model.compile/내부데이터셋.map(layer)/직접tf.function을 쓰는 경우 모두 layer.adapt()이후에 해야 함. 간단한 전처리에 좋을 듯. 
-- TextVectorization로드 : 로드한 모델의 layer는 train당시의 vocab을 가지고 있지 않아 전부 OOV로 변환하게 됨. 커스텀오브젝트로 TextVectorization을 지정해 문제를 해결할 수 있음. 
-  `load_model(path, custom_objects={"TextVectorization":TextVectorization})`로 커스텀 오브젝트 지정.
-- TextVectirization인자 : max_tokens(vocab size), standardize(입력에 적용될 정규화. None이면 동작X, Callable이면 해당 작용 수행. 기본은 'lower_and_strip_punctuation'),
-  split(None/whitespace(기본)/Callable), output_mode("int(seqVec)/tf-idf/binary/count"), ngrams(n그램 벡터화의 n, None), output_sequence_length(max_len), 
-  pad_to_max_tokens(bool, max_tokens에 맞춰 패딩. binary/count/tf-idf에서만 작동), vocabulary(vocab(토큰의 배열)).
-
-##### embedding
-- tf.keras.layers.Embedding(총 단어 개수, 결과 벡터의 크기, 입력 시퀀스 길이) : 단어를 밀집벡터로 만듦(임베딩 층(Dense 같은)제작). 
-  모델 내에서 (num of sample, input_length)형태의 정수 인코딩이 완료된 2차원 정수 배열을 입력받아 워드 임베딩 후 3차원 배열을 반환. 
-  weights 매개변수에 사전 훈련된 임베딩 벡터의 값들을 넣어 이미 훈련된 임베딩 벡터 사용 가능.
-##### pooling
-- tf.keras.layers.GlobalMaxPooling1D() : 1차원 풀링 실행. Conv1D 뒤에 위치.
-##### normalization
-- tf.keras.layers.LayerNormalization/(layers) : 층 정규화. 텐서의 마지막 차원에 대해 평균과 분산을 구하고, 이를 이용해 값을 정규화 함.
-### model
-##### RNN
-- tf.keras.layers.SimpleRNN(hidden_size) : RNN 사용. hidden_size는 출력(은닉층, 다음 시점에 보내질 값)의 크기. 
-  input_shape 매개변수에 (timesteps(입력 시퀀스, 각 문서의 단어 길이), input_dim(입력 크기, 각 단어 벡터 표현의 차원 수)) 로 넣어 입력을 정의해 줄 수 도 있음. 
-  임베딩 > RNN > 출력층 만으로도 간단한 자연어 처리(메일 분류 등)가 가능.
-##### CNN 
-- tf.keras.layers.Conv1D(kernel, kernel_size, padding, activation) : 1차원 합성곱신경망 사용.
-
 # sklearn | BOW, TFID, LDA 등
 - sklearn.feature_extraction.text.CountVectorizer() : BOW 표현을 하게 해주는 변환기 로드. .fit(문자열이 담긴 리스트)로 사용, 
   .vocabulary_ 속성에서 반환된 {단어:등장횟수} 형태의 딕셔너리를 볼 수 있음.  tf-idf 와 함께 ngram_range=(연속 토큰 최소길이, 최대길이) 로 연속된 토큰을 고려할 수 있다. 
