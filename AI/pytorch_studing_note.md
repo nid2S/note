@@ -249,26 +249,52 @@ for i in range(epoch):
 ## train/test
 ### train
 - 옵티마이저 지정 : torch.optim.SGD([파라미터(모델.parameters())\], lr=1e-5)식으로, torch.optim의 함수들에 파라미터들과 하이퍼파라미터를 지정해 옵티마이저 생성가능.
-- 모델 학습 과정 : optimizer.zero_grad()    : 가중치 초기화
-                > model(X)                : 정의한 모델(가설)로 데이터를 예측, 예측값을 얻음 
-                > loss_func(Y_pre, Y)     : 지정한 손실함수를 이용해 예측값과 레이블간의 손실(비용)계산 
-                > loss.backward()         : 손실을 미분 
-                > optimizer.step()        : 미분한 결과와 옵티마이저를 이용해 지정된 파라미터 갱신
-                과정을 거쳐 optimizer에 인자로 준 텐서(가중치, 편향)를 갱신함.
-- 미니배치 모델 학습과정 : 
-      > torch.utils.data.TensorDataset(X, y)   : 데이터와 레이블로 데이터셋 생성. TensorDataset 대신 다른 함수를 사용할 수도 있음.
-      > torch.utils.data.DataLoader(데이터셋, batch_size, shuffle=bool, drop_last=bool) : 데이터셋을 실어 미니배치를 생성함.
-      > for data, targets in 데이터로더          : 데이터로더에서 지정한 배치사이즈만큼 데이터와 레이블을 가져옴.
-      > 위의 full-batch모델 학습과정과 동일.
+- 모델 학습 과정 : 가중치 초기화 > 정의한 모델(가설)로 데이터를 예측/예측값을 얻음 > 
+  지정한 손실함수를 이용해 예측값과 레이블간의 손실(비용)계산 > 손실을 미분 > 미분한 결과와 옵티마이저를 이용해 지정된 파라미터 갱신 과정을 거쳐 optimizer에 인자로 준 텐서(가중치, 편향)를 갱신함.
+```pyhton example
+dataset = torch.utils.data.TensorDataset(X, y) 
+dataloader = torch.utils.data.DataLoader(dataset, batch_size, shuffle=bool, drop_last=bool)
+
+for epoch in range(num_epochs):
+    for batch in dataloader:
+        x, y = batch
+
+        logits = model(x)
+        loss = cross_entropy_loss(logits, y)
+        print('train loss: ', loss.item())
+    
+        loss.backward()
+    
+        optimizer.step()
+        optimizer.zero_grad() 
+```
+
+### validation
+``` python example
+for epoch in range(num_epochs):
+    with torch.no_grad():
+        val_loss = []
+        for val_batch in val_dataloader:
+          x, y = val_batch
+          logits = model(x)
+          val_loss.append(cross_entropy_loss(logits, y).item())
+    
+        val_loss = torch.mean(torch.tensor(val_loss))
+        print('val_loss: ', val_loss.item())
+```
+
 ### test
-- 모델 테스트 과정:
-      model.eval() : 모델 추론모드로 전환
-      > for data, target in 데이터셋 : 로더에서 미니배치를 하나씩 꺼내 추론을 수행
-      > model(data) : 데이터를 이용해 출력 계산
-      > [_, predicted = torch.max(outputs.data, 1)] : 확률이 가장 높은 레이블 계산(다중분류).
-      > [count += predicted.eq(targets.data.view_as(predicted)).sum()] : 정답과 일치한 경우 카운트 증가(다중분류).
-      > [count += (targets == (output > 0.5).float()).float().sum()] : 예측값 1/0으로 변환 후, 정답과 일치한 경우 카운트 증가(이진분류).
-      > [count/len(데이터로더.dataset)] : 정확도(accuracy)계산.
+- 모델 테스트 과정: 모델 추론모드로 전환 > 데이터 로더에서 배치를 꺼내 추론수행 > 모델의 예측생성 > argmax(다중분류) > metric 계산.
+```pythonr example
+model.eval()
+count = 0
+for data, target in dataset :
+    model(data)
+    _, predicted = torch.max(outputs.data, 1)
+    count += predicted.eq(targets.data.view_as(predicted)).sum()
+    # count += (targets == (output > 0.5).float()).float().sum()  # binary
+accuracy = count/len(dataset.dataset)
+```
 
 
 # torch_%
@@ -326,11 +352,13 @@ for i in range(epoch):
 - torchaudio.functional.highpass_biquad(audioform, sample_rate, cutoff_freq=2000) : 특정 주파수 초과의 오디오만 허용. 한계를 벗어나면 감쇠.
 
 
-# Lightning/Ignite
+# High-level interfaces
 - 텐서플로우의 keras와 같이, High-level인터페이스를 제공하는 오픈소스 라이브러리들. ML사용자들에세 좋음.
 
-
 ## pytorch_lightning
+- PyTorch Lightning : PyTorch에 대한 High-level 인터페이스를 제공하는 오픈소스 Python 라이브러리. 코드의 추상화를 통해 프레임워크를 넘어 하나의 코드 스타일로 자리 잡기 위해 탄생한 프로젝트.
+
+### LightningModule
 - LightningModule : 모델 내부의 구조를 설계하는 research/science클래스. 모델구조/데이터전처리/손실함수 설정 등 모델 초기화/정의. 
   모든 모듈이 따라야 하는 9가지 필수메서드의 표준 인터페이스를 가지고 있음.
 - LightningModule사용 : pl.LightningModule을 상속받는 클래스 생성 후 구조 정의. 많은 코드가 함수(추상화)형태로 LightningModule안에 포함되어있음. init/forward/손실함수/optimizer,
@@ -339,14 +367,21 @@ for i in range(epoch):
   [__init\_\_ > prepare_data > configure_optimizers > train_dataloader > val_dataloader > test_dataloader(.test()호출시)]의 순서.
   여기에 각 배치/epoch마다 루프메소드는 validation_step(배치마다 실행), validation_epoch_end(에폭마다 실행)를 실행함.
 
+### Trainer
 - pytorch_lightning.Trainer() : 트레이너 객체 생성. 모델의 학습에 관여되는 engineering(학습epoch/batch/모델의 저장/로그생성까지 전반적으로)을 담당.
+
 - 트레이너.fit(LightningModule모델) : 모델 학습. sklearn의 fit메서드와 비슷함.
 - 트레이너.test() : fit한 LightningModule모델 테스트. 
+
 - LightningModule.load_from_checkpoint(모델경로) : 사전훈련된(저장된)모델 로드.
 
 
 ## Ignite
 - Ignite : PyTorch지원 라이브러리. Lightning과 달리 표준 인터페이스를 가지고있지 않음.
+
+
+## Geometric
+- (?)
 
 
 
@@ -357,4 +392,7 @@ for i in range(epoch):
 
 
 # REFERENCE
-- [1](https://koreapy.tistory.com/788)
+- [1](https://pytorch.org/)
+- [2](https://www.pytorchlightning.ai/)
+- [3](https://koreapy.tistory.com/788)
+- [4](https://baeseongsu.github.io/posts/pytorch-lightning-introduction/)
