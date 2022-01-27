@@ -357,15 +357,36 @@ accuracy = count/len(dataset.dataset)
 
 ## pytorch_lightning
 - PyTorch Lightning : PyTorch에 대한 High-level 인터페이스를 제공하는 오픈소스 Python 라이브러리. 코드의 추상화를 통해 프레임워크를 넘어 하나의 코드 스타일로 자리 잡기 위해 탄생한 프로젝트.
+- 장점 : 효율적(정돈된 코드스타일/추상화), 유연함(torch에 적합한 구조, trainer 다양하게 override가능, callback), 구조화(딥러닝시 다뤄야 할 부분들), 다양한 학습 방법에 적용가능(GPU/TPU/16-bit precision),
+  PytorchEcosystem(어먀격한 testing과정, Pytorch친화적), logging과 통합/시각화 프레임워크 등등의 장점을 가지고 있음.
 
-### LightningModule
-- LightningModule : 모델 내부의 구조를 설계하는 research/science클래스. 모델구조/데이터전처리/손실함수 설정 등 모델 초기화/정의. 
+### Module
+- LightningModule : 모델 내부의 구조를 설계하는 research/science클래스. 모델구조/데이터전처리/손실함수 설정 등을 통해 모델 초기화/정의. 
   모든 모듈이 따라야 하는 9가지 필수메서드의 표준 인터페이스를 가지고 있음.
-- LightningModule사용 : pl.LightningModule을 상속받는 클래스 생성 후 구조 정의. 많은 코드가 함수(추상화)형태로 LightningModule안에 포함되어있음. init/forward/손실함수/optimizer,
-  학습루프(training_step - validation_step - validation_epoch_end), 데이터준비(prepare_data(), train_dataloader, val_dataloader, test_dataloader)등이 포함.
 - Lifecycle : LightningModule클래스가 함수를 실행하는 순서. 
   [__init\_\_ > prepare_data > configure_optimizers > train_dataloader > val_dataloader > test_dataloader(.test()호출시)]의 순서.
-  여기에 각 배치/epoch마다 루프메소드는 validation_step(배치마다 실행), validation_epoch_end(에폭마다 실행)를 실행함.
+#### method
+- __init\__ : 모델 초기화. 기존 모델과 동일하게 변수/층등의 정의/선언과 초기화(super(CLASS_NAME, self).__init\__())가 진행됨.
+- forward : 모델 실행시 실행될 순전파 메서드. 기존모델과 동일하게 사용할 수 있음. 입력 x를 받아 예측 pred를 반환하는 구조. 
+- 손실함수 : 손실함수. 클래스 내부에 정의해 사용하는게 구조화되어 좋음. logits과 labels를 받아 계산된 loss를 반환하는 구조.
+- configure_optimizers : 옵티마이저 설정. self.parameters()와 lr을 인자로 받는 옵티마이저를 반환하는 형태.
+
+- 모델 학습루프 : 복잡하던 훈련과정을 추상화. 3가지의 루프 패턴마다 3개지의 메소드를 가지고 있음. 일반적으로는 training_step -> validation_step -> validation_epoch_end의 구조를 사용함.
+- training_step : 모델 훈련시 진행될 훈련 메서드. train_batch(+batch_idx)를 받아 self.forward -> self.loss -> {'loss': loss, 'log': logs({'train_loss': loss})}반환 형태로 이뤄짐.
+- training_step_end : 모델 훈련시 한 step의 끝마다 수행될 메서드.
+- training_epoch_end : 모델 훈련시 한 epoch의 끝마다 수행될 메서드.
+- validation_step : 모델 훈련시 검증과정에서 진행될 validation메서드. val_batch(+batch_idx)를 받아 self.foward -> self.loss -> {'val_loss': loss}반환 의 형태로 이뤄짐.
+- validation_step_end : 모델 훈련시 검증과정에서 한 step의 끝마다 수행될 메서드.
+- validation_epoch_end : 모델 훈련시 검증과정에서 한 epoch의 끝마다 수행될 메서드. 주로 outputs를 입력받아 평균 val_loss와 log(텐서보드용)를 반환하는 구조. 반환시킬 것(dict)들의 리스트를 반환.
+- test_loop_step : 모델 테스트(.test())시 테스트 과정에서 진행될 test_loop메서드.
+- test_loop_step_end : 모델 테스트시 테스트 과정에서 한 step의 끝마다 수행될 test_loop메서드.
+- test_loop_epoch_end : 모델 테스트시 테스트 과정에서 한 epoch의 끝마다 수행될 test_loop메서드.
+
+- 데이터 준비 : Pytorch의 데이터 준비 과정을 크게 5가지로 구조화. 다운로드, 데이터정리/메모리저장, 데이터셋 로드, 데이터전처리(transforms), dataloader형태로 wrapping
+- prepare_data : 데이터 다운로드/로드 후 데이터 전처리, 분리까지 진행해 self.train_data등의 elements에 정의/선언.
+- train_dataloader : train_Dataloader 반환. self.train_data와 batch_size등을 인자로 해 train dataloader를 생성(wrapping)해 반환함.
+- val_dataloader : val_Dataloader 반환. self.val_data와 batch_size등을 인자로 해 val dataloader를 생성(wrapping)해 반환함.
+- test_dataloader : test_Dataloader 반환. self.test_data와 batch_size등을 인자로 해 test dataloader를 생성(wrapping)해 반환함.
 
 ### Trainer
 - pytorch_lightning.Trainer() : 트레이너 객체 생성. 모델의 학습에 관여되는 engineering(학습epoch/batch/모델의 저장/로그생성까지 전반적으로)을 담당.
