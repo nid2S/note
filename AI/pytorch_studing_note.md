@@ -6,6 +6,7 @@
 - 브로드 캐스팅 : 크기가 다른 행렬(텐서)들의 크기를 자동으로 맞춰 연산을 가능하게 해주는 기능. 연산시 더 큰 차원에 맞춰짐(요소 복제).
 - TorchScript : Pytorch의 JIT(Just-In-Time)컴파일러. 기존의 명령적인 실행방식 대신, 모델이나 함수의 소스코드를 TorchScript컴파일러를 통해 TorchScript로 컴파일하는 기능을 제곰함.
   이를 통해 TF의 symbolic graph execution방식과 같이 여러 optimization을 적용할 수 있고, serialized된 모델을 PythonDependency가 없는 다른환경에서도 활용할 수 있는 이점이 있음.
+- Distributed model : 둘 이상의 GPU를 사용하는 모델을 명명하는 단어. 
 
 - 구성요소 : torch - main namespace, Tensor등 다양한 수학 함수가 포함 | .autograd - 자동미분을 위한 함수가 포함. 자동미분여부를 제어하고, 자체 미분가능함수를 정의할 때 쓰는 기반클래스(Function)가 포함
   | .nn - 신경망 구축을 위한 데이터구조나 레이어 정의(모델 층, 활성화함수, 손실함수 등이 정의) | .optim - 파라미터 최적화 알고리즘(옵티마이저)구현. 
@@ -351,6 +352,8 @@ accuracy = count/len(dataset.dataset)
 - torchaudio.functional.lowpass_biquad(audioform, sample_rate, cutoff_freq=3000) : 특정 주파수 미만의 오디오만 허용. 한계를 벗어나면 감쇠.
 - torchaudio.functional.highpass_biquad(audioform, sample_rate, cutoff_freq=2000) : 특정 주파수 초과의 오디오만 허용. 한계를 벗어나면 감쇠.
 
+#
+***
 
 # pytorch_lightning
 - PyTorch Lightning : TF의 keras와 같은 PyTorch에 대한 High-level 인터페이스를 제공하는 오픈소스 Python 라이브러리. 코드의 추상화를 통해 프레임워크를 넘어 하나의 코드 스타일로 자리 잡기 위해 탄생한 프로젝트.
@@ -360,7 +363,9 @@ accuracy = count/len(dataset.dataset)
 ## Model use
 - model(x) : 훈련된 모델(순전파)사용.
 
+- trainer.save_checkpoint(path) : path에 모델 저장.
 - model = LightningModule.load_from_checkpoint(path) : 사전훈련된(저장된)모델 로드.
+- model.eval() : 모델을 추론모드로 전환. 모델의 예측시 사용해줘야 함.
 - model.freeze() : 모델의 파라미터들을 동결. 모델의 예측시 사용해줘야 함.
 
 ## Module
@@ -393,10 +398,12 @@ accuracy = count/len(dataset.dataset)
 
 ## Trainer
 - Trainer : 모델의 학습을 담당하는 클래스. 모델의 학습에 관여되는 engineering(학습epoch/batch/모델의 저장/로그생성까지 전반적으로)을 담당.
-- pytorch_lightning.Trainer() : 트레이너 객체 생성. 다양한 args를 통해 트레이너 설정(gpu등)가능.
+- pytorch_lightning.Trainer() : 트레이너 객체 생성. 다양한 args를 통해 트레이너 설정(gpus(GPU개수)등)가능.
+  accelerator 매개변수에 "dp"를 전달하면 입력한 개수의 GPU에서 분산학습을 진행하겠다는 뜻(Single-Node)이며, "ddp"를 전달하면 다양한 분산컴퓨터시스템에서 다양한 GPU를 사용하겠다는 뜻(Multi-Node)임.
 
 - 트레이너.fit(모델) : 모델 학습. sklearn의 fit메서드와 비슷함.
 - 트레이너.test() : fit한 LightningModule모델 테스트. 
+- 트레이너.save_checkpoint(path) : path에 모델 저장.
 
 
 # Ignite
@@ -406,14 +413,16 @@ accuracy = count/len(dataset.dataset)
 # Geometric
 - (?)
 
+# fast.ai
+- (?)
 
 
 
 
 
 
-
-
+#
+***
 # REFERENCE
 - [1](https://pytorch.org/)
 - [2](https://www.pytorchlightning.ai/)
