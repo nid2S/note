@@ -359,14 +359,17 @@ accuracy = count/len(dataset.dataset)
 - PyTorch Lightning : TF의 keras와 같은 PyTorch에 대한 High-level 인터페이스를 제공하는 오픈소스 Python 라이브러리. 코드의 추상화를 통해 프레임워크를 넘어 하나의 코드 스타일로 자리 잡기 위해 탄생한 프로젝트.
 - 장점 : 효율적(정돈된 코드스타일/추상화), 유연함(torch에 적합한 구조, trainer 다양하게 override가능, callback), 구조화(딥러닝시 다뤄야 할 부분들), 다양한 학습 방법에 적용가능(GPU/TPU/16-bit precision),
   PytorchEcosystem(어먀격한 testing과정, Pytorch친화적), logging과 통합/시각화 프레임워크 등등의 장점을 가지고 있음.
+- pytorch_lightning.seed_everything(seed) : 랜덤시드 고정.
 
 ## Model use
 - model(x) : 훈련된 모델(순전파)사용.
 
-- trainer.save_checkpoint(path) : path에 모델 저장.
-- model = LightningModule.load_from_checkpoint(path) : 사전훈련된(저장된)모델 로드.
 - model.eval() : 모델을 추론모드로 전환. 모델의 예측시 사용해줘야 함.
 - model.freeze() : 모델의 파라미터들을 동결. 모델의 예측시 사용해줘야 함.
+- trainer.test(test_dataloader) : LightningModule모델 테스트. 따로 테스트할 모델을 지정하지 않으면 val_dataset을 통해 구한 best모델로 test를 진행함.
+##### model save/load
+- trainer.save_checkpoint(path) : path에 모델 저장. 저장된 모델은 일반 torch check_point모델로도 사용가능(PL이 Pytorch의 래퍼이니)함.
+- model = LightningModule.load_from_checkpoint(path) : 사전훈련된(저장된)모델 로드. 
 
 ## Module
 - LightningModule : 모델 내부의 구조를 설계하는 research/science클래스. 모델구조/데이터전처리/손실함수 설정 등을 통해 모델 초기화/정의. 
@@ -377,7 +380,8 @@ accuracy = count/len(dataset.dataset)
 - __init\__() : 모델 초기화. 기존 모델과 동일하게 변수/층등의 정의/선언과 초기화(super(CLASS_NAME, self).__init\__())가 진행됨.
 - forward() : 모델 실행시 실행될 순전파 메서드. 기존모델과 동일하게 사용할 수 있음. 입력 x를 받아 예측 pred를 반환하는 구조. 
 - 손실함수() : 손실함수. 클래스 내부에 정의해 사용하는게 구조화되어 좋음. logits과 labels를 받아 계산된 loss를 반환하는 구조.
-- configure_optimizers() : 옵티마이저 설정. self.parameters()와 lr을 인자로 받는 옵티마이저를 반환하는 형태.
+- configure_optimizers() : 옵티마이저 설정. self.parameters()와 lr을 인자로 받는 옵티마이저를 반환하는 형태. 
+  여러 옵티마이저를 사용한다면 리스트 형태로 리턴, training_step에서 optimizer의 인덱스를 추가로 받아 여러 모델을 번갈아 학습하게 됨. 
 
 - 모델 학습루프 : 복잡하던 훈련과정을 추상화. 3가지의 루프 패턴마다 3개지의 메소드를 가지고 있음. 일반적으로는 training_step -> validation_step -> validation_epoch_end의 구조를 사용함.
 - training_step() : 모델 훈련시 진행될 훈련 메서드. train_batch(+batch_idx)를 받아 self.forward -> self.loss -> {'loss': loss, 'log': logs({'train_loss': loss})}반환 형태로 이뤄짐.
@@ -402,7 +406,7 @@ accuracy = count/len(dataset.dataset)
   accelerator 매개변수에 "dp"를 전달하면 입력한 개수의 GPU에서 분산학습을 진행하겠다는 뜻(Single-Node)이며, "ddp"를 전달하면 다양한 분산컴퓨터시스템에서 다양한 GPU를 사용하겠다는 뜻(Multi-Node)임.
 
 - 트레이너.fit(모델) : 모델 학습. sklearn의 fit메서드와 비슷함.
-- 트레이너.test() : fit한 LightningModule모델 테스트. 
+- 트레이너.test(test_dataloader) : fit한 LightningModule모델 테스트. 
 - 트레이너.save_checkpoint(path) : path에 모델 저장.
 
 
