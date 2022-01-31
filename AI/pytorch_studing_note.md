@@ -361,17 +361,25 @@ accuracy = count/len(dataset.dataset)
   PytorchEcosystem(어먀격한 testing과정, Pytorch친화적), logging과 통합/시각화 프레임워크 등등의 장점을 가지고 있음.
 - pytorch_lightning.seed_everything(seed) : 랜덤시드 고정.
 
-## Model use
-- model(x) : 훈련된 모델(순전파)사용.
+## Model
+- model(x) : 훈련된 모델(순전파)사용. forward함수가 구현되어있어야 사용할 수 있음.
 
 - model.eval() : 모델을 추론모드로 전환. 모델의 예측시 사용해줘야 함.
 - model.freeze() : 모델의 파라미터들을 동결. 모델의 예측시 사용해줘야 함.
 - trainer.test(test_dataloader) : LightningModule모델 테스트. 따로 테스트할 모델을 지정하지 않으면 val_dataset을 통해 구한 best모델로 test를 진행함.
+
+##### callbacks
+- pytorch_lightning.callbacks.ModelCheckpoint() : 체크포인트 저장을 커스텀하기 위해 사용하는 콜백. 설정하지 않아도 각 버전마다 체크포인트를 저장함.
+  filepath, verbose(저장결과 출력여부), save_last(마지막 체크포인트 저장여부), save_top_k(save_last제외 저장할 체크포인트 개수), monitor, mode등의 매개변수 사용.
+- pytorch_lightning.callbacks.EarlyStopping() : EarlyStopping사용. monitor, patience, verbose, mode등의 매개변수 사용가능.
+
 ##### model save/load
 - trainer.save_checkpoint(path) : path에 모델 저장. 저장된 모델은 일반 torch check_point모델로도 사용가능(PL이 Pytorch의 래퍼이니)함.
-- model = LightningModule.load_from_checkpoint(path) : 사전훈련된(저장된)모델 로드. 
+- pytorch_lightning.Trainer('resume_from_checkpoint' = path) : 기존의 체크포인트로 저장된 모델과 모델정보를 로드. 학습을 이어서 할 수 있음.
+- model = pytorch_lightning.LightningModule.load_from_checkpoint(path) : 사전훈련된(저장된)모델 로드. 
 
-## Module
+
+## Model Making
 - LightningModule : 모델 내부의 구조를 설계하는 research/science클래스. 모델구조/데이터전처리/손실함수 설정 등을 통해 모델 초기화/정의. 
   모든 모듈이 따라야 하는 9가지 필수메서드의 표준 인터페이스를 가지고 있음.
 - Lifecycle : LightningModule클래스가 함수를 실행하는 순서. 아래의 순서에 더해 각 batch와 epoch마다 함수 이름에 맞게 정해진 순서대로 호출됨.
@@ -402,8 +410,9 @@ accuracy = count/len(dataset.dataset)
 
 ## Trainer
 - Trainer : 모델의 학습을 담당하는 클래스. 모델의 학습에 관여되는 engineering(학습epoch/batch/모델의 저장/로그생성까지 전반적으로)을 담당.
-- pytorch_lightning.Trainer() : 트레이너 객체 생성. 다양한 args를 통해 트레이너 설정(gpus(GPU개수)등)가능.
+- pytorch_lightning.Trainer() : 트레이너 객체 생성. 다양한 args를 통해 트레이너 설정(gpus(GPU개수), callbacks(콜백리스트), max_epochs(epochs)등)가능.
   accelerator 매개변수에 "dp"를 전달하면 입력한 개수의 GPU에서 분산학습을 진행하겠다는 뜻(Single-Node)이며, "ddp"를 전달하면 다양한 분산컴퓨터시스템에서 다양한 GPU를 사용하겠다는 뜻(Multi-Node)임.
+  resume_from_checkpoint 매개변수에 저장된 체크포인트의 경로를 넣으면 자동으로 모델과 학습정보를 로딩해 기존의 학습을 이어가게 됨.
 
 - 트레이너.fit(모델) : 모델 학습. sklearn의 fit메서드와 비슷함.
 - 트레이너.test(test_dataloader) : fit한 LightningModule모델 테스트. 
