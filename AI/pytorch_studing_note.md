@@ -19,6 +19,18 @@
 - 텐서.cpu() : cpu 메모리에 올려진 텐서 반환.
 - 텐서.cuda() : gpu 메모리에 올려진 텐서 반환. 
 
+## XLA
+- torch_xla : Pytorch를 TPU등의 XLA(Accelerated Linear Algebra)장치에서 실행시키기 위한 라이브러리. 새로운 xla장치유형을 추가시키며, 이는 다른 장치유형처럼 작동함.
+
+- torch_xla.core.xla_mode.xla_device() : xla장치 유형을 반환. 텐서생성시 device매개변수에 넣거나 to메서드로 유형을 변경할 수 있음.
+- torch_xla.core.xla_mode.get_xla_supported_devices() : 지원하는(사용가능한)XLA디바이스들을 반환.
+- torch_xla.core.xla_mode.optimizer_step(optimizer, barrier=bool) : XLA에서 옵티마이저 실행. XLA장치를 획득하고 옵티마이저에 베리어를 설정함(barrier매개변수, ParallelLoader사용시 생략(자동생성)).
+
+- torch_xla.distribute.xla_multiprocessing.spawn(main_func, args) : 멀티프로세싱으로 여러 XLA장치를 실행할때 사용하는, 각 XLA장치를 실행하는 프로세스를 생성하는 메서드. main_func에 학습코드가 들어가있으면 됨. 
+- torch_xla.distribute.parallel_loader.ParallelLoader(train_loader, [devices\]) : 훈련데이터를 각 장치에 로드하는 로더 생성. .per_device_loader(device)메서드로 일반 데이터로더와 동일하게 사용가능.
+- torch_xla.distributed.data_parallel.DataParallel(model, device_ids) : 멀티 스레딩을 사용한 다중 XLA장치 사용시 사용하는 객체 생성. epoch만큼 train_func(model, loader, device, context를 매개변수로)과 train_loader를 입력해 사용. 
+
+
 ## tensor
 - 텐서 : pytorch의 행렬(데이터)를 저장하는/다차원 배열을 처리하기 위한 자료형/데이터구조. numpy의 ndarray와 비슷하고, 튜플타입을 가짐. 인덱스접근, 슬라이싱 등이 전부 가능함.
   GPU를 사용하는 계산도 지원하며, 이때는 torch.cuda.FloatTensor를 사용함. GPU텐서 간에만 연산이 가능하며, GPU텐서에서 ndarray로의 변환은 CPU로 이동한 후에 변환가능함.
@@ -413,6 +425,7 @@ accuracy = count/len(dataset.dataset)
 - pytorch_lightning.Trainer() : 트레이너 객체 생성. 다양한 args를 통해 트레이너 설정(gpus(GPU개수), callbacks(콜백리스트), max_epochs(epochs)등)가능.
   accelerator 매개변수에 "dp"를 전달하면 입력한 개수의 GPU에서 분산학습을 진행하겠다는 뜻(Single-Node)이며, "ddp"를 전달하면 다양한 분산컴퓨터시스템에서 다양한 GPU를 사용하겠다는 뜻(Multi-Node)임.
   resume_from_checkpoint 매개변수에 저장된 체크포인트의 경로를 넣으면 자동으로 모델과 학습정보를 로딩해 기존의 학습을 이어가게 됨.
+  tpu_cores 매개변수를 사용해 TPU로 모델학습을 할 수 있고, precision매개변수에 bit수(16)를 입력하면 16bit-precision이 가능함.
 
 - 트레이너.fit(모델) : 모델 학습. sklearn의 fit메서드와 비슷함.
 - 트레이너.test(test_dataloader) : fit한 LightningModule모델 테스트. 
@@ -441,3 +454,4 @@ accuracy = count/len(dataset.dataset)
 - [2](https://www.pytorchlightning.ai/)
 - [3](https://koreapy.tistory.com/788)
 - [4](https://baeseongsu.github.io/posts/pytorch-lightning-introduction/)
+- [5](https://i-am-eden.tistory.com/16)
