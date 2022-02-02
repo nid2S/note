@@ -696,7 +696,7 @@ print('최적화 완료')
 - ONNX(Open Neural Network Exchange) : Tensorflow, Pytorch등 서로 다른 DNN프레임워크 환경에서 만들어진 모델들을 서로 호환되게 사용할 수 있도록 만들어진 공유 플랫폼.
   TF에서 어떤 모델을 만들고 해당 모델을 ONNX그래프로 export하면 Pytorch에서도 그 모델을 import해 사용할 수 있음. 순전파시의 함수/호출들에 최적화된 그래프인 trace/script를 생성해 변환함.
 - 장점 : Framework Interoperability(상호운용성)(특정 환경에서 생성된 모델을 다른 환경으로 import해 자유롭게 사용가능)과
-  SharedOptimization(공유된 최적화)(가속기등 HW제조업체 입장에서 공유포맷이 존재하면 설계시 이를 기준으로 최적화를 하면 되니 효율적)의 장점을 뽑을 수 있음.
+  SharedOptimization(공유된 최적화)(가속기등 HW제조업체 입장에서 공유포맷이 존재하면 설계시 이를 기준으로 최적화를 하면 되니 효율적)의 장점을 뽑을 수 있음. 일부 트랜스포머 모델의 경우 놀라운 최적화를 제공할 수 있음(CPU처리량 40배 향상가능).
 - 단졈 : PyTorch의 경우 JIT compiler가 아직 완벽하지 않다보니 파이썬으로 구현한 모델에 대해서 완벽하게 지원 하지 못함. 현재 tuple/list/Variable 만이 input/output으로 지원되며, 
   dictionary나 string은 일부만 지원된다(dynamic loop up 불가능). 또한 PyTorch와 ONNX의 backend 구현에 차이가 있다보니 모델 구조에 따라서 학습 성능에 문제가 있을 수 있음.
 
@@ -712,6 +712,11 @@ print('최적화 완료')
 
 - PyTorch에서 export과정 : torch.onnx.export 함수 호출시 Pytorch의 JIT컴파일러인 TorchScript를 통해 모델의 forward함수에서 실행되는 코드들에 대한 IR을 담고있는 trace/script를 생성.
   생성된 trace/script는 ONNX exporter를 통해 ONNX IR(중간표현)로 변환되고, 여기에서 한번 더 graph optimization이 이뤄져 최종 생성된 ONNX그래프는 .onnx포맷으로 저장됨.
+
+# Cortex
+- cortex : 머신러닝을 위한 오픈소스 배포 플랫폼. (?)
+- 배포 프로세스 : 모델에 대한 예측 API를 Python으로 작성, YAML에서 API인프라와 동작을 정의하고, CLI에서 명렬어를 사용해 API를 배포하는 과정을 거침.
+
 
 # Questions
 ## numpy

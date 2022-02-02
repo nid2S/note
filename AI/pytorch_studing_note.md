@@ -20,7 +20,8 @@
 - 텐서.cuda() : gpu 메모리에 올려진 텐서 반환. 
 
 ## XLA
-- torch_xla : Pytorch를 TPU등의 XLA(Accelerated Linear Algebra)장치에서 실행시키기 위한 라이브러리. 새로운 xla장치유형을 추가시키며, 이는 다른 장치유형처럼 작동함.
+- torch_xla : Pytorch를 TPU등의 XLA(Accelerated Linear Algebra)장치에서 실행시키기 위한 라이브러리. 새로운 xla장치유형을 추가시키며, 이는 다른 장치유형처럼 작동함. bfloat16 데이터형을 사용가능(XLA_USE_BF16환경변수로 제어).
+- XLA_tensor : 다른 텐서와 달리 결과가 필요할때까지 그래프에 작업을 기록. 그래프를 자동으로 구성해 XLA장치로 보내고, 장치와 CPU간 데이터를 복사할때 동기화함. 베리어를 넣으면 명시적으로 동기화됨.
 
 - torch_xla.core.xla_mode.xla_device() : xla장치 유형을 반환. 텐서생성시 device매개변수에 넣거나 to메서드로 유형을 변경할 수 있음.
 - torch_xla.core.xla_mode.get_xla_supported_devices() : 지원하는(사용가능한)XLA디바이스들을 반환.
@@ -29,7 +30,6 @@
 - torch_xla.distribute.xla_multiprocessing.spawn(main_func, args) : 멀티프로세싱으로 여러 XLA장치를 실행할때 사용하는, 각 XLA장치를 실행하는 프로세스를 생성하는 메서드. main_func에 학습코드가 들어가있으면 됨. 
 - torch_xla.distribute.parallel_loader.ParallelLoader(train_loader, [devices\]) : 훈련데이터를 각 장치에 로드하는 로더 생성. .per_device_loader(device)메서드로 일반 데이터로더와 동일하게 사용가능.
 - torch_xla.distributed.data_parallel.DataParallel(model, device_ids) : 멀티 스레딩을 사용한 다중 XLA장치 사용시 사용하는 객체 생성. epoch만큼 train_func(model, loader, device, context를 매개변수로)과 train_loader를 입력해 사용. 
-
 
 ## tensor
 - 텐서 : pytorch의 행렬(데이터)를 저장하는/다차원 배열을 처리하기 위한 자료형/데이터구조. numpy의 ndarray와 비슷하고, 튜플타입을 가짐. 인덱스접근, 슬라이싱 등이 전부 가능함.
@@ -107,9 +107,6 @@
 - 텐서.연산_() : 기존의 값을 저장하며 연산. x.mul(2.)의 경우 x에 다시 저장하지 않으면 x엔 영향이 없으나, x.mul_()은 연산과 동시에 덮어씀.
 - 텐서.numpy() : 텐서를 넘파이배열(ndarray)로 변경.
 
-- torch.save(model(.state_dict()), path) : 모델 저장. .state_dict()를 붙이면 가중치만 저장하는 것으로, 모델이 코드상으로 구현되어 있어야 함. 기본적으로 .pt확장자.
-- model = torch.load(path) : 모델 로드.
-- model.load_state_dict(torch.load(path)) : 모델 가중치 로드.
 ###### tensor expression
 - 2D Tensor : (batch size, dim)
 - 3D Tensor : (batch size, length(time step), dim)
@@ -118,10 +115,13 @@
 ## model
 - 가설 선언 후 비용함수, 옵티마이저를 이용해 가중치, 편향등을 갱신해 올바른 값을 찾음(비용함수를 미분해 grandient(기울기)계산). 
 
-- torch.save(모델.state_dict(), 경로) : 모델의 현재 가중치를 경로에 저장.
-- 모델.load_state_dict(torch.load(경로)) : 경로의 가중치를 로드해 모델의 가중치로 사용. 
-- 모델.embedding.weight.data.copy_(임베딩벡터들) : 사전훈련된 임베딩벡터값을 모델의 임베딩층에 연결. 
-  임베딩벡터는[(필드에 저장)필드.vocab.vectors]로 확인. data까지만 쓰면 임베딩벡터 확인 가능. 
+- torch.save(model(.state_dict()), path) : 모델 저장. .state_dict()를 붙이면 가중치만 저장하는 것으로, 모델이 코드상으로 구현되어 있어야 함. 기본적으로 .pt확장자.
+- torch.jit.save(model, path) : 모델을 Pytorch의 JIT컴파일러를 사용해 제공함. 최종배포를 위해 사용.
+
+- model = torch.load(path) : 모델 로드.
+- model.load_state_dict(torch.load(path)) : 모델 가중치 로드.
+- model.embedding.weight.data.copy_(임베딩벡터들) : 사전훈련된 임베딩벡터값을 모델의 임베딩층에 연결. 
+  임베딩벡터는`(필드에 저장)필드.vocab.vectors`로 확인. data까지만 쓰면 임베딩벡터 확인 가능. 
 
 - 텐서.backword() : 역전파. 해당 수식의 텐서(w)에 대한 기울기를 계산. w가 속한 수식을 w로 미분(주로 loss에 수행). 해당 텐서 기준 연쇄법칙 적용. 
 - 모델.eval() : 모델을 추론모드로 전환. 모델 test시 사용.
@@ -376,6 +376,7 @@ accuracy = count/len(dataset.dataset)
 ## Model
 - model(x) : 훈련된 모델(순전파)사용. forward함수가 구현되어있어야 사용할 수 있음.
 
+- model.to_torchscript() : PL모델을 PyTorch로 내보냄. torch.jit.save 메서드를 사용해 저장할 수 있으며, 바닐라Pytorch보다 더 나은 성능을 발휘할 수 있으나 모든 모델이 깔끔하게 내보내지는건 아니라서 주의가 필요함.
 - model.eval() : 모델을 추론모드로 전환. 모델의 예측시 사용해줘야 함.
 - model.freeze() : 모델의 파라미터들을 동결. 모델의 예측시 사용해줘야 함.
 - trainer.test(test_dataloader) : LightningModule모델 테스트. 따로 테스트할 모델을 지정하지 않으면 val_dataset을 통해 구한 best모델로 test를 진행함.
@@ -387,6 +388,8 @@ accuracy = count/len(dataset.dataset)
 
 ##### model save/load
 - trainer.save_checkpoint(path) : path에 모델 저장. 저장된 모델은 일반 torch check_point모델로도 사용가능(PL이 Pytorch의 래퍼이니)함.
+- model.to_onnx(path, input_sample, export_params=bool) : PytorchLightning 모델을 onnx모델로 내보냄.
+
 - pytorch_lightning.Trainer('resume_from_checkpoint' = path) : 기존의 체크포인트로 저장된 모델과 모델정보를 로드. 학습을 이어서 할 수 있음.
 - model = pytorch_lightning.LightningModule.load_from_checkpoint(path) : 사전훈련된(저장된)모델 로드. 
 
@@ -455,3 +458,4 @@ accuracy = count/len(dataset.dataset)
 - [3](https://koreapy.tistory.com/788)
 - [4](https://baeseongsu.github.io/posts/pytorch-lightning-introduction/)
 - [5](https://i-am-eden.tistory.com/16)
+- [6](https://ichi.pro/ko/pytorch-lightning-model-eul-peulodeogsyeon-e-baepohaneun-bangbeob-139124684689567)

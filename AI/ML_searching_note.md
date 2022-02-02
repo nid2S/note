@@ -619,6 +619,10 @@ urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 - torch.onnx.export(model, dummy_input, path) : PyTorch 모델을 onnx 포맷으로 export. 기본적으로는 tracing이기에 예시 입력이 필요함.
   만약 모델이 dynamic control flow를 포함하고 있고, 이를 살리고 싶다면 해당 모듈의 해당 함수에 @torch.jit.script 데코레이터를 추가해 해당 부분만 scripting 해 줄 수 있음. 
   이와 같이 trace와 script를 섞어서 사용하는 방식은 TorchScript에서도 동일하게 적용 가능함.
+- pl_model.to_onnx(path, input_sample, export_params=bool) : PytorchLightning 모델을 onnx모델로 내보냄.
 ### other
 - 이외의 프레임워크(sklearn, TF, Keras등)는 tf2onnx등의 라이브러리를 import해 할 수 있음(공식 홈페이지/튜토리얼 참고).
 
+# Cortex
+- cortex : 머신러닝을 위한 오픈소스 배포 플랫폼인 cortex를 위한 라이브러리. 모델에 대한 예측 API를 작성함.
+- (?)
