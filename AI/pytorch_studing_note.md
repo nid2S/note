@@ -309,6 +309,8 @@ for data, target in dataset :
 accuracy = count/len(dataset.dataset)
 ```
 
+## PyTorch_Mobile
+- (?)
 
 # torch_%
 - torchvision : 비전분야의 유명 데이터셋, 모델, 전처리도구가 포함된 패키지.

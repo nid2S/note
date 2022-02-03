@@ -714,9 +714,24 @@ print('최적화 완료')
   생성된 trace/script는 ONNX exporter를 통해 ONNX IR(중간표현)로 변환되고, 여기에서 한번 더 graph optimization이 이뤄져 최종 생성된 ONNX그래프는 .onnx포맷으로 저장됨.
 
 # Cortex
-- cortex : 머신러닝을 위한 오픈소스 배포 플랫폼. (?)
+- cortex : 머신러닝을 위한 오픈소스 배포 플랫폼. 먼저 AWS계정에 클러스터를 생성(CLI용 cortex설치 -> 클러스터 생성) -> 조정가능한 API빌드(API배치) 를 해줘야 사용할 수 있음.
+  배포할 모델은 init(config를 인수로)과 predict(payload를 인수로 받아 예측결과를 리턴({"class":class}식))를 구현하는 식으로 약간 바꾸면 됨.
 - 배포 프로세스 : 모델에 대한 예측 API를 Python으로 작성, YAML에서 API인프라와 동작을 정의하고, CLI에서 명렬어를 사용해 API를 배포하는 과정을 거침.
+``` prepare code example(cmd)
+# install the CLI
+bash -c "$(curl -sS https://raw.githubusercontent.com/cortexlabs/cortex/v0.42.0/get-cli.sh)"
+# create a cluster
+cortex cluster up cluster.yaml
+# deploy APIs
+cortex deploy apis.yaml
 
+# cortex deploy
+creating API_NAME api
+# Distribute APIs
+cortex get API_NAME
+# deploy APIs
+cortex deploy -e aws
+```
 
 # Questions
 ## numpy
