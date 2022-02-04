@@ -717,21 +717,22 @@ print('최적화 완료')
 - cortex : 머신러닝을 위한 오픈소스 배포 플랫폼. 먼저 AWS계정에 클러스터를 생성(CLI용 cortex설치 -> 클러스터 생성) -> 조정가능한 API빌드(API배치) 를 해줘야 사용할 수 있음.
   배포할 모델은 init(config를 인수로)과 predict(payload를 인수로 받아 예측결과를 리턴({"class":class}식))를 구현하는 식으로 약간 바꾸면 됨.
 - 배포 프로세스 : 모델에 대한 예측 API를 Python으로 작성, YAML에서 API인프라와 동작을 정의하고, CLI에서 명렬어를 사용해 API를 배포하는 과정을 거침.
-``` prepare code example(cmd)
-# install the CLI
-bash -c "$(curl -sS https://raw.githubusercontent.com/cortexlabs/cortex/v0.42.0/get-cli.sh)"
-# create a cluster
-cortex cluster up cluster.yaml
-# deploy APIs
-cortex deploy apis.yaml
 
-# cortex deploy
-creating API_NAME api
-# Distribute APIs
-cortex get API_NAME
-# deploy APIs
-cortex deploy -e aws
-```
+- cortex cluster : cortex 클러스터는 AWS계정의 전용 VPC의 EKS(Kubernetes)클러스터에서 실행됨. Kubernetes 클러스터는 작업자 노드그룹에 EC2자동크기조정그룹을 사용함.
+  Cortex는 대부분의 EC2인스턴스 유형을 지원하며, GPU 및 Inferentia하드웨어를 워크로드에 노출하는데 필요한 장치드라이버가 설치됨. Kubernetes Cluster Autoscaler를 사용해 컴퓨팅요구사항을 충족하도록 적절한 노드그룹을 확장함.
+- 네트워킹 : 기본적으로 설치 중 클러스터에 대해 새 전용 VPC가 생성됨. 트래픽을 클러스터로 라우팅하기 위해 두개의 AWS로드밸런서가 생성됨(API트래픽 전용, Python클라이언트에서 Cortex에 대한 API관리요청 전용).
+- 로그 : Cortex클러스터의 모든 로그는 FluentBit을 사용해 CloudWatch로그그룹으로 푸시됨. 클러스터 내 Prometheus설치는 관찰 가능성 및 자동크기조정을 위한 metric수집에 사용됨.
+  워크로드 및 인스턴스 사용량과 관련된 지표 및 대시보드는 Grafana를 통해 보고 수정할 수 있음.
+- 클러스터에 배포 : 클러스터가 성공적으로 생성되면 CLI/Python클라이언트를 이용해 다양한 유형의 워크로드를 배포할 수 있음. 클라이언트는 AWS자격증명을 사용해 클러스터에 인증함. 
+  Cortex는 Pod라는 컨테이너 모음을 원자단위로 사용하며, 확장 및 복제는 포드수준에서 발생함. pod의 오케스트레이션 및 확장은 다양한 유형(실시간/비동기/Batch/Task)의 워크로드에 고유함.
+
+- `bash -c "$(curl -sS https://raw.githubusercontent.com/cortexlabs/cortex/v0.42.0/get-cli.sh)"` : CLI 설치
+- `cortex cluster up cluster.yaml` : 클러스터 생성.
+- `cortex deploy apis.yaml` : API 배치
+- `creating API_NAME api` : cortex 배치
+- `cortex get API_NAME` : API 배포
+- `cortex deploy -e aws` : API 배치
+
 
 # Questions
 ## numpy
