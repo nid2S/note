@@ -310,7 +310,20 @@ accuracy = count/len(dataset.dataset)
 ```
 
 ## PyTorch_Mobile
-- (?)
+- PytorchMobile : 지연시간을 줄이고, 개인정보를 보호하며 새로운 대화형 사용사례 지원을 위해 에지 장치에서 ML모델을 실행하기 위한 엔드 투 엔드 워크플로우.
+  IOS/Android/Linux에서 사용가능(모바일 애플리케이션 및 ML통합에 필요한 전처리/통합작업을 다루는 API제공, 효율적인 모바일 인터프리터 제공). 
+- 기타 특징 : 추적 및 스크립팅 지원(TorchScript IR), 부동소수점 커널라이브러리(Arm CPU용 XNNPACK), QNNPACK통합(8bit양자화커널, 채널별 양자화, 동적 양자화),
+  빌드수준 최적화 및 선택적 컴파일(최종 바이너리 크기는 앱이 필요로 하는 실제 연산자에 의해 결정), 모델최적화간소화(optimize_for_mobile), GPU/DSP/NPU등의 하드웨어 백엔드 지원(예정)등의 특징이 있음.
+- 배포 워크플로우 : 파이토치에서 모델 작성 -(모델 양자화(QUANTIZE, optional)) -> script/trace model -(모델 optimization(optional)) -> SAVE MODEL -> 안드로이드(MAVEN)/IOS(COCOAPODS)로 사용.
+
+- model = torch.quantization.convert(model) : 모델 양자화(아날로그 -> 디지털 | 연속적인 값 -> 띄엄띄엄한 값으로 근사). 선택적으로, 생략가능.
+- model = torch.jit.trace(model, example_input) : 모델 trace. PyTorch JIT컴파일러 이용.
+- model = torch.jit.script(model) : 모델 script. PyTorch JIT컴파일러 이용.
+- opt_model = torch.utils.mobile_optimizer.optimize_for_mobile(model) : 모델 optimize. 선택적으로, 생략가능.
+- opt_model.save_for_lite_interpreter(path) : 모델 저장. 저장되는 PyTorchLite모델은 .ptl 확장자를 가지고 있음.
+
+- `implementation 'org.pytorch:pytorch_android_lite:1.9.0'` : 안드로이드(MAVEN)에서 PytorchLite모델을 사용하기 위한 implementation.
+- `pod 'LibTorch_Lite','~>1.9.0'` : IOS(COCOAPODS)에서 PytorchLite모델을 사용하기 위한 pod.
 
 # torch_%
 - torchvision : 비전분야의 유명 데이터셋, 모델, 전처리도구가 포함된 패키지.
@@ -461,3 +474,4 @@ accuracy = count/len(dataset.dataset)
 - [4](https://baeseongsu.github.io/posts/pytorch-lightning-introduction/)
 - [5](https://i-am-eden.tistory.com/16)
 - [6](https://ichi.pro/ko/pytorch-lightning-model-eul-peulodeogsyeon-e-baepohaneun-bangbeob-139124684689567)
+- [7](https://pytorch.org/mobile/home/)
