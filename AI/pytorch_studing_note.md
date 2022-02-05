@@ -325,6 +325,21 @@ accuracy = count/len(dataset.dataset)
 - `implementation 'org.pytorch:pytorch_android_lite:1.9.0'` : 안드로이드(MAVEN)에서 PytorchLite모델을 사용하기 위한 implementation.
 - `pod 'LibTorch_Lite','~>1.9.0'` : IOS(COCOAPODS)에서 PytorchLite모델을 사용하기 위한 pod.
 
+## TorchScript
+- TorchScript : Python종속적이지 않은 다른 고성능 환경에서 실행할 수 있는 PyTorch 모델(의 하위 클래스)의 중간 표현. 모든 프로그램은 Python프로세스에서 저장하고 Python종속성이 잆는 프로세스에서 로드할 수 있음.
+  독립실행형 C++프로그램 등 Python 독립적으로 실행할 수 있는 TorchScript 프로그램으로 순수 Python 프로그램에서 모델을 점진적으로 전환하는 도구를 제공하며, 
+  이를 통해 Python에서 모델을 훈련하고 TorchScript를 통해 모델을 Python 프로그램이 성능 및 다중 스레딩 이유로 불리할 수 있는 프로덕션 환경으로 내보낼 수 있음.
+- 사용이유 : TorchScript코드는 자체 인터프리터(제한된 Python인터프리터인)에서 호출할 수 있고, Global Interpreter Lock를 획득하지 않아 동일한 인스턴스에서 동시에 많은 요청을 처리할 수 있음.
+  이 형식으로 전체 모델을 디스크에 저장하고 Python이외의 언어로 작성된 서버등의 다른 환경에 로드할 수 있으며, 보다 효율적인 실행제공을 위해 코드에서 컴파일러 최적화의 수행이 가능하며, 더 넓은 관점이 요구되는 백엔드/장치 런타임과 인터페이스 할 수 있음.
+
+- torch.jit.trace(model, exam_input) : PyTorch모델을 Trace 컴파일러를 사용해 TorchScript로 변환. 코드 실행해 발생 작업을 기록하여, 정확히 수행하는 ScriptModule을 구성함. 제어흐름(if_else등)은 지워짐. .code로 추적된 그래프를 코드형태로 볼 수 있음. 
+- torch.jit.script(model) : PyTorch모델을 Script 컴파일러를 사용해 TorchScript로 변환. Trace와 달리 제어 흐름이 그대로 남지만, 더 많은 비용이 소모됨. 일부 상황에선 Trace를, 일부 상황에선 Script를 사용하는게 좋음.
+- `@torch.jit.ignore` : nn.Module은 TorchScript가 아직 지원하지 않는 Python기능을 사용하기에, 일부 메소드를 제외해야 할 때 사용하는 데코레이터.
+
+- model.save(path) : TorchScript모듈을 아카이브 형식으로 디스크에 저장. 코드, 매개변수, 속성, 디버그 정보가 포함됨(아카이브는 완전 별도의 프로세스에서 로드할 수 있는 독립된 표현임).
+- torch.jit.load(path) : 저장된 TorchScript모듈을 디스크에 로드.
+
+
 # torch_%
 - torchvision : 비전분야의 유명 데이터셋, 모델, 전처리도구가 포함된 패키지.
 - torchtext : 자연어처리 분야의 유명 데이터셋, 모델, 전처리도구(텍스트에 대한 추상화기능)가 포함된 패키지.
