@@ -107,6 +107,8 @@
 - 텐서.연산_() : 기존의 값을 저장하며 연산. x.mul(2.)의 경우 x에 다시 저장하지 않으면 x엔 영향이 없으나, x.mul_()은 연산과 동시에 덮어씀.
 - 텐서.numpy() : 텐서를 넘파이배열(ndarray)로 변경.
 
+- torch.utils.data.random_split(dataset, [ratios\]) : 전달한 데이터셋을 지정한 비율들대로 나눔. [0.9, 0.1\]식으로 비율을 지정하면 됨.
+
 ###### tensor expression
 - 2D Tensor : (batch size, dim)
 - 3D Tensor : (batch size, length(time step), dim)
@@ -400,7 +402,7 @@ accuracy = count/len(dataset.dataset)
 # pytorch_lightning
 - PyTorch Lightning : TF의 keras와 같은 PyTorch에 대한 High-level 인터페이스를 제공하는 오픈소스 Python 라이브러리. 코드의 추상화를 통해 프레임워크를 넘어 하나의 코드 스타일로 자리 잡기 위해 탄생한 프로젝트.
 - 장점 : 효율적(정돈된 코드스타일/추상화), 유연함(torch에 적합한 구조, trainer 다양하게 override가능, callback), 구조화(딥러닝시 다뤄야 할 부분들), 다양한 학습 방법에 적용가능(GPU/TPU/16-bit precision),
-  PytorchEcosystem(어먀격한 testing과정, Pytorch친화적), logging과 통합/시각화 프레임워크 등등의 장점을 가지고 있음.
+  PytorchEcosystem(어먀격한 testing과정, Pytorch친화적), logging과 통합/시각화 프레임워크 등등의 장점을 가지고 있음. .to(device)를 쓰지않고도 간단하게 다른 하드웨어를 쓸 수 있음.
 - pytorch_lightning.seed_everything(seed) : 랜덤시드 고정.
 
 ## Model
@@ -447,18 +449,19 @@ accuracy = count/len(dataset.dataset)
 - test_loop_step_end() : 모델 테스트시 테스트 과정에서 한 step의 끝마다 수행될 test_loop메서드.
 - test_loop_epoch_end() : 모델 테스트시 테스트 과정에서 한 epoch의 끝마다 수행될 test_loop메서드.
 
-- 데이터 준비 : Pytorch의 데이터 준비 과정을 크게 5가지로 구조화. 다운로드, 데이터정리/메모리저장, 데이터셋 로드, 데이터전처리(transforms), dataloader형태로 wrapping
+- 데이터 준비 : Pytorch의 데이터 준비 과정을 크게 5가지로 구조화. 다운로드, 데이터정리/메모리저장, 데이터셋 로드, 데이터전처리(transforms), dataloader형태로 wrapping. 데이터로더는 리스트의 형태로 반환해 둘 이상 지정할 수 있음.
 - prepare_data() : 데이터 다운로드/로드 후 데이터 전처리, 분리까지 진행해 self.train_data등의 elements에 정의/선언.
-- train_dataloader() : train_Dataloader 반환. self.train_data와 batch_size등을 인자로 해 train dataloader를 생성(wrapping)해 반환함.
-- val_dataloader() : val_Dataloader 반환. self.val_data와 batch_size등을 인자로 해 val dataloader를 생성(wrapping)해 반환함.
-- test_dataloader() : test_Dataloader 반환. self.test_data와 batch_size등을 인자로 해 test dataloader를 생성(wrapping)해 반환함.
+- train_dataloader() : train_Dataloader 반환. 모델 학습에 사용될 데이터로더 반환.
+- val_dataloader() : val_Dataloader 반환. 모델 검증에 사용될 데이터로더 반환.
+- test_dataloader() : test_Dataloader 반환. 모델 테스트에 사용될 데이터로더 반환.
+- predict_dataloader() : predict_dataloader 반환. 모델 예측에 사용될 데이터로더 반환.
 
 ## Trainer
 - Trainer : 모델의 학습을 담당하는 클래스. 모델의 학습에 관여되는 engineering(학습epoch/batch/모델의 저장/로그생성까지 전반적으로)을 담당.
 - pytorch_lightning.Trainer() : 트레이너 객체 생성. 다양한 args를 통해 트레이너 설정(gpus(GPU개수), callbacks(콜백리스트), max_epochs(epochs)등)가능.
   accelerator 매개변수에 "dp"를 전달하면 입력한 개수의 GPU에서 분산학습을 진행하겠다는 뜻(Single-Node)이며, "ddp"를 전달하면 다양한 분산컴퓨터시스템에서 다양한 GPU를 사용하겠다는 뜻(Multi-Node)임.
   resume_from_checkpoint 매개변수에 저장된 체크포인트의 경로를 넣으면 자동으로 모델과 학습정보를 로딩해 기존의 학습을 이어가게 됨.
-  tpu_cores 매개변수를 사용해 TPU로 모델학습을 할 수 있고, precision매개변수에 bit수(16)를 입력하면 16bit-precision이 가능함.
+  num_processes로 멀티 cpu, gpus를 이용해 gpu, tpu_cores 매개변수를 사용해 TPU로 모델학습을 할 수 있고, precision매개변수에 bit수(16)를 입력하면 16bit-precision이 가능함.
 
 - 트레이너.fit(모델) : 모델 학습. sklearn의 fit메서드와 비슷함.
 - 트레이너.test(test_dataloader) : fit한 LightningModule모델 테스트. 
