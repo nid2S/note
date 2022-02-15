@@ -8,6 +8,7 @@
   이를 통해 TF의 symbolic graph execution방식과 같이 여러 optimization을 적용할 수 있고, serialized된 모델을 PythonDependency가 없는 다른환경에서도 활용할 수 있는 이점이 있음.
 - Distributed model : 둘 이상의 GPU를 사용하는 모델을 명명하는 단어. 
 
+- 모델구성 : 파이토치의 대부분의 구현체(모델)는 모델 생성시 클래스를 사용. torch.nn.Module상속 클래스 구현 > __init__에서 super().__init__을 호출, 사용할 모델(층)정의 > forward(self,x)(자동실행, 모델 사용 후 값 반환)의 과정을 거침.
 - 구성요소 : torch - main namespace, Tensor등 다양한 수학 함수가 포함 | .autograd - 자동미분을 위한 함수가 포함. 자동미분여부를 제어하고, 자체 미분가능함수를 정의할 때 쓰는 기반클래스(Function)가 포함
   | .nn - 신경망 구축을 위한 데이터구조나 레이어 정의(모델 층, 활성화함수, 손실함수 등이 정의) | .optim - 파라미터 최적화 알고리즘(옵티마이저)구현. 
   | .utils.data - GD계열의 반복연산시 사용하는 미니배치용 유틸리티함수 포함. | .onnx - ONNX(Open Neural Network eXchange, 서로다른 딥러닝 프레임워크간 모델공유시 사용하는 새 포맷)포맷으로 모델을 export할때 사용함.
@@ -19,7 +20,7 @@
 - 텐서.cpu() : cpu 메모리에 올려진 텐서 반환.
 - 텐서.cuda() : gpu 메모리에 올려진 텐서 반환. 
 
-## XLA
+### XLA
 - torch_xla : Pytorch를 TPU등의 XLA(Accelerated Linear Algebra)장치에서 실행시키기 위한 라이브러리. 새로운 xla장치유형을 추가시키며, 이는 다른 장치유형처럼 작동함. bfloat16 데이터형을 사용가능(XLA_USE_BF16환경변수로 제어).
 - XLA_tensor : 다른 텐서와 달리 결과가 필요할때까지 그래프에 작업을 기록. 그래프를 자동으로 구성해 XLA장치로 보내고, 장치와 CPU간 데이터를 복사할때 동기화함. 베리어를 넣으면 명시적으로 동기화됨.
 
@@ -39,6 +40,7 @@
 - 텐서[0, 0\] : 인덱스로 텐서 내 요소에 접근.
 - 텐서[:, :2\] : 슬라이스로 텐서 내 요소에 접근.
 - 텐서 > 2 : 마스크 배열을 이용해 True값인 요소만 추출.
+- torch.set_printoptions(percision=i, sci_mode=bool) : (실수의)표시설정을 조정. 정밀도 i 만큼 되는 소수점을 표시하고, sci_mode가 True면 Scientific Notation(과학적 기수법)을 사용함.
 
 - torch.tensor(i(iterator객체)) : 텐서 생성. .item()으로 값을 받아올 수 있음. 
 - torch.자료형Tensor(array) : array로 지정된 자료형의 텐서 생성(ex-Float:32bit 부동소수점). 
@@ -52,12 +54,39 @@
 - torch.rand(shape) : shape의 랜덤으로 값이 할당된 텐서 생성.
 - torch.randn(shape) : shape의, 표준정규분포(평균0, 분산1)내의 범위에서 랜덤으로 값이 할당된 텐서 생성.
 - torch.randint(low, high, shape) : shape의, low~high의 범위에서 랜덤으로 값이 할당된 텐서 생성. low는 포함, high는 미포함.
+- torch.scalar_tensor(number) : 스칼라 텐서 생성.
 - torch.empty(y, x) : 초기화 되지 않은 y*x의 행렬 생성. 그 시점에 할당된 메모리에 존재하던 값이 초기값으로 나타남(쓰지 않는것을 권함).
 - torch.eye(n, m) : 희소행렬(대각만 1, 나머진 0인 행렬)생성. (n, m)의 텐서가 생성되며, n만 지정시 m은 자동으로 n이 됨.
 - torch.linespace(start, end, step) : 시작과 끝을 포함하고 step의 갯수만큼 원소를 가진 등차수열을 만듦.
+
+- 텐서.grad : 텐서의 미분값 확인. 미분을 해준 뒤 여야 함.
+- 텐서.item() : 값이 하나만 있는 텐서의 값을 반환함(텐서를 스칼라 값으로 만듦).
+- 텐서.size(index) : index차원의 차원 수 반환.
+- 텐서.reshape(shape) : 텐서의 크기 변경.
+- 텐서.reshape_as(텐서) : 텐서의 크기를 주어진 텐서의 크기와 동일하게 변경. 
+- 텐서.view(shape) : 텐서의 크기(차원)변경. numpy의 reshape와 같이 전체 원소수는 동일해야 하고, -1 인자를 사용할 수 있음((out.size(0), -1)(첫 차원 제외 펼침)식).
+- 텐서.view_as(텐서) : 텐서의 크기를 입력한 텐서와 동일하게 변경. 마찬가지로 데이터의 개수는 동일해야 함.  
+- 텐서.permute(shape number - 0,3,1,2 식으로) : 텐서 차원의 순서를 변환.
+- 텐서.squeeze() : 차원의 크기가 1인 경우 해당차원 제거.
+- 텐서.unsqueeze(i) : i 위치(shape의 위치)에 크기가 1인 차원을 추가.
+- 텐서.unbind() : 다차원의 텐서를 1차원의 텐서로 분리(unbind)함.
+- 텐서.detach() : 현재 그래프에서 분리된 새 텐서 반환. 원본과 같은 스토리지를 공유.
+- 텐서.scatter(dim, 텐서, 넣을 인자) : dim차원에서, 텐서의 데이터(내부 데이터를 인덱스로)대로 넣을 인자를 삽입(할당).
+- 텐서.자료형() : 텐서의 자료형을 변환(TypeCasting).
+- 텐서.numpy() : 텐서를 넘파이배열(ndarray)로 변경.
+
 - torch.squeeze(텐서) : 텐서의 차원중 차원이 1인 차원을 압축(삭제)함. dim 인자를 입력하면 지정한 차원만 압축할 수 있음.
 - torch.unsqeeze(텐서, dim) : 지정한 차원을 추가함(차원은 1).
 - torch.transpose(텐서, dim1, dim2) : 주어진 텐서에서 dim1과 dim2를 바꿈.
+- torch.where(condition, x, y) : 조건에 따라 x 또는 y에서 선택한 요소의 텐서 반환.
+
+- torch.cat(\[텐서1, 텐서2], dim=i) : i 번째 차원을 늘리며 두 텐서를 연결. 기존 차원을 유지한채 지정 차원의 크기만 커짐.
+- torch.stack(\[텐서1, 텐서2, 텐서3], -dim=i-) : 텐서(벡터)들을 순차적으로 쌓음. 차원이 하나 늘어남. i번 차원이 늘어나게 함.
+- torch.vstack(\[텐서1, 텐서2]) : 텐서들을 dim 1에 맞게 쌓음(연결함). torch.stack(dim=1)과 동일함.
+
+- torch.split(텐서, split_size, dim) : 텐서를 몇개의 부분으로 나눔.
+- torch.chunk(텐서, chunks, dim) : 텐서를 몇개의 부분으로 나눔.
+- torch.utils.dat a.random_split(dataset, [ratios\]) : 전달한 데이터셋을 지정한 비율들대로 나눔. [0.9, 0.1\]식으로 비율을 지정하면 됨.
 
 - torch.nn.init.uniform(텐서, a, b) : 주어진 텐서를 uniform분포로 초기화함.
 - torch.nn.init.normal(텐서, a, b) : 주어진 텐서를 normal분포로 초기화함.
@@ -74,12 +103,6 @@
 - torch.argmax(텐서) : 텐서 내부의 요소중 최댓값의 인덱스를 반환. dim=i 매개변수를 사용해 특정 차원을 기준으로 볼 수 있음(없으면 전체 요소).
 - torch.bmm(batch1, batch2) : 두 행렬간의 곱을 배치단위로 처리. 단일 행렬로 계산하는 mm보다 좀 더 효율적(배치단위로 한번에 처리하니)임. 
 - torch.matmul(텐서1, 텐서2) : 두 텐서의 종류에 따라 dot(백터 내적), mv(행렬과 벡터의 곱), mm(행렬과 행렬의 곱)중 하나를 선택해 연산함.
-- torch.where(condition, x, y) : 조건에 따라 x 또는 y에서 선택한 요소의 텐서 반환.
-
-- torch.cat(\[텐서1, 텐서2], dim=i) : i 번째 차원을 늘리며 두 텐서를 연결. 기존 차원을 유지한채 지정 차원의 크기만 커짐.
-- torch.stack(\[텐서1, 텐서2, 텐서3], -dim=i-) : 텐서(벡터)들을 순차적으로 쌓음. 차원이 하나 늘어남. i번 차원이 늘어나게 함.
-- torch.split(텐서, split_size, dim) : 텐서를 몇개의 부분으로 나눔.
-- torch.chunk(텐서, chunks, dim) : 텐서를 몇개의 부분으로 나눔.
 
 - 텐서에 식 적용 : 텐서 + a , 텐서 > 0.5 등 텐서를 식에 사용하면 텐서내의 모든 데이터에 적용됨(applymap).
 - 텐서.shape : 텐서의 shape를 출력.
@@ -89,25 +112,7 @@
 - 텐서.mean() : 텐서의 요소들의 평균 반환
 - 텐서.argmax() : 텐서에서 가장 큰 요소의 인덱스를 반환.
 - 텐서.matmul(텐서) : 두 텐서의 행렬곱 반환.
-
-- 텐서.grad : 텐서의 미분값 확인. 미분을 해준 뒤 여야 함.
-- 텐서.item() : 값이 하나만 있는 텐서의 값을 반환함(텐서를 스칼라 값으로 만듦).
-- 텐서.size(index) : index차원의 차원 수 반환.
-- 텐서.reshape(shape) : 텐서의 크기 변경.
-- 텐서.reshape_as(텐서) : 텐서의 크기를 주어진 텐서의 크기와 동일하게 변경. 
-- 텐서.view(shape) : 텐서의 크기(차원)변경. numpy의 reshape와 같이 전체 원소수는 동일해야 하고, -1 인자를 사용할 수 있음((out.size(0), -1)(첫 차원 제외 펼침)식).
-- 텐서.view_as(텐서) : 텐서의 크기를 입력한 텐서와 동일하게 변경. 마찬가지로 데이터의 개수는 동일해야 함.  
-- 텐서.permute(shape number - 0,3,1,2 식으로) : 텐서 차원의 순서를 변환.
-- 텐서.squeeze() : 차원의 크기가 1인 경우 해당차원 제거.
-- 텐서.unsqueeze(i) : i 위치(shape의 위치)에 크기가 1인 차원을 추가.
-- 텐서.unbind() : 다차원의 텐서를 1차원의 텐서로 분리(unbind)함.
-- 텐서.detach() : 현재 그래프에서 분리된 새 텐서 반환. 원본과 같은 스토리지를 공유.
-- 텐서.scatter(dim, 텐서, 넣을 인자) : dim차원에서, 텐서의 데이터(내부 데이터를 인덱스로)대로 넣을 인자를 삽입(할당).
-- 텐서.자료형() : 텐서의 자료형을 변환(TypeCasting).
 - 텐서.연산_() : 기존의 값을 저장하며 연산. x.mul(2.)의 경우 x에 다시 저장하지 않으면 x엔 영향이 없으나, x.mul_()은 연산과 동시에 덮어씀.
-- 텐서.numpy() : 텐서를 넘파이배열(ndarray)로 변경.
-
-- torch.utils.data.random_split(dataset, [ratios\]) : 전달한 데이터셋을 지정한 비율들대로 나눔. [0.9, 0.1\]식으로 비율을 지정하면 됨.
 
 ###### tensor expression
 - 2D Tensor : (batch size, dim)
@@ -117,14 +122,7 @@
 ## model
 - 가설 선언 후 비용함수, 옵티마이저를 이용해 가중치, 편향등을 갱신해 올바른 값을 찾음(비용함수를 미분해 grandient(기울기)계산). 
 
-- torch.save(model(.state_dict()), path) : 모델 저장. .state_dict()를 붙이면 가중치만 저장하는 것으로, 모델이 코드상으로 구현되어 있어야 함. 기본적으로 .pt확장자.
-- torch.jit.save(model, path) : 모델을 Pytorch의 JIT컴파일러를 사용해 제공함. 최종배포를 위해 사용.
-
-- model = torch.load(path) : 모델 로드.
-- model.load_state_dict(torch.load(path)) : 모델 가중치 로드.
-- model.embedding.weight.data.copy_(임베딩벡터들) : 사전훈련된 임베딩벡터값을 모델의 임베딩층에 연결. 
-  임베딩벡터는`(필드에 저장)필드.vocab.vectors`로 확인. data까지만 쓰면 임베딩벡터 확인 가능. 
-
+- 모델.parameters() : 모델의 파라미터 출력. w와 b가 순서대로 출력됨.
 - 텐서.backword() : 역전파. 해당 수식의 텐서(w)에 대한 기울기를 계산. w가 속한 수식을 w로 미분(주로 loss에 수행). 해당 텐서 기준 연쇄법칙 적용. 
 - 모델.eval() : 모델을 추론모드로 전환. 모델 test시 사용.
 - torch.no_grad() : 미분을 하지 않음. 파라미터를 갱신하지 않는 test시 사용.  
@@ -132,22 +130,15 @@
 
 - torch.manual_seed(i) : 랜덤시드 고정.
 - torch.cuda.manual_seed_all(i) : GPU 사용시 랜덤시드 고정.
-### class
-- 파이토치의 대부분의 구현체(모델)는 모델 생성시 클래스를 사용.
-- torch.nn.Module상속 클래스 구현 > __init__에서 super().__init__을 호출, 사용할 모델(층)정의 > forward(self,x)(자동실행, 모델 사용 후 값 반환).
-- self.레이어명 = 층 : 사용할 모델의 층을 정의. 층의 경우 torch.nn의 모델도, 시퀀셜 모델이 될 수 도 있음.
-```python
-# 파이토치 모델 클래스 구현.
-import torch
-class LinearRegressionModel(torch.nn.Module):
-    def __init__(self): #
-        super().__init__()
-        self.linear = torch.nn.Linear(1, 1)
 
-    def forward(self, x):  # 모델을 데이터와 함께 호출하면 자동실행.
-        return self.linear(x)
-model = LinearRegressionModel()
-```
+### save/load
+- torch.save(model(.state_dict()), path) : 모델 저장. .state_dict()를 붙이면 가중치만 저장하는 것으로, 모델이 코드상으로 구현되어 있어야 함. 기본적으로 .pt확장자.
+- torch.jit.save(model, path) : 모델을 Pytorch의 JIT컴파일러를 사용해 제공함. 최종배포를 위해 사용.
+
+- model = torch.load(path) : 모델 로드.
+- model.load_state_dict(torch.load(path)) : 모델 가중치 로드.
+- model.embedding.weight.data.copy_(임베딩벡터들) : 사전훈련된 임베딩벡터값을 모델의 임베딩층에 연결. 
+  임베딩벡터는`(필드에 저장)필드.vocab.vectors`로 확인. data까지만 쓰면 임베딩벡터 확인 가능. 
 
 ### data
 - torch.utils.data.TensorDataset(x, y) : 데이터들을 TensorDataset(PyTorch기본 데이터셋)을 이용해 데이터셋에 저장.
@@ -179,7 +170,6 @@ class CustomDataset(Dataset):
     y = torch.FloatTensor(self.y_data[idx])
     return x, y
 ```
-
 
 ### activation function
 - torch.nn.functional.relu(텐서) : 렐루(ReLU)사용. F.relu(층) 처럼 사용. 모델 제작시 활성화 함수를 꼭 사용해 주어야 함.
@@ -216,7 +206,6 @@ for i in range(epoch):
 - torch.optim.SGD(\[가중치(학습대상1), 편향(학습대상2)], lr = learning_rate) : SGD(확률적 경사하강법)사용. 모델.parameters()를 넣을 수 있음.
 - torch.optim.Adam(모델 파라미터, lr) : 아담 옵티마이저 사용.
 
-
 ### LearningRate Scheduler
 - 사용방법 : optimizer와 schduler를 먼저 정의한 뒤 학습 시 batch마다 optimizer.step(), epoch마다 scheduler.step()을 해주면 됨.
 - 파라미터 : 공통적으로 optimizer를 넣어주고, last_epoch로 모델 저장 후 시작시 설정을, verbose=bool로 lr갱신 시 마다 메세지를 출력하게 할 수 있음.
@@ -231,11 +220,8 @@ for i in range(epoch):
 - torch.optim.lr_scheduler.CyclicLR(optimizer, step_size_up, base_lr, max_lr, gamma, mode) : base_lr부터 max_lr까지 step_size_up동안 증가하고 감소하기를 반복함. step_size_down, scale_fn등 사용가능.
 - torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr, steps_per_epoch, epochs, pct_start, anneal_strategy) : 초기 lr에서 1cycle annealing함(초기 lr에서 max_lr까지 anneal_strategy(linear/cos)에 따라 증가 후 감소).
 - torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, T_0, T_mult, eta_min) : 초기 lr에서 cosine annealing 함수에 따라 eta_min까지 떨어졌다가(T_0에 걸쳐) T_mult에 걸쳐 다시 되돌아옴. 이 후 증감을 반복. 
-  
 
 ### module(layers)
-- 모델.parameters() : 모델의 파라미터 출력. w와 b가 순서대로 출력됨. 
-  
 - torch.nn.Linear(input_dim, output_dim) : 선형회귀모델/전결합층 사용. 이대로 모델로 쓸 수도, 모델에 층으로 넣을수도 있음. bias=bool 로 편향 존재여부 지정가능.
 - torch.nn.Conv2d(input_dim, output_dim, kernel_size) : (2차원)CNN층 사용. i의 커널사이즈를 가짐. padding, stride등도 설정해줄 수 있음. 
 - torch.nn.MaxPool2d(kernel_size, stride) : (2차원)맥스풀링층 사용. 하나의 정수만 넣으면 커널사이즈와 스트라이드 둘 다 해당값으로 지정됨.
@@ -257,7 +243,7 @@ for i in range(epoch):
   CrossentropyLoss는 input(pred)는 float, target(y)는 long이여야 하며, loss가 스칼라가 아니라면 loss_.backward(gradient=loss_)로 backward를 써야 한다.
 - torch.nn.BCELoss() : Binary-cross-entropy 손실함수 층 사용.
 
-### model
+### Sequential
 - torch.nn.Sequential(module) : 시퀀셜 모델 생성. 클래스 형태로 구현되는 모델에서 층의 역할을 함. 아주아주 간단한 모델의 경우엔 모델 그 자체로 이용되기도 함.
 - 시퀀셜모델.add_model("레이어명", 레이어) : 모델에 층 추가. 모델생성시 레이어를 넣어 생성하는것과 동일하나, 층의 이름을 지정할 수 있음.
 
@@ -310,6 +296,7 @@ for data, target in dataset :
     # count += (targets == (output > 0.5).float()).float().sum()  # binary
 accuracy = count/len(dataset.dataset)
 ```
+
 
 ## PyTorch_Mobile
 - PytorchMobile : 지연시간을 줄이고, 개인정보를 보호하며 새로운 대화형 사용사례 지원을 위해 에지 장치에서 ML모델을 실행하기 위한 엔드 투 엔드 워크플로우.
@@ -415,8 +402,11 @@ accuracy = count/len(dataset.dataset)
 
 ##### callbacks
 - pytorch_lightning.callbacks.ModelCheckpoint() : 체크포인트 저장을 커스텀하기 위해 사용하는 콜백. 설정하지 않아도 각 버전마다 체크포인트를 저장함.
-  filepath, verbose(저장결과 출력여부), save_last(마지막 체크포인트 저장여부), save_top_k(save_last제외 저장할 체크포인트 개수), monitor, mode등의 매개변수 사용.
-- pytorch_lightning.callbacks.EarlyStopping() : EarlyStopping사용. monitor, patience, verbose, mode등의 매개변수 사용가능.
+  dir_path, file_name, verbose(저장결과 출력여부), save_last(마지막 체크포인트 저장여부), save_top_k(save_last제외 저장할 체크포인트 개수), monitor, mode등의 매개변수 사용.
+- pytorch_lightning.callbacks.EarlyStopping() : EarlyStopping사용. monitor, patience, verbose, mode등의 매개변수 사용가능. 스네이크 표기법으로 된 함수도 존재함.
+
+##### logger
+- (?)
 
 ##### model save/load
 - trainer.save_checkpoint(path) : path에 모델 저장. 저장된 모델은 일반 torch check_point모델로도 사용가능(PL이 Pytorch의 래퍼이니)함.
@@ -424,7 +414,6 @@ accuracy = count/len(dataset.dataset)
 
 - pytorch_lightning.Trainer('resume_from_checkpoint' = path) : 기존의 체크포인트로 저장된 모델과 모델정보를 로드. 학습을 이어서 할 수 있음.
 - model = pytorch_lightning.LightningModule.load_from_checkpoint(path) : 사전훈련된(저장된)모델 로드. 
-
 
 ## Model Making
 - LightningModule : 모델 내부의 구조를 설계하는 research/science클래스. 모델구조/데이터전처리/손실함수 설정 등을 통해 모델 초기화/정의. 
