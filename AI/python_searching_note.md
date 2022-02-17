@@ -712,14 +712,6 @@ for number , name in zip(number_l,name_l):
 - 패키지를 import 할때 from .모듈 import 변수, 함수, 클래스 를 사용하면 앞에 모듈을 붙일 필요 없이 변수만 사용할 수 있다. from .모듈 import * 을 사용해도 된다.
 - 모듈과 패키지(\_\_init__)의 첫줄에 '''모듈의 독스트링'''처럼 독스트링을 넣을 수 있고, 이걸 출력하려면 .__doc__를 출력하면 된다.
 
-# collections
-***
-- collections : 표와 인덱싱등 데이터를 다룰때 특히 유용한 라이브러리 모듈. 데이터처리를 위한 유용한 객체가 많이 있음. dict()의 기본 API사용가능.
-- collections.Counter() : 카운터객체 생성. 딕셔너리와 동일하게 키/값 형식으로 되어있으나 최초 키 추가시 0으로 자동초기화됨. 
-  .mostcommon(n)으로 빈도수 순 정렬로 받을 수 있음(n생략가능).
-- collections.defaultdict(list) : defaultdict객체 생성. 하나의 키를 여러 값에 맵핑가능. 인자로 주어진 객체의 기본값을 초깃값으로 사용.
-- collections.deque(maxlen=n) : deque객체 생성. 마지막 n개의 객체만을 유지.   
-
 # appendix
 ***
 
@@ -769,6 +761,15 @@ for number , name in zip(number_l,name_l):
 - PyCharm 에서 가상 환경을 사용하려면 File > Settings... > Project > Project Interpreter 에서 오른쪽의 톱니바퀴 버튼을 클릭하고, 
   Add Local 을 클릭하고 가상 환경의 파이썬 인터프리터(python.exe)를 추가해주면 됨.
 
+
+# collections
+***
+- collections : 표와 인덱싱등 데이터를 다룰때 특히 유용한 라이브러리 모듈. 데이터처리를 위한 유용한 객체가 많이 있음. dict()의 기본 API사용가능.
+- collections.Counter() : 카운터객체 생성. 딕셔너리와 동일하게 키/값 형식으로 되어있으나 최초 키 추가시 0으로 자동초기화됨. 
+  .mostcommon(n)으로 빈도수 순 정렬로 받을 수 있음(n생략가능).
+- collections.defaultdict(list) : defaultdict객체 생성. 하나의 키를 여러 값에 맵핑가능. 인자로 주어진 객체의 기본값을 초깃값으로 사용.
+- collections.deque(maxlen=n) : deque객체 생성. 마지막 n개의 객체만을 유지.   
+
 # json
 ***
 - json : json 모듈 import 후 .json 형식의 파일을 열어 json.load(파일객체)로 파이썬의 객체에 저장할 수 있다.
@@ -816,6 +817,9 @@ for number , name in zip(number_l,name_l):
 - sys.stdin : 받은 입력(전체)을 반환함. 라인별로 리스트로 저장되어있음. 여러줄의 입력을 한번에 받을 수 있는 방법.
 - sys.path : 파이썬 모듈들이 저장되어있는 위치들을 반환함. ''은 현재 디렉토리. .append()로 경로를 추가하면 해당 경로의 파이썬모듈을 사용할 수 있음.
 - sys.ps1 : 현재 프롬프트(코드 입력을 의미하는 >>>)를 반환. 이 변수에 값을 할당해 다른걸로 바꿀 수 있음.
+
+# timeit
+- timeit.timeit(함수) : 함수의 시작부터 끝까지 걸린 시간을 측정.
 
 # tkinter
 - tkinter : 파이썬 GUI프로그래밍 패키지. 파이썬에서 기본 제공. 구글의 colab이나 서버컴퓨터를 이용한 실행 등, 서버를 따로 두고있는 환경에선 실행할 수 없다.

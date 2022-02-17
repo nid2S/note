@@ -409,14 +409,20 @@ accuracy = count/len(dataset.dataset)
 ##### logger
 - 기본 로그저장경로 : `lightning_logs/`
 - Trainer(logger=Logger) : Logger 지정. 리스트형태로 Logger를 넣어 여러 버전의 로그를 저장하게 할 수 도 있음.
+- Trainer(log_every_n_steps=k, flush_logs_every_n_steps=n) : k step 마다 로그를 기록하고, n step마다 로거에 쓰도록 함. 훈련속도와 비용의 조정을 위함. 기본은 50, 100번. 
+
+- 지원하는 Logger : Comet(Comet.ml), CSV(yaml/csv(로컬파일)), MLFlow, Neptune, WandB, TensorBoard, TestTube(TensorBoard지만 더 나은 폴더구조를 써 로컬파일시스템에 로그인).
 - pytorch_lightning.loggers.TensorBoardLogger(path) : TensorBoard의 Log를 저장하는 Logger 생성. `tensorboard --logdir=path`명령어로 로그를 확인할 수 있음.
-- pytorch_lightning.loggers.WandBLogger(path) : 
-- pytorch_lightning.loggers.CometLogger(path) : Comet의 Log를 저장하는 Logger 생성.
-- pytorch_lightning.loggers.NeptuneLogger(path) : 
+- pytorch_lightning.loggers.WandBLogger(path) : Weights & Biases 를 사용해 기록하는 Logger 생성.
+- pytorch_lightning.loggers.CSVLogger(path) : yaml 및 CSV 형식으로 로컬파일시스템에 로깅하는 로거 생성.
 
 - self.log(변수이름="", 값) : 하나의 값(스칼라)을 수동으로 로깅. 확인하고자 하는 metric(loss등)을 기록. batch_start가 포함된 함수를 제외한 모든 위치에서 기록함.
-  on_step(bool, step마다 기록), on_epoch(bool, Epoch마다 기록), prog_bar(bool, 진행률표시줄에 기록), logger(bool, 로거)의 매개변수 사용가능.
+  on_step(bool, step마다 기록), on_epoch(bool, Epoch마다 기록), prog_bar(bool, 진행률표시줄에 메트릭 기록), logger(bool, 로거)의 옵션 사용가능.
 - self.log_dict(metrics) : 여러개의 변수(스칼라)를 수동로깅. metrics는 {변수이름: 값} 형태의 dict.
+- tensorboard = self.logger.experiment : 히스토그램, 텍스트, 이미지등과 같이 스칼라가 아닌 모든것을 기록하기 위해 로거객체를 직접 사용.
+- tensorboard.add_image() : 로거객체에 이미지 기록.
+- tensorboard.add_hitogram(...) : 로거객체에 히스토그램 기록.
+- tensorboard.add_figure(...) : 로거객체에 수치(figure) 기록.
 
 ##### model save/load
 - trainer.save_checkpoint(path) : path에 모델 저장. 저장된 모델은 일반 torch check_point모델로도 사용가능(PL이 Pytorch의 래퍼이니)함.

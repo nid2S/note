@@ -163,172 +163,6 @@
 - scipy.sparse.csr_matrix(eye) > 주어진 배열 중 0이 아닌 요소만 위치와 값을 저장(희소행렬).
 - scipy.sparse.coo_matrix((ones, (arange, arange)) > 주어진 배열 중 0이 아닌 요소만 위치와 값을 저장(희소행렬).
 
-# matplotlib.pyplot
-***
-- 구동방식 : PyplotAPI(matplotlib.pyplot 모듈에 함수로 정의되어있는 커맨드방식)/객체지향API(객체지향 라이브러리를 직접 활용하는 방식)두가지의 사용 방법이 있음.
-- 객체지향API사용 : Figure객체 생성 > 하나 이상의 Axes객체 생성 > 생성된 axes에 대해 조작(헬퍼함수로 primitives생성)  
-- plt.subplots() : Figure객체 생성 후 Figure.subplots()를 호출하여 리턴. fig, ax를 반환. constrained_layout=True로 각 플롯간 간격을 자동조절가능.
-
-- matplotlib.font_manager.FontProperties(fname(폰트경로)).get_name() : 경로의 폰트의 이름을 얻음.
-- matplotlib.rc('font', family = 폰트이름) : 폰트변경. 기본폰트가 sans-erif 이기에 한글폰트가 깨질 수 있는데, 이를 방지하기 위해 사용.
-
-- plt.figure(figsize=(n,m)) : 그래프 크기 조절.
-- plt.show() : 생성한 plot(그래프)를 보여줌.
-- plt.savefig("저장경로") : 그래프 저장.
-
-- plt.plot(정수형 리스트) : 리스트대로 선 또는 마커그래프 생성. 리스트를 한개 넣으면 y값 으로 인식하고 x를 자동생성하고, 두개면 순서대로 x,y 라고 인식한다.
-- plt.plot(정수형 리스트, 'ro') : ro - 빨간색 원형 마커. 이런식으로 색과 그래프 마커를 지정해 줄 수 있음.
-- plt.plot(x,y,type,x,y,type) : 이런 식으로 매개변수를 넣거나 plot 을 여러번 사용하면 여러개의 그래프를 그릴 수 있다.
-- plot - color : r(red),g(green),b(blue),c(cyan),m(magenta),y(yellow),k(black),w(white) , color='css_color_name/#rgb'으로 다양한 색상 지정 가능.
-- plot - LineStyle : -(solid),--(dashed),-.(dashed-dot),:(dotted).
-- plot - Markers : o(circle),s(square),*(star),p(pentagon),+(plus),x(X),D(diamond),|/_(h/v line),^/v/</>(triangle),1/2/3/4(tri)
-- plot - style : plt.style.use(스타일) 로 각종 스타일 사용가능. 종류는 'seaborn-white'등, plt.style.available 에서 확인가능함.
-- plt.subplot(nrow, ncol, pos) : 여러개의 그래프를 그림(격자형). nrow, ncol은 고정한 채 해당 그래프의 코드 앞에 pos를 증가시키며 사용. pos는 1부터 시작. 
-- plt.subplot_adjust(left, bottom, right, top, wspace, hspace) : 서브플롯들의 위치를 직접 조정. 모든 값은 0~1의 소수(비율). 뒤의 둘은 너비/높이의 비율.
-
-- plt.title(title) : 그래프 제목 설정. loc-타이틀 위치('right','left'), pad-타이틀&그래프간격, 폰트 크기와 두께 설정 가능.
-- plt.x/ylabel(text) : x/y축에 레이블(축제목) 설정.
-- plt.x/yticks(number 리스트) : x/y축에 눈금 표시. 빈리스트를 넣으면 제거. label 매개변수에 리스트를 넣어 각 눈금의 이름을 지정해 줄 수 있음.
-- plt.x/ylim([min,max\]) : x/y축 범위 설정. 축의 시작과 끝 지점을 지정할 수 있다.
-- plt.axis([x min, x max, y min, y max\]) : 축의 범위 지정.
-- plt.x/yaxis(rotation, fontsize) : x/y축의 폰트 회전 및 크기 설정.
-- plt.annotate(str, xy, xytext, arrowprops) : xy((x, y))부터 xytext((x, y))까지 설정에 따라({'color':'green'})화살표를 그린 후 문자열을 표시.
-
-- plt.grid() : 그래프에 격자 표시. axis='y/x' 로 가로/세로 방향의 그래프만 그릴 수 있음. color,alpha,linestyle 등의 매개변수 사용가능.
-- plt.legend() : 그래프에 레이블(범례) 표시, plot 에서 label="" 로 준 레이블이 그 그래프의 레이블이 됨. loc=위치("upper right"/2 등)인자로 위치를 지정해줄수도 있음.
-- plt.tick_params() : 눈금 스타일 설정. axis-적용축('x','y','both'), direction-눈금위치('in','out','inout'),
-  pad-눈금&레이블 거리, length/width/color-눈금 길이/너비/색, labelsize/labelcolor-레이블 크기/색, t,b,l,r - bool&눈금표시 위치.
-
-- plt.text(x, y, "text") : 텍스트 표시.
-- plt.axhline(y, x_min(0~1), x_max(0~1)) : y에 min 부터 max 까지 수평선을 그음. color, linestyle, linewidth 등 매개변수 사용가능.
-- plt.axvline(x, y_min, y_max) : x에 min 부터 max 까지 수직선을 그음. 왼쪽 아래부터 오른쪽 끝까지 0~1로 표현.
-- plt.hlines(y, x_min, x_max) : y에 min 부터 max 까지 수평선을 그음. min,max 가 0~1로 표현되지 않음.
-- plt.vlines(x, y_min, y_max) : x에 min 부터 max 까지 수직선을 그음.
-- plt.fill_between(x, y, alpha) : 그래프에서 그 범위를 채움. (x,y1,y2)식으로 두 그래프 사이의 영역을 채울 수 도 있음. color 매개 변수로 색 지정 가능.
-- plt.fill(x,y,alpha) : x,y 점들로 정의되는 다각형의 영역을 자유롭게 채울 수 있음.
-  
-- plt.imshow(image) : image를 표시함. cmap="gray"(흑백으로)등 이미지에 대한 조작을 할 수 있음. 
-- plt.bar(x, y) : 막대그래프를 그림. width(너비),align(눈금위치. 히스토그램처럼 눈금을 막대 끝으로 이동가능,'edge'),
-  color,edgecolor,linewidth(테두리두께),tick_label,log(bool, y를 로그스케일로) 등의 매개변수 사용 가능.
-- plt.barh(x, y) : 수평 막대그래프를 그림. height 를 제외하면 매개변수 동일. width/height 를 음수로 지정하면 막대 위쪽에 눈금 표시.
-- plt.scatter(x, y) : 산점도(상관관계표현)를 그림. s(마커 면적),c(마커 색),alpha(투명도) 등의 매개변수 사용가능.
-- plt.hist(리스트(x, y도 가능)) : 히스토그램(도수분포표 그래프)을 그림. 리스트에 나온 계급과 그 빈도를 분석해 자동으로 히스토그램으로 만들어줌. 
-  bins(쪼갤영역수),density(bool,막대사이를 이어 하나로), histtype(막대 내부를 채울지,'step') 등 매개변수 사용가능.
-- plt.hist2d(x,y,(가로 셀 개수, 세로 셀 개수)) : 격자로 나눠서 빈도를 확인할 수 있는 2차원 히스토그램을 그림. scatter과 같이 쓰면 좋고, hist의 모든 인자사용가능. 
-- plt.errorbar(x, y, yerr) : 에러바(데이터편차표현)를 그림. yerr 는 각 y의 편차로 위아래 대칭인 오차로 표시, 
-  [(error), (error)\]식으로 넣으면 아래방향/위방향 편차를 나타내게 됨. uplims/lolims(bool, 상한/하한 기호표시) 매개변수 사용가능.
-- plt.pie(ratio(각 영역 비율 리스트), label(각 영역 이름 리스트)) : 파이차트(범주별 구성비율 원형표시)를 그림. 
-  autopct(영역안에 표시될 숫자 형식 지정), startangle(시작각도), counterclock(bool,반시계 여부), explode(0~1실수 리스트, 차트중심에서 이탈도), 
-  shadow(bool,그림자), colors(리스트,색이름/코드), wedgeprops({'width': 0.7, 'edgecolor': 'w', 'linewidth': 5}, 반지름 비율, 테두리색, 테두리너비) 매개변수 사용가능.
-- plt.box(x, y) :  극단치, 최소, 최대, 각 사분위, 중앙값, 사분위범위(상자)등을 알 수 있는(기초통계,편차 확인)그래프를 그림.
-- plt.hexbin(x, y) : 각 데이터가 겹치는(밀집된)정도를 볼 수 있는 그래프를 그림.
-- plt.area(x, y) : 각 데이터의 영역을 볼 수 있는 그래프를 그림.
-
-# seaborn
-- seaborn : matplotlib기반 시각화 라이브러리. 통계그래픽을 그리기 위한 고급 인터페이스 제공. 흔히 sns라는 별칭으로 사용됨. 여러개의 그래프를 그리면 한 그래프에 그려짐.
-- sns.histplot() : 변수에 대한 히스토그램을 표시. 하나 혹은 두개에 대한 변수분포를 나타냄. 범위에 포함하는 관측수를 세어 표시함.
-- sns.kdeplot() : 하나 혹은 두개의 변수에 대한 분포를 표시. 연속된 곡선의 그래프를 얻음. 밀도추정치를 시각화함.
-- sns.ecdfplot() : 누적분포를 시각롸. 실제 관측치의 비율을 시각화(선형).
-- sns.rugplot() : 축을 따라 눈금을 그려서 주변 분포도를 표시함. 다른 그래프와 함께 쓰이는 경우가 많음.
-- sns.barplot() : 이변량(변수 두개)분석을 위한 plot. x축엔 범주형 변수, y축에는 연속형 변숙를 넣음.
-- sns.countplot() : 범주형 변수의 발생횟수를 셈. 일변량 분석.
-- sns.boxplot() : box plot을 그림. 최소/1사분위/평균/3사분위/최대 를 보기위한 그래프. 특이치 발견에도 좋음.
-- sns.violineplot() : box plot과 비슷하나 분포에 대한 정보도 주어짐(박스 양 옆으로 곡선이 그려짐).
-- sns.stripplot() : 연속형 변수와 범주형 변수 사이의 그래프. 산점도로 표시되나, 범주형 변수의 인코딩을 추가로 사용함.
-- sns.swarmplot() : strip + violin. 데이터포인트 수와 함께 각 데이터의 분포도 제공함.
-- sns.heatmap() : 데이터간 수치에 따라 색상을 입힘. 
-- sns.clustermap() : heatmap에서 몇몇 특징을 그룹화(토너먼트처럼 선으로)함.
-- sns.facetgrid() : 특정 조건에 따라 그래프를 각각 확인.
-- sns.jointplot() : 두 변수의 분포에 대한 분석가능. 두 displot사이에 scatter/hex plot이 추가되어 분포를 추가러 확인가능.
-- sns.pairplot() : 숫자형 특성들에 대해 각각의 히스토그램과 두 변수간 scatter plot을 그림. 데이터셋을 통째로 넣어도 됨.
-- sns.regplot() : Regression(회귀)결과를 그래프로 보여줌.
-- sns.lmplot() : regplot + faceGrid. hue에 들어간 칼럼 속 값들을 따로따로 모델링해 결과(regplot)를 보여줌.
-
-# plotnine(ggplot)
-***
-- plotnine : 업데이트가 멈춘 시각화패키지 ggplot을 다시 포팅한 패키지. 커스터마이징이 되어있음. 
-- plotnine.ggplot(petitions)  : 데이터로 그래프 제작
-- plotnine.aes('category')  : 데이터 축 설정. x='' , y='' 식으로 레이블을 지정하지 않고 하나만 지정하면 x로 들어감.
-- plotnine.geom_bar(fill='green')) : 데이터 종류 설정. geom_point() 식으로 하면 산점도 타입이다.
-- plotnine.ggplot(data=데이터, mapping= plotnine.aes(x=, y=, color=) + plotnine.geom_point(alpha=f)) : 식으로도 가능.
-
-# mglearn
-***
-- mglearn.discrete_scatter(X[:, 0, X[:, 1], y) > 산점도를 그림.
-
-- mglearn.dataset.make/load_데이터이름() > 데이터셋 로드.
-- mglearn.dataset.make_forge() > 인위적인 이진분류 대이터셋 로드. x,y에 각각 특성이 들어간다.
-
-- mglearn.plots.plot_모델이름() > 그 모델의 그래프를 그림.
-- mglearn.plots.plot_2d_classification(fit 된 모델, X, fill=bool, alpha=) > 선형 이진 분류 그래프를 결정경계와 함께 그린다.
-- mglearn.plots.plot_knn_classification(n_neighbors = k) > knn 분류를 그래프로 그림.
-- mglearn.plots.plot_knn_regression(n_neighbors = k) > knn 회귀를 그래프로 그림.
-- mglearn.plots.plot_ridge_n_samples() > 리지 회귀를 그래프로 그림.
-
-# folium
-- python 지도 시각화 패키지.
-
-# 다른 시각화 라이브러리
-- Altair : 주피터등 웹 환경에서 유효. 데이터프레임의 칼럼을 기반으로 데이터추출, 다양하고 예쁜 그래프를 쉽게 그림. 
-- Plotly : Altair와 같이 JS로 웹브라우저 상에서 이미지를 렌더링하는 라이브러리. D3.js를 사용해서 시각화.
-
-
-# dlib
-***
-- viola & Jones 알고리즘 > Face Detection(얼굴에 Bounding Box) 가능하게 함. Face Landmark Detection 이 더 자세한 개념.
-- Head Pose Detection(얼굴 방향)/Face Morphing(두 얼굴의 중간 얼굴을 생성)/Face Averaging(얼굴들의 평균 얼굴을 생성)/
-  Face Swap/Blink&Drowsy Driver Detection(눈의 깜빡임 감지)/Face Filter 등이 Face Landmark Detection 을 통해 가능해짐.
-- dlib.get_frontal_face_detector() > face Detection 을 기능하게 하는 face detector 생성.
-- dlib.shape_predictor(데이터셋(얼굴 랜드마크)이 있는 경로) > Landmark detector 생성.
-- faceDetector(이미지,업스케일 횟수(0,1,2)) > 이미지에서 얼굴을 찾음.
-
-# OpenCv (cv2)
-***
-- 설치 : `pip install opencv-python`로 설치해야 함.
-- cv2.imread('이미지 경로',읽는 방법) > 이미지 읽기. 이미지가 작업 디렉토리에 있거나 전체 경로를 주어야 함. data type 을 지정하지 않으면 상수형 int 타입으로 저장.
-- 1 = 컬러이미지(default) / 0 = 그레이스케일 이미지 / -1 = unchanged
-- cv2.cvtColor(BGR 이미지,cv2.COLOR_BGR2RGB) > OpenCv 로 읽어온 BGR 이미지를 RGB 이미지로 변환함
-- cv2.cvtColor(BGR 이미지,cv2.COLOR_BGR2GRAY) > 컬러 BGR 이미지를 흑백으로 전환한다.
-- 이미지.copy() > 본래의 사진과 완전히 별개인 이미지복사본을 생성
-- 이미지[w1:w2,h1:h2] > 저 부분의 이미지만을 복사.
-- 이미지.shape[0] = 행에 대한 정보 / 이미지.shape[1] = 열에 대한 정보 / 이미지.shape[2] = 채널에 대한 정보. 그레이스케일(흑백)이라면 없음.
-
-- cv2.imwrite('경로',이미지) > 경로에 이미지 저장
-- cv2.imshow("윈도우( = 뜰 창) 이름)",이미지) > 이미지 띄울 준비
-- cv2.waitKey(ms) > 입력한 밀리세크(1000ms = 1s)동안 이미지를 띄움. 0일 경우 어느 키보드 입력시까지 띄움.
-- cv2.destroyAllWindows() > 이름 그대로. waitKey 이후에 필수.
-- cv2.resize(이미지, 절대크기(상대면 0,0), x 스케일(절대면 패스), y 스케일(절대면 패스), interpolation=method(cv2.INTER_LINEAR,보간법)) > 이미지 resize.
-
-- cv2.line(이미지,시작좌표(x,y),끝좌표(x,y),색(R,G,B),thickness(꽉 채울려면 -1),lineType(기본적으로 윤곽선,CV_LINE_AA=안티엘리어싱)) > 선을 그린다.
-- cv2.polylines(img, pts, isClosed, color, thickness=None, lineType=None, shift=None) > 점들을 이어 선을 그림
-- cv2.circle(이미지,중심좌표(x,y),radius,선 색,두께/채우기 타입,선 타입) > 원을 그린다.
-- cv2.ellipse(이미지,중심,(x길이,y길이),기울기,원 시작 각도, 원 끝 각도(시작부터 끝의 각도까지만 그려짐),색,두께,타입) > 타원을 그린다.
-- cv2.rectangle(이미지,좌측상단 좌표,우측하단 좌표,색,두께,타입) > 사각형을 그린다.
-- cv2.putText(이미지,문자열,표시될 좌표,폰트,글자 크기,색,두께,타입) > 글자를 입력한다.
-- cv2.flip(이미지, 방향) > 이미지 반전. 1 = 좌우, 0 = 상하
-- cv2.lotation(이미지, cv2.ROTATE_각도_방향) > 이미지 회전. cv2.ROTATE_90_CLOCKWISE = 시계방향 90도. 반시계 방향은 COUNTERCLOCKWISE, 180도는 방향을 쓰지 않는다.
-
-- cv2.VideoCapture(비디오 파일 경로(카메라=0 -여러개일 경우 1씩 추가-)) > VideoCapture 객체 생성.
-- VideoCapture객체.isopened() > 읽을 영상이 남아 있는지 반환.
-- VideoCapture객체.read() > 영상의 존재 여부와 이미지를 반환.
-- VideoCapture객체.release() > 동영상 종료.
-- VideoCapture객체.get(cv2.CAP_PROP_FRAME_WIDTH/HEIGHT) > 프레임 너비와 높이 휙득. 실수형이기에 정수형으로 변환 필요.
-
-- cv2.videoWriter('경로/이름',cv2.VideoWriter_fourcc('M','P','4','V'-MP4/'M','J','P','G'-avi),FPS(33이하),(프레임너비,높이)) > videoWriter 객체 생성.
-- videoWriter 객체.write(read 로 얻은 이미지) > 저장
-
-- 이미지 모델 학습시에는 np.ndarray(shape=(image_amount, image_size[1\], image_size[0\]), dtype=np.float32) 식으로 준비된 이미지 파일과
-  np.ndarray(shape=(image_amount,), dtype=np.int32)식으로 준비된 레이블에
-  이미지 오픈 > fit > asarray > normalized(astype(np.float32)>/255.0 ) > all_images[i\]에 넣은 이미지를 사용해야 한다.
-  mnist, PIL > (number, y, x) 로 train. | openCv > (number, y, x ,3) 으로 train
-
-# PIL(Pillow)
-- PIL : Python Imaging Library. 
-- 설치 : `pip install image`로 설치.
-- Pillow : PIL의 프로젝트 포크(Fork).
-  
-- PIL.Image.fromarray(frame(cv2비디오캡쳐.read())) : cv2에서 읽은 이미지/비디오의 프레임을 Image객체로 변환.  
-- PIL.ImageTK.PhotoImage(Image객체) : Image객체를 ImageTk객체로 변환. tkinter에서 사용가능(Label의 image인자에 넣을 수 있음).
 
 # scikit learn
 ***
@@ -496,30 +330,173 @@
   훈련데이터의 통걔적 속성을 사용하므로 파이프 라인을 이용한 그리드 서치를 해 주어야 한다. .idf_ 에서 훈련세트의 idf 값을 볼 수 있다. 
   idf 값이 낮으면 자주 나타나 덜 중요하다 생각되는 것이다.
 
-# wandb
-- wandb(Weights & Biases, WandB) : ML을 위한 개발 툴. Tensorboard와 비슷한 기능(Dashboard/Sweeps/Artifacts)을 하나 tf, pytorch등 여러 모듈에서 사용가능함. 기본적으로는 웹사이트에서 그래프를 보여줌.
 
-- wandb.login() : wandb login. 먼저 wandb홈페이지에서 회원가입을 한 후 사용가능. 계정이 없다면 계정을 생성, 그 후 로그인을 진행.
-- wandb.init() : wandb 초기설정. project에 project명을, entity에 계정명을, name에 저장하는데 사용하는 이름을 인자로 줄 수 있음. 이 외에도 config등의 인자 사용가능.
-- wandb.run.name : 매 실행 이름. 여기에 값을 할당해 실행 이름을 지정할 수 있고, 생략시 임의로 지정됨.  wandb.run.id를 넣어 생성된 runID임을 명시할 수 도 있음.
+# matplotlib.pyplot
+***
+- 구동방식 : PyplotAPI(matplotlib.pyplot 모듈에 함수로 정의되어있는 커맨드방식)/객체지향API(객체지향 라이브러리를 직접 활용하는 방식)두가지의 사용 방법이 있음.
+- 객체지향API사용 : Figure객체 생성 > 하나 이상의 Axes객체 생성 > 생성된 axes에 대해 조작(헬퍼함수로 primitives생성)  
+- plt.subplots() : Figure객체 생성 후 Figure.subplots()를 호출하여 리턴. fig, ax를 반환. constrained_layout=True로 각 플롯간 간격을 자동조절가능.
 
-- wandb.config.updata(args) : wandb에서 갱신할 변수들을 설정. parser.parse_args()(argparse)를 넣거나 {변수명: 값}형태의 딕셔너리를 넣어 파라미터 일부/전체를 업데이트 가능. 
-- wandb.config.변수명 : 설정을 wandb에 넣어둠. 변수명은 epochs/batch_size등이며, init에서 config매개변수에 딕셔너리 형태로도 넣을 수 있음. 
+- matplotlib.font_manager.FontProperties(fname(폰트경로)).get_name() : 경로의 폰트의 이름을 얻음.
+- matplotlib.rc('font', family = 폰트이름) : 폰트변경. 기본폰트가 sans-erif 이기에 한글폰트가 깨질 수 있는데, 이를 방지하기 위해 사용.
 
-- wandb.log(dict) : 이미지, accuracy, test_loss등의 로그를 기록. {저장될 이름: 값}형태이며, 이미지(plt)/히스토그램(wandb.Histogram(numpy_array_or_sequence))등이 전부 가능함. 
-- wandb.watch(model) : 모델의 학습을 따라가며 진행과정을 보여줌. 
+- plt.figure(figsize=(n,m)) : 그래프 크기 조절.
+- plt.show() : 생성한 plot(그래프)를 보여줌.
+- plt.savefig("저장경로") : 그래프 저장.
 
-# kfp
-- kfp : 큐브플로우 파이프라인 SDK(소프트웨어 개발 키트, 다른 프로그램에 추가/연결할 수 있는 커스텀 앱 제작 도구모음)라이브러리.
+- plt.plot(정수형 리스트) : 리스트대로 선 또는 마커그래프 생성. 리스트를 한개 넣으면 y값 으로 인식하고 x를 자동생성하고, 두개면 순서대로 x,y 라고 인식한다.
+- plt.plot(정수형 리스트, 'ro') : ro - 빨간색 원형 마커. 이런식으로 색과 그래프 마커를 지정해 줄 수 있음.
+- plt.plot(x,y,type,x,y,type) : 이런 식으로 매개변수를 넣거나 plot 을 여러번 사용하면 여러개의 그래프를 그릴 수 있다.
+- plot - color : r(red),g(green),b(blue),c(cyan),m(magenta),y(yellow),k(black),w(white) , color='css_color_name/#rgb'으로 다양한 색상 지정 가능.
+- plot - LineStyle : -(solid),--(dashed),-.(dashed-dot),:(dotted).
+- plot - Markers : o(circle),s(square),*(star),p(pentagon),+(plus),x(X),D(diamond),|/_(h/v line),^/v/</>(triangle),1/2/3/4(tri)
+- plot - style : plt.style.use(스타일) 로 각종 스타일 사용가능. 종류는 'seaborn-white'등, plt.style.available 에서 확인가능함.
+- plt.subplot(nrow, ncol, pos) : 여러개의 그래프를 그림(격자형). nrow, ncol은 고정한 채 해당 그래프의 코드 앞에 pos를 증가시키며 사용. pos는 1부터 시작. 
+- plt.subplot_adjust(left, bottom, right, top, wspace, hspace) : 서브플롯들의 위치를 직접 조정. 모든 값은 0~1의 소수(비율). 뒤의 둘은 너비/높이의 비율.
 
-- kfp.dsl.Condition() : 큐브플로우 설정 관련 정의 객체 생성. .after(preprocesser)로 관련 설정 재정의 가능. with를 이용해 열어서 사용됨.
-- kfp.dsl.ContainerOp() : 컨테이너의 설정 정의 객체 생성.
-- kfp.components.load_component_from_url() : 컴포넌트를 url기반으로 가져옴.
+- plt.title(title) : 그래프 제목 설정. loc-타이틀 위치('right','left'), pad-타이틀&그래프간격, 폰트 크기와 두께 설정 가능.
+- plt.x/ylabel(text) : x/y축에 레이블(축제목) 설정.
+- plt.x/yticks(number 리스트) : x/y축에 눈금 표시. 빈리스트를 넣으면 제거. label 매개변수에 리스트를 넣어 각 눈금의 이름을 지정해 줄 수 있음.
+- plt.x/ylim([min,max\]) : x/y축 범위 설정. 축의 시작과 끝 지점을 지정할 수 있다.
+- plt.axis([x min, x max, y min, y max\]) : 축의 범위 지정.
+- plt.x/yaxis(rotation, fontsize) : x/y축의 폰트 회전 및 크기 설정.
+- plt.annotate(str, xy, xytext, arrowprops) : xy((x, y))부터 xytext((x, y))까지 설정에 따라({'color':'green'})화살표를 그린 후 문자열을 표시.
 
-- client = kfp.Client(host) : 기본적으로, 최초생성했던 AI플랫폼 파이프라인의 대쉬보드에서 .com으로 끝나는 주소값을 넘겨주면 연동됨.
-- client.upload_pipeline(path, name) : 파이프라인 업로드.
-- client.create_run_from_pipeline_func() : run을 파이프라인 함수를 기반으로 생성.
-- kfp.compiler.Compiler().compile(pipeline, name(path)) : .after(processer)을 통해 수동으로 Experiment나 등록을 위한 파이프라인 업로드가 가능(로컬폴더에 생성->업로드).
+- plt.grid() : 그래프에 격자 표시. axis='y/x' 로 가로/세로 방향의 그래프만 그릴 수 있음. color,alpha,linestyle 등의 매개변수 사용가능.
+- plt.legend() : 그래프에 레이블(범례) 표시, plot 에서 label="" 로 준 레이블이 그 그래프의 레이블이 됨. loc=위치("upper right"/2 등)인자로 위치를 지정해줄수도 있음.
+- plt.tick_params() : 눈금 스타일 설정. axis-적용축('x','y','both'), direction-눈금위치('in','out','inout'),
+  pad-눈금&레이블 거리, length/width/color-눈금 길이/너비/색, labelsize/labelcolor-레이블 크기/색, t,b,l,r - bool&눈금표시 위치.
+
+- plt.text(x, y, "text") : 텍스트 표시.
+- plt.axhline(y, x_min(0~1), x_max(0~1)) : y에 min 부터 max 까지 수평선을 그음. color, linestyle, linewidth 등 매개변수 사용가능.
+- plt.axvline(x, y_min, y_max) : x에 min 부터 max 까지 수직선을 그음. 왼쪽 아래부터 오른쪽 끝까지 0~1로 표현.
+- plt.hlines(y, x_min, x_max) : y에 min 부터 max 까지 수평선을 그음. min,max 가 0~1로 표현되지 않음.
+- plt.vlines(x, y_min, y_max) : x에 min 부터 max 까지 수직선을 그음.
+- plt.fill_between(x, y, alpha) : 그래프에서 그 범위를 채움. (x,y1,y2)식으로 두 그래프 사이의 영역을 채울 수 도 있음. color 매개 변수로 색 지정 가능.
+- plt.fill(x,y,alpha) : x,y 점들로 정의되는 다각형의 영역을 자유롭게 채울 수 있음.
+  
+- plt.imshow(image) : image를 표시함. cmap="gray"(흑백으로)등 이미지에 대한 조작을 할 수 있음. 
+- plt.bar(x, y) : 막대그래프를 그림. width(너비),align(눈금위치. 히스토그램처럼 눈금을 막대 끝으로 이동가능,'edge'),
+  color,edgecolor,linewidth(테두리두께),tick_label,log(bool, y를 로그스케일로) 등의 매개변수 사용 가능.
+- plt.barh(x, y) : 수평 막대그래프를 그림. height 를 제외하면 매개변수 동일. width/height 를 음수로 지정하면 막대 위쪽에 눈금 표시.
+- plt.scatter(x, y) : 산점도(상관관계표현)를 그림. s(마커 면적),c(마커 색),alpha(투명도) 등의 매개변수 사용가능.
+- plt.hist(리스트(x, y도 가능)) : 히스토그램(도수분포표 그래프)을 그림. 리스트에 나온 계급과 그 빈도를 분석해 자동으로 히스토그램으로 만들어줌. 
+  bins(쪼갤영역수),density(bool,막대사이를 이어 하나로), histtype(막대 내부를 채울지,'step') 등 매개변수 사용가능.
+- plt.hist2d(x,y,(가로 셀 개수, 세로 셀 개수)) : 격자로 나눠서 빈도를 확인할 수 있는 2차원 히스토그램을 그림. scatter과 같이 쓰면 좋고, hist의 모든 인자사용가능. 
+- plt.errorbar(x, y, yerr) : 에러바(데이터편차표현)를 그림. yerr 는 각 y의 편차로 위아래 대칭인 오차로 표시, 
+  [(error), (error)\]식으로 넣으면 아래방향/위방향 편차를 나타내게 됨. uplims/lolims(bool, 상한/하한 기호표시) 매개변수 사용가능.
+- plt.pie(ratio(각 영역 비율 리스트), label(각 영역 이름 리스트)) : 파이차트(범주별 구성비율 원형표시)를 그림. 
+  autopct(영역안에 표시될 숫자 형식 지정), startangle(시작각도), counterclock(bool,반시계 여부), explode(0~1실수 리스트, 차트중심에서 이탈도), 
+  shadow(bool,그림자), colors(리스트,색이름/코드), wedgeprops({'width': 0.7, 'edgecolor': 'w', 'linewidth': 5}, 반지름 비율, 테두리색, 테두리너비) 매개변수 사용가능.
+- plt.box(x, y) :  극단치, 최소, 최대, 각 사분위, 중앙값, 사분위범위(상자)등을 알 수 있는(기초통계,편차 확인)그래프를 그림.
+- plt.hexbin(x, y) : 각 데이터가 겹치는(밀집된)정도를 볼 수 있는 그래프를 그림.
+- plt.area(x, y) : 각 데이터의 영역을 볼 수 있는 그래프를 그림.
+
+# seaborn
+- seaborn : matplotlib기반 시각화 라이브러리. 통계그래픽을 그리기 위한 고급 인터페이스 제공. 흔히 sns라는 별칭으로 사용됨. 여러개의 그래프를 그리면 한 그래프에 그려짐.
+- sns.histplot() : 변수에 대한 히스토그램을 표시. 하나 혹은 두개에 대한 변수분포를 나타냄. 범위에 포함하는 관측수를 세어 표시함.
+- sns.kdeplot() : 하나 혹은 두개의 변수에 대한 분포를 표시. 연속된 곡선의 그래프를 얻음. 밀도추정치를 시각화함.
+- sns.ecdfplot() : 누적분포를 시각롸. 실제 관측치의 비율을 시각화(선형).
+- sns.rugplot() : 축을 따라 눈금을 그려서 주변 분포도를 표시함. 다른 그래프와 함께 쓰이는 경우가 많음.
+- sns.barplot() : 이변량(변수 두개)분석을 위한 plot. x축엔 범주형 변수, y축에는 연속형 변숙를 넣음.
+- sns.countplot() : 범주형 변수의 발생횟수를 셈. 일변량 분석.
+- sns.boxplot() : box plot을 그림. 최소/1사분위/평균/3사분위/최대 를 보기위한 그래프. 특이치 발견에도 좋음.
+- sns.violineplot() : box plot과 비슷하나 분포에 대한 정보도 주어짐(박스 양 옆으로 곡선이 그려짐).
+- sns.stripplot() : 연속형 변수와 범주형 변수 사이의 그래프. 산점도로 표시되나, 범주형 변수의 인코딩을 추가로 사용함.
+- sns.swarmplot() : strip + violin. 데이터포인트 수와 함께 각 데이터의 분포도 제공함.
+- sns.heatmap() : 데이터간 수치에 따라 색상을 입힘. 
+- sns.clustermap() : heatmap에서 몇몇 특징을 그룹화(토너먼트처럼 선으로)함.
+- sns.facetgrid() : 특정 조건에 따라 그래프를 각각 확인.
+- sns.jointplot() : 두 변수의 분포에 대한 분석가능. 두 displot사이에 scatter/hex plot이 추가되어 분포를 추가러 확인가능.
+- sns.pairplot() : 숫자형 특성들에 대해 각각의 히스토그램과 두 변수간 scatter plot을 그림. 데이터셋을 통째로 넣어도 됨.
+- sns.regplot() : Regression(회귀)결과를 그래프로 보여줌.
+- sns.lmplot() : regplot + faceGrid. hue에 들어간 칼럼 속 값들을 따로따로 모델링해 결과(regplot)를 보여줌.
+
+# plotnine(ggplot)
+***
+- plotnine : 업데이트가 멈춘 시각화패키지 ggplot을 다시 포팅한 패키지. 커스터마이징이 되어있음. 
+- plotnine.ggplot(petitions)  : 데이터로 그래프 제작
+- plotnine.aes('category')  : 데이터 축 설정. x='' , y='' 식으로 레이블을 지정하지 않고 하나만 지정하면 x로 들어감.
+- plotnine.geom_bar(fill='green')) : 데이터 종류 설정. geom_point() 식으로 하면 산점도 타입이다.
+- plotnine.ggplot(data=데이터, mapping= plotnine.aes(x=, y=, color=) + plotnine.geom_point(alpha=f)) : 식으로도 가능.
+
+# mglearn
+***
+- mglearn.discrete_scatter(X[:, 0, X[:, 1], y) > 산점도를 그림.
+
+- mglearn.dataset.make/load_데이터이름() > 데이터셋 로드.
+- mglearn.dataset.make_forge() > 인위적인 이진분류 대이터셋 로드. x,y에 각각 특성이 들어간다.
+
+- mglearn.plots.plot_모델이름() > 그 모델의 그래프를 그림.
+- mglearn.plots.plot_2d_classification(fit 된 모델, X, fill=bool, alpha=) > 선형 이진 분류 그래프를 결정경계와 함께 그린다.
+- mglearn.plots.plot_knn_classification(n_neighbors = k) > knn 분류를 그래프로 그림.
+- mglearn.plots.plot_knn_regression(n_neighbors = k) > knn 회귀를 그래프로 그림.
+- mglearn.plots.plot_ridge_n_samples() > 리지 회귀를 그래프로 그림.
+
+# 시각화 라이브러리
+- folium : python 지도 시각화 패키지.
+- Altair : 주피터등 웹 환경에서 유효. 데이터프레임의 칼럼을 기반으로 데이터추출, 다양하고 예쁜 그래프를 쉽게 그림. 
+- Plotly : Altair와 같이 JS로 웹브라우저 상에서 이미지를 렌더링하는 라이브러리. D3.js를 사용해서 시각화.
+
+
+# OpenCv (cv2)
+***
+- 설치 : `pip install opencv-python`로 설치해야 함.
+- cv2.imread('이미지 경로',읽는 방법) > 이미지 읽기. 이미지가 작업 디렉토리에 있거나 전체 경로를 주어야 함. data type 을 지정하지 않으면 상수형 int 타입으로 저장.
+- 1 = 컬러이미지(default) / 0 = 그레이스케일 이미지 / -1 = unchanged
+- cv2.cvtColor(BGR 이미지,cv2.COLOR_BGR2RGB) > OpenCv 로 읽어온 BGR 이미지를 RGB 이미지로 변환함
+- cv2.cvtColor(BGR 이미지,cv2.COLOR_BGR2GRAY) > 컬러 BGR 이미지를 흑백으로 전환한다.
+- 이미지.copy() > 본래의 사진과 완전히 별개인 이미지복사본을 생성
+- 이미지[w1:w2,h1:h2] > 저 부분의 이미지만을 복사.
+- 이미지.shape[0] = 행에 대한 정보 / 이미지.shape[1] = 열에 대한 정보 / 이미지.shape[2] = 채널에 대한 정보. 그레이스케일(흑백)이라면 없음.
+
+- cv2.imwrite('경로',이미지) > 경로에 이미지 저장
+- cv2.imshow("윈도우( = 뜰 창) 이름)",이미지) > 이미지 띄울 준비
+- cv2.waitKey(ms) > 입력한 밀리세크(1000ms = 1s)동안 이미지를 띄움. 0일 경우 어느 키보드 입력시까지 띄움.
+- cv2.destroyAllWindows() > 이름 그대로. waitKey 이후에 필수.
+- cv2.resize(이미지, 절대크기(상대면 0,0), x 스케일(절대면 패스), y 스케일(절대면 패스), interpolation=method(cv2.INTER_LINEAR,보간법)) > 이미지 resize.
+
+- cv2.line(이미지,시작좌표(x,y),끝좌표(x,y),색(R,G,B),thickness(꽉 채울려면 -1),lineType(기본적으로 윤곽선,CV_LINE_AA=안티엘리어싱)) > 선을 그린다.
+- cv2.polylines(img, pts, isClosed, color, thickness=None, lineType=None, shift=None) > 점들을 이어 선을 그림
+- cv2.circle(이미지,중심좌표(x,y),radius,선 색,두께/채우기 타입,선 타입) > 원을 그린다.
+- cv2.ellipse(이미지,중심,(x길이,y길이),기울기,원 시작 각도, 원 끝 각도(시작부터 끝의 각도까지만 그려짐),색,두께,타입) > 타원을 그린다.
+- cv2.rectangle(이미지,좌측상단 좌표,우측하단 좌표,색,두께,타입) > 사각형을 그린다.
+- cv2.putText(이미지,문자열,표시될 좌표,폰트,글자 크기,색,두께,타입) > 글자를 입력한다.
+- cv2.flip(이미지, 방향) > 이미지 반전. 1 = 좌우, 0 = 상하
+- cv2.lotation(이미지, cv2.ROTATE_각도_방향) > 이미지 회전. cv2.ROTATE_90_CLOCKWISE = 시계방향 90도. 반시계 방향은 COUNTERCLOCKWISE, 180도는 방향을 쓰지 않는다.
+
+- cv2.VideoCapture(비디오 파일 경로(카메라=0 -여러개일 경우 1씩 추가-)) > VideoCapture 객체 생성.
+- VideoCapture객체.isopened() > 읽을 영상이 남아 있는지 반환.
+- VideoCapture객체.read() > 영상의 존재 여부와 이미지를 반환.
+- VideoCapture객체.release() > 동영상 종료.
+- VideoCapture객체.get(cv2.CAP_PROP_FRAME_WIDTH/HEIGHT) > 프레임 너비와 높이 휙득. 실수형이기에 정수형으로 변환 필요.
+
+- cv2.videoWriter('경로/이름',cv2.VideoWriter_fourcc('M','P','4','V'-MP4/'M','J','P','G'-avi),FPS(33이하),(프레임너비,높이)) > videoWriter 객체 생성.
+- videoWriter 객체.write(read 로 얻은 이미지) > 저장
+
+- 이미지 모델 학습시에는 np.ndarray(shape=(image_amount, image_size[1\], image_size[0\]), dtype=np.float32) 식으로 준비된 이미지 파일과
+  np.ndarray(shape=(image_amount,), dtype=np.int32)식으로 준비된 레이블에
+  이미지 오픈 > fit > asarray > normalized(astype(np.float32)>/255.0 ) > all_images[i\]에 넣은 이미지를 사용해야 한다.
+  mnist, PIL > (number, y, x) 로 train. | openCv > (number, y, x ,3) 으로 train
+
+# PIL(Pillow)
+- PIL : Python Imaging Library. 
+- 설치 : `pip install image`로 설치.
+- Pillow : PIL의 프로젝트 포크(Fork).
+  
+- PIL.Image.fromarray(frame(cv2비디오캡쳐.read())) : cv2에서 읽은 이미지/비디오의 프레임을 Image객체로 변환.  
+- PIL.ImageTK.PhotoImage(Image객체) : Image객체를 ImageTk객체로 변환. tkinter에서 사용가능(Label의 image인자에 넣을 수 있음).
+
+# dlib
+***
+- viola & Jones 알고리즘 : Face Detection(얼굴에 Bounding Box)을 가능하게 하는 알고리즘. Face Landmark Detection이 더 자세한 개념.
+- Face Landmark Detection사용 : Head Pose Detection(얼굴 방향)/Face Morphing(두 얼굴의 중간 얼굴을 생성)/Face Averaging(얼굴들의 평균 얼굴을 생성)/
+  Face Swap/Blink&Drowsy Driver Detection(눈의 깜빡임 감지)/Face Filter등이 이를 통해 가능해짐
+
+- dlib.get_frontal_face_detector() : face Detection 을 기능하게 하는 face detector 생성.
+- dlib.shape_predictor(데이터셋(얼굴 랜드마크)이 있는 경로) : Landmark detector 생성.
+- faceDetector(이미지,업스케일 횟수(0,1,2)) : 이미지에서 얼굴을 찾음.
+
 
 # os | os(파일, 디렉토리)관련 명령
 - os.getcwd() : 현재 작업 폴더 반환.
@@ -535,8 +512,29 @@
 - os.path.exists(경로) : 파일 혹은 디렉토리의 존재 여부를 반환.
 - os.path.getsize(경로) : 파일의 크기 반환.
 
+# urllib(3)/zipfile | url,zip
+- urllib : url 이용 라이브러리. urllib3 은 따로 install, import가 필요함. 
+
+- urllib3.PoolManager() : url poolManager 로드. url이용에 사용가능.
+- http(Pool).request('GET', url, preload_content=False) : url 오픈. with 등을 이용해 파일객체로 열 수 있고, 다운로드를 위해 shutil이 필요.
+- shutil(shutil모듛).copyfileobj(request객체, 복사받을_파일객체(wb)) : 파일객체를 복사해옴.
+
+- urllib.request.urlretrieve(주소, filename) : 주소의 파일을 파일 이름으로 다운로드.
+- urllib.request.build_opener() : 오프너 생성. urllib.request의 함수들은 import urllib.request로 import해야 사용가능.
+- 오프너.addheaders=[넣을 헤더\] : 오프너에 브라우저 헤더추가.
+- urllib.request.install_opener(opener) : 오프너로 오픈. 이 이후 평범하게 코드 사용.
+
+- zipfile.ZipFile(zipfilepath, 'r') : zip파일객체 오픈. .extractall(path)로 압축을 헤재할 수 있음.
+
+# requests | http요청
+- requests : http요청을 보내는 라이브러리. 
+- requests.get/post/delete/head/options(url, timeout=n) : 요청. 상황에 맞게 헤더/파일등을 포함해 요청가능. delete엔 data인자를 꼭 넣어주어야 함. 
+  요청성공시 응답 상태와 데이터가 전송되어 옴. 
+- 인자 구조 :  headers = {'Authorization': 'Mozilla/5.0' } | data = {'key1':val1 'key2':val2'} | files = 
+  \[('image', (image.png, open(image.png, 'rb'), 'image/png', {'Expires': '0'}))]의 구조를 가지고 있음. 
+
 # selenium
-- 웹 크롤링, 웹상 자동화(메일등)에 이용되는 패키지. 사용자가 웹사이트를 이용하는 방법과 동일하게 동작.
+- selenium : 웹 크롤링, 웹상 자동화(메일등)에 이용되는 패키지. 사용자가 웹사이트를 이용하는 방법과 동일하게 동작. scrapy라는 크롤링(스크래핑)라이브러리도 존재.
 - import selenium.webdriver 으로 import해야 webdriver사용가능.
   
 - selenium.webdriver.웹브라우저() : 해당 웹브라우저를 이용한 웹드라이버 객체 생성. .close()로 닫을 수 있음.
@@ -576,33 +574,31 @@ urllib.request.install_opener(opener)           # 오프너 오픈
 urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 ```
 
-# urllib(3)/zipfile | url,zip
-- urllib : url 이용 라이브러리. urllib3 은 따로 install, import가 필요함. 
 
-- urllib3.PoolManager() : url poolManager 로드. url이용에 사용가능.
-- http(Pool).request('GET', url, preload_content=False) : url 오픈. with 등을 이용해 파일객체로 열 수 있고, 다운로드를 위해 shutil이 필요.
-- shutil(shutil모듛).copyfileobj(request객체, 복사받을_파일객체(wb)) : 파일객체를 복사해옴.
+# wandb
+- wandb(Weights & Biases, WandB) : ML을 위한 개발 툴. Tensorboard와 비슷한 기능(Dashboard/Sweeps/Artifacts)을 하나 tf, pytorch등 여러 모듈에서 사용가능함. 기본적으로는 웹사이트에서 그래프를 보여줌.
 
-- urllib.request.urlretrieve(주소, filename) : 주소의 파일을 파일 이름으로 다운로드.
-- urllib.request.build_opener() : 오프너 생성. urllib.request의 함수들은 import urllib.request로 import해야 사용가능.
-- 오프너.addheaders=[넣을 헤더\] : 오프너에 브라우저 헤더추가.
-- urllib.request.install_opener(opener) : 오프너로 오픈. 이 이후 평범하게 코드 사용.
+- wandb.login() : wandb login. 먼저 wandb홈페이지에서 회원가입을 한 후 사용가능. 계정이 없다면 계정을 생성, 그 후 로그인을 진행.
+- wandb.init() : wandb 초기설정. project에 project명을, entity에 계정명을, name에 저장하는데 사용하는 이름을 인자로 줄 수 있음. 이 외에도 config등의 인자 사용가능.
+- wandb.run.name : 매 실행 이름. 여기에 값을 할당해 실행 이름을 지정할 수 있고, 생략시 임의로 지정됨.  wandb.run.id를 넣어 생성된 runID임을 명시할 수 도 있음.
 
-- zipfile.ZipFile(zipfilepath, 'r') : zip파일객체 오픈. .extractall(path)로 압축을 헤재할 수 있음.
+- wandb.config.updata(args) : wandb에서 갱신할 변수들을 설정. parser.parse_args()(argparse)를 넣거나 {변수명: 값}형태의 딕셔너리를 넣어 파라미터 일부/전체를 업데이트 가능. 
+- wandb.config.변수명 : 설정을 wandb에 넣어둠. 변수명은 epochs/batch_size등이며, init에서 config매개변수에 딕셔너리 형태로도 넣을 수 있음. 
 
-# requests | http요청
-- requests : http요청을 보내는 라이브러리. 
-- requests.get/post/delete/head/options(url, timeout=n) : 요청. 상황에 맞게 헤더/파일등을 포함해 요청가능. delete엔 data인자를 꼭 넣어주어야 함. 
-  요청성공시 응답 상태와 데이터가 전송되어 옴. 
-- 인자 구조 :  headers = {'Authorization': 'Mozilla/5.0' } | data = {'key1':val1 'key2':val2'} | files = 
-  \[('image', (image.png, open(image.png, 'rb'), 'image/png', {'Expires': '0'}))]의 구조를 가지고 있음. 
+- wandb.log(dict) : 이미지, accuracy, test_loss등의 로그를 기록. {저장될 이름: 값}형태이며, 이미지(plt)/히스토그램(wandb.Histogram(numpy_array_or_sequence))등이 전부 가능함. 
+- wandb.watch(model) : 모델의 학습을 따라가며 진행과정을 보여줌. 
 
-# Scrapy
-- scrapy : 파이썬 웹 크롤링(스크래핑) 패키지.
+# kfp | 파이프라인 SDK
+- kfp : 큐브플로우 파이프라인 SDK(소프트웨어 개발 키트, 다른 프로그램에 추가/연결할 수 있는 커스텀 앱 제작 도구모음)라이브러리.
 
-# timeit
-- timeit.timeit(함수) : 함수의 시작부터 끝까지 걸린 시간을 측정.
+- kfp.dsl.Condition() : 큐브플로우 설정 관련 정의 객체 생성. .after(preprocesser)로 관련 설정 재정의 가능. with를 이용해 열어서 사용됨.
+- kfp.dsl.ContainerOp() : 컨테이너의 설정 정의 객체 생성.
+- kfp.components.load_component_from_url() : 컴포넌트를 url기반으로 가져옴.
 
+- client = kfp.Client(host) : 기본적으로, 최초생성했던 AI플랫폼 파이프라인의 대쉬보드에서 .com으로 끝나는 주소값을 넘겨주면 연동됨.
+- client.upload_pipeline(path, name) : 파이프라인 업로드.
+- client.create_run_from_pipeline_func() : run을 파이프라인 함수를 기반으로 생성.
+- kfp.compiler.Compiler().compile(pipeline, name(path)) : .after(processer)을 통해 수동으로 Experiment나 등록을 위한 파이프라인 업로드가 가능(로컬폴더에 생성->업로드).
 
 # ONNX
 - onnx : ONNX모델을 import해 사용할 수 있게 해주는 라이브러리.
