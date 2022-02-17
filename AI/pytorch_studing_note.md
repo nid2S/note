@@ -15,6 +15,7 @@
 
 ## device
 - torch.cuda.is_available() : 현 환경에서 GPU 사용가능 여부를 반환.
+- torch.cuda.device_count() : 사용가능한 GPU개수를 반환.
 - torch.device("cuda") : GPU연산 사용. ("cuda" if USE_CUDA(위의 결과) else "cpu")식으로, GPU 사용이 가능할 때만 사용하게 사용. 
 - 모델(텐서).to(device) : 연산을 수행할 위치를 지정.
 - 텐서.cpu() : cpu 메모리에 올려진 텐서 반환.
@@ -406,7 +407,16 @@ accuracy = count/len(dataset.dataset)
 - pytorch_lightning.callbacks.EarlyStopping() : EarlyStopping사용. monitor, patience, verbose, mode등의 매개변수 사용가능. 스네이크 표기법으로 된 함수도 존재함.
 
 ##### logger
-- (?)
+- 기본 로그저장경로 : `lightning_logs/`
+- Trainer(logger=Logger) : Logger 지정. 리스트형태로 Logger를 넣어 여러 버전의 로그를 저장하게 할 수 도 있음.
+- pytorch_lightning.loggers.TensorBoardLogger(path) : TensorBoard의 Log를 저장하는 Logger 생성. `tensorboard --logdir=path`명령어로 로그를 확인할 수 있음.
+- pytorch_lightning.loggers.WandBLogger(path) : 
+- pytorch_lightning.loggers.CometLogger(path) : Comet의 Log를 저장하는 Logger 생성.
+- pytorch_lightning.loggers.NeptuneLogger(path) : 
+
+- self.log(변수이름="", 값) : 하나의 값(스칼라)을 수동으로 로깅. 확인하고자 하는 metric(loss등)을 기록. batch_start가 포함된 함수를 제외한 모든 위치에서 기록함.
+  on_step(bool, step마다 기록), on_epoch(bool, Epoch마다 기록), prog_bar(bool, 진행률표시줄에 기록), logger(bool, 로거)의 매개변수 사용가능.
+- self.log_dict(metrics) : 여러개의 변수(스칼라)를 수동로깅. metrics는 {변수이름: 값} 형태의 dict.
 
 ##### model save/load
 - trainer.save_checkpoint(path) : path에 모델 저장. 저장된 모델은 일반 torch check_point모델로도 사용가능(PL이 Pytorch의 래퍼이니)함.
@@ -428,6 +438,7 @@ accuracy = count/len(dataset.dataset)
   여러 옵티마이저를 사용한다면 리스트 형태로 리턴, training_step에서 optimizer의 인덱스를 추가로 받아 여러 모델을 번갈아 학습하게 됨. 
 
 - 모델 학습루프 : 복잡하던 훈련과정을 추상화. 3가지의 루프 패턴마다 3개지의 메소드를 가지고 있음. 일반적으로는 training_step -> validation_step -> validation_epoch_end의 구조를 사용함.
+  %_step()인 함수들의 반환값은 (?).
 - training_step() : 모델 훈련시 진행될 훈련 메서드. train_batch(+batch_idx)를 받아 self.forward -> self.loss -> {'loss': loss, 'log': logs({'train_loss': loss})}반환 형태로 이뤄짐.
 - training_step_end() : 모델 훈련시 한 step의 끝마다 수행될 메서드.
 - training_epoch_end() : 모델 훈련시 한 epoch의 끝마다 수행될 메서드.
@@ -439,6 +450,7 @@ accuracy = count/len(dataset.dataset)
 - test_loop_epoch_end() : 모델 테스트시 테스트 과정에서 한 epoch의 끝마다 수행될 test_loop메서드.
 
 - 데이터 준비 : Pytorch의 데이터 준비 과정을 크게 5가지로 구조화. 다운로드, 데이터정리/메모리저장, 데이터셋 로드, 데이터전처리(transforms), dataloader형태로 wrapping. 데이터로더는 리스트의 형태로 반환해 둘 이상 지정할 수 있음.
+  (?).
 - prepare_data() : 데이터 다운로드/로드 후 데이터 전처리, 분리까지 진행해 self.train_data등의 elements에 정의/선언.
 - train_dataloader() : train_Dataloader 반환. 모델 학습에 사용될 데이터로더 반환.
 - val_dataloader() : val_Dataloader 반환. 모델 검증에 사용될 데이터로더 반환.
