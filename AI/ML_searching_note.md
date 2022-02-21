@@ -19,7 +19,8 @@
 - np.ones(shape) : 모든 값이 1인 배열 생성.
 - np.full(shape, num) : 모든 값이 num 인 배열 생성.
 - np.diag(1차원 배열) :  대각행렬 생성. k 매개변수에 음수를 넣으면 그 절댓값 만큼 아래 행에서 시작.
-- np.eye(i) : 대각선이 1이고 나머지는 0인 i*i의 2차원 배열 생성
+- np.eye(i) : 대각선이 1이고 나머지는 0인 i*i의 2차원 배열(희소행렬)생성. 
+  np.eye(vocab_size)[number_list\]로 생성하면 number_list내부의 요소들의 인덱스만 1이고 나머지는 0인 행렬이 되어, 원핫인코딩이 가능함.
 - np.sin(x) : 사인 함수를 이용해 배열 x와 대응하는 배열 생성
 - np.random.random(shape) : 임의의 값(0~1)으로 채워진 배열 생성.
 - np.random.permutation(i) : i 까지 랜덤으로 섞인 배열 반환.
@@ -574,6 +575,9 @@ urllib.request.install_opener(opener)           # 오프너 오픈
 urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 ```
 
+
+# TensorBoard
+- (?)
 
 # wandb
 - wandb(Weights & Biases, WandB) : ML을 위한 개발 툴. Tensorboard와 비슷한 기능(Dashboard/Sweeps/Artifacts)을 하나 tf, pytorch등 여러 모듈에서 사용가능함. 기본적으로는 웹사이트에서 그래프를 보여줌.

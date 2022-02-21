@@ -227,8 +227,9 @@ for i in range(epoch):
 - torch.nn.Conv2d(input_dim, output_dim, kernel_size) : (2차원)CNN층 사용. i의 커널사이즈를 가짐. padding, stride등도 설정해줄 수 있음. 
 - torch.nn.MaxPool2d(kernel_size, stride) : (2차원)맥스풀링층 사용. 하나의 정수만 넣으면 커널사이즈와 스트라이드 둘 다 해당값으로 지정됨.
 - torch.nn.RNN(input_size, hidden_size) : RNN층 사용. batch_first(bool, 입력텐서의 첫번째 차원은 배치크기), 
-  num_layer(int, 은닉층개수(깊은RNN으로 만듦)), bidirectional(bool, 양방향순환신경망으로 만듦)인자 사용가능.  
-- torch.nn.LSTM(input_size, hidden_size) : LSTM층 사용. RNN과 동일한 인자 사용가능. RNN계열은 사용시(x, h_0)를 입력으로 해야 하며, h_0는 처음에 초기화가 필요함. 
+  num_layer(int, 은닉층개수(깊은RNN으로 만듦)), bidirectional(bool, 양방향순환신경망으로 만듦), batch_first(bool, 사용시(batch, input_dim, hidden_size)가 됨), dropout(0~1, 드롭아웃 비율)인자 사용가능.  
+- torch.nn.LSTM(input_size(vocab_size), hidden_size) : LSTM층 사용. RNN계열 모델은 사용시 h_0(LSTM은 c_0도)을 같이 입력해야 하며, 각 변수는 zeros(D*num_layers, batch_size, hidden_size, requires_grad=False)로 초기화되야 함(D = 2 if bidirectional else 1).
+  출력은 [output, (h_0, c_0)]가 되며, output은 (batch_size, input_dim, D\*hidden_size)(batch_first=True)를 가지고 각 t에 따른 마지막 h_t를 담으며, h_n/c_n은 (D\*num_layers, batch, hidden)의 차원을 가지고 마지막 step의 state들이 담김.
 - torch.nn.GRU(input_size, hidden_size) : GRU층 사용. RNN과 동일한 인자 사용 가능. 
 
 - torch.nn.Embedding(num_embedding, embedding_dim) : 학습가능한 임베딩 테이블 생성. .weight 로 벡터 확인 가능. 이후 층에서 input_size를 embed_dim으로 변경해주어야 함.
@@ -391,6 +392,7 @@ accuracy = count/len(dataset.dataset)
 - PyTorch Lightning : TF의 keras와 같은 PyTorch에 대한 High-level 인터페이스를 제공하는 오픈소스 Python 라이브러리. 코드의 추상화를 통해 프레임워크를 넘어 하나의 코드 스타일로 자리 잡기 위해 탄생한 프로젝트.
 - 장점 : 효율적(정돈된 코드스타일/추상화), 유연함(torch에 적합한 구조, trainer 다양하게 override가능, callback), 구조화(딥러닝시 다뤄야 할 부분들), 다양한 학습 방법에 적용가능(GPU/TPU/16-bit precision),
   PytorchEcosystem(어먀격한 testing과정, Pytorch친화적), logging과 통합/시각화 프레임워크 등등의 장점을 가지고 있음. .to(device)를 쓰지않고도 간단하게 다른 하드웨어를 쓸 수 있음.
+- 자동 최적화 : (?)
 - pytorch_lightning.seed_everything(seed) : 랜덤시드 고정.
 
 ## Model
@@ -401,12 +403,12 @@ accuracy = count/len(dataset.dataset)
 - model.freeze() : 모델의 파라미터들을 동결. 모델의 예측시 사용해줘야 함.
 - trainer.test(test_dataloader) : LightningModule모델 테스트. 따로 테스트할 모델을 지정하지 않으면 val_dataset을 통해 구한 best모델로 test를 진행함.
 
-##### callbacks
+### callbacks
 - pytorch_lightning.callbacks.ModelCheckpoint() : 체크포인트 저장을 커스텀하기 위해 사용하는 콜백. 설정하지 않아도 각 버전마다 체크포인트를 저장함.
   dir_path, file_name, verbose(저장결과 출력여부), save_last(마지막 체크포인트 저장여부), save_top_k(save_last제외 저장할 체크포인트 개수), monitor, mode등의 매개변수 사용.
 - pytorch_lightning.callbacks.EarlyStopping() : EarlyStopping사용. monitor, patience, verbose, mode등의 매개변수 사용가능. 스네이크 표기법으로 된 함수도 존재함.
 
-##### logger
+### logger
 - 기본 로그저장경로 : `lightning_logs/`
 - Trainer(logger=Logger) : Logger 지정. 리스트형태로 Logger를 넣어 여러 버전의 로그를 저장하게 할 수 도 있음.
 - Trainer(log_every_n_steps=k, flush_logs_every_n_steps=n) : k step 마다 로그를 기록하고, n step마다 로거에 쓰도록 함. 훈련속도와 비용의 조정을 위함. 기본은 50, 100번. 
@@ -431,17 +433,19 @@ accuracy = count/len(dataset.dataset)
 - pytorch_lightning.Trainer('resume_from_checkpoint' = path) : 기존의 체크포인트로 저장된 모델과 모델정보를 로드. 학습을 이어서 할 수 있음.
 - model = pytorch_lightning.LightningModule.load_from_checkpoint(path) : 사전훈련된(저장된)모델 로드. 
 
-## Model Making
+### Lightning Module
 - LightningModule : 모델 내부의 구조를 설계하는 research/science클래스. 모델구조/데이터전처리/손실함수 설정 등을 통해 모델 초기화/정의. 
   모든 모듈이 따라야 하는 9가지 필수메서드의 표준 인터페이스를 가지고 있음.
 - Lifecycle : LightningModule클래스가 함수를 실행하는 순서. 아래의 순서에 더해 각 batch와 epoch마다 함수 이름에 맞게 정해진 순서대로 호출됨.
   [__init\_\_ > prepare_data > configure_optimizers > train_dataloader > val_dataloader > test_dataloader(.test()호출시)]의 순서.
-### method
+
+#### method
 - __init\__() : 모델 초기화. 기존 모델과 동일하게 변수/층등의 정의/선언과 초기화(super(CLASS_NAME, self).__init\__())가 진행됨.
 - forward() : 모델 실행시 실행될 순전파 메서드. 기존모델과 동일하게 사용할 수 있음. 입력 x를 받아 예측 pred를 반환하는 구조. 
 - 손실함수() : 손실함수. 클래스 내부에 정의해 사용하는게 구조화되어 좋음. logits과 labels를 받아 계산된 loss를 반환하는 구조.
 - configure_optimizers() : 옵티마이저 설정. self.parameters()와 lr을 인자로 받는 옵티마이저를 반환하는 형태. 
   여러 옵티마이저를 사용한다면 리스트 형태로 리턴, training_step에서 optimizer의 인덱스를 추가로 받아 여러 모델을 번갈아 학습하게 됨. 
+  스케줄러를 설정해 `return [optimizer], [scheduler]`의 형식으로 반환해 스케줄러를 사용할 수 도 있음.
 
 - 모델 학습루프 : 복잡하던 훈련과정을 추상화. 3가지의 루프 패턴마다 3개지의 메소드를 가지고 있음. 일반적으로는 training_step -> validation_step -> validation_epoch_end의 구조를 사용함.
   %_step()인 함수들의 반환값은 (?).
@@ -463,12 +467,46 @@ accuracy = count/len(dataset.dataset)
 - test_dataloader() : test_Dataloader 반환. 모델 테스트에 사용될 데이터로더 반환.
 - predict_dataloader() : predict_dataloader 반환. 모델 예측에 사용될 데이터로더 반환.
 
+### Automatic optimization
+- 자동최적화 : Lightning은 내부적으로 다음을 수행함. 
+  각 epoch의 각 batch(+각 optim)마다 training_step을 수행해 loss를 구한 뒤 optimizer.zero_grad() -> loss.backward() -> optimizer.step(loss) -> lr_scheduler.step()
+```python 
+for epoch in epochs:
+  for batch in data:
+
+      def closure():
+          loss = model.training_step(batch, batch_idx, ...)
+          optimizer.zero_grad()
+          loss.backward()
+          return loss
+
+      optimizer.step(closure)
+
+  for lr_scheduler in lr_schedulers:
+      lr_scheduler.step()
+```
+- 임의의 간격으로 단계최적화 : 학습룰워밍업, 홀수스케줄링 등 옵티마이저에서의 작업수행을 위해 optimizer_step()을 재정의해줄 수 있음. optimizer_closure매개변수를 받아야 하며, optim과 lr_scheduler의 step을 해주면 됨.
+
+### Manual optimization
+- self.automatic_optimization = False : init에서 설정시 수동 최적화를 할 수 있음. 수행시 pl은 정밀도 및 가속기 논리만 처리하며, 사용자가 가중치 갱신, 누적, 모델 토글등을 해줘야 함.
+- opt = self.optimizers() : 옵티마이저 호출.
+- opt.zero_grad() : 옵티마이저 초기화. 항상 manual_backward의 앞에 호출되어야 함.
+- loss = self.compute_loss(batch) : loss 도출. 
+- self.manual_backward(loss) : 수동 역전파 수행
+- opt.step() : 가중치 갱신).
+
+- sch = self.lr_schedulers() : 스케줄러 호출. 스케줄러를 임의의 간격으로 호출할 수 있게 함. training_step에서 optim과 함께 이뤄져야 함.
+- sch.step() : lr 조정. 
+
 ## Trainer
 - Trainer : 모델의 학습을 담당하는 클래스. 모델의 학습에 관여되는 engineering(학습epoch/batch/모델의 저장/로그생성까지 전반적으로)을 담당.
 - pytorch_lightning.Trainer() : 트레이너 객체 생성. 다양한 args를 통해 트레이너 설정(gpus(GPU개수), callbacks(콜백리스트), max_epochs(epochs)등)가능.
-  accelerator 매개변수에 "dp"를 전달하면 입력한 개수의 GPU에서 분산학습을 진행하겠다는 뜻(Single-Node)이며, "ddp"를 전달하면 다양한 분산컴퓨터시스템에서 다양한 GPU를 사용하겠다는 뜻(Multi-Node)임.
-  resume_from_checkpoint 매개변수에 저장된 체크포인트의 경로를 넣으면 자동으로 모델과 학습정보를 로딩해 기존의 학습을 이어가게 됨.
-  num_processes로 멀티 cpu, gpus를 이용해 gpu, tpu_cores 매개변수를 사용해 TPU로 모델학습을 할 수 있고, precision매개변수에 bit수(16)를 입력하면 16bit-precision이 가능함.
+  - accelerator : "dp"전달시 입력한 개수의 GPU에서 분산학습을 진행하겠다는 뜻(Single-Node)이며, "ddp"는 다양한 분산컴퓨터시스템에서 다양한 GPU를 사용하겠다는 뜻(Multi-Node)임.
+  - resume_from_checkpoint : 저장된 체크포인트의 경로를 넣으면 자동으로 모델과 학습정보를 로딩해 기존의 학습을 이어가게 됨.
+  - num_processes : 멀티 cpu를 사용하게 함.
+  - gpus : gpu를 사용하게 함(0 전달시 None과 동일하게 미사용).
+  - tpu_cores : TPU로 모델학습을 할 수 있게 함.
+  - precision : bit수(16)를 전달하면 16bit-precision이 가능하게 됨.
 
 - 트레이너.fit(모델) : 모델 학습. sklearn의 fit메서드와 비슷함.
 - 트레이너.test(test_dataloader) : fit한 LightningModule모델 테스트. 
