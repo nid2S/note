@@ -513,6 +513,14 @@
 - os.path.exists(경로) : 파일 혹은 디렉토리의 존재 여부를 반환.
 - os.path.getsize(경로) : 파일의 크기 반환.
 
+# 기타 파일형식 읽기
+- PyYAML : YAML파일의 처리를 도와주는 라이브러리. `pip install pyyaml`로 설치, `import yaml`로 사용가능.
+- yaml.safe_load(YAML파일객체) : yml파일을 파이썬 객체(딕셔너리)로 변환함.
+
+- JsonLines : jsonl(JSON 내부에 한 줄씩 JSON을 저장할 수 있는 구조화된 데이터 형식)파일의 처리를 도와주는 라이브러리. 
+  `pip install jsonlines`로 설치, `import jsonlines`로 사용가능.
+- read_file = jsonlines.open(path) : jsonl형식의 파일을 읽어옴.
+
 # urllib(3)/zipfile | url,zip
 - urllib : url 이용 라이브러리. urllib3 은 따로 install, import가 필요함. 
 
@@ -577,20 +585,30 @@ urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 
 
 # TensorBoard
-- (?)
+- 텐서보드 : 텐서플로우의 머신러닝 시각화 도구. 각 파라미터들의 변화와 손실, 정확도, 모델 그래프등을 시각화해줌.
+- 사용 : 기본적으로는 체크포인트를 저장한 뒤 터미널에`tensorboard --logdir=path`로 실행할 수 있으며, --port와 --host등을 이용해 서버설정을 변경할 수 있음.
+- 인라인 실행 : `!load_ext tensorboard` -> `tensorboard --logdir=path`로 인라인에서 텐서보드를 확인할 수 있음.
+## TensorboardX
+- 텐서보드X : 텐서플로우 시각화 라이브러리인 텐서보드를 파이토치에서 사용할 수 있도록 한 서드파티 패키지. 파이토치 모델을 오닉스(ONNX)로 변환 후 텐서보드에 넣음.
+- tensorboardX.SummaryWriter(path) : 모델을 저장할 저장클래스 호출. path로 지정한 폴더에 파일이 저장됨. 폴더가 없으면 자동으로 생성함.
+- writer.add_graph(model, dummy_input) : 더미데이터를 전달할때 그래프를 writer에 저장함.
+- writer.close() : writer 종료. 이 이후 그냥 텐서보드를 실행하듯이 하면 됨.
 
 # wandb
 - wandb(Weights & Biases, WandB) : ML을 위한 개발 툴. Tensorboard와 비슷한 기능(Dashboard/Sweeps/Artifacts)을 하나 tf, pytorch등 여러 모듈에서 사용가능함. 기본적으로는 웹사이트에서 그래프를 보여줌.
+- 사용 : 먼저 login -> 키 입력 -> | pl의 경우 WandbLogger생성(인자 그대로 사용가능)후 트레이너에 넣음 | torch의 경우 init -> config(hparams) -> log(params) -> watch(model)(optional)의 순서대로 사용.
+  | TF의 경우 init -> config -> tf.Sesstion()에서 wandb.tensorflow.log(tf.summary.merge_all()) | keras는 init -> config -> callbacks에 wandb.keras.WandbCallback()을 넣어 사용.
+  | HF의 경우는 init -> TrainingArguments(..., report_to="wandb") 후 트레이너로 훈련 | 어떤 파이썬 스크립트라도 init -> config -> log로 기록(사용)할 수 있음.
 
 - wandb.login() : wandb login. 먼저 wandb홈페이지에서 회원가입을 한 후 사용가능. 계정이 없다면 계정을 생성, 그 후 로그인을 진행.
 - wandb.init() : wandb 초기설정. project에 project명을, entity에 계정명을, name에 저장하는데 사용하는 이름을 인자로 줄 수 있음. 이 외에도 config등의 인자 사용가능.
-- wandb.run.name : 매 실행 이름. 여기에 값을 할당해 실행 이름을 지정할 수 있고, 생략시 임의로 지정됨.  wandb.run.id를 넣어 생성된 runID임을 명시할 수 도 있음.
 
+- wandb.run.name : 매 실행 이름. 여기에 값을 할당해 실행 이름을 지정할 수 있고, 생략시 임의로 지정됨.  wandb.run.id를 넣어 생성된 runID임을 명시할 수 도 있음.
 - wandb.config.updata(args) : wandb에서 갱신할 변수들을 설정. parser.parse_args()(argparse)를 넣거나 {변수명: 값}형태의 딕셔너리를 넣어 파라미터 일부/전체를 업데이트 가능. 
 - wandb.config.변수명 : 설정을 wandb에 넣어둠. 변수명은 epochs/batch_size등이며, init에서 config매개변수에 딕셔너리 형태로도 넣을 수 있음. 
 
 - wandb.log(dict) : 이미지, accuracy, test_loss등의 로그를 기록. {저장될 이름: 값}형태이며, 이미지(plt)/히스토그램(wandb.Histogram(numpy_array_or_sequence))등이 전부 가능함. 
-- wandb.watch(model) : 모델의 학습을 따라가며 진행과정을 보여줌. 
+- wandb.watch(model) : 모델의 학습을 따라가며 진행과정을 보여줌. 혹은 wandb홈페이지에서 프로젝트란을 통해 확인할 수 있음.
 
 # kfp | 파이프라인 SDK
 - kfp : 큐브플로우 파이프라인 SDK(소프트웨어 개발 키트, 다른 프로그램에 추가/연결할 수 있는 커스텀 앱 제작 도구모음)라이브러리.
