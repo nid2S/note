@@ -41,7 +41,7 @@
 - 텐서[0, 0\] : 인덱스로 텐서 내 요소에 접근.
 - 텐서[:, :2\] : 슬라이스로 텐서 내 요소에 접근.
 - 텐서 > 2 : 마스크 배열을 이용해 True값인 요소만 추출.
-- torch.set_printoptions(percision=i, sci_mode=bool) : (실수의)표시설정을 조정. 정밀도 i 만큼 되는 소수점을 표시하고, sci_mode가 True면 Scientific Notation(과학적 기수법)을 사용함.
+- torch.set_printoptions(precision=i, sci_mode=bool) : (실수의)표시설정을 조정. 정밀도 i 만큼 되는 소수점을 표시하고, sci_mode가 True면 Scientific Notation(과학적 기수법)을 사용함.
 
 - torch.tensor(i(iterator객체)) : 텐서 생성. .item()으로 값을 받아올 수 있음. 
 - torch.자료형Tensor(array) : array로 지정된 자료형의 텐서 생성(ex-Float:32bit 부동소수점). 
@@ -211,18 +211,20 @@ for i in range(epoch):
 - 사용방법 : optimizer와 schduler를 먼저 정의한 뒤 학습 시 batch마다 optimizer.step(), epoch마다 scheduler.step()을 해주면 됨.
 - 파라미터 : 공통적으로 optimizer를 넣어주고, last_epoch로 모델 저장 후 시작시 설정을, verbose=bool로 lr갱신 시 마다 메세지를 출력하게 할 수 있음.
 
-- torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=func(lambda)) : lambda표현식으로 작성한 함수를 통해 lr을 조절함. 초기 lr에 lambda(epoch)를 곱해 lr을 계산함.
-- torch.optim.lr_scheduler.MultiplicativeLR(optimizer, lr_lambda=func(lambda)) : lambda표현식으로 작성한 함수를 통해 lr을 조절. lr에 lambda(epoch)를 누적곱해 lr을 계산함.
 - torch.optim.lr_scheduler.StepLR(optimizer, step_size=s, gamma=g) : step사이즈마다 gamma비율로 lr을 감소시킴(일정 step마다 gamma를 곱함). 
+- torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=func(lambda)) : lambda표현식으로 작성한 함수를 통해 lr을 조절함. 초기 lr에 lambda(epoch)를 곱해 lr을 계산함.
 - torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[m1,m2\], gamma=g) : 지정 epoch마다 gamma비율로 lr을 감소시킴(지정 epoch마다 gamma를 곱함). 
-- torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=g) : learing rate decay가 exponential함수를 따름(매 epoch마다 gamma를 곱함). 
-- torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=t, eta_min=min) : lr이 cos함수를 따라 eta_min까지 떨어졌다가 다시 초기 lr로 돌아오기를 반복함(최대 T_max번).
-- torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode) : 입력한 성능평가지표가 patience만큼 향상되지 않으면 lr을 줄임. optim에 momentum을 설정해야 하고, scheduler.step(평가지표)로 사용함.
+- torch.optim.lr_scheduler.LinearLR(optimizer, start_factor, total_iters) : 곱셈인자를 선형적으로 total_iters(0부터 시작)에 걸쳐 변형시켜 학습 속도를 늦춤. 시작 lr * start_factor 에서 * 1/total_iters만큼을 계속 변동시켜 결국은 시작 lr * 0.1로 만드는 듯.
 - torch.optim.lr_scheduler.CyclicLR(optimizer, step_size_up, base_lr, max_lr, gamma, mode) : base_lr부터 max_lr까지 step_size_up동안 증가하고 감소하기를 반복함. step_size_down, scale_fn등 사용가능.
+- torch.optim.lr_scheduler.ConstantLR(optimizer, factor, total_iters) : epochs가 total_iters에 도달할 때 까지 시작 lr * factor를 lr으로 사용함.
+- torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=t, eta_min=min) : lr이 cos함수를 따라 eta_min까지 떨어졌다가 다시 초기 lr로 돌아오기를 반복함(최대 T_max번).
+- torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=g) : learing rate decay가 exponential함수를 따름(매 epoch마다 gamma를 곱함). 
+- torch.optim.lr_scheduler.MultiplicativeLR(optimizer, lr_lambda=func(lambda)) : lambda표현식으로 작성한 함수를 통해 lr을 조절. lr에 lambda(epoch)를 누적곱해 lr을 계산함.
 - torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr, steps_per_epoch, epochs, pct_start, anneal_strategy) : 초기 lr에서 1cycle annealing함(초기 lr에서 max_lr까지 anneal_strategy(linear/cos)에 따라 증가 후 감소).
-- torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, T_0, T_mult, eta_min) : 초기 lr에서 cosine annealing 함수에 따라 eta_min까지 떨어졌다가(T_0에 걸쳐) T_mult에 걸쳐 다시 되돌아옴. 이 후 증감을 반복. 
+- torch.optim.lr_scheduler.SequentialLR(optimizer, schedulers, milestones) : milestones의 간격대로 주어진 스케줄러를 순차적으로 적용함.
+- torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode) : 입력한 성능평가지표가 patience만큼 향상되지 않으면 lr을 줄임. optim에 momentum을 설정해야 하고, scheduler.step(평가지표)로 사용함.
 
-### module(layers)
+### nn(layers)
 - torch.nn.Linear(input_dim, output_dim) : 선형회귀모델/전결합층 사용. 이대로 모델로 쓸 수도, 모델에 층으로 넣을수도 있음. bias=bool 로 편향 존재여부 지정가능.
 - torch.nn.Conv2d(input_dim, output_dim, kernel_size) : (2차원)CNN층 사용. i의 커널사이즈를 가짐. padding, stride등도 설정해줄 수 있음. 
 - torch.nn.MaxPool2d(kernel_size, stride) : (2차원)맥스풀링층 사용. 하나의 정수만 넣으면 커널사이즈와 스트라이드 둘 다 해당값으로 지정됨.
@@ -244,6 +246,12 @@ for i in range(epoch):
   ignore_index인자에 무시할 토큰의 인덱스를 전달해(pad 등)손실함수가 연산에 포함시키지 않게 할 수 있음.
   CrossentropyLoss는 input(pred)는 float, target(y)는 long이여야 하며, loss가 스칼라가 아니라면 loss_.backward(gradient=loss_)로 backward를 써야 한다.
 - torch.nn.BCELoss() : Binary-cross-entropy 손실함수 층 사용.
+
+### functional
+- torch.nn.functional : torch.nn이 클래스로 정의되어있는 것과 NN관련 기능들이 함수로 정의되어있는 클래스. `import torch.nn.functional`로 import하지 않으면 사용할 수 없음. 주로 as F로 사용됨.
+  nn으로 구현한 클래스의 경우는 attribure를 활용해 state를 저장하고 활용할 수 있고, torch.nn.functional로 구현한 함수는 인스턴스화 시킬 필요 없이 사용이 가능하다는 장점이 있음. 두 방식 모두 결과는 동일하게 제공됨.
+- F.log_softmax(input) : logarithm을 따르는 softmax를 적용함. dim 인자로 계산될 차원을 정할 수 있음. 수학적으로는 log(softmax(x))와 동일하나 둘을 따로 하는것은 느리고 숫자적으로 불안정하므로 사용하는 대안공식.
+- F.nll_loss(input, target) : negative log likehood loss. C클래스 분류 task에서 사용. 
 
 ### Sequential
 - torch.nn.Sequential(module) : 시퀀셜 모델 생성. 클래스 형태로 구현되는 모델에서 층의 역할을 함. 아주아주 간단한 모델의 경우엔 모델 그 자체로 이용되기도 함.
@@ -392,7 +400,6 @@ accuracy = count/len(dataset.dataset)
 - PyTorch Lightning : TF의 keras와 같은 PyTorch에 대한 High-level 인터페이스를 제공하는 오픈소스 Python 라이브러리. 코드의 추상화를 통해 프레임워크를 넘어 하나의 코드 스타일로 자리 잡기 위해 탄생한 프로젝트.
 - 장점 : 효율적(정돈된 코드스타일/추상화), 유연함(torch에 적합한 구조, trainer 다양하게 override가능, callback), 구조화(딥러닝시 다뤄야 할 부분들), 다양한 학습 방법에 적용가능(GPU/TPU/16-bit precision),
   PytorchEcosystem(어먀격한 testing과정, Pytorch친화적), logging과 통합/시각화 프레임워크 등등의 장점을 가지고 있음. .to(device)를 쓰지않고도 간단하게 다른 하드웨어를 쓸 수 있음.
-- 자동 최적화 : (?)
 - pytorch_lightning.seed_everything(seed) : 랜덤시드 고정.
 
 ## Model
@@ -404,9 +411,9 @@ accuracy = count/len(dataset.dataset)
 - trainer.test(test_dataloader) : LightningModule모델 테스트. 따로 테스트할 모델을 지정하지 않으면 val_dataset을 통해 구한 best모델로 test를 진행함.
 
 ### callbacks
-- pytorch_lightning.callbacks.ModelCheckpoint() : 체크포인트 저장을 커스텀하기 위해 사용하는 콜백. 설정하지 않아도 각 버전마다 체크포인트를 저장함.
+- pytorch_lightning.callbacks.ModelCheckpoint() : 체크포인트 저장을 커스텀하기 위해 사용하는 콜백. 설정하지 않아도 각 버전마다 체크포인트를 저장함. %_step()함수의 log로 판별함.
   dir_path, file_name, verbose(저장결과 출력여부), save_last(마지막 체크포인트 저장여부), save_top_k(save_last제외 저장할 체크포인트 개수), monitor, mode등의 매개변수 사용.
-- pytorch_lightning.callbacks.EarlyStopping() : EarlyStopping사용. monitor, patience, verbose, mode등의 매개변수 사용가능. 스네이크 표기법으로 된 함수도 존재함.
+- pytorch_lightning.callbacks.EarlyStopping() : EarlyStopping사용. monitor, patience, verbose, mode등의 매개변수 사용가능. 스네이크 표기법으로 된 함수도 존재함. %_step()함수의 log로 판별함.
 
 ### logger
 - 기본 로그저장경로 : `lightning_logs/`
@@ -446,10 +453,11 @@ accuracy = count/len(dataset.dataset)
 - configure_optimizers() : 옵티마이저 설정. self.parameters()와 lr을 인자로 받는 옵티마이저를 반환하는 형태. 
   여러 옵티마이저를 사용한다면 리스트 형태로 리턴, training_step에서 optimizer의 인덱스를 추가로 받아 여러 모델을 번갈아 학습하게 됨. 
   스케줄러를 설정해 `return [optimizer], [scheduler]`의 형식으로 반환해 스케줄러를 사용할 수 도 있음.
+- configure_callbacks() : 콜백 설정. 사용될 콜백 정의 후 리스트 형태로 반환하게 하면, fit()등을 호출시 호출되어 사용되게 됨.
 
 - 모델 학습루프 : 복잡하던 훈련과정을 추상화. 3가지의 루프 패턴마다 3개지의 메소드를 가지고 있음. 일반적으로는 training_step -> validation_step -> validation_epoch_end의 구조를 사용함.
-  %_step()인 함수들의 반환값은 (?).
-- training_step() : 모델 훈련시 진행될 훈련 메서드. train_batch(+batch_idx)를 받아 self.forward -> self.loss -> {'loss': loss, 'log': logs({'train_loss': loss})}반환 형태로 이뤄짐.
+  %_step()인 함수들의 반환값은 %_epoch_end()함수의 output으로 들어가게 되며, ModelCheckpoint함수의 metric은 %_step()함수의 log, EalryStopping함수는 %_epoch_end()함수의 log여야 함.
+- training_step() : 모델 훈련시 진행될 훈련 메서드. train_batch(+batch_idx)를 받아 self.forward -> self.loss -> {'loss': loss}반환 형태로 이뤄짐. 반드시 loss키를 반환해야 함.
 - training_step_end() : 모델 훈련시 한 step의 끝마다 수행될 메서드.
 - training_epoch_end() : 모델 훈련시 한 epoch의 끝마다 수행될 메서드.
 - validation_step() : 모델 훈련시 검증과정에서 진행될 validation메서드. val_batch(+batch_idx)를 받아 self.foward -> self.loss -> {'val_loss': loss}반환 의 형태로 이뤄짐.
@@ -460,7 +468,6 @@ accuracy = count/len(dataset.dataset)
 - test_loop_epoch_end() : 모델 테스트시 테스트 과정에서 한 epoch의 끝마다 수행될 test_loop메서드.
 
 - 데이터 준비 : Pytorch의 데이터 준비 과정을 크게 5가지로 구조화. 다운로드, 데이터정리/메모리저장, 데이터셋 로드, 데이터전처리(transforms), dataloader형태로 wrapping. 데이터로더는 리스트의 형태로 반환해 둘 이상 지정할 수 있음.
-  (?).
 - prepare_data() : 데이터 다운로드/로드 후 데이터 전처리, 분리까지 진행해 self.train_data등의 elements에 정의/선언.
 - train_dataloader() : train_Dataloader 반환. 모델 학습에 사용될 데이터로더 반환.
 - val_dataloader() : val_Dataloader 반환. 모델 검증에 사용될 데이터로더 반환.
