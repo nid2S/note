@@ -133,7 +133,7 @@
 - torch.cuda.manual_seed_all(i) : GPU 사용시 랜덤시드 고정.
 
 ### save/load
-- torch.save(model(.state_dict()), path) : 모델 저장. .state_dict()를 붙이면 가중치만 저장하는 것으로, 모델이 코드상으로 구현되어 있어야 함. 기본적으로 .pt확장자.
+- torch.save(model(.state_dict()), path) : 모델 저장. .state_dict()를 붙이면 가중치만 저장하는 것으로, 모델이 코드상으로 구현되어 있어야 함. 기본적으로 .pt확장자. dir이 존재하지 않으면 오류 발생.
 - torch.jit.save(model, path) : 모델을 Pytorch의 JIT컴파일러를 사용해 제공함. 최종배포를 위해 사용.
 
 - model = torch.load(path) : 모델 로드.
@@ -220,7 +220,6 @@ for i in range(epoch):
 - torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=t, eta_min=min) : lr이 cos함수를 따라 eta_min까지 떨어졌다가 다시 초기 lr로 돌아오기를 반복함(최대 T_max번).
 - torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=g) : learing rate decay가 exponential함수를 따름(매 epoch마다 gamma를 곱함). 
 - torch.optim.lr_scheduler.MultiplicativeLR(optimizer, lr_lambda=func(lambda)) : lambda표현식으로 작성한 함수를 통해 lr을 조절. lr에 lambda(epoch)를 누적곱해 lr을 계산함.
-- torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr, steps_per_epoch, epochs, pct_start, anneal_strategy) : 초기 lr에서 1cycle annealing함(초기 lr에서 max_lr까지 anneal_strategy(linear/cos)에 따라 증가 후 감소).
 - torch.optim.lr_scheduler.SequentialLR(optimizer, schedulers, milestones) : milestones의 간격대로 주어진 스케줄러를 순차적으로 적용함.
 - torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode) : 입력한 성능평가지표가 patience만큼 향상되지 않으면 lr을 줄임. optim에 momentum을 설정해야 하고, scheduler.step(평가지표)로 사용함.
 
@@ -340,9 +339,12 @@ accuracy = count/len(dataset.dataset)
 
 
 # torch_%
+- torchmetrics : torch를 다루고 torch tensor를 반환하는 pytorch의 metrics들이 모인 패키지.
 - torchvision : 비전분야의 유명 데이터셋, 모델, 전처리도구가 포함된 패키지.
 - torchtext : 자연어처리 분야의 유명 데이터셋, 모델, 전처리도구(텍스트에 대한 추상화기능)가 포함된 패키지.
 - torchaudio : 오디오 분야의 torch_%. 
+## metrics
+- torchmetrics.Accuracy() : Accuracy객체 생성. acc(pred, y)로 사용할 수 있으며, 반환값은 float의 scalar텐서임.
 ## vision
 - torchvision.datasets.MNIST(경로, train=bool, transform=트랜스폼, download=bool) : MNIST 다운로드. 
   train=false면 test데이터 다운로드, download는 경로에 데이터가 없으면 다운로드받음.
@@ -433,13 +435,6 @@ accuracy = count/len(dataset.dataset)
 - tensorboard.add_hitogram(...) : 로거객체에 히스토그램 기록.
 - tensorboard.add_figure(...) : 로거객체에 수치(figure) 기록.
 
-##### model save/load
-- trainer.save_checkpoint(path) : path에 모델 저장. 저장된 모델은 일반 torch check_point모델로도 사용가능(PL이 Pytorch의 래퍼이니)함.
-- model.to_onnx(path, input_sample, export_params=bool) : PytorchLightning 모델을 onnx모델로 내보냄.
-
-- pytorch_lightning.Trainer('resume_from_checkpoint' = path) : 기존의 체크포인트로 저장된 모델과 모델정보를 로드. 학습을 이어서 할 수 있음.
-- model = pytorch_lightning.LightningModule.load_from_checkpoint(path) : 사전훈련된(저장된)모델 로드. 
-
 ### Lightning Module
 - LightningModule : 모델 내부의 구조를 설계하는 research/science클래스. 모델구조/데이터전처리/손실함수 설정 등을 통해 모델 초기화/정의. 
   모든 모듈이 따라야 하는 9가지 필수메서드의 표준 인터페이스를 가지고 있음.
@@ -474,7 +469,15 @@ accuracy = count/len(dataset.dataset)
 - test_dataloader() : test_Dataloader 반환. 모델 테스트에 사용될 데이터로더 반환.
 - predict_dataloader() : predict_dataloader 반환. 모델 예측에 사용될 데이터로더 반환.
 
-### Automatic optimization
+### model save/load
+- trainer.save_checkpoint(path) : path에 모델 저장. 저장된 모델은 일반 torch check_point모델로도 사용가능(PL이 Pytorch의 래퍼이니)함.
+- model.to_onnx(path, input_sample, export_params=bool) : PytorchLightning 모델을 onnx모델로 내보냄.
+
+- pytorch_lightning.Trainer('resume_from_checkpoint' = path) : 기존의 체크포인트로 저장된 모델과 모델정보를 로드. 학습을 이어서 할 수 있음.
+- model = pytorch_lightning.LightningModule.load_from_checkpoint(path) : 사전훈련된(저장된)모델 로드. 
+
+### optimization
+#### Automatic optimization
 - 자동최적화 : Lightning은 내부적으로 다음을 수행함. 
   각 epoch의 각 batch(+각 optim)마다 training_step을 수행해 loss를 구한 뒤 optimizer.zero_grad() -> loss.backward() -> optimizer.step(loss) -> lr_scheduler.step()
 ```python 
@@ -493,8 +496,7 @@ for epoch in epochs:
       lr_scheduler.step()
 ```
 - 임의의 간격으로 단계최적화 : 학습룰워밍업, 홀수스케줄링 등 옵티마이저에서의 작업수행을 위해 optimizer_step()을 재정의해줄 수 있음. optimizer_closure매개변수를 받아야 하며, optim과 lr_scheduler의 step을 해주면 됨.
-
-### Manual optimization
+#### Manual optimization
 - self.automatic_optimization = False : init에서 설정시 수동 최적화를 할 수 있음. 수행시 pl은 정밀도 및 가속기 논리만 처리하며, 사용자가 가중치 갱신, 누적, 모델 토글등을 해줘야 함.
 - opt = self.optimizers() : 옵티마이저 호출.
 - opt.zero_grad() : 옵티마이저 초기화. 항상 manual_backward의 앞에 호출되어야 함.
@@ -514,6 +516,8 @@ for epoch in epochs:
   - gpus : gpu를 사용하게 함(0 전달시 None과 동일하게 미사용).
   - tpu_cores : TPU로 모델학습을 할 수 있게 함.
   - precision : bit수(16)를 전달하면 16bit-precision이 가능하게 됨.
+  - progress_bar_refresh_rate : 진행률 표시 줄의 갱신 비율. 0으로 하면 진행률 바가 나타나지 않게 됨.
+  - weights_summary : (학습 초반에 나오는)가중치 요약 창에 대한 설정. None으로 하면 가중치 요약 창이 꺼지게 됨.
 
 - 트레이너.fit(모델) : 모델 학습. sklearn의 fit메서드와 비슷함.
 - 트레이너.test(test_dataloader) : fit한 LightningModule모델 테스트. 
