@@ -794,12 +794,13 @@ for number , name in zip(number_l,name_l):
 - argparse : 명령행 인터페이스를 쉽게 작성하도록함. sys.argv를 어떻게 파싱할지 파악하며, 도움말과 사용법메세지를 자동 생성하고, 잘못된 인자를 줄 때 에러를 발생시킴.
 - parser = argparse.ArgumentParser() : ArgumentParser객체 생성. description(도움말 전에 표시될 텍스트)등의 인자 사용가능. 
 - parser.add_argument(옵션명) : 프로그램 인자에 대한 정보를 추가. 명령행의 문자열을 객체로 변환하는 방법을 알려줌. 옵션명은 리스트로 여러개를 지정해 줄 수도 있음.
-- add_argument인자 : action(인자발견시 수행할 액션의 기본형), nargs(소비되야하는 인자의 수), const(일부action및nargs선택시 필요상숫값), 
+- add_argument인자 : action(인자발견시 수행할 액션의 기본형), nargs(소비되야하는 인자의 수), const(일부action및nargs선택시 필요상숫값), dest(args.dest로 사용될 python내부에서의 인자이름),
   default(인자가 명령행에도 namespace에도 없으면 생성되는 값), type(명령행인자가 변환되야 할 형), choices(인자로 허용되는 값의 컨테이너),
   required(명령행 옵션 생략가능여부), help(인자기능에 대한 간단한 설명), metavar(사용메세지에 사용되는 인자명), dest(parse_args()의 반환객체에 추가될 속성이름).
 - add_argument예시 : [parser.add_argument('-b', '--batch-size', type=int, default=8, metavar='N', help='input batch size for training (default: 8)')]
 - args = parser.parse_args() : 인자를 파싱. 명령행 검사 -> 인자를 적절한 형으로 변환 -> 적절한 액션을 호출. sys.argv에서 자동으로 명령행인자 결정.
 - args.accumulate(args.인자명) : 해당 인자의 값을 가져옴.
+- args.log.write() : (?)
 
 - sys.argv : 파이썬 스크립트에 전달된 명령줄 인자의 리스트. argv[0\]은 스크립트 이름, 인터프리터에 이름이 전달되지 않으면 빈 문자열.
 
@@ -821,6 +822,35 @@ for number , name in zip(number_l,name_l):
 
 - 데몬쓰레드 : 백그라운드에서 실행되는, 메인쓰레드가 종료되면 즉시 종료되는 쓰레드. 일반 쓰레드는 메인이 끝나도 자신의 작업이 끝날때까지 계속 실행.
 - t.deamon = True : 데몬쓰레드로 설정.
+
+# logging
+- logging : 소프트웨어가 작동 중일때 발생하는 여러 사건을 추적하는 파이썬 내장 라이브러리. 메세지의 형식과 내용을 모두 제어할 수 있음. 각 사건의 중요도를 level이라고 정의하고 있음.
+- level : DEBUG -> INFO -> WARNING -> ERROR -> CRITICAL 
+  - DEBUG : 간단히 문제를 진단하고 싶을 때 필요한 자세한 정보를 기록함.
+  - INFO : 계획대로 작동하고 있음을 알리는 확인 메시지, print와 같은 느낌으로 사용됨.
+  - WARNING : 소프트웨어가 작동은 하고 있지만, 예상치 못한 일이 발생했거나 할 것으로 예측된다는 것을 알림. 기본설정.
+  - ERROR : 중대한 문제로 인해 소프트웨어가 몇몇 기능들을 수행하지 못함을 알림. 
+  - CRITICAL : 작동이 불가능한 수준의 심각한 에러가 발생함을 알림.
+- 중요구성요소 : logger, handler, filter, formatter. Log사건정보들은 LogRecord Instance안에 있는 위 요소들 사이에서 전송. formatter(format)와 handlers등의 설정은 json파일로 만들어 관리하면 좋음.
+  - Logger : Logger 클래스의 인스턴스. logging의 시작. 각 logger는 name을 갖게되고, 엘리멘트 형식으로(.을 통해)계층적 관계를 형성하게 되며 설정을 변화시키지 않으면 자식이 부모의 여러 특성을 물려받게 됨.
+  - Handler : log기록들이 표시/기록될 장소를 결정. log메세지의 level에 따라 지정된 위치에 전달하는 역할을 수행. 기능과 목적에 따라 여러개를 가질 수 있으며, 각 handler는 다른 level과 format을 가질 수 도 있음.
+  - Filter : 간단히 사용할 때는 잘 쓰이지는 않으나 level보다 복잡한 필터링을 원할때(어떤 log기록이 출력될지 정할때)사용됨. 
+  - formatter : 실제 출력형식을 결정함.
+
+- logger = logging.getLogger(name) : logging 인스턴스인 logger 생성. 아무것도 입력하지 않으면 root logger가 생성됨.
+- logger.setLevel(level) : logger에 level 부여. 지정한 level이상의 메세지를 출력할 수 있게 됨. logging.Level로 level객체를 꺼낼 수 있음.
+- logger.addHandler(핸들러) : 로거에 핸들러 설정. 핸들러는 기능과 목적에 따라 여러개 일 수 있으며, 각 핸들러는 다른 level과 format을 가질 수 있음.
+- logger.info(Message) : info 메세지를 콘솔에 출력. 이외에도 각 level을 소문자로 바꿔 메서드로 사용하면 해당 level의 메세지를 출력할 수 있음.
+- logger.exception(Message) : 에러메세지를 설정.
+- logger.propagate = False : 자식으로의 전파(연결)을 하지 않게 함.
+
+- logging.StreamHandler() : stream(console)에 기록하는 스트림 핸들러 객체를 생성.
+- logging.FileHandler(file_name) : 파일에 기록하는 파일 핸들러 객체를 생성.
+- handler.setLevle(레벨) : 핸들러에 레벨 설정.
+- handler.setFormatter(formatter) : formatter 설정.
+
+- logging.Formatter(fmt, datefmt, style) : 메세지의 출력형식을 결정하는 Formatter생성. 각 log기록들은 LogRecord객체의 속성으로 정의되어 있으며(asctime-인간이 읽을 수 있는 시간 등)format정의에 활용됨(자세한건 공식문서).
+  fmt(메세지 출력 형태, None이면 raw), datefmt(날짜, None이면 '%Y-%m-%d %H:%M:%S'), style([%, {, $]중 하나. fmt의 스타일을 결정)의 인자를 사용할 수 있음. 
 
 # sys
 - sys : 파이썬 인터프리터를 제어할 수 있음.
