@@ -122,6 +122,9 @@
 
 ## model
 - 가설 선언 후 비용함수, 옵티마이저를 이용해 가중치, 편향등을 갱신해 올바른 값을 찾음(비용함수를 미분해 grandient(기울기)계산). 
+- torch.nn.functional : torch.nn이 클래스로 정의되어있는 것과 NN관련 기능들이 함수로 정의되어있는 클래스. `import torch.nn.functional`로 import하지 않으면 사용할 수 없음. 주로 as F로 사용됨.
+  nn으로 구현한 클래스의 경우는 attribure를 활용해 state를 저장하고 활용할 수 있고, torch.nn.functional로 구현한 함수는 인스턴스화 시킬 필요 없이 사용이 가능하다는 장점이 있음. 두 방식 모두 결과는 동일하게 제공됨.
+- Loss : input(pred)는 float, target(y)는 long이여야 하며, loss가 스칼라가 아니라면 loss.backward(gradient=loss)로 backward를 써야 함.
 
 - 모델.parameters() : 모델의 파라미터 출력. w와 b가 순서대로 출력됨.
 - 텐서.backword() : 역전파. 해당 수식의 텐서(w)에 대한 기울기를 계산. w가 속한 수식을 w로 미분(주로 loss에 수행). 해당 텐서 기준 연쇄법칙 적용. 
@@ -177,11 +180,13 @@ class CustomDataset(Dataset):
 - torch.nn.functional.sigmoid(텐서) : 시그모이드 사용. torch.sigmoid(텐서(식))로도 사용가능. 
 - torch.nn.functional.softmax(텐서) : 소프트맥스 사용. dim=i매개변수(적용될 차원 선택)사용가능. 손실함수에 포함되어있어 잘 쓰이지 않음.
 - torch.nn.functional.log_softmax(텐서) : 로그 소프트맥스 사용. torch.log(F.softmax())와 동일.
+- torch.nn.functional.log_softmax(input) : logarithm을 따르는 softmax를 적용함. dim 인자로 계산될 차원을 정할 수 있음. 수학적으로는 log(softmax(x))와 동일하나 둘을 따로 하는것은 느리고 숫자적으로 불안정하므로 사용하는 대안공식.
 
 ### loss
 - torch.nn.functional.mse_loss(prediction, label) : MSE(평균제곱오차) 손실함수 사용.
-- torch.nn.functional.binary_cross_entropy(prediction, label) : 이진분류(로지스틱 회귀)의 손실함수 사용. reduction인자에 'sum'등을 넣어 출력에 적용할 축소를 지정할 수 있음.
+- torch.nn.functional.binary_cross_entropy(prediction, label) : 이진분류(로지스틱 회귀)의 손실함수 사용. reduction인자에 'sum'등을 넣어 출력에 적용할 축소를 지정할 수 있음. nn에서는 BCELoss임.
 - torch.nn.functional.cross_entropy(prediction, label) : cross-entropy 손실함수 사용. F.nll_loss(F.log_softmax(z, dim=1), y)와 동일함.
+- torch.nn.functional.nll_loss(input, target) : negative log likehood loss. C클래스 분류 task에서 사용. 
 
 ### optimizer
 - 옵티마이저.zero_grad() : gradient 0으로 초기화.
@@ -223,34 +228,27 @@ for i in range(epoch):
 - torch.optim.lr_scheduler.SequentialLR(optimizer, schedulers, milestones) : milestones의 간격대로 주어진 스케줄러를 순차적으로 적용함.
 - torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode) : 입력한 성능평가지표가 patience만큼 향상되지 않으면 lr을 줄임. optim에 momentum을 설정해야 하고, scheduler.step(평가지표)로 사용함.
 
-### nn(layers)
+### layers
 - torch.nn.Linear(input_dim, output_dim) : 선형회귀모델/전결합층 사용. 이대로 모델로 쓸 수도, 모델에 층으로 넣을수도 있음. bias=bool 로 편향 존재여부 지정가능.
+
 - torch.nn.Conv2d(input_dim, output_dim, kernel_size) : (2차원)CNN층 사용. i의 커널사이즈를 가짐. padding, stride등도 설정해줄 수 있음. 
 - torch.nn.MaxPool2d(kernel_size, stride) : (2차원)맥스풀링층 사용. 하나의 정수만 넣으면 커널사이즈와 스트라이드 둘 다 해당값으로 지정됨.
+
 - torch.nn.RNN(input_size, hidden_size) : RNN층 사용. batch_first(bool, 입력텐서의 첫번째 차원은 배치크기), 
   num_layer(int, 은닉층개수(깊은RNN으로 만듦)), bidirectional(bool, 양방향순환신경망으로 만듦), batch_first(bool, 사용시(batch, input_dim, hidden_size)가 됨), dropout(0~1, 드롭아웃 비율)인자 사용가능.  
 - torch.nn.LSTM(input_size(vocab_size), hidden_size) : LSTM층 사용. RNN계열 모델은 사용시 h_0(LSTM은 c_0도)을 같이 입력해야 하며, 각 변수는 zeros(D*num_layers, batch_size, hidden_size, requires_grad=False)로 초기화되야 함(D = 2 if bidirectional else 1).
   출력은 [output, (h_0, c_0)]가 되며, output은 (batch_size, input_dim, D\*hidden_size)(batch_first=True)를 가지고 각 t에 따른 마지막 h_t를 담으며, h_n/c_n은 (D\*num_layers, batch, hidden)의 차원을 가지고 마지막 step의 state들이 담김.
-- torch.nn.GRU(input_size, hidden_size) : GRU층 사용. RNN과 동일한 인자 사용 가능. 
+- torch.nn.GRU(input_size, hidden_size) : GRU층 사용. RNN과 동일하게 h_0를 입력으로 넣어야 하며, x와 h_c를 반환함. RNN과 동일한 인자 사용 가능. 
+- torch.nn.TransformerEncoderLayer(d_model(입력차원), nhead(멀티헤드어텐션 헤드수)) : 트랜스포머의 인코더 층을 생성. 셀프어텐션과 FF층으로 이뤄져 있음. 이외에도 dim_feedforward, dropout, activation, batch_first등의 인자를 사용가능함.
+- torch.nn.TransformerEncoder(encoder_layer, num_layers) : encoder_layer를 num_layers개 쌓은 트랜스포머 인코더 생성.
+- torch.nn.TransformerDecocerLayer(d_model, nhead) : 트랜스포머 디코더 층 생성. 셀프어텐션과 멀티헤드어텐션, FF층으로 구성. target과 memory(인코더 은닉상태)를 입력해야 함.
+- torch.nn.TransformerDecocer(decoder_layer, num_layers) : decoder_layer를 num_layers개 쌓은 트랜스포머 디코더 생성.
+- torch.nn.Transformer(nhead, num_encoder_layers) : 트랜스포머 생성. 필요한 모든 애트리뷰트를 수정할 수 있음. 
 
 - torch.nn.Embedding(num_embedding, embedding_dim) : 학습가능한 임베딩 테이블 생성. .weight 로 벡터 확인 가능. 이후 층에서 input_size를 embed_dim으로 변경해주어야 함.
   num_embedidng(단어집합 크기(임베딩할 단어개수)), embedding_dim(임베딩벡터의 차원)와 선택적으로 padding_idx(패딩을 위한 토큰의 인덱스)인자 사용가능.
 - torch.nn.Embedding.from_pretrained(임베딩 벡터(필드.vocab.vectors), freeze=False) : 사전휸련된 임베딩벡터를 사용해 임베딩층 생성.
-- torch.nn.Dropout(f) : f의 비율로 드롭아웃을 시행하는 층 사용. 
-
-- torch.nn.Sigmoid() : 활성화함수 시그모이드 층을 쌓음. Linear() > Sigmoid() 로 로지스틱 회귀 구현 가능.
-- torch.nn.ReLU() : 활성화함수 ReLU(렐루)층을 쌓음.
-  
-- torch.nn.CrossEntropyLoss() : cross-entropy 손실함수 층 사용. softmax함수가 포함되어있음. 
-  ignore_index인자에 무시할 토큰의 인덱스를 전달해(pad 등)손실함수가 연산에 포함시키지 않게 할 수 있음.
-  CrossentropyLoss는 input(pred)는 float, target(y)는 long이여야 하며, loss가 스칼라가 아니라면 loss_.backward(gradient=loss_)로 backward를 써야 한다.
-- torch.nn.BCELoss() : Binary-cross-entropy 손실함수 층 사용.
-
-### functional
-- torch.nn.functional : torch.nn이 클래스로 정의되어있는 것과 NN관련 기능들이 함수로 정의되어있는 클래스. `import torch.nn.functional`로 import하지 않으면 사용할 수 없음. 주로 as F로 사용됨.
-  nn으로 구현한 클래스의 경우는 attribure를 활용해 state를 저장하고 활용할 수 있고, torch.nn.functional로 구현한 함수는 인스턴스화 시킬 필요 없이 사용이 가능하다는 장점이 있음. 두 방식 모두 결과는 동일하게 제공됨.
-- F.log_softmax(input) : logarithm을 따르는 softmax를 적용함. dim 인자로 계산될 차원을 정할 수 있음. 수학적으로는 log(softmax(x))와 동일하나 둘을 따로 하는것은 느리고 숫자적으로 불안정하므로 사용하는 대안공식.
-- F.nll_loss(input, target) : negative log likehood loss. C클래스 분류 task에서 사용. 
+- torch.nn.Dropout(f) : f의 비율로 드롭아웃을 시행하는 층 사용. 포지셔널 임베딩과 마스크드 임베딩은 지원하지 않기때문에, 따로 해줘야만 함.
 
 ### Sequential
 - torch.nn.Sequential(module) : 시퀀셜 모델 생성. 클래스 형태로 구현되는 모델에서 층의 역할을 함. 아주아주 간단한 모델의 경우엔 모델 그 자체로 이용되기도 함.
