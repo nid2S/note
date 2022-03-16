@@ -800,7 +800,6 @@ for number , name in zip(number_l,name_l):
 - add_argument예시 : [parser.add_argument('-b', '--batch-size', type=int, default=8, metavar='N', help='input batch size for training (default: 8)')]
 - args = parser.parse_args() : 인자를 파싱. 명령행 검사 -> 인자를 적절한 형으로 변환 -> 적절한 액션을 호출. sys.argv에서 자동으로 명령행인자 결정.
 - args.accumulate(args.인자명) : 해당 인자의 값을 가져옴.
-- args.log.write() : (?)
 
 - sys.argv : 파이썬 스크립트에 전달된 명령줄 인자의 리스트. argv[0\]은 스크립트 이름, 인터프리터에 이름이 전달되지 않으면 빈 문자열.
 
@@ -956,8 +955,9 @@ for number , name in zip(number_l,name_l):
   유저명/유저명 레포지토리에 README.md를 넣어 깃허브의 프로필을 꾸밀 수 있음.  
 
 
-# scp
+# scp/ssh
 - (복사할 파일의 경로에서) scp file.txt(파일명) temp_1@10.120.72.239:/home/temp_1(파일을 복사해 넣을 경로) : 파일을 복사해 넣음.
+- ssh ip : 해당 ip로 접속. -p 인자로 포트를 지정하거나 할 수 있음. usage -> `ssh temp_1@10.120.72.237 -p 22` 
 
 # linux
 - rm -r dir1/ : dir1디렉토리 삭제. 파일이 들어있는 디렉토리도 삭제함. -rf 로 사용하게 되면 강제로, -ri로 사용하게 되면 하나하나 확인하며 삭제하게 됨.

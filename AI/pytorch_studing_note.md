@@ -176,17 +176,17 @@ class CustomDataset(Dataset):
 ```
 
 ### activation function
-- torch.nn.functional.relu(텐서) : 렐루(ReLU)사용. F.relu(층) 처럼 사용. 모델 제작시 활성화 함수를 꼭 사용해 주어야 함.
-- torch.nn.functional.sigmoid(텐서) : 시그모이드 사용. torch.sigmoid(텐서(식))로도 사용가능. 
-- torch.nn.functional.softmax(텐서) : 소프트맥스 사용. dim=i매개변수(적용될 차원 선택)사용가능. 손실함수에 포함되어있어 잘 쓰이지 않음.
-- torch.nn.functional.log_softmax(텐서) : 로그 소프트맥스 사용. torch.log(F.softmax())와 동일.
-- torch.nn.functional.log_softmax(input) : logarithm을 따르는 softmax를 적용함. dim 인자로 계산될 차원을 정할 수 있음. 수학적으로는 log(softmax(x))와 동일하나 둘을 따로 하는것은 느리고 숫자적으로 불안정하므로 사용하는 대안공식.
+- torch.nn.functional.F.relu(텐서) : 렐루(ReLU)사용. F.relu(층) 처럼 사용. 모델 제작시 활성화 함수를 꼭 사용해 주어야 함.
+- torch.nn.functional.F.sigmoid(텐서) : 시그모이드 사용. torch.sigmoid(텐서(식))로도 사용가능. 
+- torch.nn.functional.F.softmax(텐서) : 소프트맥스 사용. dim=i매개변수(적용될 차원 선택)사용가능. 손실함수에 포함되어있어 잘 쓰이지 않음.
+- torch.nn.functional.F.log_softmax(텐서) : 로그 소프트맥스 사용. torch.log(F.softmax())와 동일.
+- torch.nn.functional.F.log_softmax(input) : logarithm을 따르는 softmax를 적용함. dim 인자로 계산될 차원을 정할 수 있음. 수학적으로는 log(softmax(x))와 동일하나 둘을 따로 하는것은 느리고 숫자적으로 불안정하므로 사용하는 대안공식.
 
 ### loss
-- torch.nn.functional.mse_loss(prediction, label) : MSE(평균제곱오차) 손실함수 사용.
-- torch.nn.functional.binary_cross_entropy(prediction, label) : 이진분류(로지스틱 회귀)의 손실함수 사용. reduction인자에 'sum'등을 넣어 출력에 적용할 축소를 지정할 수 있음. nn에서는 BCELoss임.
-- torch.nn.functional.cross_entropy(prediction, label) : cross-entropy 손실함수 사용. F.nll_loss(F.log_softmax(z, dim=1), y)와 동일함.
-- torch.nn.functional.nll_loss(input, target) : negative log likehood loss. C클래스 분류 task에서 사용. 
+- torch.nn.functional.F.mse_loss(prediction, label) : MSE(평균제곱오차) 손실함수 사용.
+- torch.nn.functional.F.binary_cross_entropy(prediction, label) : 이진분류(로지스틱 회귀)의 손실함수 사용. reduction인자에 'sum'등을 넣어 출력에 적용할 축소를 지정할 수 있음. nn에서는 BCELoss임.
+- torch.nn.functional.F.cross_entropy(prediction, label) : cross-entropy 손실함수 사용. F.nll_loss(F.log_softmax(z, dim=1), y)와 동일함.
+- torch.nn.functional.F.nll_loss(input, target) : negative log likehood loss. C클래스 분류 task에서 사용. 
 
 ### optimizer
 - 옵티마이저.zero_grad() : gradient 0으로 초기화.
@@ -411,6 +411,7 @@ accuracy = count/len(dataset.dataset)
 - trainer.test(test_dataloader) : LightningModule모델 테스트. 따로 테스트할 모델을 지정하지 않으면 val_dataset을 통해 구한 best모델로 test를 진행함.
 
 ### callbacks
+- 커스텀 콜백 : pytorch_lightning.Callback를 상속받는 클래스를 제작해 LightningModule과 같은(on_train_batch_start등) 함수를 정의해 콜백을 생성할 수 있음.
 - pytorch_lightning.callbacks.ModelCheckpoint() : 체크포인트 저장을 커스텀하기 위해 사용하는 콜백. 설정하지 않아도 각 버전마다 체크포인트를 저장함. %_step()함수의 log로 판별함.
   dir_path, file_name, verbose(저장결과 출력여부), save_last(마지막 체크포인트 저장여부), save_top_k(save_last제외 저장할 체크포인트 개수), monitor, mode등의 매개변수 사용.
 - pytorch_lightning.callbacks.EarlyStopping() : EarlyStopping사용. monitor, patience, verbose, mode등의 매개변수 사용가능. 스네이크 표기법으로 된 함수도 존재함. %_step()함수의 log로 판별함.
@@ -428,10 +429,10 @@ accuracy = count/len(dataset.dataset)
 - self.log(변수이름="", 값) : 하나의 값(스칼라)을 수동으로 로깅. 확인하고자 하는 metric(loss등)을 기록. batch_start가 포함된 함수를 제외한 모든 위치에서 기록함.
   on_step(bool, step마다 기록), on_epoch(bool, Epoch마다 기록), prog_bar(bool, 진행률표시줄에 메트릭 기록), logger(bool, 로거)의 옵션 사용가능.
 - self.log_dict(metrics) : 여러개의 변수(스칼라)를 수동로깅. metrics는 {변수이름: 값} 형태의 dict.
-- tensorboard = self.logger.experiment : 히스토그램, 텍스트, 이미지등과 같이 스칼라가 아닌 모든것을 기록하기 위해 로거객체를 직접 사용.
-- tensorboard.add_image() : 로거객체에 이미지 기록.
-- tensorboard.add_hitogram(...) : 로거객체에 히스토그램 기록.
-- tensorboard.add_figure(...) : 로거객체에 수치(figure) 기록.
+- logger = self.logger.experiment : 히스토그램, 텍스트, 이미지등과 같이 스칼라가 아닌 모든것을 기록하기 위해 로거객체를 직접 사용.
+- logger.add_image() : 로거객체에 이미지 기록.
+- logger.add_hitogram(...) : 로거객체에 히스토그램 기록.
+- logger.add_figure(...) : 로거객체에 수치(figure) 기록.
 
 ### Lightning Module
 - LightningModule : 모델 내부의 구조를 설계하는 research/science클래스. 모델구조/데이터전처리/손실함수 설정 등을 통해 모델 초기화/정의. 
