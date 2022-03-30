@@ -687,25 +687,6 @@ print('최적화 완료')
 - multi armed bandit : 여러개의 슬롯머신중 가장 많은 보상을 주는 기계를 찾아가는 강화학습 모델. 
   중간 중간 기계의 보상 설정 값이 변화하는 상황이 발생하며, 강화학습의 이해에 가장 좋은 방법.
 
-## GCP
-- GCP : 구글 클라우드 플랫폼. 관리형 JupyterNoteBook인 AI PlatformNotebook, Kubeflow Pipelines인 AI Platform Pipeline, AI Platform이 속해있어, AI의 학습, 실험, 배포가 가능함.
-  현재는 Vertex AI(통합 API, 클라이언트 라이브러리, 사용자 인터페이스, AutoML, AI Platform)를 통해 지원되고 있음.
-- 사용방법(주피터) : 먼저 프로젝트를 생성한 뒤 API(ComputeEngineAPI)를 활성화시킴 -> 인스턴스 생성(타입은 변경,추가가 가능) -> OpenJupyterLab 에서 AI PlatformNotebook 사용가능. 
-- 시용방법(파이프라인) : AI Platform > Pipelines에서 인스턴스 생성(노트북과 동일한 프로젝트) -> 클러스터 생성 ->  설치 후 설정, 배포(컴포넌츠 설치)로 Kubeflow Pipelines 사용가능.
-- 사용방법(Cloud Stroage) : AI Platform Pipelines 설치시 생성된 버킷(Storage > Browser에서 확인가능)에 필요 폴더를 생성한 뒤 사용가능. 데이터/모델등의 저장/로드에 사용가능.
-
-- DockerFile작성/ContainerRegistry에 등록 : Docker로 파이프라인이 구성되어, 학습을 위한 각 스텝의 코드는 언어무관함(간략하게 lightweight pipeline사용도 가능).
-  remote로 학습수행을 위해 데이터의 입/출력은 별개의 클라우드스토리지를 활용하도록 해야 함. 각 스텝의 모듈이 독립적으로 외부저장소에서 데이터를 주고받도록 하면 의존성을 줄일 수 있음.
-- 수행방법 : Dockerize를 위한 Dockerfile을 비롯한 필요 파일들을 가지고, 
-- 파일 역할 : Dockerfile-Dockerize, setup.py-원격학습시의 의존성정의, __init\_\_.py-패키지구조를 나타냄/AI Platform Job Submit이용을 위해 필요, runjob.sh-독립적 원격학습(쉘로 작성). 
-
-- ML PipeLine생성 : (SDK기준)TFX를 사용하거나, KFP(큐브플로우 파이프라인)SDK를 사용하는 것으로 나눌 수 있음.
-- kfp : Kubeflow Pipeline. `pip install kfp`로 설치가능. 이후 클라우드에서 학습/갱신을 하거나 AI플랫폼 Job에서 학습 진행 후 AI플랫폼 모델환경에 버전을 생성해 배포할 수 있음.
-
-- !gcloud ai-platform models create 이름 옴션 : ai플랫폼에 업로드.
-- !gcloud beta ai-platform versions create 옴션 : 모델 버전을 생성.
-- !gcloud ai-platform prediction 옵션 : ai플랫폼에 업로드했던 모델 로드 후 예측.
-
 ## ONNX
 - ONNX(Open Neural Network Exchange) : Tensorflow, Pytorch등 서로 다른 DNN프레임워크 환경에서 만들어진 모델들을 서로 호환되게 사용할 수 있도록 만들어진 공유 플랫폼.
   TF에서 어떤 모델을 만들고 해당 모델을 ONNX그래프로 export하면 Pytorch에서도 그 모델을 import해 사용할 수 있음. 순전파시의 함수/호출들에 최적화된 그래프인 trace/script를 생성해 변환함.
@@ -726,6 +707,45 @@ print('최적화 완료')
 
 - PyTorch에서 export과정 : torch.onnx.export 함수 호출시 Pytorch의 JIT컴파일러인 TorchScript를 통해 모델의 forward함수에서 실행되는 코드들에 대한 IR을 담고있는 trace/script를 생성.
   생성된 trace/script는 ONNX exporter를 통해 ONNX IR(중간표현)로 변환되고, 여기에서 한번 더 graph optimization이 이뤄져 최종 생성된 ONNX그래프는 .onnx포맷으로 저장됨.
+
+# GCP
+- GCP : 구글 클라우드 플랫폼. 관리형 JupyterNoteBook인 AI PlatformNotebook, Kubeflow Pipelines인 AI Platform Pipeline, AI Platform이 속해있어, AI의 학습, 실험, 배포가 가능함.
+### Vertex AI
+- Vertex AI : 통합 API, 클라이언트 라이브러리, 사용자 인터페이스, AutoML, AI Platform가 지원되는 GCP의 통합 서비스.
+- 사용방법(주피터) : 먼저 프로젝트를 생성한 뒤 API(ComputeEngineAPI)를 활성화시킴 -> 인스턴스 생성(타입은 변경,추가가 가능) -> OpenJupyterLab 에서 AI PlatformNotebook 사용가능. 
+- 시용방법(파이프라인) : AI Platform > Pipelines에서 인스턴스 생성(노트북과 동일한 프로젝트) -> 클러스터 생성 ->  설치 후 설정, 배포(컴포넌츠 설치)로 Kubeflow Pipelines 사용가능.
+- 사용방법(Cloud Stroage) : AI Platform Pipelines 설치시 생성된 버킷(Storage > Browser에서 확인가능)에 필요 폴더를 생성한 뒤 사용가능. 데이터/모델등의 저장/로드에 사용가능.
+
+- DockerFile작성/ContainerRegistry에 등록 : Docker로 파이프라인이 구성되어, 학습을 위한 각 스텝의 코드는 언어무관함(간략하게 lightweight pipeline사용도 가능).
+  remote로 학습수행을 위해 데이터의 입/출력은 별개의 클라우드스토리지를 활용하도록 해야 함. 각 스텝의 모듈이 독립적으로 외부저장소에서 데이터를 주고받도록 하면 의존성을 줄일 수 있음.
+- 수행방법 : Dockerize를 위한 Dockerfile을 비롯한 필요 파일들을 가지고, 
+- 파일 역할 : Dockerfile-Dockerize, setup.py-원격학습시의 의존성정의, __init\_\_.py-패키지구조를 나타냄/AI Platform Job Submit이용을 위해 필요, runjob.sh-독립적 원격학습(쉘로 작성). 
+
+- ML PipeLine생성 : (SDK기준)TFX를 사용하거나, KFP(큐브플로우 파이프라인)SDK를 사용하는 것으로 나눌 수 있음.
+- kfp : Kubeflow Pipeline. `pip install kfp`로 설치가능. 이후 클라우드에서 학습/갱신을 하거나 AI플랫폼 Job에서 학습 진행 후 AI플랫폼 모델환경에 버전을 생성해 배포할 수 있음.
+
+- !gcloud ai-platform models create 이름 옴션 : ai플랫폼에 업로드.
+- !gcloud beta ai-platform versions create 옴션 : 모델 버전을 생성.
+- !gcloud ai-platform prediction 옵션 : ai플랫폼에 업로드했던 모델 로드 후 예측.
+
+### CloudTPU
+- [튜토리얼(PyTorch)](https://cloud.google.com/tpu/docs/run-calculation-pytorch)
+- CloudTPU : Google Cloud Platform에서 지원하는 Cloud TPU. TPU vm과 TPU노드 두 종류가 있음. 사용하기 위해선 GCP계정을 만들고 Goole Cloud CLI를 설치한 뒤 gcloud명령어를 구성해야 함.
+- 사전 설정 : [여기](https://cloud.google.com/tpu/docs/setup-gcp-account) 에 나와있는 대로 GoogleCloud계정과 CloudTPU프로젝트를 만든 뒤, Compute Engine 및 Cloud TPU API를 활성화해야 사용할 수 있음.
+- 해제 : `exit`명령어로 Compute Engine인스턴스 연결을 해제할 수 있고, 이 후 삭제까지 해야 리소스 비용이 계정에 청구되지 않음.
+
+- `gcloud alpha compute tpus tpu-vm create tpu-name` : TPU VM 시작. zone(만들려는 영역), accelerator-type(생성할 Cloud TPU 유형), version(버전)등의 명령어 플래그를 사용할 수 있음.
+- `gcloud alpha compute tpus tpu-vm ssh tpu-name` : Cloud TPU VM에 연결. 해당 명령어로 TPU환경의 가상 환경에 접속하게 됨.
+- `export XRT_TPU_CONFIG="localservice;0;localhost:51011"` : Torch-XLA 환경을 구성함. 이 후 torch_xla 라이브러리를 이용해 XLA텐서로 타입을 바꾼 코드파일를 cmd에서 실행시켜주면 됨.
+- `gcloud alpha compute tpus tpu-vm delete tpu-name` : 클라우드 TPU삭제. exit 명령어로 인스턴스에서 연결을 해제한 뒤에 사용해야 함.
+
+- `gcloud compute instances create tpu-name` : TPU노드 생성을 위한 Compute Engine VM 인스턴스 생성.
+- `gcloud compute tpus create tpu-name` : TPU인스턴스 생성.
+- `gcloud compute ssh tpu-name --zone-name` : Cloud TPU VM에 연결
+- `gcloud compute tpus describe tpu-name --zone=zone-name` : TPU노드의 ip주소를 찾음.
+- `conda activate torch-xla-1.11` -> `export TPU_IP_ADDRESS=your-tpu-ip-address` -> `export XRT_TPU_CONFIG="tpu_worker;0;$TPU_IP_ADDRESS:8470"` 
+  : Torch_XLA 환경을 구성함.
+- `gcloud compute tpus execution-groups delete tpu-name` : 클라우드 TPU삭제. exit 명령어로 인스턴스에서 연결을 해제한 뒤에 사용해야 함.
 
 # distribution
 ## API

@@ -10,6 +10,11 @@
   python3는 Unicode로 저장되고, 정수처리 기능이 개선(5/2==2.5)되었으며 쓰레기 수집 및 메모리 할당 기능이 개선되었고 기존 목록을 기반으로 목록을 만들 수 있게 되었음.
 - 속도 : 파이썬은 인터프리터 언어이기에 느림, 실무에서는 주로 쓰는 함수를 C등으로 래핑해 사용한다고 하며, 가장 좋은건 오픈소스를 쓰는 것이라고 함. 
 
+- 명령형 코드 : 문제 해결에 필요한 모든 단계를 일일이 직접 선언하는 코드.
+- 선언형 코드 : 명령형 코드와 같은 작업을 이미 정의된 함수로 처리함. 명령형 코드 위에 존재.
+- 함수형 프로그래밍 : 순수함수(외부 상태값 참조, 외부값 변경 X), 비상태불변성(전달된 값을 변경하는게 아닌, 새로운 상태를 만들어 반환)등의 특징으로 인해 sideEffect(부작용)을 방지.
+  Expressions Only(if, for, switch등이 없이 expression으로만 사용), 함수를 변수에 할당/함수에 인자로 전달하거나 리턴(1급함수)/함수자체를 인자로 전달하거나 또다른 함수를 리턴하는(고차함수)속성을 가지고 있어야 함.
+
 # print
 ***
 - print(a,b,c,sep=',') > 사이를 sep 로
@@ -933,9 +938,14 @@ for number , name in zip(number_l,name_l):
 - git diff : 마지막 수정 이후 추가한 내용을 알려줌
 - git add (더할 파일) : 필드(커밋시 git에 등록될 파일이 있는 공간)에 올림
 - git commit -m "(버전-설명-)" : 컴퓨터 내의 git에 등록.
-- git log : 생성한 버전 보여줌
-- git push : 컴퓨터에 저장된 git파일을 깃허브에 등록.
-- git status : 상태(수정한 부분)보여줌
+- git commit --amend : 커밋메세지를 수정함.
+- git log : 생성한 버전을 보여줌.
+- git push : 컴퓨터에 저장된 git파일을 깃허브에 등록. remote로 설정한 원격 저장소에 push.
+- git push remote명(origin) branch명(master) : remote에 branch를 push. 커밋번호:branch명 으로 특정 커밋까지만 push 할 수 도 있음.
+- git status : 상태(수정한 부분)를 보여줌
+- git reset HEAD [file명] : add되어 stage에 올라가있는 파일을 Unstage함(add를 취소함). file명을 생략하면 모든 파일이 취소됨.
+- git reset HEAD^ : 최근의 commit을 취소하고 해당 파일을 Unstaged상태로 보존함. --mixed 옵션을 사용한것과 같으며, --soft는 staged상태로 보존, --hard를 사용하면 unstaged상태로 삭제됨.
+- git reset HEAD~i : 최근 i개의 commit을 취소함.
 
 - .gitignore : 깃에서 관리하지 않을, 무시할 파일/디렉토리를 정의한 파일. 프로젝트 최상위에 존재해야 함.
 - 규칙 : '#'로 시작하는 라인은 무시 | 평범한 파일형식(*.a등)사용 | '/'로 시작하면 하위 디렉토리에 미적용('/dir/\*.a'면 /dir/subdir/의 a파일은 미적용)
@@ -948,7 +958,7 @@ for number , name in zip(number_l,name_l):
 
 - BFG Repo-Cleaner : 원치 않는 데이터 제거 등을 지원하는 오픈소스 도구.
 - [java -jar (bfg파일경로+bfg파일명).jar --strip-blobs-bigger-than 100M (.git파일명).git] : 해당 깃 레포지토리 사용. 제거할 파일이 있는 레포지토리를 사용해야 함.
-- [java -jar (bfg파일경로+bfg파일명).jar --delete-files(-D) (삭제할파일)] : 삭제 파일 등록. 파일 삭제.
+- [java -jar (bfg파일경로+bfg파일명).jar --delete-files(-D) (삭제할파일)] : 삭제 파일 등록. 파일 삭제. 경로는 이런식(D:\Git\bfg-1.14.0.jar).
 - [git reflog expire --expire=now --all && git gc --prune=now --aggressive] : 파일 삭제 확정. 이 이후 push를 실행하면 됨. 
 
 - README.md : 각 레포지토리 최상단(.gitignore와 같은 위치)에 README.md라는 파일이 있으면 해당 파일이 README로 깃허브에 표시되고, 

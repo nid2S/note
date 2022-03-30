@@ -23,6 +23,7 @@
 
 ### XLA
 - torch_xla : Pytorch를 TPU등의 XLA(Accelerated Linear Algebra)장치에서 실행시키기 위한 라이브러리. 새로운 xla장치유형을 추가시키며, 이는 다른 장치유형처럼 작동함. bfloat16 데이터형을 사용가능(XLA_USE_BF16환경변수로 제어).
+  `!pip install cloud-tpu-client==0.10 torch==1.9.0 https://storage.googleapis.com/tpu-pytorch/wheels/torch_xla-1.9-cp37-cp37m-linux_x86_64.whl` 으로 리눅스 환경(colab)에서 설치할 수 있음.
 - XLA_tensor : 다른 텐서와 달리 결과가 필요할때까지 그래프에 작업을 기록. 그래프를 자동으로 구성해 XLA장치로 보내고, 장치와 CPU간 데이터를 복사할때 동기화함. 베리어를 넣으면 명시적으로 동기화됨.
 
 - torch_xla.core.xla_mode.xla_device() : xla장치 유형을 반환. 텐서생성시 device매개변수에 넣거나 to메서드로 유형을 변경할 수 있음.
@@ -127,9 +128,9 @@
 - Loss : input(pred)는 float, target(y)는 long이여야 하며, loss가 스칼라가 아니라면 loss.backward(gradient=loss)로 backward를 써야 함.
 
 - 모델.parameters() : 모델의 파라미터 출력. w와 b가 순서대로 출력됨.
-- 텐서.backword() : 역전파. 해당 수식의 텐서(w)에 대한 기울기를 계산. w가 속한 수식을 w로 미분(주로 loss에 수행). 해당 텐서 기준 연쇄법칙 적용. 
+- 텐서.backward() : 역전파. 해당 수식의 텐서(w)에 대한 기울기를 계산. w가 속한 수식을 w로 미분(주로 loss에 수행). 해당 텐서 기준 연쇄법칙 적용. 
 - 모델.eval() : 모델을 추론모드로 전환. 모델 test시 사용.
-- torch.no_grad() : 미분을 하지 않음. 파라미터를 갱신하지 않는 test시 사용.  
+- torch.no_grad() : 미분을 하지 않음. 파라미터를 갱신하지 않는 test시 사용. `with torch.no_grad` 식으로 사용하며, 내부에서 사용된 텐서들은 전부 require_grad=False.
 - torch.nn.init.xavier_uniform_(self.층.weight) : 특정 층 한정으로 가중치 초기화. 형태 변경을 위한 전결합층 등 파라미터 갱신을 원하지 않는 층에 사용.
 
 - torch.manual_seed(i) : 랜덤시드 고정.
@@ -185,7 +186,7 @@ class CustomDataset(Dataset):
 ### loss
 - torch.nn.functional.F.mse_loss(prediction, label) : MSE(평균제곱오차) 손실함수 사용.
 - torch.nn.functional.F.binary_cross_entropy(prediction, label) : 이진분류(로지스틱 회귀)의 손실함수 사용. reduction인자에 'sum'등을 넣어 출력에 적용할 축소를 지정할 수 있음. nn에서는 BCELoss임.
-- torch.nn.functional.F.cross_entropy(prediction, label) : cross-entropy 손실함수 사용. F.nll_loss(F.log_softmax(z, dim=1), y)와 동일함.
+- torch.nn.functional.F.cross_entropy(prediction, label) : cross-entropy 손실함수 사용. F.nll_loss(F.log_softmax(z, dim=1), y)와 동일함. weight 매개변수에 텐서를 전달해 레이블들에 가중치(특정 레이블이 더 큰 영향을 끼치는)를 설정할 수 있음.
 - torch.nn.functional.F.nll_loss(input, target) : negative log likehood loss. C클래스 분류 task에서 사용. 
 
 ### optimizer
@@ -245,7 +246,7 @@ for i in range(epoch):
 - torch.nn.TransformerDecocer(decoder_layer, num_layers) : decoder_layer를 num_layers개 쌓은 트랜스포머 디코더 생성.
 - torch.nn.Transformer(nhead, num_encoder_layers) : 트랜스포머 생성. 필요한 모든 애트리뷰트를 수정할 수 있음. 
 
-- torch.nn.Embedding(num_embedding, embedding_dim) : 학습가능한 임베딩 테이블 생성. .weight 로 벡터 확인 가능. 이후 층에서 input_size를 embed_dim으로 변경해주어야 함.
+- torch.nn.Embedding(num_embedding, embedding_dim) : 학습가능한 임베딩 테이블 생성. .weight 로 벡터 확인 가능. 이후 층에서 input_size를 embed_dim으로 변경해주어야 함. 임베딩 층을 사용할 것이라면, X를 int/Long Tensor로 해야 함.
   num_embedidng(단어집합 크기(임베딩할 단어개수)), embedding_dim(임베딩벡터의 차원)와 선택적으로 padding_idx(패딩을 위한 토큰의 인덱스)인자 사용가능.
 - torch.nn.Embedding.from_pretrained(임베딩 벡터(필드.vocab.vectors), freeze=False) : 사전휸련된 임베딩벡터를 사용해 임베딩층 생성.
 - torch.nn.Dropout(f) : f의 비율로 드롭아웃을 시행하는 층 사용. 포지셔널 임베딩과 마스크드 임베딩은 지원하지 않기때문에, 따로 해줘야만 함.
@@ -316,7 +317,7 @@ accuracy = count/len(dataset.dataset)
 - model = torch.jit.trace(model, example_input) : 모델 trace. PyTorch JIT컴파일러 이용.
 - model = torch.jit.script(model) : 모델 script. PyTorch JIT컴파일러 이용.
 - opt_model = torch.utils.mobile_optimizer.optimize_for_mobile(model) : 모델 optimize. 선택적으로, 생략가능.
-- opt_model.save_for_lite_interpreter(path) : 모델 저장. 저장되는 PyTorchLite모델은 .ptl 확장자를 가지고 있음.
+- opt_model._save_for_lite_interpreter(path) : 모델 저장. 저장되는 PyTorchLite모델은 .ptl 확장자를 가지고 있음.
 
 - `implementation 'org.pytorch:pytorch_android_lite:1.9.0'` : 안드로이드(MAVEN)에서 PytorchLite모델을 사용하기 위한 implementation.
 - `pod 'LibTorch_Lite','~>1.9.0'` : IOS(COCOAPODS)에서 PytorchLite모델을 사용하기 위한 pod.
