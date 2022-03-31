@@ -856,6 +856,25 @@ for number , name in zip(number_l,name_l):
 - logging.Formatter(fmt, datefmt, style) : 메세지의 출력형식을 결정하는 Formatter생성. 각 log기록들은 LogRecord객체의 속성으로 정의되어 있으며(asctime-인간이 읽을 수 있는 시간 등)format정의에 활용됨(자세한건 공식문서).
   fmt(메세지 출력 형태, None이면 raw), datefmt(날짜, None이면 '%Y-%m-%d %H:%M:%S'), style([%, {, $]중 하나. fmt의 스타일을 결정)의 인자를 사용할 수 있음. 
 
+# os | os(파일, 디렉토리)관련 명령
+- os.getcwd() : 현재 작업 폴더 반환.
+- os.chdir(경로) : 디렉토리 변경.
+- os.makedirs(dir명) : 디렉토리 생성.  
+- os.listdir(경로) : 경로 안의 파일 이름을 전부 반환.
+- os.getenv(환경변수 명) : 환경변수를 얻어옴.
+
+- os.environ[] : 환경변수 설정에 사용. key에 환경변수 이름을 설정한 뒤 문자열로 해당 환경변수에 들어갈 값을 할당하면 됨.
+- os.environ.get(환경변수 명) : 환경변수를 얻음.
+
+- os.path.abspath(상대 경로) : 절대 경로 반환. 
+- os.path.dirname(경로) : 디렉토리명만 반환.
+- os.path.basename(경로) : 파일 이름만 반환.
+- os.path.join(상위, 하위) : 경로를 병합해 새 경로 생성. ('C:\Tmp', 'a', 'b')식으로 넣는다.
+- os.path.isdir(경로) : 폴더의 존재 여부를 반환.
+- os.path.isfile(경로) : 파일의 존재 여부를 반환.
+- os.path.exists(경로) : 파일 혹은 디렉토리의 존재 여부를 반환.
+- os.path.getsize(경로) : 파일의 크기 반환.
+
 # sys
 - sys : 파이썬 인터프리터를 제어할 수 있음.
 - sys.argv : 명령행에서 전달한 인자를 받을 수 있음. python명령어 뒤의 모든것들이 공백을 기준으로 나뉘어 리스트의 요소가 됨(첫 요소는 파일명).

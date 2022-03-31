@@ -501,20 +501,6 @@
 - faceDetector(이미지,업스케일 횟수(0,1,2)) : 이미지에서 얼굴을 찾음.
 
 
-# os | os(파일, 디렉토리)관련 명령
-- os.getcwd() : 현재 작업 폴더 반환.
-- os.chdir(경로) : 디렉토리 변경.
-- os.makedirs(dir명) : 디렉토리 생성.  
-- os.path.abspath(상대 경로) : 절대 경로 반환. 
-- os.path.dirname(경로) : 디렉토리명만 반환.
-- os.path.basename(경로) : 파일 이름만 반환.
-- os.listdir(경로) : 경로 안의 파일 이름을 전부 반환.
-- os.path.join(상위, 하위) : 경로를 병합해 새 경로 생성. ('C:\Tmp', 'a', 'b')식으로 넣는다.
-- os.path.isdir(경로) : 폴더의 존재 여부를 반환.
-- os.path.isfile(경로) : 파일의 존재 여부를 반환.
-- os.path.exists(경로) : 파일 혹은 디렉토리의 존재 여부를 반환.
-- os.path.getsize(경로) : 파일의 크기 반환.
-
 # 기타 파일형식 읽기
 - PyYAML : YAML파일의 처리를 도와주는 라이브러리. `pip install pyyaml`로 설치, `import yaml`로 사용가능.
 - yaml.safe_load(YAML파일객체) : yml파일을 파이썬 객체(딕셔너리)로 변환함.
