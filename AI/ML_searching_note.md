@@ -129,9 +129,11 @@
   
 - df[열이름\].nunique() : 열에서 중복된 샘플을 제외한 샘플의 개수 출력. 중복된 값이 있다면 단 하나의 값만 남게 됨.
 - df[열이름\].value_counts() : 그 칼럼에 등장하는 값의 종류를 그 값이 나온 수와 함께 나타냄.
+- df[열이름\].idxmax() : 
 - df.isna()/isnull() : 데이터프레임속 값이 널값인지 여부를 표시. .sum()으로 널값의 총 개수를 확인할 수 있음.
 - df.fillna(널값을 대체할 값) : 널값을 다른값으로 대체함. df.열이름.fillna()로 속성별로 다르게 널값을 바꿀수 도 있음. inplace=bool로 데이터프레임에 바로 적용되게 할건지 결정가능.
   df[na열이름\].fillna(df.groupbu(열이름)[na열이름\].transform("median"(바꿀값, max등)), inplace=True)처럼 사용해 na를 그럴듯한(중간값)으로 설정하는것도 가능.
+- df[~df[열이름].isna()] : 해당 열이 null인 행을 전부 삭제함.
 - df.drop(삭제할 행) : 행 삭제. axis=1 을 주면 열을 삭제할 수 있음. inplace매개변수를 사용하면 반환형이 NonType이 되어 체인함수의 사용이 불가능해짐(가장 마지막 함수에만 사용해야함).
 - df.duplicated() : 행마다 중복된 데이터인지 반환. 인자로 열을 넣어 중복기준 설정 가능(생략시 모든 내용이 동일해야 함).
 - df.drop_duplicates() : 열에서 중복 내용 제거. 인자로 열을 넣어 중복기준 설정가능, keep="lsat"로 중복된 값 중 마지막 값을 유지할 수 있음(first가 기본).
@@ -583,6 +585,9 @@ urllib.request.install_opener(opener)           # 오프너 오픈
 urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 ```
 
+# streamlit
+- (?)
+- @st.cache(allow_output_mutation=True) : 함수의 실행결과를 캐시해 최초 한번 실행 이후 더이상 실행되지 않게 하며, 반환값은 바뀔 수 있게 하는 데코레이터.
 
 # TensorBoard
 - 텐서보드 : 텐서플로우의 머신러닝 시각화 도구. 각 파라미터들의 변화와 손실, 정확도, 모델 그래프등을 시각화해줌.
