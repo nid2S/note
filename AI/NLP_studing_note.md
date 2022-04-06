@@ -856,6 +856,7 @@ h_t(hidden_state)= o_t ⨀ tanh(c_t)
 - tokenizer.analyze(sent) : 문장분석. 반환값의 요소를 빼내어 word.morphs로 토큰/품사 형태의 결과를 볼 수 있다(str으로 변환 필요).
 
 # hgtk | 한국어 자소단위로 쪼개기
+- 공식 : Code = 0xAC00(가(유니코드)) + (초성 인덱스 * 중성개수 * 종성개수) + (중성 인덱스 * 종성 개수) + (종성 인덱스)
 - hgtk.text.decompose(sent, compose_code) : 문장을 자소단위로 쪼갬. 글자간 경계 문자는 생략시 기본값인 ᴥ가 사용됨.
 - hgtk.text.compose(sent, compose_code) : 자소단위의 문장을 다시 합침. compose_code에 넣은 문자는 글자간 경계 문자를 알려주는 역할.
 

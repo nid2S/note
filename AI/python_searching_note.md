@@ -764,8 +764,10 @@ for number , name in zip(number_l,name_l):
 
 ## other
 ***
-- eval('문자열') : 문자열 형태의 파이썬 코드를 실행하고 결과를 반환 / repr(객체) > 파이썬 인터프리터에서 실행할 수 있는 문자열을 반환
-- chr(코드값) : ASCII 코드값에 해당하는 문자를 반환 / ord(문자) > 문자의 ASCII 코드를 반환
+- id(object) : 오브젝트의 주소값 반환.
+- eval('문자열') : 문자열 형태의 파이썬 코드를 실행하고 결과를 반환
+- repr(객체) : 파이썬 인터프리터에서 실행할 수 있는 문자열을 반환
+- ord(문자) : 문자의 ASCII 코드를 반환
 - hex(정수) : 16진수 / oct(정수) > 8진수 (둘다 문자열로)
 - bin(정수) : 2진수 변환 / int('2진수문자열', 2) > 2진수 10진수 변환
 - math.isclose(0.1 + 0.2, 0.3) : 두 실수가 같은지 판단.
@@ -864,6 +866,7 @@ for number , name in zip(number_l,name_l):
 - os.makedirs(dir명) : 디렉토리 생성.  
 - os.listdir(경로) : 경로 안의 파일 이름을 전부 반환.
 - os.getenv(환경변수 명) : 환경변수를 얻어옴.
+- os.cpu_count() : 컴퓨터의 cpu개수를 반환.
 
 - os.environ[] : 환경변수 설정에 사용. key에 환경변수 이름을 설정한 뒤 문자열로 해당 환경변수에 들어갈 값을 할당하면 됨.
 - os.environ.get(환경변수 명) : 환경변수를 얻음.
@@ -955,15 +958,24 @@ for number , name in zip(number_l,name_l):
 ***
 
 # git
-- git clone (깃허브 디렉토리 주소) .(현재 디렉토리) : github 디렉토리의 파일을 전부 복사해옴
-- git diff : 마지막 수정 이후 추가한 내용을 알려줌
 - git add (더할 파일) : 필드(커밋시 git에 등록될 파일이 있는 공간)에 올림
 - git commit -m "(버전-설명-)" : 컴퓨터 내의 git에 등록.
 - git commit --amend : 커밋메세지를 수정함.
+
+- git clone (깃허브 디렉토리 주소) .(현재 디렉토리) : github 디렉토리의 파일을 전부 복사해옴
 - git log : 생성한 버전을 보여줌.
+- git diff : 마지막 수정 이후 추가한 내용을 알려줌
+
+- git status : 상태(수정한 부분/stage에 올라있는 파일)를 보여주고, 현재 위치한 branch를 확인할 수 있음.
 - git push : 컴퓨터에 저장된 git파일을 깃허브에 등록. remote로 설정한 원격 저장소에 push.
 - git push remote명(origin) branch명(master) : remote에 branch를 push. 커밋번호:branch명 으로 특정 커밋까지만 push 할 수 도 있음.
-- git status : 상태(수정한 부분)를 보여줌
+- git pull : 원격저장소로부터 필요한 파일을 다운+병합. 지역 브랜치와 원격저장소 origin/master가 같은 위치를 가리킴.
+- git fetch : 원격저장소로부터 필요한 파일을 다운. 지역브랜치는 지역저장소의 최근 커밋을, 원격저장소는 가져온 최신 커밋을 가리킴.
+
+- git branch 브랜치명 : 새 브랜치 생성.
+- git branch -d 브랜치명 : 해당 브랜치 삭제. 
+- git checkout 브랜치명 : 해당 브랜치로 변경함.
+- git merge 브랜치명 : 해당 브랜치를 현재 브랜치로 병합함. 현재 브랜치에서 해당 브랜치로 백트래킹 없이 갈 수 있다면 빨리감기병합을, 아니면 3방향 병햡을 실행하며, --no--ff옵션을 사용하면 항상 새 커밋을 만들게 할 수 있음.
 - git reset HEAD [file명] : add되어 stage에 올라가있는 파일을 Unstage함(add를 취소함). file명을 생략하면 모든 파일이 취소됨.
 - git reset HEAD^ : 최근의 commit을 취소하고 해당 파일을 Unstaged상태로 보존함. --mixed 옵션을 사용한것과 같으며, --soft는 staged상태로 보존, --hard를 사용하면 unstaged상태로 삭제됨.
 - git reset HEAD~i : 최근 i개의 commit을 취소함.
@@ -1002,6 +1014,9 @@ for number , name in zip(number_l,name_l):
 - unzip 파일 : zip 파일 압축해제
 - cd 경로 : 경로로 이동.
 - pwd : 현재 경로 확인.
+- export : 전체 환경변수 확인. export 환경변수=새 값 으로 환경변수의 변경이 가능함. echo 환경변수 로 특정 환경변수의 값만 볼 수 도 있음.
+
 - vi 파일명 : 파일명이 존재한다면 해당 파일을, 아니면 새 파일을 vi 편집기로 오픈. 다양한 명령어가 존재함.
+- nvidia-smi : 현재 GPU사용량을 보여줌.
 - Ctrl + Insert / Ctrl + shift + C : 복사 -> Ctrl + C로 클립보드에 복사
 - Shift + Insert / Ctrl + shift + V : 붙여넣기 -> 우클릭으로 붙여넣기
