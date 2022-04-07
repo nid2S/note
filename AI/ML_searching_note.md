@@ -571,9 +571,41 @@ urllib.request.install_opener(opener)           # 오프너 오픈
 urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 ```
 
-# streamlit
-- (?)
-- @st.cache(allow_output_mutation=True) : 함수의 실행결과를 캐시해 최초 한번 실행 이후 더이상 실행되지 않게 하며, 반환값은 바뀔 수 있게 하는 데코레이터.
+# Streamlit
+- Streamlit : 앱을 만드는 미니멀한 프레임워크. 간단하게 파이썬 코드로 앱을 빌드할 수 있고, 인터렉티브한 기능을 제공(백엔드, HTTP요청 구현 X)함. 만든 앱을 대시보드나 프로토타입처럼 활용할 수 도 있음.
+  Streamlig Component 홈페이지에 많은 컴포넌트들이 소개되어있음. 배포를 위해서는 간단히 Heroku를 사용하거나, 자체 제공기능을 사용해도 좋음.
+- `streamlit run 작성한py파일` : Streamlit 실행. 실행 후 나타난 URL로 접속하면 작성한 앱을 볼 수 있음.
+- @st.cache : 함수의 실행결과를 캐시해 최초 한번 실행 이후 더이상 실행되지 않게 데코레이터. (allow_output_mutation=True)로 함수가 매번 바뀌게 할 수 있음.
+
+- st.title(title) : 앱의 타이틀 설정(h1).
+- st.header(title) : 앱의 헤더 설정(h2).
+- st.subheader(title) : 앱의 중간제목 설정(h3).
+- st.text(text) : 앱의 텍스트 지정. .text(text)를 다시 사용해 텍스트를 수정할 수 있음.
+
+- st.write(data) : 데이터를 작성. 데이터 프레임을 넣으면 데이터 프레임이 그대로 출력되고, 텍스트를 입력하면 텍스트가 그대로 출력됨.
+- st.button(text) : 버튼 생성. `if button()` 식으로 버튼 입력시의 동작을 지정할 수 있음.
+- st.checkbox(text) : 체크박스와 그 옆에 표시될 텍스트 지정. value=True인자로 기본값을 체크로 할 수 있음. `if checkbox()` 식으로 체크박스가 체크됐을때의 동작을 지정할 수 있음.
+- st.radio(text, (options)) : 라디오 버튼 생성. 첫 요소가 기본으로 선택되며, `if 반환값 == 요소` 식으로 특정 요소 선택시의 동작을 정의할 수 있음.
+- st.selectbox(text, (options)) : 선택박스 생성. 반환값은 선택한 옵션.
+- st.multiselect(text, option_list) : 다중선택박스 생성. 결과가 배열([번호: 값\])로 나오게 됨.
+- st.slider(title, start, end, init_v) : 슬라이더 생성. 이것의 반환값은 슬라이더가 현재 가리키고 있는 값. 초기값을 튜플로 설정해 값을 범위처럼 할 수 도 있음(처음값, 끝값 반환).
+- st.sidebar.옵션() : 웹 사이트 왼쪽에 사이드바 추가.
+- st.beta_columns(i) : i개의 레이아웃(세로)으로 나눔. 반환값은 i개의 column이며, `with col1:`식으로 해당 칼럼(레이아웃)에 들어갈 요소들을 설정할 수 있음.
+
+- st.text_input(value) : 텍스트데이터 입력. type=”password” 인자를 추가헤 암호로 사용할 수 있음.
+- st.number_input(label, value) : 숫자 데이터 입력.
+- st.text_area(label, value) : 텍스트 데이터 여러 줄 입력.
+- st.date_input(label, value) : 날짜를 입력.
+- st.time_input(label, value) : 시간을 입력.
+
+- st.dataframe(df) : 인터렉티브한 테이블(DF)를 볼 수 있음. df.style.highlight_max(axis=0) 등을 이용하면 데이터를 더 잘 표현할 수 있음.
+- st.table(df) : static한 테이블(그냥 고정되어있는 형태의)을 보여줌.
+- st.line/area/bar/pyplot/altair/vega_lite/plotly/bokeh/pydeck/graphviz/map_chart(df) : 각 형태에 맞는 그래프를 그림.
+- st.image/video/audio(file) : 이미지/컨텐츠/오디오 출력. PIL.Image.open()이나 이미지 링크, open(file, "rb").read() 등으로 얻은 바이트 파일을 넣을 수 있음. 이미지의 경우 use_column_width 옵션으로 칼럼의 넓이를 쓸 수 있음.
+
+- st.success/error/warning/info(message) : 메서드에 맞는 Progress, Status메세지를 표시함. 각 녹/적/황/청 색으로 강조되어있음.
+- st.spinner(message) : 코드 실행도중 출력될 메세지를 지정함. `with st.spinner(): time.sleep(1)` 식으로 사용하며 노란색으로 강조되어있음.
+
 
 # TensorBoard
 - 텐서보드 : 텐서플로우의 머신러닝 시각화 도구. 각 파라미터들의 변화와 손실, 정확도, 모델 그래프등을 시각화해줌.
@@ -600,6 +632,15 @@ urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 
 - wandb.log(dict) : 이미지, accuracy, test_loss등의 로그를 기록. {저장될 이름: 값}형태이며, 이미지(plt)/히스토그램(wandb.Histogram(numpy_array_or_sequence))등이 전부 가능함. 
 - wandb.watch(model) : 모델의 학습을 따라가며 진행과정을 보여줌. 혹은 wandb홈페이지에서 프로젝트란을 통해 확인할 수 있음.
+
+# Dash
+- DashBoard : 데이터를 한눈에 확인할 수 있도록 해주는 보드.
+- Dash : 파이썬 대시보드 라이브러리. 대표적인 대시보드 솔루션으로, 인터렉티브한 환경을 제공하며 대시보드 라이브러리중 기능이 많은 편에 속함. 약간의 개발 리소스가 필요함.
+- (?)
+
+# Volia
+- Volia : JupyterNotebook을 바로 시각화 할 수 있게 해주는 라이브러리. JupyterNotebook위에서 진행되므로 ipywidget을 넘어서는 인터렉티브함은 어려움.
+- (?)
 
 # kfp | 파이프라인 SDK
 - kfp : 큐브플로우 파이프라인 SDK(소프트웨어 개발 키트, 다른 프로그램에 추가/연결할 수 있는 커스텀 앱 제작 도구모음)라이브러리.
