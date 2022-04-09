@@ -635,12 +635,27 @@ urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 
 # Dash
 - DashBoard : 데이터를 한눈에 확인할 수 있도록 해주는 보드.
-- Dash : 파이썬 대시보드 라이브러리. 대표적인 대시보드 솔루션으로, 인터렉티브한 환경을 제공하며 대시보드 라이브러리중 기능이 많은 편에 속함. 약간의 개발 리소스가 필요함.
-- (?)
+- Dash : 파이썬 대시보드 라이브러리. 데이터 앱을 빠르게 구축하기 위한 로우코드프레임워크. Plotly.js와 React.js기반으로 개발. 대시 앱은 웹브라우저에서 랜더링됨. 
+  대표적인 대시보드 솔루션으로, 인터렉티브한 환경을 제공하며 대시보드 라이브러리중 기능이 많은 편에 속함. VM이나 Kubernetes클러스터에 앱을 배포한 뒤 URL을 통해 공유할 수 있음.
+- 구조 : 대시 앱은 두 부분으로 구성되어 있는데, 첫째부분은 앱의 레이아웃(앱의 생김새)을 기술하고, 두번째 부분은 응용프로그램의 상호작용성에 대해 기술함.
 
-# Volia
-- Volia : JupyterNotebook을 바로 시각화 할 수 있게 해주는 라이브러리. JupyterNotebook위에서 진행되므로 ipywidget을 넘어서는 인터렉티브함은 어려움.
-- (?)
+- app = dash.Dash(__name\_\_) : 대시보드 앱 생성.
+- app.run_server(debug=bool) : 앱 실행.
+
+- app.layout = dash_html_components.Div(children=[컴포넌트들의 트리\]) : 앱의 레이아웃 구성.
+- dash_html_components.태그 : 해당 태그를 사용.
+- dash_core_components.자료 : 그래프 등 컴포넌트 사용.
+
+# Voila
+- Voila : JupyterNotebook을 바로 시각화 할 수 있게 해주는 라이브러리. JupyterNotebook위에서 진행되므로 ipywidget을 넘어서는 인터렉티브함은 어려움.
+- 특징 : JupyterNotebook의 결과를 쉽게 웹에 띄울 수 있고, Extension이 있어 노트북에서 바로 대시보드로 변환할 수 있으며, 다양한 언어의 코드와 고유한 템플릿 생성기능을 지원함.
+- `voila *.ipynb` : 노트북 렌더링. 노트북 코드의 결과들을 볼 수 있음. `--strip_sources=False`옵션을 주면 노트북의 코드도 볼 수 있으나 셀 실행은 불가능함. 그냥 `voila`로 실행하면 현재 폴도의 파일을 전부 voila로 실행함.
+- `voila --ExecutePreprocessor.timeout=i` : Voila실행시 한셀을 실행하는데 30초 이상 소요되면 TimeoutError가 발생하는데, 이 제한시간을 i초로 늘릴 수 있음.
+
+- ipywidgets.FloatSlider(descriotion, value) : 실수형 슬라이드 바 사용. 
+- ipywidgets.FloatTest(disabled, descriotion) : 실수 텍스트 사용. .value로 기본값 지정 가능.
+- ipywidgets.Vbox([widgets\]) : Vertical으로 widgets들을 묶음.
+- slider.observe(func, value) : 슬라이더 동작시 해당 함수를 실행함. 해당 함수 안에서 slider.value 로 슬라이더의 값을 얻어 올 수 있음.
 
 # kfp | 파이프라인 SDK
 - kfp : 큐브플로우 파이프라인 SDK(소프트웨어 개발 키트, 다른 프로그램에 추가/연결할 수 있는 커스텀 앱 제작 도구모음)라이브러리.
