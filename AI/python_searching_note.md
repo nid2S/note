@@ -416,7 +416,8 @@ for number , name in zip(number_l,name_l):
 - 매직메서드(특별메서드) : __로 시작해 __로 끝나는 메서드. 클래스 내에서 특별한 역할을 함. 대표적으로 __init\__(), __next\__()등.
 
 - isinstance(인스턴스,클래스) : 인스턴스가 클래스에 속해있는지 확인. 맞으면 True,아니면 False 반환.
-
+- class attribute : 클래스 내부(함수의 밖)에서 선언되는 속성. 모든 개채에서 공유되며, 클래스.속성 또는 인스턴스.속성 을 통해 접근가능함.
+- instance attribute : self매개변수를 통해 정의되는 속성. 한 인스턴스의 값을 변경하도 다른 인스턴스들는 영향이 없음.
 
 ## class element
 ***

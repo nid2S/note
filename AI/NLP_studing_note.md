@@ -285,6 +285,11 @@
   후보 문장의 길이가 점수에 주는 영향을 상쇄하기 위해 (길이가 가장 비슷한)참조 문장의 길이가 후보보다 크면 패널티를 줌.
 - BLEU 식 : BLEU=BP×exp(^N∑_(n=1)w_n log p_n). BP = (c>r)? 1 : e^(1−r/c).   C = Candidate 길이, r : Candidate와 가장 적은 길이 차이의 Reference 길이.
 
+##### BenchMarks
+- GLUE : 일반언어이해평가(General Language Understanding Evaluation)벤치마크. NLU기술이 실질적으로 최대한 유용하려면 일반적이여야 하므로 등장한, 기존의 다양한 작업에서 모델의 성능을 평가하고 분석하기 위한도구.
+- GELU Tasks : TextClassification, SentimentAnalysis, SemanticTentualSimilarity, Paraphrasing, 
+  NaturalLanguageInference, LinguisticAcceptabiliy, StochasticOptimization, QA등.
+
 #### DL
 - MLP(다층 퍼셉트론) : 단층 퍼셉트론에서 은닉층이 1개 이상 추가된 신경망. FF 신경망의 가장 기본적 형태.
 - NNLM(신경망 언어모델) : n-gram 언어 모델의 희소문제 해결을 위해 등장. 기계가 단어간 유사도를 파악. n 개의 단어 벡터를 이용해 목표 단어를 예측. 
@@ -676,8 +681,6 @@ h_t(hidden_state)= o_t ⨀ tanh(c_t)
 - metric.inputs_description : 메트릭의 설명 확인 가능.
 
 - datasets.load_dataset(데이터셋) : 데이터셋 로드. 불러오려는 데이터셋이 구성이라면 (데이터셋, 구성)형태로 써야 함. split="train"등으로 특정 데이터셋만 가져올 수 있음.
-### 데이터셋 종류
-- glue(일반 언어 이해 평가) : mrpc(문장쌍이 동일한지 판단하는 주석이 달린 문장쌍의 모음)/sst2(?)/
 
 # gensim | word2vec, FastText
 - gensim : 통계적의미론에 초점이 맞춰져, 문서의 구조를 분석한 후 유사성을 기준으로 다른 문서에 점수를 주는

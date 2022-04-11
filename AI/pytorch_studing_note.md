@@ -342,6 +342,7 @@ accuracy = count/len(dataset.dataset)
 - torchvision : 비전분야의 유명 데이터셋, 모델, 전처리도구가 포함된 패키지.
 - torchtext : 자연어처리 분야의 유명 데이터셋, 모델, 전처리도구(텍스트에 대한 추상화기능)가 포함된 패키지.
 - torchaudio : 오디오 분야의 torch_%. 
+- torchnlp : (?)
 ## metrics
 - torchmetrics.Accuracy() : Accuracy객체 생성. acc(pred, y)로 사용할 수 있으며, 반환값은 float의 scalar텐서임.
 ## vision
