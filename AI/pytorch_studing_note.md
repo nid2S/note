@@ -6,7 +6,7 @@
 - 브로드 캐스팅 : 크기가 다른 행렬(텐서)들의 크기를 자동으로 맞춰 연산을 가능하게 해주는 기능. 연산시 더 큰 차원에 맞춰짐(요소 복제).
 - TorchScript : Pytorch의 JIT(Just-In-Time)컴파일러. 기존의 명령적인 실행방식 대신, 모델이나 함수의 소스코드를 TorchScript컴파일러를 통해 TorchScript로 컴파일하는 기능을 제곰함.
   이를 통해 TF의 symbolic graph execution방식과 같이 여러 optimization을 적용할 수 있고, serialized된 모델을 PythonDependency가 없는 다른환경에서도 활용할 수 있는 이점이 있음.
-- Distributed model : 둘 이상의 GPU를 사용하는 모델을 명명하는 단어. 
+- Distributed model : 둘 이상의 GPU를 사용하는 모델을 명명하는 단어.
 
 - 모델구성 : 파이토치의 대부분의 구현체(모델)는 모델 생성시 클래스를 사용. torch.nn.Module상속 클래스 구현 > __init__에서 super().__init__을 호출, 사용할 모델(층)정의 > forward(self,x)(자동실행, 모델 사용 후 값 반환)의 과정을 거침.
 - 구성요소 : torch - main namespace, Tensor등 다양한 수학 함수가 포함 | .autograd - 자동미분을 위한 함수가 포함. 자동미분여부를 제어하고, 자체 미분가능함수를 정의할 때 쓰는 기반클래스(Function)가 포함
@@ -232,6 +232,9 @@ for i in range(epoch):
 ### layers
 - torch.nn.Linear(input_dim, output_dim) : 선형회귀모델/전결합층 사용. 이대로 모델로 쓸 수도, 모델에 층으로 넣을수도 있음. bias=bool 로 편향 존재여부 지정가능.
 
+- torch.nn.Conv1d(input_channel, output_channel, kernel_size, stride) : 1차원 CNN층 사용. 3차원(batch_size, input_channel, input_dim(>kernel_size))의 텐서를 요구하며, 
+  (batch_size, output_channel, (input_dim - kernel_size + stride // stride))의 텐서를 반환함. stride는 생략시 1, kernel_size는 Tuple로, 2차원 이상을 설정했다면 4차원 이상의 차원이 필요함(2D CNN처럼 사용가능). 
+- torch.nn.MaxPool1d(pool_size) : 1D MaxPooling층 사용. 언제나 마지막 차원이 input_tensor.shape(0) // pool_size인 텐서를 반환함(pool_size보다 작을 때 포함).
 - torch.nn.Conv2d(input_dim, output_dim, kernel_size) : (2차원)CNN층 사용. i의 커널사이즈를 가짐. padding, stride등도 설정해줄 수 있음. 
 - torch.nn.MaxPool2d(kernel_size, stride) : (2차원)맥스풀링층 사용. 하나의 정수만 넣으면 커널사이즈와 스트라이드 둘 다 해당값으로 지정됨.
 
@@ -250,6 +253,7 @@ for i in range(epoch):
   num_embedidng(단어집합 크기(임베딩할 단어개수)), embedding_dim(임베딩벡터의 차원)와 선택적으로 padding_idx(패딩을 위한 토큰의 인덱스)인자 사용가능.
 - torch.nn.Embedding.from_pretrained(임베딩 벡터(필드.vocab.vectors), freeze=False) : 사전휸련된 임베딩벡터를 사용해 임베딩층 생성.
 - torch.nn.Dropout(f) : f의 비율로 드롭아웃을 시행하는 층 사용. 포지셔널 임베딩과 마스크드 임베딩은 지원하지 않기때문에, 따로 해줘야만 함.
+- torch.nn.Flatten() : 입력된 텐서를 .view(size(-1), -1)형태로 바꾸어 줌.
 
 ### Sequential
 - torch.nn.Sequential(module) : 시퀀셜 모델 생성. 클래스 형태로 구현되는 모델에서 층의 역할을 함. 아주아주 간단한 모델의 경우엔 모델 그 자체로 이용되기도 함.
