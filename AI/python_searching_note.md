@@ -791,6 +791,13 @@ for number , name in zip(number_l,name_l):
 - collections.defaultdict(list) : defaultdict객체 생성. 하나의 키를 여러 값에 맵핑가능. 인자로 주어진 객체의 기본값을 초깃값으로 사용.
 - collections.deque(maxlen=n) : deque객체 생성. 마지막 n개의 객체만을 유지.   
 
+# itertools
+***
+- itertools.permutations(list, n) : 순열(P, 중복을 허용하지 않고 순서가 존재하는 채로 n개를 뽑아서 나열)을 생성. 나올 수 있는 조합히 차례대로, 튜플형태로 나타나게 됨.
+- itertools.combinations(list, n) : 조합(C, 중복을 허용하지 않고 순서가 없는 채로 n개를 뽑아서 나열)을 생성.
+- itertools.product(list, n) : 중복순열(Pi, 중복을 허용하고 순서가 존재하는 채로 n개를 뽑아서 나열)을 생성.
+- itertools.combinations_with_replacement(list, n) : 중복조합(H, 중복을 허용하고 순서가 존재하는 채로 n개를 뽑아서 나열)을 생성.
+
 # json
 ***
 - json : json 모듈 import 후 .json 형식의 파일을 열어 json.load(파일객체)로 파이썬의 객체에 저장할 수 있다.
