@@ -613,7 +613,10 @@ urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 - 인라인 실행 : `!load_ext tensorboard` -> `tensorboard --logdir=path`로 인라인에서 텐서보드를 확인할 수 있음.
 ## TensorboardX
 - 텐서보드X : 텐서플로우 시각화 라이브러리인 텐서보드를 파이토치에서 사용할 수 있도록 한 서드파티 패키지. 파이토치 모델을 오닉스(ONNX)로 변환 후 텐서보드에 넣음.
-- tensorboardX.SummaryWriter(path) : 모델을 저장할 저장클래스 호출. path로 지정한 폴더에 파일이 저장됨. 폴더가 없으면 자동으로 생성함.
+- tensorboardX.SummaryWriter(path) : 모델을 저장할 저장클래스 호출. path로 지정한 폴더에 파일이 저장됨. 폴더가 없으면 자동으로 생성함(./runs/log들).
+- writer.add_scalar(name, variable, iteration) : 하나의 변수에 대해 출력(writer에 저장). 여러개를 한번에 넣으려면 add_scalars를 사용.
+- writer.add_histogram(name, data, iteration) : 모델의 각 파라미터들이 적절히 특성을 갖고있는지 확인하도록 도와줌.
+  파라미터를 출력하고 싶은 모델의 name과 param변수들을 `for name, param in name_parameters()`로 불러와 input으로 가져오면 됨. data는 param.copy()->cpu->data.numpy()로 변환해줘야 한다.
 - writer.add_graph(model, dummy_input) : 더미데이터를 전달할때 그래프를 writer에 저장함.
 - writer.close() : writer 종료. 이 이후 그냥 텐서보드를 실행하듯이 하면 됨.
 
@@ -631,6 +634,7 @@ urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 - wandb.config.변수명 : 설정을 wandb에 넣어둠. 변수명은 epochs/batch_size등이며, init에서 config매개변수에 딕셔너리 형태로도 넣을 수 있음. 
 
 - wandb.log(dict) : 이미지, accuracy, test_loss등의 로그를 기록. {저장될 이름: 값}형태이며, 이미지(plt)/히스토그램(wandb.Histogram(numpy_array_or_sequence))등이 전부 가능함. 
+- wandb.Histogram(hist) : 히스토그램을 그려 저장. 히스토그램 이외에도 그래프나 이미지, 각종 plt차트등도 저장할 수 있음.
 - wandb.watch(model) : 모델의 학습을 따라가며 진행과정을 보여줌. 혹은 wandb홈페이지에서 프로젝트란을 통해 확인할 수 있음.
 
 # Dash
