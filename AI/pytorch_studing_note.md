@@ -150,8 +150,10 @@
 - torch.utils.data.DataLoader(dataset, batch_size=i) : 데이터셋을 i개의 미니배치로 학습시킴. shuffle=bool(Epoch마다 데이터 학습순서를 섞음)매개변수와 num_worker(병렬처리, 일반적으로 코어수보다 적게 설정),
   drop_last=bool(batch_size로 배치를 나눈 뒤, 남은(batch_size 미만의)데이터셋을 버릴지)매개변수 사용가능. .dataset으로 내부의 데이터셋 확인가능. 나올떈 각 텐서가 batch_size만큼 concatenate되어 나옴.
   반환되는건 iterable객체로, enumerate를 이용해 batch_idx와 sample(x, y)을 꺼낼 수 있음. 반복문이 하나 추가되는걸 제외하고는 배치학습법과 동일. 
+- torch.utils.data.sampler.WeightedRandomSampler(weight, batch_size) : 가중치에 맞게 데이터를 가져오는 샘플러를 생성. 데이터 로더의 sampler매개변수로 전달해 사용할 수 있으며, 주어진 가중치(실수배열)의 비율에 맞게 해당 클래스의 데이터를 사용함.
 
 - 모델.parameters() : 모델의 파라미터들을 꺼냄. [p.requires_grad]로 해당 파라미터가 학습이 되는지, [p.numel()]로 해당 파라미터의 값을 볼 수 있음.   
+- 모델.named_parameters() : 모델의 파라미터들의 name과 파라미터들을 꺼냄.
 
 - 커스텀 데이터셋 구현 : torch.utils.data.Dataset을 상속받는 클래스 제작 후 __init\__(전처리), __len\__(길이, 총 샘플 수), __getitem\__(특정샘플, 인덱스)을 구현해 제작.
 ```python 

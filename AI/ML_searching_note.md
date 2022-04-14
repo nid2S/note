@@ -616,7 +616,7 @@ urllib.request.urlretrieve(imgUrl, "test.jpg")  # 이미지 다운로드
 - tensorboardX.SummaryWriter(path) : 모델을 저장할 저장클래스 호출. path로 지정한 폴더에 파일이 저장됨. 폴더가 없으면 자동으로 생성함(./runs/log들).
 - writer.add_scalar(name, variable, iteration) : 하나의 변수에 대해 출력(writer에 저장). 여러개를 한번에 넣으려면 add_scalars를 사용.
 - writer.add_histogram(name, data, iteration) : 모델의 각 파라미터들이 적절히 특성을 갖고있는지 확인하도록 도와줌.
-  파라미터를 출력하고 싶은 모델의 name과 param변수들을 `for name, param in name_parameters()`로 불러와 input으로 가져오면 됨. data는 param.copy()->cpu->data.numpy()로 변환해줘야 한다.
+  파라미터를 출력하고 싶은 모델의 name과 param변수들을 `for name, param in named_parameters()`로 불러와 input으로 가져오면 됨. data는 param.copy()->cpu->data.numpy()로 변환해줘야 한다.
 - writer.add_graph(model, dummy_input) : 더미데이터를 전달할때 그래프를 writer에 저장함.
 - writer.close() : writer 종료. 이 이후 그냥 텐서보드를 실행하듯이 하면 됨.
 
