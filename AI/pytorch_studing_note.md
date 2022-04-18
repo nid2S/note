@@ -194,7 +194,7 @@ class CustomDataset(Dataset):
 ### optimizer
 - 옵티마이저.zero_grad() : gradient 0으로 초기화.
 - 옵티마이저.step() : 주어진 학습대상들을 업데이트.
-- 옵티마이저 매개변수 : 학습시킬 매개변수들, lr(learning rate), weight_decay(가중치감쇠(L2규제)의 강도)등의 매개변수 사용가능.
+- 옵티마이저 매개변수 : 학습시킬 매개변수들, lr(learning rate), weight_decay(가중치감쇠(L2규제)의 강도, 보통 1e-5등의 작은 값)등의 매개변수 사용가능.
 - optimizer.param_groups : 파라미터 그룹 확인 가능.
 ```python 
 # 사용 예
@@ -219,9 +219,9 @@ for i in range(epoch):
 - 사용방법 : optimizer와 schduler를 먼저 정의한 뒤 학습 시 batch마다 optimizer.step(), epoch마다 scheduler.step()을 해주면 됨.
 - 파라미터 : 공통적으로 optimizer를 넣어주고, last_epoch로 모델 저장 후 시작시 설정을, verbose=bool로 lr갱신 시 마다 메세지를 출력하게 할 수 있음.
 
-- torch.optim.lr_scheduler.StepLR(optimizer, step_size=s, gamma=g) : step사이즈마다 gamma비율로 lr을 감소시킴(일정 step마다 gamma를 곱함). 
-- torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=func(lambda)) : lambda표현식으로 작성한 함수를 통해 lr을 조절함. 초기 lr에 lambda(epoch)를 곱해 lr을 계산함.
+- torch.optim.lr_scheduler.StepLR(optimizer, step_size=s, gamma=g) : stepsize만큼의 epochs마다 gamma비율로 lr을 감소시킴(일정 epoch마다 gamma를 곱함).  
 - torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[m1,m2\], gamma=g) : 지정 epoch마다 gamma비율로 lr을 감소시킴(지정 epoch마다 gamma를 곱함). 
+- torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=func(lambda)) : lambda표현식으로 작성한 함수를 통해 lr을 조절함. 초기 lr에 lambda(epoch)를 곱해 lr을 계산함.
 - torch.optim.lr_scheduler.LinearLR(optimizer, start_factor, total_iters) : 곱셈인자를 선형적으로 total_iters(0부터 시작)에 걸쳐 변형시켜 학습 속도를 늦춤. 시작 lr * start_factor 에서 * 1/total_iters만큼을 계속 변동시켜 결국은 시작 lr * 0.1로 만드는 듯.
 - torch.optim.lr_scheduler.CyclicLR(optimizer, step_size_up, base_lr, max_lr, gamma, mode) : base_lr부터 max_lr까지 step_size_up동안 증가하고 감소하기를 반복함. step_size_down, scale_fn등 사용가능.
 - torch.optim.lr_scheduler.ConstantLR(optimizer, factor, total_iters) : epochs가 total_iters에 도달할 때 까지 시작 lr * factor를 lr으로 사용함.
@@ -229,7 +229,7 @@ for i in range(epoch):
 - torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=g) : learing rate decay가 exponential함수를 따름(매 epoch마다 gamma를 곱함). 
 - torch.optim.lr_scheduler.MultiplicativeLR(optimizer, lr_lambda=func(lambda)) : lambda표현식으로 작성한 함수를 통해 lr을 조절. lr에 lambda(epoch)를 누적곱해 lr을 계산함.
 - torch.optim.lr_scheduler.SequentialLR(optimizer, schedulers, milestones) : milestones의 간격대로 주어진 스케줄러를 순차적으로 적용함.
-- torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode) : 입력한 성능평가지표가 patience만큼 향상되지 않으면 lr을 줄임. optim에 momentum을 설정해야 하고, scheduler.step(평가지표)로 사용함.
+- torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode) : 입력한 성능평가지표가 patience만큼 향상되지 않으면 lr을 줄임. optim에 momentum을 설정해야 하고, scheduler.step(평가지표)로 사용함. 초깃값의 2~10배까지 줄이는게 일반적. 
 
 ### layers
 - torch.nn.Linear(input_dim, output_dim) : 선형회귀모델/전결합층 사용. 이대로 모델로 쓸 수도, 모델에 층으로 넣을수도 있음. bias=bool 로 편향 존재여부 지정가능.
@@ -241,7 +241,7 @@ for i in range(epoch):
 - torch.nn.MaxPool2d(kernel_size, stride) : (2차원)맥스풀링층 사용. 하나의 정수만 넣으면 커널사이즈와 스트라이드 둘 다 해당값으로 지정됨.
 
 - torch.nn.RNN(input_size, hidden_size) : RNN층 사용. batch_first(bool, 입력텐서의 첫번째 차원은 배치크기), 
-  num_layer(int, 은닉층개수(깊은RNN으로 만듦)), bidirectional(bool, 양방향순환신경망으로 만듦), batch_first(bool, 사용시(batch, input_dim, hidden_size)가 됨), dropout(0~1, 드롭아웃 비율)인자 사용가능.  
+  num_layer(int, 은닉층개수(깊은RNN으로 만듦)), bidirectional(bool, 양방향순환신경망으로 만듦), batch_first(bool, 사용시(batch, input_dim, hidden_size)가 됨), dropout(0~1, 드롭아웃 비율, 보통 0.2~0.5)인자 사용가능.  
 - torch.nn.LSTM(input_size(vocab_size), hidden_size) : LSTM층 사용. RNN계열 모델은 사용시 h_0(LSTM은 c_0도)을 같이 입력해야 하며, 각 변수는 zeros(D*num_layers, batch_size, hidden_size, requires_grad=False)로 초기화되야 함(D = 2 if bidirectional else 1).
   출력은 [output, (h_0, c_0)]가 되며, output은 (batch_size, input_dim, D\*hidden_size)(batch_first=True)를 가지고 각 t에 따른 마지막 h_t를 담으며, h_n/c_n은 (D\*num_layers, batch, hidden)의 차원을 가지고 마지막 step의 state들이 담김.
 - torch.nn.GRU(input_size, hidden_size) : GRU층 사용. RNN과 동일하게 h_0를 입력으로 넣어야 하며, x와 h_c를 반환함. RNN과 동일한 인자 사용 가능. 
