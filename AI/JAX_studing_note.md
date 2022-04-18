@@ -7,6 +7,7 @@
 - VS Numpy : JAX는 편의를 위해 Numpy에서 영감을 받은(거의 동일한)인터페이스를 제공하고, 덕파이핑을 통해 JAX배열과 Numpy배열을 교체해 사용할 수 있지만, JAX배열은 생성 후 변경할 수 없음.
 - 학습 flow : parmaters와 x를 입력으로 받는 모델을 정의하고, loss_fn에서 그를 사용 -> 손실을 구한 뒤, optimize(update)에서 grad(loss)(params, x, y)를 포함한 optimize과정을 구현해 epochs동안 update실행함.
 
+- jax.local_device_count() : 사용가능한 디바이스 개수를 반환.
 - jax.config.config.update("jax_debug_nans", True) : NaN생성시 계산오류를 발생시킴.
 - 함수.block_until_ready() : 해당 함수를 동기 실행으로 바꿔줌.
 
@@ -16,9 +17,9 @@
 - jaxarr.at[index\].set(i) : JAX배열의 index가 i로 바뀐 복사본을 반환함.
 - jax.numpy.where(condition, t_value, f_value) : 조건이 참일때는 t_value, 거짓일때는 f_value로 바뀐 행렬 반환.
 
-- key : jax.random.PRNGKey(i) : JAX의 난수 생성을 위한 키 생성. 기존의 numpy는 Mersenne Twister PRNG를 사용해 난수를 생성했는데, 
-  여기에는 보안이나 추론등에 어려움이 있어 분할 가능한 최신 Threefry 카운터 기반 PRNG를 사용함. 
-  키는 두개의 unsigned-int32로 설명되는데, 동일한 키를 사용하면 동일한 난수가 나오고, 새로운 난수가 필요할 때 마다 `key, subkey = jax.ramdom.split(key)`를 통해 PRNG를 분할해야 함. split(key, i)로 subkey를 한번에 여러개 생설할 수 있음.  
+- key : jax.random.PRNGKey(i) : JAX의 난수 생성을 위한 키 생성. split(key, num=i)로 subkey를 한번에 여러개 생성할 수 있음(받을땐 key, *subkeys).
+  기존의 numpy는 Mersenne Twister PRNG를 사용해 난수를 생성했는데, 여기에는 보안이나 추론등에 어려움이 있어 분할 가능한 최신 Threefry 카운터 기반 PRNG(pseudo random number generation, 의사 난수 생성)를 사용함. 
+  키는 두개의 unsigned-int32로 설명되는데, 동일한 키를 사용하면 동일한 난수가 나오고, 새로운 난수가 필요할 때 마다 `key, subkey = jax.ramdom.split(key)`를 통해 PRNG를 분할해야 함.
 - jax.random.normal(key, shape) : normal범주 안의 난수로 채워진 shape형태의 행렬생성.
 
 - jax.numpy.convolve(x, y) : 컨볼루션을 진행.
@@ -41,10 +42,25 @@
 - jax.make_jaxpr(func) : jit 컴파일시 추출되는 작업시퀀스(JAX표현식, jaxpr)를 확인 할 수 있음. 변수가 사용되는 제어문은 추적할 수 없으나, `@functools.partial(jit, static_angnums`로 정적변수로 표시하면 추적할 수 있음.
 - jax.device_put(x) : 모든 연산시마다 GPU로 데이터를 전송해 속도가 느렸던 동작으로 필요할 때만 값을 CPU에 복사하도록 변경. jit(lambda x: x)와 동일하나 더 빠름.
 
-- jax.vmap(func) : 자동 벡터화. 함수 내에서 자동으로 벡터를 행렬로 승격시키게 함. batch연산시 사용. 두개의 1차원 벡터간의 연산으로 설계된 함수를, 두개의 행렬간의 연산이 가능하게 바꿔줌. 배치차원이 첫번째가 아닌 경우, in_axes/out_axes인수를 사용해 지정할 수 있음.
+- jax.vmap(func) : 자동 벡터화. 함수 내에서 자동으로 벡터를 행렬로 승격시키게 함. batch연산시 사용. 두개의 1차원 벡터간의 연산으로 설계된 함수를, 두개의 행렬간의 연산이 가능하게 바꿔줌. 배치차원이 첫번째가 아닌 경우, out_axes인수를 사용해 지정할 수 있음.
+  특정 매개변수에는 차원을 추가하고 싶지 않다면 in_axes매개변수를 이용해 지정할 수 있고(추가하지 않을 매개변수의 위치에는 None, 이외에는 0으로 된 튜플), 샘플당 가속된 grad계산을 하고 싶다면, jit(vmap(grad(loss_func)))로 할 수 있음. 
+- jax.pmap(func) : SPMD(동일한 계산(순전파 등)이 다른장치에서 병렬로 다른 입력데이터로 실행되는 병렬기술)을 위해 내장. 기본 사용법은 vmap과 동일함. 배치를 사용가능한 장치수와 동일하게 제작한 뒤 변환. 배열의 요소가 병렬처리에 사용되는 모든 장치에 걸쳐 분할되기에, ShardedDeviceArray를 반환함. 
+  vmap과 동일하게 in_axes등의 매개변수를 사용할 수 있으며, 과정중 JIT컴파일이 포함되어 있기에 jit()은 필요하지 않음. 
+
+## pytree
+- 파이트리 : leaf elements와/또는 pytree의 컨테이너. 일반적으로 모델 매개변수, 데이터세트 항목, 데이터세트로 대량작업, RL에이전트 관챃 등에서 찾을 수 있음. 
+  컨테이너는 list, tuple, dict를 포함함. leaf element는 배열 등 pytree가 아닌 모든것이며, 파이트리는 중첩될 수 있는 표준 혹은 유저등록의 파이썬 컨테이너임. 중첩된 경우 컨테이너유형이 일치하지 않아도 됨. 단일 leaf(컨테이너가 아닌 오브젝트)도 파이트리로 간주됨. 
+- 주의점 : node를 leaf로 착각하거나(구성요소가 pytree노드인 튜플등 이며 그것의 내용은 leaves인 배열이 있다면, map은 튜플로 불러오는게 아니라 leaf인 각 요소들을 불러오게 됨. 이 경우 튜플을 leaf인 ndarray나 jnparray로 바꾸거나 tree_map코드를 다시 작성할 수 있음),
+  None을 pytree의 자식으로 설정하려 한다거나(이경우 자식이 없다고 판단함)등의 주의점이 있음.
+
+- jax.tree_leaves(pytree) : 파이트리 객체를 만듦. pytree는 pytree로 간주되는 것들로 이뤄진 컨테이너형이 될 수 있으며, 2차원 배열또한 될 수 있음. 
+- jax.tree_map(func, lists) : 2차원 배열의 각 배열들에 func를 적용시켜 합침. func의 매개변수를 2개 이상 사용하려면, 2차원 배열들 또한 2개 이상 넣으면 됨.  
+- jax.tree_util.register_pytree_node(MyContainer, flatten_MyContainer, unflatten_MyContainer) : 커스텀 파이트리 노트를 등록. 등록하지 않아도 pytree로 사용할 수는 있으나 tree_map등의 사용을 위함.
+  flatten은 컨테이너의 각 요소를 리스트 형태로 만든것과 컨테이너의 .name을 반환하는 함수이고, unflatten은 aux_data(.name)과 flat_contents를 입력받아 컨테이너로 만들어 반환하는 함수면 됨.
+- jax.tree_transpose(outer_treedef, inner_treedef, pytree_to_transpose) : 내부 및 외부 pytree의 구조를 지정해 pytree의 구조를 바꿀 수 있는 함수. 각 구조는 jax.tree_structure([0 for e in episode_steps])처럼 지정하면 됨.
 
 ## grad
 - jax.grad(func) : 자동 미분. 기울기를 계산. 주로 jax.grad(loss_fn)(params, data_batch)로 사용됨. jax.grad되는 함수는 스칼라를 반환하는 함수만 정의되어 있어 반환값이 튜플이라면 hax_aus=True를 해줘야 함.
 - jax.value_and_grad(loss_fn)(x, y) : (value(loss), grad)의 튜플을 반환함.
-- jax.jacfwd(func) : 순전파.
-- jax.jacrev(func) : 역전파.
+- jax.jacfwd(func) : autodiff에 해당하는 함수의 Jacobian행렬(야코비 행렬, 다변수 벡터 함수의 도함수 행렬)을 계산. 순방향 모드. 역방향과 답변의 차이는 없으나 특정 상황에서 더 효율적일 수 있음.
+- jax.jacrev(func) : autodiff에 해당하는 함수의 Jacobian 행렬을 계산. 역방향 모드. 순방향과 답변의 차이는 없으나 특정 상황에서 더 효율적일 수 있음.
