@@ -9,7 +9,7 @@
 
 - jax.local_device_count() : 사용가능한 디바이스 개수를 반환.
 - jax.config.config.update("jax_debug_nans", True) : NaN생성시 계산오류를 발생시킴.
-- 함수.block_until_ready() : 해당 함수를 동기 실행으로 바꿔줌.
+- 함수.block_until_ready() : 해당 함수를 비동기 실행으로 바꿔줌.
 
 ## Numpy
 - jax.numpy : JAX의 넘파이 연산들이 모인 패키지. 넘파이의 함수는 전부 사용할 수 있고, 일반 넘파이 배열도 연산할 수 있음. 인덱스가 오버된다면 항상 배열의 마지막값이 반환됨.
@@ -28,12 +28,13 @@
 - jax.lax : jax.numpy에 비해 더 엄격하고 종종 더 강력한 하위수준 API. 암시적 인수 승격을 통한 혼합 데이터 유형간 작업 허용 등의 기능이 없음.
 - jax.lax.conv_general_dilated(x, y, stride, padding) : 훨씬 더 일반적인 컨볼루션 사용. 
 
+- jax.lax.scan(f) : HLO동안 single XLA로 낮춤. 파이썬 루프가 롤링되지 않아 대규모 연산이 이뤄지게 하기떄문에 컴파일 시간을 줄여줌.
 - jax.lax.stop_gradient(x) : 기울기계산을 하지 않게 함. 대상의 종속성을 무시. 매개변수에 의존하는 않는 것처럼 취급. 일부 손실의 기울기가 신경망 매개변수의 하위 집합에만 영향을 미치도록 하려는 경우에도 쓸 수 있음.
 - jax.lax.cond(bool, true_func, false_func, operand) : 미분 가능한 조건(제어흐름)식 사용.
 - jax.lax.while_loop(cond_func, body_func, init_val) : fwd모드로 미분가능한 반복문 사용. while(cond_func(init_val): body_func)로 동작함.
 - jax.lax.fori_loop(start, stop, body_func, init_val) : 일반적으로 fwd모드로 미분가능한 for문 사용. 끝점이 정적인 경우 fwd및 rev-mode를 구분할 수 있음. for i in range(start, end): val=body_func(init_val)로 사용됨.
 
-## jax JIT, vmap
+## jit
 - jax.jit(func) : 여러 작업(함수)을 XLA을 사용해 한번에 컴파일함. 한번에 한 작업씩 커널을 디스패치 하던걸 한번에 하는걸로 바꿔 속도를 높임. 함수의 일부 부분만 컴파일 할 수 도 있음. 데코레이터 `@jit`으로도 사용가능.
 - 조건 : 단, 모든 배열이 정적이여야 하는(실행중 모양을 알 수 없는 배열을 생성하지 않아야 하는)등의 조건이 있음. 실제 데이터를 추적하는 형식으로 진행되며, 기록된 계산 시퀀스는 파이썬 코드의 재실행 없이 모양과 type이 같은 새 입력에 효율적으로 적용될 수 있음.
   정적 작업은 Python컴파일 타임에 평가되고, 추적된 작업은 XLA 런타임시 컴파일 및 평가됨. 따라서, 정적인 작업에는 numpy를, 추적해야 하는 작업에는 jnp를 사용하는게 유용함. static_argnums매개변수를 사용해 제어흐름이 있는 함수에도(하나의 흐름으로 고정해)사용할 수 있음.
@@ -42,6 +43,7 @@
 - jax.make_jaxpr(func) : jit 컴파일시 추출되는 작업시퀀스(JAX표현식, jaxpr)를 확인 할 수 있음. 변수가 사용되는 제어문은 추적할 수 없으나, `@functools.partial(jit, static_angnums`로 정적변수로 표시하면 추적할 수 있음.
 - jax.device_put(x) : 모든 연산시마다 GPU로 데이터를 전송해 속도가 느렸던 동작으로 필요할 때만 값을 CPU에 복사하도록 변경. jit(lambda x: x)와 동일하나 더 빠름.
 
+## vmap
 - jax.vmap(func) : 자동 벡터화. 함수 내에서 자동으로 벡터를 행렬로 승격시키게 함. batch연산시 사용. 두개의 1차원 벡터간의 연산으로 설계된 함수를, 두개의 행렬간의 연산이 가능하게 바꿔줌. 배치차원이 첫번째가 아닌 경우, out_axes인수를 사용해 지정할 수 있음.
   특정 매개변수에는 차원을 추가하고 싶지 않다면 in_axes매개변수를 이용해 지정할 수 있고(추가하지 않을 매개변수의 위치에는 None, 이외에는 0으로 된 튜플), 샘플당 가속된 grad계산을 하고 싶다면, jit(vmap(grad(loss_func)))로 할 수 있음. 
 - jax.pmap(func) : SPMD(동일한 계산(순전파 등)이 다른장치에서 병렬로 다른 입력데이터로 실행되는 병렬기술)을 위해 내장. 기본 사용법은 vmap과 동일함. 배치를 사용가능한 장치수와 동일하게 제작한 뒤 변환. 배열의 요소가 병렬처리에 사용되는 모든 장치에 걸쳐 분할되기에, ShardedDeviceArray를 반환함. 
@@ -64,3 +66,26 @@
 - jax.value_and_grad(loss_fn)(x, y) : (value(loss), grad)의 튜플을 반환함.
 - jax.jacfwd(func) : autodiff에 해당하는 함수의 Jacobian행렬(야코비 행렬, 다변수 벡터 함수의 도함수 행렬)을 계산. 순방향 모드. 역방향과 답변의 차이는 없으나 특정 상황에서 더 효율적일 수 있음.
 - jax.jacrev(func) : autodiff에 해당하는 함수의 Jacobian 행렬을 계산. 역방향 모드. 순방향과 답변의 차이는 없으나 특정 상황에서 더 효율적일 수 있음.
+
+## nn
+- jax.nn : jax의 neural network와 관련된 메서드들이 모여있는 패키지.
+### initializer
+- jax.nn.initializers.glorot_normal() : glorat_normal 초기화 사용. 주로 가중치 초기화에 사용됨. (key, shape)로 사용.
+- jax.nn.initializers.normal() : normal초기화 사용. 주로 bias 초기화에 사용됨. (key, shape)로 사용.
+### activate function
+- jax.nn.sigmoid() : sigmoid사용.
+
+## stax
+- jax.experimental.stax : 파이토치나 케라스와 유사하게 더 높은 수준의 추상화 Layer를 제공하는 패키지. 아직까지 RNN계열 모델은 잘 지원되지 않아 직접 만들어야 함.
+- stax.serial(layers) : 각 순전파연산(층)들을 체인하는 wrapper. init_fn와 model(net)을 반환하며, `_, params = init_fn(key, shape)`로 init_fn을 사용할 수 있음.
+### layers
+- stax.Conv(output_dim, kernel, stride) : Convolution Layer 사용.
+- stax.Dense(output_dim) : Dense Layer 사용.
+- stax.BatchNorm() : Batch Normalization 사용.
+- stax.Flatten : Flatten 층 사용.
+### activate function
+- stax.Relu : Relu 사용.
+- stax.LogSoftmax : LogSoftmax 사용.
+### optimizer
+- jax.experimental.optimizers : optimizer들이 정의되어있는 패키지. `opt_init, opt_update, get_params = optimizers.adam(lr)`식으로 사용되며 init은`opt_state = opt_init(params)`식으로 사용함.
+- optimizers.adam(lr) : adam옵티마이저 사용. 
