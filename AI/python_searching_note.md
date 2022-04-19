@@ -515,20 +515,12 @@ for number , name in zip(number_l,name_l):
 -  @abstractmethod
 -  def 메서드이름(self):
 -   pass(추상메서드는 직접 호출될 일이 없기 때문에 빈 메서드로 만듦)로 사용. 상속받는 클래스에서 클래스의 정의를 강제하기 위해 사용. 추상클래스의 모든 추상 메서드를 구현해야함.
-
+- 믹스인 : 다른 클래스에서 사용할 수 있도록 공통적인 메서드를 모아 놓은 클래스. HelloMixIn 같은 방식으로 사용.
 
 ### has a class
 ***
 - 동등한 클래스가 아니라 어떤 클래스들을 관리하는 클래스를 만드려면 리스트 속성에 self.person_list.append(person)식으로 인스턴스들을 넣어 관리한다.
 - 이 경우, PersonList 는 Person 을 가지고 있다고 할 수 있으며, 이런 관계를 포함관계, 영어로는 has-a 관계라고 한다.
-
-### about class
-***
-- Math 패키지(파이썬 내장) > sqrt(값):제곱근 | pow(값,지수):값의 지수제곱 반환 | abs(값):절댓값 반환
-- (collections 모델 import)클래스명 = collections.namedtuple('자료형이름', ['요소이름1', '요소이름2'\])로 각 요소에 이름을 지정해주는 namedtuple 생성.
-- 인스턴스 = 클래스(값1,값2)/클래스(요소1=값1,요소2=값2)로 인스턴스 생성, 인스턴스.요소1/인스턴스[인덱스\]로 요소 접근. 클래스를 따로 만들고 
-  __init__으로 요소를 만들기보다 요소만 쓰는데 유용한듯.
-- 믹스인 : 다른 클래스에서 사용할 수 있도록 공통적인 메서드를 모아 놓은 클래스. HelloMixIn 같은 방식으로 사용.
 
 # try
 ***
@@ -622,6 +614,7 @@ for number , name in zip(number_l,name_l):
 - 코루틴.throw(예외이름, 에러메세지)로 코루틴에 예외를 발생시킬 수 있고, 코루틴에 except 를 사용할 수 있는데, 그 안에서 yield 를 사용하면 throw 의 반환값으로 나온다.
 - 변수 = yield from 코루틴()으로 코루틴 내에서의 return 반환값을 받아올 수 있다.
 - 이때 변수가 있는 상위 코루틴에 값을 보내도 하위 코루틴에서 값을 받고, 하위 코루틴에서 yield 로 값을 보내면 그걸 그대로 다시 밖으로 보냄.
+- 
 ### asyncio
 - asyncio : 비동기 프로그래밍을 위한 모듈. CPU작업과 I/O를 병렬로 처리하게 해줌.
 - 네이티브 코루틴 : 제너레이터기반 코루틴(yield)과 달리 async로 만든 코루틴.  
@@ -671,6 +664,76 @@ for number , name in zip(number_l,name_l):
      혹시 func 에 리턴이 있다면, r을 반환시킬 때 앞뒤로 감쌀 문자열도 같이 반환해야 반환값만 뒤로 밀려나지 않음.
 - 이런식으로 데코레이터를 작성.
 
+# byte
+***
+- bytes : 바이트 단위의 값을 연속적으로 저장하는 시퀀스 객체.
+- bytes(길이): 정해진 길이만큼 0으로 채워진 바이트 객체를 생성
+- bytes(반복가능한객체): 반복 가능한 객체로 바이트 객체를 생성 의 두가지 방법으로 만들 수 있다,
+- ''나 ""앞에 b를 붙이면 바이트객체가 됨
+- dis.dis(func) : 함수가 bytecode로 변환되는 과정을 볼 수 있음. dis패키지를 import 해야 함.
+
+## byte array
+***
+- bytearray : bytes 와 같지만 요소변경 가능.
+- bytearray(): 빈 바이트 배열 객체를 생성
+- bytearray(길이): 정해진 길이만큼 0으로 채워진 바이트 배열 객체를 생성
+- bytearray(반복가능한객체): 반복 가능한 객체로 바이트 배열 객체를 생성
+
+# encoding
+***
+- 파이썬에서 문자열의 기본 인코딩은 UTF-8인데, 바이트객체로 만들면 ASCII 코드로 저장해 그걸로 처리하고 싶을 때 바이트 객체를 사용한다.
+- .encode() : 문자열을  바이트 객체로 바꿀때 사용. ("인코딩")처럼 인코딩을 지정해주면 해당 인코딩으로 된 바이트 객체로 만듦.
+- .decode() : 바이트 객체를 문자열로 바꿈. 이때도 뒤에 특정 인코딩을 지정하면, 그 인코딩으로 된 바이트 객체를 디코딩함.
+- bytes("값", encoding='인코딩') 식으로 인코딩을 지정하여 객체를 생성할 수 있다.
+
+# other
+***
+- id(object) : 오브젝트의 주소값 반환.
+- eval('문자열') : 문자열 형태의 파이썬 코드를 실행하고 결과를 반환
+- repr(객체) : 파이썬 인터프리터에서 실행할 수 있는 문자열을 반환
+- ord(문자) : 문자의 ASCII 코드를 반환
+- chr(정수) : ASCII코드의 문자를 반환
+- hex(정수) : 16진수 / oct(정수) > 8진수 (둘다 문자열로)
+- bin(정수) : 2진수 변환 / int('2진수문자열', 2) > 2진수 10진수 변환
+
+# import
+***
+- import 모듈 as 별명 > 모듈 이름대신 별명으로도 구동 가능.
+- from 모듈 import 변수,함수,클래스 > 모듈.변수로 쓸 필요 없이 그냥 변수만 쓸 수 있다. 그 함수만 사용할 때 유용. *로 쓰면 모든 변수,함수,클래스를 가져온다. 
+  클래스의 경우 모듈.클래스로 사용해야 하니 이 기능을 쓰면 좋다.
+- from 모듈 import 변수 as 변명 > 가져온 변수,함수,클래스에 별명을 붙인다.
+- from 모듈 import 변수 as 이름1, 함수 as 이름2, 클래스 as 이름3 > 여러개를 가져오며 각각에 이름을 붙인다.
+- import 를 해제하려면 del 모듈 로 할 수 있고, 다시 가져오려면 importlib 모듈의 reload 를 사용하면 된다.
+- import 패키지.모듈, import 패키지.모듈1, 패키지.모듈2 로 패키지와 모듈을 가져올 수 있고 여기에 as를 사용하면 패키지.모듈 대신 별명만 사용할 수 있고 
+  from 도 from 패키지.모듈 import 변수 식으로 사용한다..
+
+- 같은 폴더에 있는 파일(모듈)은 그냥 import 모듈로 사용할 수 있다.
+- __name__은 직접 실행한 파일일 경우 __main__이 반환되고, 아니면 그 파일(모듈)의 이름이 반환된다. 패키지의 모듈일 경우 패키지.모듈이름 이 반환된다.
+
+## about import
+***
+- \_\_all__ = ["패키지","의 요소들"\] 로 *을 통해 모든 요소를 불러올때 공개할 것들의 목록을 지정할 수 있다.
+- 현재 폴더에 모듈, 패키지가 없으면 path 에서 찾는데, 이건 sys 모듈의 path 함수로 볼 수 있다. 그 안의 site-packages 는 pip 로 설치한 패키지가 들어가는데, 
+  가상환경을 만든다면 가상환경/Lib/site-packages 폴더에 들어간다.
+- 파이썬은 하위 패키지를 만들 수 있고, 하위패키지의 모듈을 가져 올 떄는 계층순서대로 .을 붙여(.operation.element)가져오면 된다. 
+  하위패키지에서 옆의 패키지를 가져 올 때는 ..(상위폴더란 뜻, 위로 올라갈수록 .이 늘어남)패키지 로 불러올 수 있다.
+- 파이썬에서 \_\_init__.py 파일은 폴더가 패키지로 인식되게 하기도 하고, 패키지를 초기화하는 역할도 한다. 즉 import 시에 이 파일이 실행된다. 
+  __all__도 이 파일에서 해야 하고, 비워둘수도 있으며, 3.3이상에선 없어도 패키지로 인식된다. 근데 이게 비어있으면 from 이 안되는 듯.
+- 이를 이용해 __init__파일에 from .(현재패키지) import 모듈  식으로 명령을 넣어 패키지만 가져와도 모듈도 같이 가져와 calcpkg.operation.add(10, 20)식으로 
+  사용할 수 있게 만들 수 있다.
+- 패키지를 import 할때 from .모듈 import 변수, 함수, 클래스 를 사용하면 앞에 모듈을 붙일 필요 없이 변수만 사용할 수 있다. from .모듈 import * 을 사용해도 된다.
+- 모듈과 패키지(\_\_init__)의 첫줄에 '''모듈의 독스트링'''처럼 독스트링을 넣을 수 있고, 이걸 출력하려면 .__doc__를 출력하면 된다.
+
+# Virtual environment
+***
+- python -m venv 가상환경이름 을 가상환경을 만들 폴더에서 사용하면 가상환경 폴더 생성
+- 그 폴더로 이동해 .\Scripts\Activate.bat 파일을 실행하면(혹은 activate 실행)가상 환경이 활성화됨. 이 명령을 실행한 파이썬의 버전이 가상환경의 버전이 됨.
+- 성공적으로 가상환경을 만들면 (가상환경이름)이 표시되는데, 그 상태에서 pip 로 패키지를 설치하면 \Lib\site-packages 안에 패키지가 저장되며 그 패키지에서만 사용할 수 있다.
+- [pip freeze > requirements.txt] : requirements.txt 파일에 설치된 패키지 목록 저장. 그 목록대로 설치하려면 pip install -r requirements.txt , 삭제하려면 uninstall.
+- 가상환경 폴더를 옮겼다면 activate.bat, Activate.ps1, activate 파일 안의 VIRTUAL_ENV 부분을 이동시킨 폴더 경로로 수정.
+- PyCharm 에서 가상 환경을 사용하려면 File > Settings... > Project > Project Interpreter 에서 오른쪽의 톱니바퀴 버튼을 클릭하고, 
+  Add Local 을 클릭하고 가상 환경의 파이썬 인터프리터(python.exe)를 추가해주면 됨.
+
 # regular expression
 ***
 - 정규 표현식 : 일정한 규칙을 가진 문자열을 표현하는 방법.
@@ -710,6 +773,9 @@ for number , name in zip(number_l,name_l):
 - 그룹에 이름을 지었다면, \\g<이름>형식으로도 매칭된 문자열을 지정할 수 있다.
 - 문자열 앞에 r을 붙이면 원시 문자열이 되어 \를 붙이지 않아도 특수문자를 판단할 수 있게되어 r'\숫자 \g<이름> \g<숫자>'처럼 \를 하나만 붙여서 사용할 수 있게 된다.
 
+# Packages
+***
+
 # pip
 ***
 - pip > 원도우용 파이썬에는 기본 내장, 리눅스 : 리눅스, macOS$ curl -O https://bootstrap.pypa.io/get-pip.py(curl 설치 필요), 맥OS : 
@@ -719,100 +785,33 @@ for number , name in zip(number_l,name_l):
 - pip install 패키지==버전: 특정 버전의 패키지를 설치(예: pip install requests==2.9.0)
 - pip list 또는 pip freeze: 패키지 목록 출력
 - pip uninstall 패키지: 패키지 삭제
+- pip.main(["명령어", "목적어"\]) : 파이썬 코드 내에서 pip사용.
 
 - 모듈(module): 변수, 함수, 클래스 등을 모아 놓은 스크립트 파일.
 - 패키지(package): 여러 모듈을 묶은 것
 
-# import
-***
-- import 모듈 as 별명 > 모듈 이름대신 별명으로도 구동 가능.
-- from 모듈 import 변수,함수,클래스 > 모듈.변수로 쓸 필요 없이 그냥 변수만 쓸 수 있다. 그 함수만 사용할 때 유용. *로 쓰면 모든 변수,함수,클래스를 가져온다. 
-  클래스의 경우 모듈.클래스로 사용해야 하니 이 기능을 쓰면 좋다.
-- from 모듈 import 변수 as 변명 > 가져온 변수,함수,클래스에 별명을 붙인다.
-- from 모듈 import 변수 as 이름1, 함수 as 이름2, 클래스 as 이름3 > 여러개를 가져오며 각각에 이름을 붙인다.
-- import 를 해제하려면 del 모듈 로 할 수 있고, 다시 가져오려면 importlib 모듈의 reload 를 사용하면 된다.
-- import 패키지.모듈, import 패키지.모듈1, 패키지.모듈2 로 패키지와 모듈을 가져올 수 있고 여기에 as를 사용하면 패키지.모듈 대신 별명만 사용할 수 있고 
-  from 도 from 패키지.모듈 import 변수 식으로 사용한다..
+- math.isclose(0.1 + 0.2, 0.3) : 두 실수가 같은지 판단.
 
-- 같은 폴더에 있는 파일(모듈)은 그냥 import 모듈로 사용할 수 있다.
-- __name__은 직접 실행한 파일일 경우 __main__이 반환되고, 아니면 그 파일(모듈)의 이름이 반환된다. 패키지의 모듈일 경우 패키지.모듈이름 이 반환된다.
+- Math 패키지(파이썬 내장) > sqrt(값):제곱근 | pow(값,지수):값의 지수제곱 반환 | abs(값):절댓값 반환 | comb(n, k): nCk 반환.
+- (collections 모델 import)클래스명 = collections.namedtuple('자료형이름', ['요소이름1', '요소이름2'\])로 각 요소에 이름을 지정해주는 namedtuple 생성.
 
-## about import
-***
-- \_\_all__ = ["패키지","의 요소들"\] 로 *을 통해 모든 요소를 불러올때 공개할 것들의 목록을 지정할 수 있다.
-- 현재 폴더에 모듈, 패키지가 없으면 path 에서 찾는데, 이건 sys 모듈의 path 함수로 볼 수 있다. 그 안의 site-packages 는 pip 로 설치한 패키지가 들어가는데, 
-  가상환경을 만든다면 가상환경/Lib/site-packages 폴더에 들어간다.
-- 파이썬은 하위 패키지를 만들 수 있고, 하위패키지의 모듈을 가져 올 떄는 계층순서대로 .을 붙여(.operation.element)가져오면 된다. 
-  하위패키지에서 옆의 패키지를 가져 올 때는 ..(상위폴더란 뜻, 위로 올라갈수록 .이 늘어남)패키지 로 불러올 수 있다.
-- 파이썬에서 \_\_init__.py 파일은 폴더가 패키지로 인식되게 하기도 하고, 패키지를 초기화하는 역할도 한다. 즉 import 시에 이 파일이 실행된다. 
-  __all__도 이 파일에서 해야 하고, 비워둘수도 있으며, 3.3이상에선 없어도 패키지로 인식된다. 근데 이게 비어있으면 from 이 안되는 듯.
-- 이를 이용해 __init__파일에 from .(현재패키지) import 모듈  식으로 명령을 넣어 패키지만 가져와도 모듈도 같이 가져와 calcpkg.operation.add(10, 20)식으로 
-  사용할 수 있게 만들 수 있다.
-- 패키지를 import 할때 from .모듈 import 변수, 함수, 클래스 를 사용하면 앞에 모듈을 붙일 필요 없이 변수만 사용할 수 있다. from .모듈 import * 을 사용해도 된다.
-- 모듈과 패키지(\_\_init__)의 첫줄에 '''모듈의 독스트링'''처럼 독스트링을 넣을 수 있고, 이걸 출력하려면 .__doc__를 출력하면 된다.
-
-# appendix
-***
-
-## time
+# time
 ***
 - time.time() : 현재시간 반환. 단위는 sec. 함수 시작 전과 후의 차이를 이용해 함수의 실행시간을 구할 수 도 있음.
 - time.sleep(n) : sleep. n초를 sleep함. n은 실수도 가능.
 - time 모듈의 localtime 함수를 이용하면 UTC 가 아니라 KST 로, 날짜와 시간 형태로 변환해준다.
 - time.strftime('포맷', time.localtime(time.time())) 로 원하는 포맷으로 사용할 수 있다.
 
-## byte
-***
-- bytes : 바이트 단위의 값을 연속적으로 저장하는 시퀀스 객체.
-- bytes(길이): 정해진 길이만큼 0으로 채워진 바이트 객체를 생성
-- bytes(반복가능한객체): 반복 가능한 객체로 바이트 객체를 생성 의 두가지 방법으로 만들 수 있다,
-- ''나 ""앞에 b를 붙이면 바이트객체가 됨
+# timeit
+- timeit.timeit(함수) : 함수의 시작부터 끝까지 걸린 시간을 측정.
+- %timeit func : IPython(주피터)환경에서 해당 함수 실행시 걸리는 시간을 측정. return이 있는 함수나 lambda등으로 측정해야하고, print등으로 하면 무한반복 된다.
 
-### byte array
-***
-- bytearray : bytes 와 같지만 요소변경 가능.
-- bytearray(): 빈 바이트 배열 객체를 생성
-- bytearray(길이): 정해진 길이만큼 0으로 채워진 바이트 배열 객체를 생성
-- bytearray(반복가능한객체): 반복 가능한 객체로 바이트 배열 객체를 생성
-
-## encoding
-***
-- 파이썬에서 문자열의 기본 인코딩은 UTF-8인데, 바이트객체로 만들면 ASCII 코드로 저장해 그걸로 처리하고 싶을 때 바이트 객체를 사용한다.
-- .encode() : 문자열을  바이트 객체로 바꿀때 사용. ("인코딩")처럼 인코딩을 지정해주면 해당 인코딩으로 된 바이트 객체로 만듦.
-- .decode() : 바이트 객체를 문자열로 바꿈. 이때도 뒤에 특정 인코딩을 지정하면, 그 인코딩으로 된 바이트 객체를 디코딩함.
-- bytes("값", encoding='인코딩') 식으로 인코딩을 지정하여 객체를 생성할 수 있다.
-
-## other
-***
-- id(object) : 오브젝트의 주소값 반환.
-- eval('문자열') : 문자열 형태의 파이썬 코드를 실행하고 결과를 반환
-- repr(객체) : 파이썬 인터프리터에서 실행할 수 있는 문자열을 반환
-- ord(문자) : 문자의 ASCII 코드를 반환
-- chr(정수) : ASCII코드의 문자를 반환
-- hex(정수) : 16진수 / oct(정수) > 8진수 (둘다 문자열로)
-- bin(정수) : 2진수 변환 / int('2진수문자열', 2) > 2진수 10진수 변환
-- math.isclose(0.1 + 0.2, 0.3) : 두 실수가 같은지 판단.
-- dis.dis(func) : 함수가 bytecode로 변환되는 과정을 볼 수 있음. dis패키지를 import 해야 함.
-
-
-# Virtual environment
-***
-- python -m venv 가상환경이름 을 가상환경을 만들 폴더에서 사용하면 가상환경 폴더 생성
-- 그 폴더로 이동해 .\Scripts\Activate.bat 파일을 실행하면(혹은 activate 실행)가상 환경이 활성화됨. 이 명령을 실행한 파이썬의 버전이 가상환경의 버전이 됨.
-- 성공적으로 가상환경을 만들면 (가상환경이름)이 표시되는데, 그 상태에서 pip 로 패키지를 설치하면 \Lib\site-packages 안에 패키지가 저장되며 그 패키지에서만 사용할 수 있다.
-- [pip freeze > requirements.txt] : requirements.txt 파일에 설치된 패키지 목록 저장. 그 목록대로 설치하려면 pip install -r requirements.txt , 삭제하려면 uninstall.
-- 가상환경 폴더를 옮겼다면 activate.bat, Activate.ps1, activate 파일 안의 VIRTUAL_ENV 부분을 이동시킨 폴더 경로로 수정.
-- PyCharm 에서 가상 환경을 사용하려면 File > Settings... > Project > Project Interpreter 에서 오른쪽의 톱니바퀴 버튼을 클릭하고, 
-  Add Local 을 클릭하고 가상 환경의 파이썬 인터프리터(python.exe)를 추가해주면 됨.
-
-
-# collections
-***
-- collections : 표와 인덱싱등 데이터를 다룰때 특히 유용한 라이브러리 모듈. 데이터처리를 위한 유용한 객체가 많이 있음. dict()의 기본 API사용가능.
-- collections.Counter() : 카운터객체 생성. 딕셔너리와 동일하게 키/값 형식으로 되어있으나 최초 키 추가시 0으로 자동초기화됨. 
-  .mostcommon(n)으로 빈도수 순 정렬로 받을 수 있음(n생략가능).
-- collections.defaultdict(list) : defaultdict객체 생성. 하나의 키를 여러 값에 맵핑가능. 인자로 주어진 객체의 기본값을 초깃값으로 사용.
-- collections.deque(maxlen=n) : deque객체 생성. 마지막 n개의 객체만을 유지.   
+# Math
+- math : 수학 연산과 관련된 메서드들이 내장된 패키지.
+- math.sqrt(값) :제곱근.
+- math.pow(값,지수) : 값의 지수제곱 반환.
+- math.abs(값) : 절댓값 반환.
+- math.comb(n, k) : nCk 반환.
 
 # itertools
 ***
@@ -821,13 +820,43 @@ for number , name in zip(number_l,name_l):
 - itertools.product(list, n) : 중복순열(Pi, 중복을 허용하고 순서가 존재하는 채로 n개를 뽑아서 나열)을 생성.
 - itertools.combinations_with_replacement(list, n) : 중복조합(H, 중복을 허용하고 순서가 존재하는 채로 n개를 뽑아서 나열)을 생성.
 
-# json
+# collections
 ***
-- json : json 모듈 import 후 .json 형식의 파일을 열어 json.load(파일객체)로 파이썬의 객체에 저장할 수 있다.
-- 파이썬 객체를 json 문자열로 변환하려면 json.dump(객체-딕셔너리?)로 통과시켜줘야 한다. 가독성을 위해 
-  (객체, indent=들여쓰기할 숫자,sort_keys=True(키 중심으로 정렬))등을 사용할 수 있다.
-- API : API 의 url 을 문자열에 저장한 후 request 모둘의 get(url) 함수로 변환한 후, 그걸 다시 읽을 수 있게 get 한 객체.text 로 변환하고, 
-  그걸 json.load 로 json 파일로 변환한다. 그 후, API 의 참조 파일을 참고해 데이터의 종류를 파악한다.
+- collections : 표와 인덱싱등 데이터를 다룰때 특히 유용한 라이브러리 모듈. 데이터처리를 위한 유용한 객체가 많이 있음. dict()의 기본 API사용가능.
+- collections.namedtuple('자료형이름', ['요소이름1', '요소이름2'\]) : 각 요소에 이름을 지정해주는 namedtuple 생성.
+- collections.Counter() : 카운터객체 생성. 딕셔너리와 동일하게 키/값 형식으로 되어있으나 최초 키 추가시 0으로 자동초기화됨. 
+  .mostcommon(n)으로 빈도수 순 정렬로 받을 수 있음(n생략가능).
+- collections.defaultdict(list) : defaultdict객체 생성. 하나의 키를 여러 값에 맵핑가능. 인자로 주어진 객체의 기본값을 초깃값으로 사용.
+- collections.deque(maxlen=n) : deque객체 생성. 마지막 n개의 객체만을 유지.   
+
+# logging
+- logging : 소프트웨어가 작동 중일때 발생하는 여러 사건을 추적하는 파이썬 내장 라이브러리. 메세지의 형식과 내용을 모두 제어할 수 있음. 각 사건의 중요도를 level이라고 정의하고 있음.
+- level : DEBUG -> INFO -> WARNING -> ERROR -> CRITICAL 
+  - DEBUG : 간단히 문제를 진단하고 싶을 때 필요한 자세한 정보를 기록함.
+  - INFO : 계획대로 작동하고 있음을 알리는 확인 메시지, print와 같은 느낌으로 사용됨.
+  - WARNING : 소프트웨어가 작동은 하고 있지만, 예상치 못한 일이 발생했거나 할 것으로 예측된다는 것을 알림. 기본설정.
+  - ERROR : 중대한 문제로 인해 소프트웨어가 몇몇 기능들을 수행하지 못함을 알림. 
+  - CRITICAL : 작동이 불가능한 수준의 심각한 에러가 발생함을 알림.
+- 중요구성요소 : logger, handler, filter, formatter. Log사건정보들은 LogRecord Instance안에 있는 위 요소들 사이에서 전송. formatter(format)와 handlers등의 설정은 json파일로 만들어 관리하면 좋음.
+  - Logger : Logger 클래스의 인스턴스. logging의 시작. 각 logger는 name을 갖게되고, 엘리멘트 형식으로(.을 통해)계층적 관계를 형성하게 되며 설정을 변화시키지 않으면 자식이 부모의 여러 특성을 물려받게 됨.
+  - Handler : log기록들이 표시/기록될 장소를 결정. log메세지의 level에 따라 지정된 위치에 전달하는 역할을 수행. 기능과 목적에 따라 여러개를 가질 수 있으며, 각 handler는 다른 level과 format을 가질 수 도 있음.
+  - Filter : 간단히 사용할 때는 잘 쓰이지는 않으나 level보다 복잡한 필터링을 원할때(어떤 log기록이 출력될지 정할때)사용됨. 
+  - formatter : 실제 출력형식을 결정함.
+
+- logger = logging.getLogger(name) : logging 인스턴스인 logger 생성. 아무것도 입력하지 않으면 root logger가 생성됨.
+- logger.setLevel(level) : logger에 level 부여. 지정한 level이상의 메세지를 출력할 수 있게 됨. logging.Level로 level객체를 꺼낼 수 있음.
+- logger.addHandler(핸들러) : 로거에 핸들러 설정. 핸들러는 기능과 목적에 따라 여러개 일 수 있으며, 각 핸들러는 다른 level과 format을 가질 수 있음.
+- logger.info(Message) : info 메세지를 콘솔에 출력. 이외에도 각 level을 소문자로 바꿔 메서드로 사용하면 해당 level의 메세지를 출력할 수 있음.
+- logger.exception(Message) : 에러메세지를 설정.
+- logger.propagate = False : 자식으로의 전파(연결)을 하지 않게 함.
+
+- logging.StreamHandler() : stream(console)에 기록하는 스트림 핸들러 객체를 생성.
+- logging.FileHandler(file_name) : 파일에 기록하는 파일 핸들러 객체를 생성.
+- handler.setLevle(레벨) : 핸들러에 레벨 설정.
+- handler.setFormatter(formatter) : formatter 설정.
+
+- logging.Formatter(fmt, datefmt, style) : 메세지의 출력형식을 결정하는 Formatter생성. 각 log기록들은 LogRecord객체의 속성으로 정의되어 있으며(asctime-인간이 읽을 수 있는 시간 등)format정의에 활용됨(자세한건 공식문서).
+  fmt(메세지 출력 형태, None이면 raw), datefmt(날짜, None이면 '%Y-%m-%d %H:%M:%S'), style([%, {, $]중 하나. fmt의 스타일을 결정)의 인자를 사용할 수 있음. 
 
 # argparse
 - argparse : 명령행 인터페이스를 쉽게 작성하도록함. sys.argv를 어떻게 파싱할지 파악하며, 도움말과 사용법메세지를 자동 생성하고, 잘못된 인자를 줄 때 에러를 발생시킴.
@@ -861,34 +890,21 @@ for number , name in zip(number_l,name_l):
 - 데몬쓰레드 : 백그라운드에서 실행되는, 메인쓰레드가 종료되면 즉시 종료되는 쓰레드. 일반 쓰레드는 메인이 끝나도 자신의 작업이 끝날때까지 계속 실행.
 - t.deamon = True : 데몬쓰레드로 설정.
 
-# logging
-- logging : 소프트웨어가 작동 중일때 발생하는 여러 사건을 추적하는 파이썬 내장 라이브러리. 메세지의 형식과 내용을 모두 제어할 수 있음. 각 사건의 중요도를 level이라고 정의하고 있음.
-- level : DEBUG -> INFO -> WARNING -> ERROR -> CRITICAL 
-  - DEBUG : 간단히 문제를 진단하고 싶을 때 필요한 자세한 정보를 기록함.
-  - INFO : 계획대로 작동하고 있음을 알리는 확인 메시지, print와 같은 느낌으로 사용됨.
-  - WARNING : 소프트웨어가 작동은 하고 있지만, 예상치 못한 일이 발생했거나 할 것으로 예측된다는 것을 알림. 기본설정.
-  - ERROR : 중대한 문제로 인해 소프트웨어가 몇몇 기능들을 수행하지 못함을 알림. 
-  - CRITICAL : 작동이 불가능한 수준의 심각한 에러가 발생함을 알림.
-- 중요구성요소 : logger, handler, filter, formatter. Log사건정보들은 LogRecord Instance안에 있는 위 요소들 사이에서 전송. formatter(format)와 handlers등의 설정은 json파일로 만들어 관리하면 좋음.
-  - Logger : Logger 클래스의 인스턴스. logging의 시작. 각 logger는 name을 갖게되고, 엘리멘트 형식으로(.을 통해)계층적 관계를 형성하게 되며 설정을 변화시키지 않으면 자식이 부모의 여러 특성을 물려받게 됨.
-  - Handler : log기록들이 표시/기록될 장소를 결정. log메세지의 level에 따라 지정된 위치에 전달하는 역할을 수행. 기능과 목적에 따라 여러개를 가질 수 있으며, 각 handler는 다른 level과 format을 가질 수 도 있음.
-  - Filter : 간단히 사용할 때는 잘 쓰이지는 않으나 level보다 복잡한 필터링을 원할때(어떤 log기록이 출력될지 정할때)사용됨. 
-  - formatter : 실제 출력형식을 결정함.
+# sys
+- sys : 파이썬 인터프리터를 제어할 수 있음.
+- sys.argv : 명령행에서 전달한 인자를 받을 수 있음. python명령어 뒤의 모든것들이 공백을 기준으로 나뉘어 리스트의 요소가 됨(첫 요소는 파일명).
+- sys.exit() : 강제로 스크립트 종료. Ctrl+Z/D등과 같은 기능을 함.
+- sys.stdin : 받은 입력(전체)을 반환함. 라인별로 리스트로 저장되어있음. 여러줄의 입력을 한번에 받을 수 있는 방법.
+- sys.path : 파이썬 모듈들이 저장되어있는 위치들을 반환함. ''은 현재 디렉토리. .append()로 경로를 추가하면 해당 경로의 파이썬모듈을 사용할 수 있음.
+- sys.ps1 : 현재 프롬프트(코드 입력을 의미하는 >>>)를 반환. 이 변수에 값을 할당해 다른걸로 바꿀 수 있음.
 
-- logger = logging.getLogger(name) : logging 인스턴스인 logger 생성. 아무것도 입력하지 않으면 root logger가 생성됨.
-- logger.setLevel(level) : logger에 level 부여. 지정한 level이상의 메세지를 출력할 수 있게 됨. logging.Level로 level객체를 꺼낼 수 있음.
-- logger.addHandler(핸들러) : 로거에 핸들러 설정. 핸들러는 기능과 목적에 따라 여러개 일 수 있으며, 각 핸들러는 다른 level과 format을 가질 수 있음.
-- logger.info(Message) : info 메세지를 콘솔에 출력. 이외에도 각 level을 소문자로 바꿔 메서드로 사용하면 해당 level의 메세지를 출력할 수 있음.
-- logger.exception(Message) : 에러메세지를 설정.
-- logger.propagate = False : 자식으로의 전파(연결)을 하지 않게 함.
-
-- logging.StreamHandler() : stream(console)에 기록하는 스트림 핸들러 객체를 생성.
-- logging.FileHandler(file_name) : 파일에 기록하는 파일 핸들러 객체를 생성.
-- handler.setLevle(레벨) : 핸들러에 레벨 설정.
-- handler.setFormatter(formatter) : formatter 설정.
-
-- logging.Formatter(fmt, datefmt, style) : 메세지의 출력형식을 결정하는 Formatter생성. 각 log기록들은 LogRecord객체의 속성으로 정의되어 있으며(asctime-인간이 읽을 수 있는 시간 등)format정의에 활용됨(자세한건 공식문서).
-  fmt(메세지 출력 형태, None이면 raw), datefmt(날짜, None이면 '%Y-%m-%d %H:%M:%S'), style([%, {, $]중 하나. fmt의 스타일을 결정)의 인자를 사용할 수 있음. 
+# json
+***
+- json : json 모듈 import 후 .json 형식의 파일을 열어 json.load(파일객체)로 파이썬의 객체에 저장할 수 있다.
+- 파이썬 객체를 json 문자열로 변환하려면 json.dump(객체-딕셔너리?)로 통과시켜줘야 한다. 가독성을 위해 
+  (객체, indent=들여쓰기할 숫자,sort_keys=True(키 중심으로 정렬))등을 사용할 수 있다.
+- API : API 의 url 을 문자열에 저장한 후 request 모둘의 get(url) 함수로 변환한 후, 그걸 다시 읽을 수 있게 get 한 객체.text 로 변환하고, 
+  그걸 json.load 로 json 파일로 변환한다. 그 후, API 의 참조 파일을 참고해 데이터의 종류를 파악한다.
 
 # os | os(파일, 디렉토리)관련 명령
 - os.getcwd() : 현재 작업 폴더 반환.
@@ -909,17 +925,6 @@ for number , name in zip(number_l,name_l):
 - os.path.isfile(경로) : 파일의 존재 여부를 반환.
 - os.path.exists(경로) : 파일 혹은 디렉토리의 존재 여부를 반환.
 - os.path.getsize(경로) : 파일의 크기 반환.
-
-# sys
-- sys : 파이썬 인터프리터를 제어할 수 있음.
-- sys.argv : 명령행에서 전달한 인자를 받을 수 있음. python명령어 뒤의 모든것들이 공백을 기준으로 나뉘어 리스트의 요소가 됨(첫 요소는 파일명).
-- sys.exit() : 강제로 스크립트 종료. Ctrl+Z/D등과 같은 기능을 함.
-- sys.stdin : 받은 입력(전체)을 반환함. 라인별로 리스트로 저장되어있음. 여러줄의 입력을 한번에 받을 수 있는 방법.
-- sys.path : 파이썬 모듈들이 저장되어있는 위치들을 반환함. ''은 현재 디렉토리. .append()로 경로를 추가하면 해당 경로의 파이썬모듈을 사용할 수 있음.
-- sys.ps1 : 현재 프롬프트(코드 입력을 의미하는 >>>)를 반환. 이 변수에 값을 할당해 다른걸로 바꿀 수 있음.
-
-# timeit
-- timeit.timeit(함수) : 함수의 시작부터 끝까지 걸린 시간을 측정.
 
 # tkinter
 - tkinter : 파이썬 GUI프로그래밍 패키지. 파이썬에서 기본 제공. 구글의 colab이나 서버컴퓨터를 이용한 실행 등, 서버를 따로 두고있는 환경에선 실행할 수 없다.
@@ -983,7 +988,6 @@ for number , name in zip(number_l,name_l):
 
 - pygame.draw.rect/polygon/circle/eclipse/arc/line/lines/aaline/aalines() : 도형/선을 그림. 여러 매개변수를 주어 도형의 색/크기/위치/그 외 기타등등을 설정가능.
 
-
 # other program
 ***
 
@@ -1026,7 +1030,6 @@ for number , name in zip(number_l,name_l):
 
 - README.md : 각 레포지토리 최상단(.gitignore와 같은 위치)에 README.md라는 파일이 있으면 해당 파일이 README로 깃허브에 표시되고, 
   유저명/유저명 레포지토리에 README.md를 넣어 깃허브의 프로필을 꾸밀 수 있음.  
-
 
 # scp/ssh
 - (복사할 파일의 경로에서) scp file.txt(파일명) temp_1@10.120.72.239:/home/temp_1(파일을 복사해 넣을 경로) : 파일을 복사해 넣음.
