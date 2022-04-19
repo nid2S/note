@@ -26,6 +26,17 @@
 - SDK(Software Development Kit) : 일반적으로 하드웨어 플랫폼, OS 또는 프로그래밍 언어 제작사가 제공하는 일련의 툴. 이를 활용해 특정 플랫폼, 시스템, 프로그래밍 언어에 따라 개발이 가능. 
   컴파일러, 디버거, API등이 포함되나 다양한 도구(설명서, 라이브러리, 편집기, 런타임/개발환경, 테스트/분석 툴, 드라이버, 네트워크 프로토콜 등)도 포함될 수 있음.
 
+# operators
+- 산술 연산자(Arithmetic Operators) : 단순 계산을 위한 연산자. +, -, *, /, %, **, //
+- 할당 연산자(Assignment Operators) : 값을 변수에 할당하는 연산자. =, +=, -=, *=, /=, %=. //=, **=
+- 삼항 연산자(Ternary Operator) : 삼항연산자. 실제로 파이썬에 삼항연산자는 없으나, 같은 역할을 하는 파이썬 문법`a if num % 2 ==0 else b`이 있음.
+- 비교 연산자(Comparison Operators) : 좌우 변수를 비교하는 연산자. boolean값을 반환함. ==, !=, >, <, >=, <=
+- 논리 연산자(Logical Operators) : 조건문 결합시 사용하는 연산자. and, or, not
+- 항등 연산자(Identity Operators) : 같은 메모리에 있는지 확인하는 연산자. is, is not
+- 멤버 연산자(Membership Operators) : 왼쪽 값이 오른쪽 컨테이너 객체의 멥버인지 확인하는 연산자. in, not in 
+- 비트 연산자(Bitwise Operators) : 비트단위로 연산하는 연산자. 최대한 메모리를 아끼기 위해 사용. &, |, ^, ~, <<, >>
+- 추가 : 그 외 연산자. @(합성곱, ndarray나 tensor등의 자료형간의 합성곱을 하게 함)등이 있음. 
+
 # print
 ***
 - print(a,b,c,sep=',') > 사이를 sep 로
