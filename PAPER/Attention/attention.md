@@ -13,18 +13,37 @@
 - v(t) = \[a(t);s(t)](결합) | v(t)와 s(t-1)을 메모리셀(LSTM, RNN)의 입력으로 사용해 s(t)를 얻고, 이는 출력층으로 전달되 현시점의 예측값을 구하게 됨.
 
 
-## order
+# order
 - 인코더와 디코더의 은닉상태 크기가 같다고 가정.
 - s(t) : 현시점 디코더 은닉상태(Q) | h(i) : i번째 인코더 은닉상태(K(i)) | score(s(t), h(i)) : 현시점과 i번째 인코더 은닉상태간 어텐션스코어(유사도) |
-- Dot-Product Attention (dot, Luong)  : score(s(t), h(i)) = s(t).T * h(i)
-- scaled dot            (Vaswani)     : score(s(t), h(i)) = s(t).T * h(i) / √(n)                      | 주로 Q = s(t), K = h. V = K+어텐션(Normalized Weights). 초기값은 V와 K가 동일.
-- general               (Luong)       : score(s(t), h(i)) = s(t).T * W(a) * h(i)                      | W(a): 학습가능한 가중치 행렬
-- concat                (Bahadanau)   : score(s(t-1), h(i)) = W(a).T * tanh(W(b)*s(t-1) + W(c)*h(i))  | W(b,c): 학습가능한 가중치 행렬. 병렬화를 위해 h(i)대신 H(h 모두 모음)을 사용.
-- location-base         (Luong)       : score(s(t), h(i)) = X | a(t) = softmax(W(a) * s(t))           | 어텐션값 산출시 s(t)만 사용하는 방법
+### Dot-Product
+- Dot-Product Attention(dot, Luong) : score(s(t), h(i)) = s(t).T * h(i).
+### Scaled dot
+- scaled dot Attention(Vaswani) : score(s(t), h(i)) = s(t).T * h(i) / √(n)
+- 주로 Q = s(t), K = h. V = K+어텐션(Normalized Weights). 초기값은 V와 K가 동일.
+### General
+- general Attention(Luong) : score(s(t), h(i)) = s(t).T * W(a) * h(i)
+- W(a): 학습가능한 가중치 행렬
+### Concat
+- concat Attention(Bahadanau) : score(s(t-1), h(i)) = W(a).T * tanh(W(b)*s(t-1) + W(c)*h(i))
+- W(b,c): 학습가능한 가중치 행렬. 병렬화를 위해 h(i)대신 H(h 모두 모음)을 사용.
+### lacation-base
+- location-base Attention(Luong) : score(s(t), h(i)) = X
+- a(t) = softmax(W(a) * s(t))
+- 어텐션값 산출시 s(t)만 사용하는 방법
+### Additive
+- Additive Attention : c_t = sum(a_(t,i) * h_i) = a_t * h.
+- a_(t,i) = exp(s_(t,i))/sum(exp(s_(t,i)))        | s_(t,i) = w^T * tanh(W\*d_(t-1) + V*h_i + b)
+- W, V = 학습가능 가중치 | w, v = 학습 가능 벡터 가중치 | h_i, d_i = 인코더/디코더 i번째 feature | 
+- s_(t,i) = t 시점에서 h_i에 대한 attention score    | a_(t,i) = t 시점에서 h_i에 대한 alignment(0~1)
+- c_t = t시점에서 Attention모듈로부터 추출한 context vector | Additive = 첨가된.
+### Location Sensitive
+- Location Sensitive Attention : s_(t, i) = w^T * tanh(W*d_(t-1) + v\*h_i + U\*f_(t,i)+b)
+- f_i = F * a_(i-1) | F = Convolution Filter | a_(i-1) = 지난 시점 Additive Attention alignment score. 
+- 이전 시점에서 생성된 attention alignment를 이용해 다음 시점을 구할때 추가로 고려.
 
 
-
-## self attention
+# self attention
 - 셀프 어텐션 : 쿼리, 키, 벨류가 입력문장의 모든 단어벡터들로 동일. 인코더(Encoder) 혹은 디코더에서(Masked decoder) 이뤄짐. 
   입력문장내 단어들끼리 유사도를 구해 단어의 의미(it 등이 무엇을 뜻하는지)를 찾아냄.
 - 셀프 어텐션 실행 : 각 단어벡터들에 가중치행렬(단어벡터차원*(단어벡터차원/num_heads)의 크기를 지님)을 곱해 일정크기(단어벡터차원/num_heads)의 쿼리, 키, 벨류 벡터를 얻음.
@@ -33,4 +52,3 @@
 - 셀프 어텐션 행렬연산 과정 : 문장행렬에 가중치행렬을 곱해 Q,K,V 행렬을 구하고, Q와 K를 내적곱(Q*K^t)하고 (q\*k/√(k벡터 차원))로 나눠 어텐션스코어를 얻으며,
   여기에 softmax를 지나게 하고(어텐션 분포) V행렬을 곱해 어텐션값 행렬을 만들 수 있음.
  
-![img.png](../../image/attention.png)
