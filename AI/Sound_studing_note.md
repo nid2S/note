@@ -68,6 +68,7 @@ plt.show()
 # 음성합성(TTS)
 - 음성 합성(speech synthesis) : 인위적으로 사람의 소리를 합성하여 만들어 내는 것. 텍스트를 음성으로 변환한다는 데서 TTS(text-to-speech)하고도 함.
 - 라이브러리 : gtts(Google Text to Speech API), speech, sound, pyttsx3등의 라이브러리가 있음.
+- 푸리에 변환 : 시간이나 공간에 대한 함수를 시간 또는 공간 주파수 성분으로 분해하는 변환. 일종의 적분변환. 함수 x(t)가 복소수 범위에서 정의되어 있고 르베그 적분이 가능할 때, -∞∫∞ x(t)e^(-2πiξt). | t = 시간, ξ = 변환변수, 주파수.  
 - 스펙트로그램(Spectrogram) : 소리나 파동을 시각화하여 파악하기 위한 도구로, 파형(시간에 따른 진폭의 변화)과 스펙트럼(주파수에 따른 진폭의 변화)의 특징이 조합되어 있음. 
   시간축과 주파수 축의 변화에 따라 진폭의 차이를 인쇄 농도/표시색상의 차이로 나타냄.
 - 멜스펙트로그램(Mel-spectrogram) : 음성의 특징 추출 방법 중 하나. 주파수의 단위를 특정 공식에 따라 멜 단위로 바꾼 스펙트럼. 
@@ -85,6 +86,7 @@ plt.show()
 - 어텐션 : 디코더는 pre-net을 거쳐 어텐션의 키로 사용됨. 쿼리(인코더 출력)와 키를 구했으니 스코어 계산, value concat의 과정을 거침.
 - 보코더 : concat한 벡터를 multi GRU에 입력해 멜-스펙트로그램을 출력하고, 이후 하나 더 있는 CBHG에 멜스펙트로그램을 입력해 스펙트로그램을 출력함. 이를 그리핀-림 알고리즘을 이용해 오디오신호로 복원. 
 
+- [tacotron2](../PAPER/TTS/tacotron2.md)
 - tacotron2 : 타코트론1과 가장 큰 차이점은 wavenet보코더의 유무(없어졌음).
 - 차이점 : 인코더에서 FC-CBHG 구조가 아닌 1Dconv - Bi_zeroShot_LSTM 구조가 되었고, 어텐션에 location aware를 적용했으며, 디코더의 attentionRNN이 GRU에서 GRU에서 zoneout LSTM으로 변경되었고,
   어텐션 출력이 residual BIGRU -> 멜스펙트로그램 에서 단순히 linear net을 거쳐 멜스펙토그램과 stop토큰(audio가 있는 프레임이면 0, 없으면(패딩)1)을 만드는 것으로 바뀜. 
