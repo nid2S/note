@@ -68,6 +68,7 @@ plt.show()
 # 음성합성(TTS)
 - 음성 합성(speech synthesis) : 인위적으로 사람의 소리를 합성하여 만들어 내는 것. 텍스트를 음성으로 변환한다는 데서 TTS(text-to-speech)하고도 함.
 - 라이브러리 : gtts(Google Text to Speech API), speech, sound, pyttsx3등의 라이브러리가 있음.
+- 어텐션 역할 : 화자가 말 하는 법을 학습. "여기에 집중해라"를 학습하므로 특정 문자의 발음이나 말을 쉬는 시간등을 학습하게 됨. 일반화(학습하지 않은 문장도 합성)를 담당함.
 - 푸리에 변환 : 시간이나 공간에 대한 함수를 시간 또는 공간 주파수 성분으로 분해하는 변환. 일종의 적분변환. 함수 x(t)가 복소수 범위에서 정의되어 있고 르베그 적분이 가능할 때, -∞∫∞ x(t)e^(-2πiξt). | t = 시간, ξ = 변환변수, 주파수.  
 - 스펙트로그램(Spectrogram) : 소리나 파동을 시각화하여 파악하기 위한 도구로, 파형(시간에 따른 진폭의 변화)과 스펙트럼(주파수에 따른 진폭의 변화)의 특징이 조합되어 있음. 
   시간축과 주파수 축의 변화에 따라 진폭의 차이를 인쇄 농도/표시색상의 차이로 나타냄.
@@ -78,7 +79,7 @@ plt.show()
 ## 모델
 ### Tacotron
 - tacotron1 : 딥러닝 기반 음성합성의 대표적 모델. attention + S2S 기반. 인코더, 디코더, 어텐션, 보코더(오디오생성)으로 나눌 수 있음. 이 후 오디오로 복원하기 위해 그리핀-림 알고리즘을 사용함.
-  오디오 멜 스펙토그램을 학습해 유사한 음파를 합성해 마치 말하는 것과 같은 음성을 보여 줌. loss는 디코더 출력 멜스펙트로그램에 대한 loss와 postCBHG의 출력 스펙트로그램의 loss를 더한 것이 됨.
+  오디오 멜 스펙토그램을 학습해 유사한 음파를 합성해 마치 말하는 것과 같은 음성을 보여 줌. loss는 디코더 출력 멜스펙트로그램에 대한 loss와 postCBHG의 출력 스펙트로그램의 loss를 더한 것이 됨. 한명의 발화자를 완벽히 학습하기 위해선 스무시간 이상의 데이터가 필요함.
 - 전처리 : 문자단위로 입력데이터를 나눠 정제(공백제외 비문자 제거)와 정수인코딩 과정을 거친 뒤 문자임베딩 층을 거쳐 임베딩 됨. 
 - 인코더 : 1DCNN을 을 거친 데이터와 원래 데이터를 Residual연결해 Highway Layer를 통과시켜 BiRNN으로 특정을 추출. CBHG구조를 거친다고 함(문자단위 표현에 효과적인 구조라고 함).
   CBHG참고 : Character Embedding -> SingleLayer Convolution + Relu -> MaxPooling(Stride 5) -> Segment Embedding -> 4Layer Highway Network -> SingleLayer BiGRU
@@ -98,9 +99,14 @@ plt.show()
 - 디코더 : 층 구조만 바뀐 인코더와 달리, DecoderRNN부분이  linear projection(FC 1층)으로 바뀜. 어텐션과 어텐션LSTM을 연결한 벡터를 입력해 하나는 멜스펙트로그램을(activation 없음), 하나는 stop토큰을(sigmoid)만듦.
   stop토큰은 오디오가 있으면 0, 패딩이면 1이 되고(loss에 포함), 멜-스펙은 다시 5개의 conv층을 거치고, (residual처럼)출력과 층에 들어오기 전의 원본을 더해 최종 멜스펙토그램 출력을 만듦. 이후 보코더로 음성을 복원.
 
+### Multi-Speaker Tacotron
+- Multi-Speaker(N-Speaker)Tacotron : DeepVoice2에서 제안된 타코트론1의 변형모델. N명의 목소리를 하나의 모델로 제작. 여러개의 목소리를 만들 때 메모리의 절약이 가능함. 데이터가 적은 목소리라도 Attention을 제대로 배워 좋은 성능을 끌어낼 수 있음.
+- Speaker Embedding : 각 스피커의 정보가 담긴 임베딩. 타코트론의 중간중간에 들어감. CBHG의 Residual connection과 BiRNN, Pre-Net, DecoderRNN에 들어가게 됨.
+
 ### WaveNet
 - WaveNet : 딥마인드에서 공개한 오디오 시그널 모델. TTS를 위한 종전의 방법(parametric TTS, concatenative TTS)들과는 달리 오디오의 waveforms자체를 모델링해 음성생성.
 - 장점 : 한번 만든 모델에서 목소리를 바꾸어 오디오를 생성하거나, 음악등 사람의 목소리와는 다른 분야에도 활용 가능.
+
 
 ## 모델 학습
 - 데이터셋 : 일반적으로 공개되어 있는 음성데이터들의 품질은 좋지 않음(대본과 틀리다던가). 학습해 합성은 가능하나 굉장히 음질이 떨어짐. 틀린문장은 없는지 확인과 대본에 대한 검토가 충분히 필요하며,
