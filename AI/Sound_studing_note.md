@@ -99,7 +99,7 @@ plt.show()
 - 디코더 : 층 구조만 바뀐 인코더와 달리, DecoderRNN부분이  linear projection(FC 1층)으로 바뀜. 어텐션과 어텐션LSTM을 연결한 벡터를 입력해 하나는 멜스펙트로그램을(activation 없음), 하나는 stop토큰을(sigmoid)만듦.
   stop토큰은 오디오가 있으면 0, 패딩이면 1이 되고(loss에 포함), 멜-스펙은 다시 5개의 conv층을 거치고, (residual처럼)출력과 층에 들어오기 전의 원본을 더해 최종 멜스펙토그램 출력을 만듦. 이후 보코더로 음성을 복원.
 
-### Multi-Speaker Tacotron
+#### Multi-Speaker Tacotron
 - Multi-Speaker(N-Speaker)Tacotron : DeepVoice2에서 제안된 타코트론1의 변형모델. N명의 목소리를 하나의 모델로 제작. 여러개의 목소리를 만들 때 메모리의 절약이 가능함. 데이터가 적은 목소리라도 Attention을 제대로 배워 좋은 성능을 끌어낼 수 있음.
 - Speaker Embedding : 각 스피커의 정보가 담긴 임베딩. 타코트론의 중간중간에 들어감. CBHG의 Residual connection과 BiRNN, Pre-Net, DecoderRNN에 들어가게 됨.
 
@@ -107,6 +107,9 @@ plt.show()
 - WaveNet : 딥마인드에서 공개한 오디오 시그널 모델. TTS를 위한 종전의 방법(parametric TTS, concatenative TTS)들과는 달리 오디오의 waveforms자체를 모델링해 음성생성.
 - 장점 : 한번 만든 모델에서 목소리를 바꾸어 오디오를 생성하거나, 음악등 사람의 목소리와는 다른 분야에도 활용 가능.
 
+### WaveGlow
+- WaveGlow : 멜스펙트로그램 컨디셔닝을 사용해 가우스 분포에서 오디오 샘플을 생성하는 흐름기반 생성모델. 훈련중 모델은 일련의 흐름을 통해 데이터세트 분포를 구형 가우스 분포로 변환하는 방법을 학습함.
+- 구조 : 흐름의 한 단계는 invertible convolution과 attine coupling layer의 역할을 하는 수정된 WaveNet아키텍쳐로 구성됨. 추론중 네트워크가 반전되고, 가우스분포에서 오디오샘플이 생성됨.
 
 ## 모델 학습
 - 데이터셋 : 일반적으로 공개되어 있는 음성데이터들의 품질은 좋지 않음(대본과 틀리다던가). 학습해 합성은 가능하나 굉장히 음질이 떨어짐. 틀린문장은 없는지 확인과 대본에 대한 검토가 충분히 필요하며,
