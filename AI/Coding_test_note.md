@@ -1,5 +1,16 @@
 # Coding Test
 - 주의 : 침착, 문제 주의깊게 잘 읽기, 문제 이해(입출력, 조건)완료, 알고리즘 작성.
+## algorithm
+### BinarySearch
+- 이진탐색.
+- stack을 이용, 초깃값이 (0, 0)인 stack과 seen(set)을 준비한 뒤 stack이 빌때까지 (x, y)를 .pop(), 
+- x와 y가 최댓값(배열 인덱스의 끝)이 된다면 True를 반환하고,
+- [(1, 0), (-1, 0), (0, 1), (0, -1)]를 돌며 x + r, y + s 를 구한 뒤
+- 0 <= p < m and 0 <= q < n이고 (p, q)가 seen에 없다면 seen과 stack에 해당 좌표값을 넣음. 이때 stack과 seen에 추가하기 전에 조건을 주어 문제조건에 맞게 탐색을 시킴(해당 문제 기준으로 소비 cost가 주어진 값보다 낮아야 함).
+
+- 즉, (0, 0)에서 시작, 자신의 상하좌우를 돌며, 해당 값이 배열의 범위 내에 있고 가본적 없다면 현재 위치와 해당 위치의 값을 구해 차이가 더 적은(해당 문제 기준 덜 올라가며 해당 차이가 기준보다 적은)곳을 이동stack에 포함함.
+- 그렇게 배열의 끝에 도달했다면 True를 반환하고, 도달하지 못했다면 False를 반환함.
+
 ## Ques
 - [2020 KAKAO 문자열압축](https://programmers.co.kr/learn/courses/30/lessons/60057#)
   - 나 : 1부터 문자열 길이까지(커널사이즈)돌면서 temp_s의 앞에서 i를 분리, 바로 뒤의 문자가 동일하지 않으면 넘기고, 아니면 동일하지 않을때까지 문자열을 제거.
@@ -30,7 +41,8 @@
 - [Richest Customer Wealth](https://leetcode.com/problems/richest-customer-wealth/)
   - 나 : 리스트 표현식을 사용, 각 row의 합을 리스트로 만든 뒤 max 출력.
   - 타인 : 전부 풀어 사용. | 사견 -> 아무래도 풀어쓰는게(리스트 표현식 같은거 X, 함수(함수(값)) X)훨씬 빠른 듯 함. 속도가 필요할때 참고하면 좋을거 같긴 한데 오류가 날 정도면 알고리즘과 시간복잡도의 문제라 코드의 깔끔도가 더 중요할듯.
-
+- [Path With Minimum Effort](https://leetcode.com/problems/path-with-minimum-effort/)
+  - 타인 : 이진 탐색을 이용, 전체 값의 중간값을 기준으로 시작해, 해당 중간값보다 적은 cost를 사용해 끝에 도달할 수 있다면 end를 mid로, 그렇지 않으면 start를 mid로 만들고, 다시 중간값을 구하는걸 반복, end와 start의 차이가 1보다 적어지면 end를 반환함.
 
 
 
