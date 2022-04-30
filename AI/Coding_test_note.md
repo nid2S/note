@@ -43,7 +43,8 @@
   - 타인 : 전부 풀어 사용. | 사견 -> 아무래도 풀어쓰는게(리스트 표현식 같은거 X, 함수(함수(값)) X)훨씬 빠른 듯 함. 속도가 필요할때 참고하면 좋을거 같긴 한데 오류가 날 정도면 알고리즘과 시간복잡도의 문제라 코드의 깔끔도가 더 중요할듯.
 - [Path With Minimum Effort](https://leetcode.com/problems/path-with-minimum-effort/)
   - 타인 : 이진 탐색을 이용, 전체 값의 중간값을 기준으로 시작해, 해당 중간값보다 적은 cost를 사용해 끝에 도달할 수 있다면 end를 mid로, 그렇지 않으면 start를 mid로 만들고, 다시 중간값을 구하는걸 반복, end와 start의 차이가 1보다 적어지면 end를 반환함.
-
+- [Evaluate Division](https://leetcode.com/problems/evaluate-division/)
+  - 타인 : DFS를 이용, 먼저 default_dict를 이용해 a/b와 b/a를 dict형태(d[a][b]=v)로 저장한 뒤, queue를 이용, value를 찾아 리스트에 추가한 뒤 반환함.
 
 
 
