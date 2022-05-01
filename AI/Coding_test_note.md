@@ -1,15 +1,16 @@
 # Coding Test
 - 주의 : 침착, 문제 주의깊게 잘 읽기, 문제 이해(입출력, 조건)완료, 알고리즘 작성.
+- 주의 : 최대한 단순하게, 한번해 할 생각 말고 나눠서, 말렸다 싶으면 처음부터 다시 생각하는것도 방법임.
 ## algorithm
-### BinarySearch
-- 이진탐색.
-- stack을 이용, 초깃값이 (0, 0)인 stack과 seen(set)을 준비한 뒤 stack이 빌때까지 (x, y)를 .pop(), 
-- x와 y가 최댓값(배열 인덱스의 끝)이 된다면 True를 반환하고,
-- [(1, 0), (-1, 0), (0, 1), (0, -1)]를 돌며 x + r, y + s 를 구한 뒤
-- 0 <= p < m and 0 <= q < n이고 (p, q)가 seen에 없다면 seen과 stack에 해당 좌표값을 넣음. 이때 stack과 seen에 추가하기 전에 조건을 주어 문제조건에 맞게 탐색을 시킴(해당 문제 기준으로 소비 cost가 주어진 값보다 낮아야 함).
-
-- 즉, (0, 0)에서 시작, 자신의 상하좌우를 돌며, 해당 값이 배열의 범위 내에 있고 가본적 없다면 현재 위치와 해당 위치의 값을 구해 차이가 더 적은(해당 문제 기준 덜 올라가며 해당 차이가 기준보다 적은)곳을 이동stack에 포함함.
-- 그렇게 배열의 끝에 도달했다면 True를 반환하고, 도달하지 못했다면 False를 반환함.
+### Search
+- 선형탐색 : 그냥 반복문을 돌면서 원하는 값이 나올때까지 찾음.
+  - 구현 : 단순 for문
+- 이진탐색 : 절반씩 나누어 가며 내가 원하는 값과 더 가까운 쪽을 찾아감. 데이터가 정렬되어 있어야 하며 1억개의 요소가 있더라도 27번만에 찾을 수 있다는 장점이 있음.
+  - 구현 : while len(list) > 1 등
+- DFS(깊이우선탐색) : 갈 수 있는 끝까지 탐색해 리프노드 방문 후, 이전 갈림길에서 선택하지 않았던 노드를 방문하는 식.  
+  - 구현 : while stack등. 돌면서 가능한걸 전부 넣고 하나를 빼서 또 넣고 를 반복하면 결국 DFS가 됨.
+- BFS(너비우선탐색) : 루트노드와 같은 거리의 노드를 우선으로 방문. 큐 등의 자료구조 사용으로 구현할 수 있으며(while 큐, while stack등), 리스트.pop(i)는 시간복잡도 O(N)이라 collections의 deque를 사용하면 효율적인 코드를 짤 수 있음.
+  - 구현 : while queue등. 돌면서 가능한걸 전부 넣는건 동일하나 큐로 먼저 들어간게 먼저 나오니, BFS가 됨.
 
 ## Ques
 - [2020 KAKAO 문자열압축](https://programmers.co.kr/learn/courses/30/lessons/60057#)
@@ -44,10 +45,20 @@
 - [Path With Minimum Effort](https://leetcode.com/problems/path-with-minimum-effort/)
   - 타인 : 이진 탐색을 이용, 전체 값의 중간값을 기준으로 시작해, 해당 중간값보다 적은 cost를 사용해 끝에 도달할 수 있다면 end를 mid로, 그렇지 않으면 start를 mid로 만들고, 다시 중간값을 구하는걸 반복, end와 start의 차이가 1보다 적어지면 end를 반환함.
 - [Evaluate Division](https://leetcode.com/problems/evaluate-division/)
-  - 타인 : DFS를 이용, 먼저 default_dict를 이용해 a/b와 b/a를 dict형태(d[a][b]=v)로 저장한 뒤, queue를 이용, value를 찾아 리스트에 추가한 뒤 반환함.
-
-
-
+  - 타인 : DFS를 이용, 먼저 default_dict를 이용해 a/b와 b/a를 dict형태(d[a][b]=v)로 저장한 뒤, queue를 이용, 만약 a가 있다면 큐에 (a, 1)을 넣고, 
+    큐에서 하나씩 뽑아 i가 b가 될 때 까지 i가 a인 모든 변수들을 한번씩 뽑아 큐에 넣고, i가 b와 같아지면 value를 찾아 리스트에 추가한 뒤 반환함.
+    -> 결국 (A, X)일때, ?가 나온적 없는(A, ?)들을 찾고, 그걸 기반으로 (?, ??)인 것들을 찾으면서 value*해당value를 저장, 결국 (?, B)인걸 찾게 되면 해당것의 value를 반환하게 하며 만약 못찾으면(혹은 a가 없으면)-1로 하게 함.  
+- [k진수에서 소수 개수 구하기](https://programmers.co.kr/learn/courses/30/lessons/92335)
+  - 나 : 먼저 n을 pow(k, p)가 n보다 작은동안 p를 증가시킨 후 n//pow -> res += div -> n%pow 로 k진수로 바꾼 뒤, sqrt를 이용하는 방법으로 소수인지를 반별해 개수를 반환함.
+  - 에러사항 : 일단 while n > pow(k, p)로 했었고, 진수 변환 단계에서 정확한 알고리즘의 생각 없이 코딩.
+  - 타인 : 진수 변환 -> while n: `n%k -> n//k` 이후 s를 뒤집어서 반환. | 소수 판정 -> if n <= 1: False, while i**2 <= n: if n%i==0: False, i++ | 이외에는 동일함.
+- [주차 요금 계산](https://programmers.co.kr/learn/courses/30/lessons/92341)
+  - 나 : 일단 모든 시간을 기록 후, 해당 시간을 받고 문제에 맞게 주차 시간을 구해(먼저 기본금 + 추가 시간)정렬 후 반환함.
+  - 에러사항 : 문제 이해를 성급히 했고(문제 연산과 조건 등), 모든걸 한번에 처리하려고 하였음.
+  - 타인 : 따로 클래스를 만들어, defaultdict를 이용해 dict[car]에 계속 업데이트를 하게 하였고, 정렬 후 calc_fee를 이용해 반환하였음.
+    update -> self.in_flag변수를 이용(IN이면 T,아니면 F)self.in_time에 시간을 기록하게 하고, 아니면 self.total에 누적 시간을 더함. | calc_fee -> 만약 self.in_flag가 T면 23.59로 update를 한 뒤, 조건에 따라 계산(math.ceil(올림)사용). | 결론 -> 클래스를 잘 사용함.    
+- [양궁대회](https://programmers.co.kr/learn/courses/30/lessons/92342)
+  - 타인 : 깊이 우선 탐색을 이용. 하나씩 화살을 쏘아 화살이 다 떨어지고 한바퀴 이상을 돌면 종료. 그 전까지는 화살을 한발씩 쏘아 화살이 다 떨어지면 점수를 구하고, 그게 끝나면 화살을 제거. for i in range(left, -1, -1): 라이언[idx]=i, dfs(idx-1, left-1, 라이언), 라이언[idx]=0 식.  
 
 
 
