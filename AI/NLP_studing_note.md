@@ -844,6 +844,8 @@ h_t(hidden_state)= o_t ⨀ tanh(c_t)
   gaps = True 로 화이트 스페이스를 사용한 토큰화를 할 수 있다. 
 - nltk.tokenizer.regexp_tokenize(sentence, patten='정규 표현식') : 정규 표현식 단어 토큰화 함수 로드. 
 
+- nltk.ngrams(words, i) : i-gram으로 words내의 단어들을 튜플형태로 만들어 반환해줌.
+
 ### stem
 - nltk.stem.WordNetLemmatizer() : 표제어 추출기 생성. .lemmatize(word)로 표제어 추출 사용 가능. 정확한 추출을 위해선 (word, 품사)식으로 넣어주어야 한다.
 - nltk.stem.PorterStemmer() : PorterStemmer 알고리즘의 어간 추출기 생성. .stem(토큰.norm_.lower()) 으로 어간(용언에서 뜻을 나타내는 불변인 부분)을 찾음.

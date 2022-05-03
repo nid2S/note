@@ -126,6 +126,7 @@
 - torch.nn.functional : torch.nn이 클래스로 정의되어있는 것과 NN관련 기능들이 함수로 정의되어있는 클래스. `import torch.nn.functional`로 import하지 않으면 사용할 수 없음. 주로 as F로 사용됨.
   nn으로 구현한 클래스의 경우는 attribure를 활용해 state를 저장하고 활용할 수 있고, torch.nn.functional로 구현한 함수는 인스턴스화 시킬 필요 없이 사용이 가능하다는 장점이 있음. 두 방식 모두 결과는 동일하게 제공됨.
 - Loss : input(pred)는 float, target(y)는 long이여야 하며, loss가 스칼라가 아니라면 loss.backward(gradient=loss)로 backward를 써야 함.
+- 레이어.register_forward_hook(hook_fn) : 해당 레이어에 hook을 추가. 해당 레이어가 동작할 때, hook_fn을 호출하게 됨(따라서 hook_fn은(module, input, output)를 입력받음). 주로 해당 층의 출력을 추출할 때 사용. 이 함수는 핸들을 반환하는데, .remove()로 등록한 함수를 취소할 수 있음. 
 
 - 모델.parameters() : 모델의 파라미터 출력. w와 b가 순서대로 출력됨.
 - 텐서.backward() : 역전파. 해당 수식의 텐서(w)에 대한 기울기를 계산. w가 속한 수식을 w로 미분(주로 loss에 수행). 해당 텐서 기준 연쇄법칙 적용. 
