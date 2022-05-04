@@ -350,21 +350,24 @@ accuracy = count/len(dataset.dataset)
 - torchtext : 자연어처리 분야의 유명 데이터셋, 모델, 전처리도구(텍스트에 대한 추상화기능)가 포함된 패키지.
 - torchaudio : 오디오 분야의 torch_%. 
 - torchnlp : (?)
+
 ## metrics
 - torchmetrics.Accuracy() : Accuracy객체 생성. acc(pred, y)로 사용할 수 있으며, 반환값은 float의 scalar텐서임.
+
 ## vision
 - torchvision.datasets.MNIST(경로, train=bool, transform=트랜스폼, download=bool) : MNIST 다운로드. 
   train=false면 test데이터 다운로드, download는 경로에 데이터가 없으면 다운로드받음.
 - torchvision.transforms.ToTensor() : 받은 데이터셋을 어떻게 변환할지 선택, 텐서로 변환. 다운로드중 transform매개변수에 넣어 사용.
 - 데이터.test_data : 테스트 데이터를 가져옴.
 - 데이터.test_labels : 테스트 레이블을 가져옴.
+
 ## text
 - 제공기능 : 파일로드(다양한 코퍼스 로드), 토큰화(단어단위), 단어집합, 정수인코딩(단어들을 고유한 정수로 맵핑), 단어벡터(단어들에 고유 임베딩벡터 제작), 
   패딩/배치화(훈련샘플의 배치화). 데이터의 분리와 단어-벡터간 맵핑(룩업테이블)은 별도로 해주어야 함.
 - 데이터셋 생성 : 필드 정의(토크나이저, 데이터크기 등 전처리방법 정의) > 데이터셋 제작(필드에 따라 데이터 로드, 토큰화) > 단어집합 제작(데이터셋 이용, 정수화) > 
   데이터로더 제작(Iterator, 배치사이즈 정의)의 순서로 이뤄짐.
-
-- torchtext.data.Field() : 필드(앞으로 할 전처리를 정의, 텍스트/레이블 등을 정의)지정. 
+### data
+- torchtext.data.Field() : 필드(앞으로 할 전처리를 정의, 텍스트/레이블 등을 정의)지정. 데이터를 읽거나 토큰화하는 방법을 정의하는데 유용함.
 - Field인자 : sequential(bool, 시퀀스데이터 여부), use_vocab(bool, 단어집합생성 여부), tokenize(함수, 사용할 토큰화함수), lower(bool. 소문자화 여부),
   batch_first(bool, 미니배치 크기(fix_lenX배치크기)->(배치크기Xfix_len)), is_target(bool, 레이블데이터 여부), fix_length(int, 최대허용길이/패딩길이) 인자를 사용할 수 있음.
 - 필드.build_vocab(데이터셋) : 단어집합 생성. vectors(사전훈련된 임베딩벡터 사용), min_freq(int, 단어의 최소등장빈도 조건 추가), 
@@ -375,16 +378,22 @@ accuracy = count/len(dataset.dataset)
 - torchtext.data.TabularDataset.splits() : 데이터셋을 만들며(데이터를 불러오며)필드에서 정의했던 토큰화방법으로 토큰화를 수행.
 - TabularDataset.splits인자 : path(파일 경로), train/test(train,test파일명), format(데이터 포맷(csv 등)), 
   fields(위에서 정의한 필드. [("필드를 호칭할 이름", 필드)\]형식), skip_header(bool, 데이터 첫줄 무시 여부)인자 사용가능.
-- torchtext.datasets.데이터셋이름.splits(TEXT필드, LABEL필드) : 데이터 셋을 필드에 가져온 후 train/test 데이터를 나눔. vars(나눠진데이터셋[0\])등으로 데이터 확인 가능.
-- 데이터셋.split(split_ratio) : 데이터셋을 나눔. train데이터를 나눠 검증 데이터를 만드는 등에 사용. 지정한 비율이 첫번째 데이터셋의 데이터 비율.
 
 - torchtext.data.Iterator(데이터셋, batch_size=i) : 데이터셋을 이용해 i의 배치크기 만큼 데이터를 로드하게 하는 데이터로더 생성. 배치.필드명 으로 실제 데이터텐서에 접근가능.
-- torchtext.data.BucketIterator(데이터셋, batch_size, shuffle=bool, repeat=bool) : 모든 데이터를 배치처리 후 단어를 인덱스 번호로 대체하는 데이터로더 생성. 
+- torchtext.data.BucketIterator(데이터셋, batch_size, shuffle=bool, repeat=bool) : 모든 데이터를 배치처리 후 단어를 인덱스 번호로 대체하는 데이터로더 생성.
   (데이터셋1,데이터셋2)처럼 넣어 여러 데이터셋에도 적용 가능.
 - 데이터로더에서 반복문으로 각 배치를 꺼낼 수 있으며, batch.text 로 해당 배치의 실제 데이터에 접근가능.
 
+### dataset
+- torchtext.dataset : IMDB, TREC(질문 분류), 언어모델링(WikiText-2)및 여러 다른 데이터셋을 사용하기 위한 래퍼클래스를 제공함.
+- torchtext.datasets.데이터셋이름.splits(TEXT필드, LABEL필드) : 데이터 셋을 필드에 가져온 후 train/test 데이터를 나눔. vars(나눠진데이터셋[0\])등으로 데이터 확인 가능.
+
+- 데이터셋.split(split_ratio) : 데이터셋을 나눔. train데이터를 나눠 검증 데이터를 만드는 등에 사용. 지정한 비율이 첫번째 데이터셋의 데이터 비율.
+
+### vocab
 - torchtext.vocap.Vectors(name=W2V파일명) : 사전훈련된 Word2Vec모델 사용.
 - torchtext.vocab.Glove(name, dim) : 토치텍스트 제공 사전훈련된 임베딩벡터(영어)사용. (6B, 50/100/200/300)등이 있음.필드.build_vocap()의 vectors 인자의 입력으로 사용.
+
 ## audio
 - audioform, sample_rate = torchaudio.load(path) : 오디오파일 로드. 다양한 파일 형식을 지원함. 
 - torchaudio.transforms.Resample(sample_rate, new_sample_rate)(audioform) : 리샘플링.
