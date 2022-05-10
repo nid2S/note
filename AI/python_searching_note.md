@@ -377,7 +377,10 @@ for number , name in zip(number_l,name_l):
 
 ## file pickle, glob
 ***
-- pickle : 메모리에 올라가 있는 data 그 자체를 dump, load 를 통해 외부에 저장하고 사용하는 것.
+- pickle : 메모리에 올라가 있는 data 그 자체를 dump, load 를 통해 외부에 저장하고 사용하는 것. .pkl파일 형식으로 나타내어 짐.
+- 장점 : text파일을 사용하는 경우 필요 부분을 파싱해야 하지만, 이미 필요한 형태로 저장되어있어 훤씬 빠름.
+- 단점 : 위험함. 원격코드실행(RCE)공격을 받을 수 있어, 사용에 매우 주의해야 함.
+
 - import pickle , open("파일명","wb(write binary)")로 파일 오픈 후
 - pickle.dump(객체,파일명)으로 파일에 객체저장. 한 줄 씩 입력됨. 파이썬에 존재하는 모든것이 입력가능함.
 - 마찬가지로 import, open("파일명","rb")로 파일 오픈 후
