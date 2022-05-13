@@ -35,7 +35,7 @@
 - 항등 연산자(Identity Operators) : 같은 메모리에 있는지 확인하는 연산자. is, is not
 - 멤버 연산자(Membership Operators) : 왼쪽 값이 오른쪽 컨테이너 객체의 멥버인지 확인하는 연산자. in, not in 
 - 비트 연산자(Bitwise Operators) : 비트단위로 연산하는 연산자. 최대한 메모리를 아끼기 위해 사용. &, |, ^, ~, <<, >>
-- 추가 : 그 외 연산자. @(합성곱, ndarray나 tensor등의 자료형간의 합성곱을 하게 함)등이 있음. 
+- 추가 : 그 외 연산자. @(합성곱, ndarray나 tensor등의 자료형간의 합성곱을 하게 함), ~(2의 보수 연산자, -x - 1)등이 있음. 
 
 # print
 ***
