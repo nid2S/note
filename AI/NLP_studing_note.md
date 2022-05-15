@@ -449,10 +449,26 @@ h_t(hidden_state)= o_t ⨀ tanh(c_t)
 
 ### FoundationModel
 - Foundation model : 대규모 데이터셋에서 레이블 없는 데이터로 사전훈련된 모델. GPT, Bert, Bart등이 속함. 이후 task에 맞게 파인튜닝되어 사용됨. 대부분의 언어 모델에서 SOTA를 달성하고 있음.
+
+- feature-based approach : 특정 작업을 수행하는 네트워크에 사전훈련된 언어표현을 추가적 feature로 제공(두개의 네트워크를 붙여 사용)하는 방식. ELMo등이 대표. 또다른 사전훈련 언어표현의 적용방식.
+- 전이학습(Transfer Learning) : Imagenet(큰데이터)으로 pre-train된 backbone을 이용해 featureMap을 뽑아낸 뒤 자신의 데이터셋에 맞게 fc layer만 다시 설계. 파인튜닝과 비슷함. 
+  backbone - base model, Bottleneck feature - Conv layer를 거쳐서 나온 특성. Conv layer - 모델에서 데이터의 특성을 추출하는 복잡한 층, fc layer - 출력(전결합)층.
+- 파인튜닝(Fine Tuning) : 기존에 학습된 모델을 기반으로 아키텍쳐를 새 목적에 맞게 변형. 파라미터를 미세하게 조정하는 행위. 기존에 학습된 레이어에 내 데이터를 추가로 학습해 파라미터를 업데이트.
+- 주의사항 : lr을 크게잡으면 사전훈련된 모델의 가중치를 훼손시킬 수 있어, 보통 원래/10정도로 세팅. optimizer도 이전가중치보존/안정적학습속도의 SGD등 안정성 있는 것을 쓰는게 바람직.
+  만약 새 레이어를 붙인다면, 모든 레이어는 한번 이상 학습이 완료되어야 함. 무작위 가중치가 부여된 새 레이어는 큰 가중치가 학습되어, 핵심학습내용을 잊어버릴 수 있단 위험이 있음.
+  이를 위해 bottleneckFeature들로 미리 학습을 진행해 가중치를 저장한 뒤, 사전훈련된 모델에 붙여 학습을 진행하는 등의 방법이 있음.
+- 방법1 : 모델의 모든 부분을 재학습. 모델의 구조만 사용. 내 데이테셋이 충분하고 선행학습된 데이터셋과 많이 다를경우 사용. 
+- 방법2 : 모델의 일부 부분을 재학습. 초반레이어는 일반적인 특징을, 후반레이어는 특별한(task에 맞는)특징을 추출하는 것을 이용. 
+  ConvLayer초기계층은 lr을 0으로 해 학습을 진행하지 않고, 현 task에 조금 더 맞는 특징을 유도하기 위해 Conv layer후반 계층 일부와 fc layer만 파인튜닝. 
+  데이터셋이 충분하나 선행학습된 것과 유사할때, 데이터셋이 적고 선행학습된 데이터와 많이 다를 때(오버피팅의 위험이 있어 전부 학습하는것이 불가능)사용. 
+- 방법3 : fc레이어만 재학습. 데이터셋이 적고, 선행학습된 것과 유사할떄 사용. 오버피팅의 가능성이 있어 Conv층을 동결시키고 bottleneckFeature만 뽑아 FC층을 학습.
+  데이터 증강이 필요 없을 정도로 학습데이터셋의 크기가 클 때도 사용가능.
+
 #### GPT
 - GPT : Generative Pre-training Transfomer. OpenAI가 제작한 초거대규모(foundation)모델. 다양한 종류의 GPT가 있으며 현재는 GPT3까지 존재하고, 2022년 7~8월 경에 GPT4가 출시될 것 이라고 함.
 - 구조 : 트랜스포머 기반. 트랜스포머의 디코더 구조를 사용하며, 조건부 언어모델을 핵심으로 하고있음. BPE를 도입함.
 - BPE(바이트 페어 인코딩) : 자주 함께 사용되는 char 를 하나의 묶음으로 사용(최소한의 단어). 워드 임베딩과 캐릭터 임베딩의 장점을 모두 가지고 있음. (word)단어간의 유사도와 (char)처음보는 문자의 예측 모두가 가능함.
+- 사용 Task : 문장 생성능력이 중요한 Task에 사용됨.
 ##### GPT 시리즈
 - GPT-1 : 문장간 관계 유추, 질의 응답, 문장유사도, 분류등에 뛰어난 성능을 보임. 
   언어 모델로 학습, 파인 튜닝(linear와 softmax, 추가적인 레이어 없이 적은 양의 레이블 만으로도 가능)두 단계를 거침. 트랜스포머의 디코더기반 모델. 
@@ -467,7 +483,19 @@ h_t(hidden_state)= o_t ⨀ tanh(c_t)
 - REformer : 메모리 풋프린트와 계산시간을 줄이기 위한 많은 트릭이 있는 자동회귀 트랜스포머 모델.
   축 위치 인코딩, LSH어텐션, backward pass동안 리버시블 트랜스포머층을 사용해 각 레이어의 중간결과를 저장/재계산함, 전체배치 > 청크 의 트릭을 사용함.
 - XLNet : 자기회귀모델 기반 훈련. 모델이 마지막 n개의 토큰을 사용해 n+1의 토큰을 예측하게 하며, 이 과정을 모두 마스크에서 진행함.  
-
+#### BERT
+- BERT : Bidirectional Encoder Representations from Transformer. 2018년 구글이 공개한 언어표현모델. 한국어용 BERT 패키지 KoBERT가 존재함.
+- 구조 : 트랜스포머의 인코더 부분만을 사용. 포지셔널 인코딩 대신 포지션 임베딩과 segment임베딩을 추가해, 총 세가지 임베딩의 합산 결과를 취함. 이후 N개의 인코더블록(멀티헤드어텐션-PositionWiseFFLayer)을 RNN처럼 재귀적으로 반복처리함.
+- 특징 : wiki나 book data등의 대용량 unlabeled data로 모델을 학습시킨 뒤, 특정 task의 labeled data로 transfer Learning해 하위 NLP테스크에 적용하는 Semi-Supervised Learning 모델. 
+  BERT이전의 비슷한 모델들(ELMo, OpenAI GPT등)과 달리 bidirectional함. 특정 task의 처리를 위해 새 네트워크를 붙일 필요 없이, 모델자체의 fine-tuning을 통해 state-of-the-art달성.
+- 학습 : 이후 단어의 예측을 위해 Bidirectional하게 학습할 수 없었던 이전 모델의 단점을 해결하기 위해 다른 형태(MLM, NSP)의 문제로 전환해 학습.
+- 사용 Task : Span(Slot)Prediction, Zero-shot Learning, QA, NER, 형태소 분석, 그 외 언어 이해능력이 중요한 Task에서 사용됨.
+#### BART
+- BART : Bidirectional and Auto-Regressive Transformers. 2020년 페이스북이 발표. 넓은 분야에 적용할 수 있도록 Seq2Seq구조로 만들어진 denoising auto-encoder.
+- 구조 : Seq2Seq 트랜스포머 구조를 사용, GeLU 활성화 함수 사용. 
+- 학습 : 손상된 text를 복구하도록 학습하며, 디코더의 출력과 원본텍스트의 loss를 줄이도록 함. 다른 오토인코더모델과는 다르게 모든 종류의 노이즈를 적용할 수 있음.
+  BERT와 GPT의 특성을 모두 적용해, 손상된 text를 bidirectional모델(BERT)로 인코딩하고, 정답에 대한 likehood를 autoregressive(GPT)디코더로 계산함.
+- 사용 Task : generation task(생성, 번역 등. 특히 요약)에 주로 사용. 분류 Task에서도 BERT와 비슷한 성능을 낼 수 있음.
 
 ## Tasks
 ### Embedding

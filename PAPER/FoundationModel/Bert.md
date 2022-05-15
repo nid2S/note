@@ -1,32 +1,12 @@
 # BERT
-- BERT : Bidirectional Encoder Representations from Transformer(양방향 인코더 표현 from 프랜스포머)의 약자. 2018년 구글이 공개한 언어표현모델. 한국어용 BERT 패키지 KoBERT가 존재함.
-  wiki나 book data등의 대용량 unlabeled data로 모델을 학습시킨 뒤, 특정 task의 labeled data로 transfer Learning해 하위 NLP테스크에 적용하는 Semi-Supervised Learning 모델. 
-  BERT이전의 비슷한 모델들(ELMo, OpenAI GPT등)과 달리 bidirectional함. 특정 task의 처리를 위해 새 네트워크를 붙일 필요 없이, 모델자체의 fine-tuning을 통해 state-of-the-art달성.
-
-- feature-based approach : 특정 작업을 수행하는 네트워크에 사전훈련된 언어표현을 추가적 feature로 제공(두개의 네트워크를 붙여 사용)하는 방식. ELMo등이 대표. 또다른 사전훈련 언어표현의 적용방식.
-- Transfer Learning(전이학습) : Imagenet(큰데이터)으로 pre-train된 backbone을 이용해 featureMap을 뽑아낸 뒤 자신의 데이터셋에 맞게 fc layer만 다시 설계. 파인튜닝과 비슷함. 
-  backbone - base model, Bottleneck feature - Conv layer를 거쳐서 나온 특성. Conv layer - 모델에서 데이터의 특성을 추출하는 복잡한 층, fc layer - 출력(전결합)층.
-- Fine Tuning : 기존에 학습된 모델을 기반으로 아키텍쳐를 새 목적에 맞게 변형. 파라미터를 미세하게 조정하는 행위. 기존에 학습된 레이어에 내 데이터를 추가로 학습해 파라미터를 업데이트.
-- 주의사항 : lr을 크게잡으면 사전훈련된 모델의 가중치를 훼손시킬 수 있어, 보통 원래/10정도로 세팅. optimizer도 이전가중치보존/안정적학습속도의 SGD등 안정성 있는 것을 쓰는게 바람직.
-  만약 새 레이어를 붙인다면, 모든 레이어는 한번 이상 학습이 완료되어야 함. 무작위 가중치가 부여된 새 레이어는 큰 가중치가 학습되어, 핵심학습내용을 잊어버릴 수 있단 위험이 있음.
-  이를 위해 bottleneckFeature들로 미리 학습을 진행해 가중치를 저장한 뒤, 사전훈련된 모델에 붙여 학습을 진행하는 등의 방법이 있음.
-- 방법1 : 모델의 모든 부분을 재학습. 모델의 구조만 사용. 내 데이테셋이 충분하고 선행학습된 데이터셋과 많이 다를경우 사용. 
-- 방법2 : 모델의 일부 부분을 재학습. 초반레이어는 일반적인 특징을, 후반레이어는 특별한(task에 맞는)특징을 추출하는 것을 이용. 
-  ConvLayer초기계층은 lr을 0으로 해 학습을 진행하지 않고, 현 task에 조금 더 맞는 특징을 유도하기 위해 Conv layer후반 계층 일부와 fc layer만 파인튜닝. 
-  데이터셋이 충분하나 선행학습된 것과 유사할때, 데이터셋이 적고 선행학습된 데이터와 많이 다를 때(오버피팅의 위험이 있어 전부 학습하는것이 불가능)사용. 
-- 방법3 : fc레이어만 재학습. 데이터셋이 적고, 선행학습된 것과 유사할떄 사용. 오버피팅의 가능성이 있어 Conv층을 동결시키고 bottleneckFeature만 뽑아 FC층을 학습.
-  데이터 증강이 필요 없을 정도로 학습데이터셋의 크기가 클 때도 사용가능.
-![.](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FPz8Qd%2Fbtq1pzAhn1P%2FEiHtq9sHM9ibIvbDecEcsk%2Fimg.png)
-
-## 구조
-- transformer의 encoder부분만을 사용. 
-- 모델의 크기에 따라 base모델과 large모델을 제공. L - 트랜스포머 블록 층수(개수), H - hidden size, A - self-attention해드개수. 성능은 Large > base (데이터셋 크기 무관).
+- 모델 종류 : 모델의 크기에 따라 base모델과 large모델을 제공. L - 트랜스포머 블록 층수(개수), H - hidden size, A - self-attention해드개수. 성능은 Large > base (데이터셋 크기 무관).
 - BERT_base : L=12, H=768, A=12, Total Parameters = 110M, feed-forward/filter size = 4H
 - BERT_large : L=24, H=1024, A=16, Total Parameters = 340M, feed-forward/filter size = 4H
+- 사용 Task : Span Prediction, Zero-shot Learning, 그 외 언어 이해능력이 중요한 Task.
+- Span Prediction : 문장 전체의 벡터를 생성, 각 Slot이 없는지/어떤 값이든 상관없는지/존재하는지 예측한 후 각 토큰의 벡터들을 이용해 Slot의 시작/종료점의 확률을 계산, 이를 바탕으로 Slot을 추측.  
+- Zero-shot Learning : 아예 처음보는 서비스나 Slot도 처리 가능. Slot의 설명이 주어진다면 언어처리능력으로 기존의 Slot과 비슷함을 인지, 처리.  
 
-- 트랜스포머 모델 아키텍쳐. BERT에선 인코더만 사용함.
-![Transformer 모델 아키텍쳐](https://user-images.githubusercontent.com/1250095/49935094-73f99c80-ff13-11e8-8ba5-50a008ed4d20.png)
-
+## 인코더
 ### 인코더 입력
 - BERT입력층 : 트랜스포머를 기반으로(그중에서도 인코더만 사용)함. 포지셔널 인코딩 대신 포지션 임베딩과 Segment Embeddings를 추가해, 총 세가지 임베딩의 합산 결과를 취함.
 - BERT임베딩 : 사용되는 임베딩은 WordPiece(Token)임베딩, Segment임베딩, Position임베딩. 이 세가지 임베딩을 얻어와 합산한 뒤 층정규화 & Dropout을 거친 결과를 인코더의 입력으로 함.
@@ -91,7 +71,7 @@
   pre-training에 비해 굉장히 빠르게 학습되며, 따라서 최적의 하이퍼파라미터를 exhaustive search로 찾아내도 괜찮음. 사전훈련 단계에서 step이 많을수록 정확도가 늘어남.
 - 파인튜닝시 하이퍼 파라미터 : batch_size=16/32, lr(Adam)=5/3/2e-5, epoch=3/4 사이에서 잘 학습된다고 함. 
 
-- 전처리 : 각 문장의 시작과 끝에 특수토큰([CLS\], [SEP\])을 넣어주고, 모든 문장의 길이를 맞춰줘야(pad, truncate)
+- 전처리 : 각 문장의 시작과 끝에 특수토큰([CLS\], [SEP\])을 넣어주고, 모든 문장의 길이를 맞춰줘야(pad, truncate)함.
 
 - sequence-level 분류작업 : 직접적임. 입력 시퀀스에 대해 일정 차원수의 representation결과를 얻기위해, [CLS\]토큰의 트랜스포머 output값을 사용함.
   [CLS\]토큰의 벡터는 H차원을 가지며, 여기에 분류하고 싶은 개수(K)에 따라 classification layer를 붙이고, label probabilities는 softmax로 계산. 모든 파라미터가 같이 파인튜닝됨.
@@ -105,12 +85,6 @@
 
 - Feature-based Approach : 모든 task를 표현하지는 못함으로, 특정 task를 수행가능한 네트워크를 부착해 쓸 수 있으며, 전산적 이점을 얻을 수 있다는 이점이 있음. 
   마지막 레이어에 Bi-LSTM등을 부착해 해당 레이어만 학습시키는 등의 방법이 있으며, 가장 효과적인(마지막 4레이어)경우 파인튜닝과 큰 차이가 없음.
-
-
-## BERT의 Task
-- Span Prediction : 문장 전체의 벡터를 생성, 각 Slot이 없는지/어떤 값이든 상관없는지/존재하는지 예측한 후 각 토큰의 벡터들을 이용해 Slot의 시작/종료점의 확률을 계산, 이를 바탕으로 Slot을 추측.  
-- Zero-shot Learning : 아예 처음보는 서비스나 Slot도 처리 가능. Slot의 설명이 주어진다면 언어처리능력으로 기존의 Slot과 비슷함을 인지, 처리.  
-
 
 ## BERT의 변형(인코더/오토인코딩 모델)
 - BERT : MLM, NSP사용. 기본 BERT모델.

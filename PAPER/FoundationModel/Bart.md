@@ -1,11 +1,5 @@
-
 # BART
-- BART(Bidirectional and Auto-Regressive Transformers) : 넓은 분야에 적용할 수 있도록 S2S구조로 만들어진 denoising auto-encoder. 손상된 text를 복구하도록 모델이 사전학습됨. 
-  분류에서 BERT와 비슷한 성능을 내며 generation task(특히 summarization)에서도 SOTA를 달성함. 
-  BERT와 GPT의 특성을 모두 적용해, 손상된 text를 bidirectional모델로 인코딩하고, 정답에 대한 likehood를 autoregressive디코더로 계산함.  
-- BART 구조 : S2S트랜스포머 구조를 사용, GeLU 활성화 함수 사용. base모델은 6layer, large모델은 12layer를 사용함.
-  손상된 text로 학습하며, 디코더의 출력과 원본텍스트의 loss를 줄이도록 함. 다른 오토인코더모델과는 다르게 모든 종류의 노이즈를 적용할 수 있음.
-
+- BART 구조 : base모델은 6layer, large모델은 12layer를 사용함. 
 
 ## BART 노이즈 기법
 - LM : GPT와 비슷함. left-to-right 트랜스포머를 학습시킴. 어텐션이 빠진 BART 디코더와 동일.
@@ -18,7 +12,6 @@
 - TextInfilling : 포아송분포를 따르는 길이의 text span을 생성해 하나로 마스킹(여러토큰이 하나로 마스킹/없던자리에 추가로 마스킹 됨). 빠진 토큰의 양을 예측.
 - SentencePremutaion : 문서를 문장단위로 나눠서 섞음.
 - DocumentRotation : 토큰하나를 정해 문장이 해당 토큰부터 시작하게 하고, 문서의 시작을 구분하게 함.
-
 
 ## BART 파인튜닝
 - 시퀀스 분류 : 같은 입력이 인코더와 디코더에 주어지고, 디코더의 마지막 은닉상태가 새 선형분류기로 전달됨. BERT와 비슷하나 마지막토큰까지 입력.
