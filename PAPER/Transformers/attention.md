@@ -11,7 +11,11 @@
   
 - a(t) = sum(softmax(\[score(s(t), h(0)) . . .  score(s(t), h(max))]) * h(0 . . . max))  | 어텐션 스코어(score) > 어텐션 분포(softmax) > 어텐션값(가중합)
 - v(t) = \[a(t);s(t)](결합) | v(t)와 s(t-1)을 메모리셀(LSTM, RNN)의 입력으로 사용해 s(t)를 얻고, 이는 출력층으로 전달되 현시점의 예측값을 구하게 됨.
-
+``` attention
+v(t) = [a(t);Q(t-1)]  # 어텐션 레이어 결과
+a(t) = sum(softmax([score(Q(t), K(0)) . . .  score(Q(t), K(max))]) * V)  # 어텐션 분포 -> 어텐션 값
+score(Q(t), K(i)) = Q(t).T * K(i)  # 어텐션 스코어
+```
 
 # order
 - 인코더와 디코더의 은닉상태 크기가 같다고 가정.
