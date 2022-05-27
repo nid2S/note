@@ -824,6 +824,10 @@ for number , name in zip(number_l,name_l):
 - math.abs(값) : 절댓값 반환.
 - math.comb(n, k) : nCk 반환.
 
+# tqdm
+- tqdm.tqdm(iter) : 이터레이터에서 값을 꺼내며 진행률 표시줄을 생성. desc매개변수로 이터레이션에 대한 설명을 추가할 시 [desc: {i}it \[amount_time, {i/dur}it/s\]]의 형식이 됨.
+  이터레이터를 감싸 for문 등 .__next\_\_()를 수행하게 하는 식으로 사용됨. `for i in tqdm.tqdm(range(100), desc='test iter')`식.
+
 # itertools
 ***
 - itertools.permutations(list, n) : 순열(P, 중복을 허용하지 않고 순서가 존재하는 채로 n개를 뽑아서 나열)을 생성. 나올 수 있는 조합히 차례대로, 튜플형태로 나타나게 됨.
