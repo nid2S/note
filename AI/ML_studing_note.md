@@ -13,6 +13,9 @@
   Forwad/Backward Propagation은 모두 FP16으로 연산하고, weight를 업데이트 할 때에는 다시 FP32로 변환하여 계산함. 메모리가 절반으로 줄어들기에, 배치사이즈를 늘리거나 더 큰 모델의 학습이 가능함.
   단, FP16은 매우 낮은수를 표현할 수 없어 모두 0이 되는데, 이를 방지하기 위해 특정값(under/overflow가 발생하지 않는)을 곱해 손실과 기울기를 계산하고 가중치를 업데이트 함. 
 
+- PyTorch VS Tensorflow : 둘 모두 오픈소스 딥러닝 프레임워크이나 TF는 Theano기반/Goole개발이고, PT는 Torch(c++)기반/Facebook개발. 
+  가장 중요한 차이점은 계산 그래프를 정의하는 방식인데, TF는 정적그래프를, PT는 동적그래프를 사용함. 모델의 전체 계산 그래프를 정의한 뒤 ML모델을 실행하거나 동작중 그래프를 정의/조작 할 수 있다는 차이점이 있음.
+
 - 머신러닝(모델제작)과정 : 크게 데이터 수집 > 데이터 점검,탐색(분석) > 전처리,정제 > 모델링,훈련 > 평가 > 배포 총 6단계로 나뉜다.
 - 파이프라인 : 한 데이터 처리 단계의 출력이 다음단계의 입력으로 이어지는 구조로, 인공지능 모델의 구조를 가리킬 때 주로 사용됨.
 - 학습환경 : 학습을 수행하기 위해서는 프레임워크에 맞는 환경을 설치하고, 필요한 리소스(CPU, GPU)등을 프로비저닝(IT 인프라 설정 프로세스, 사용가능하게 데이터와 리소스에 대한 액세스를 관리하는데 필요한 단계)한 뒤 학습을 진행해야 하며,
@@ -792,6 +795,9 @@ print('최적화 완료')
 
 - PyTorch에서 export과정 : torch.onnx.export 함수 호출시 Pytorch의 JIT컴파일러인 TorchScript를 통해 모델의 forward함수에서 실행되는 코드들에 대한 IR을 담고있는 trace/script를 생성.
   생성된 trace/script는 ONNX exporter를 통해 ONNX IR(중간표현)로 변환되고, 여기에서 한번 더 graph optimization이 이뤄져 최종 생성된 ONNX그래프는 .onnx포맷으로 저장됨.
+
+## Math For AI
+- (?)
 
 # GCP
 - GCP : 구글 클라우드 플랫폼. 관리형 JupyterNoteBook인 AI PlatformNotebook, Kubeflow Pipelines인 AI Platform Pipeline, AI Platform이 속해있어, AI의 학습, 실험, 배포가 가능함.
